@@ -15,8 +15,8 @@ STATION______________________________________________________________________
 DELIMITER $$
 DROP PROCEDURE IF EXISTS createStation;
 CREATE PROCEDURE createStation (idStationVar VARCHAR(11), latitudeVar REAL, longitudeVar REAL,
-											elevationVar REAL, stateCodeVar VARCHAR(2), stationNameVar VARCHAR(50),
-											gsnFlagVar VARCHAR(3), hcnCrnFlagVar VARCHAR(3), wmoldVar VARCHAR(3),
+											elevationVar REAL, stateCodeVar VARCHAR(2), stationNameVar VARCHAR(100),
+											gsnFlagVar VARCHAR(3), hcnCrnFlagVar VARCHAR(3), wmoldVar VARCHAR(50),
 											countryCodeVar VARCHAR(2))
 BEGIN
 	#Verifies if there is an important value in NULL
@@ -56,7 +56,7 @@ COUNTRY______________________________________________________________________
 */
 DELIMITER $$
 DROP PROCEDURE IF EXISTS createCountry;
-CREATE PROCEDURE createCountry (countryCodeVar VARCHAR(2), countryNameVar VARCHAR(50))
+CREATE PROCEDURE createCountry (countryCodeVar VARCHAR(2), countryNameVar VARCHAR(100))
 BEGIN
 	IF ISNULL(countryCodeVar) OR ISNULL(countryNameVar) THEN
 		SELECT "There are values NULL";
@@ -79,7 +79,7 @@ STATE________________________________________________________________________
 */
 DELIMITER $$
 DROP PROCEDURE IF EXISTS createState;
-CREATE PROCEDURE createState (stateCodeVar VARCHAR(2), stateNameVar VARCHAR(50))
+CREATE PROCEDURE createState (stateCodeVar VARCHAR(2), stateNameVar VARCHAR(100))
 BEGIN
 	IF ISNULL(stateCodeVar) OR ISNULL(stateNameVar) THEN 
 		SELECT "There are values NULL";
@@ -135,7 +135,7 @@ STATION______________________________________________________________________
 DELIMITER $$
 DROP PROCEDURE IF EXISTS readStation;
 CREATE PROCEDURE readStation (idStationVar VARCHAR(11), stateCodeVar VARCHAR(2), 
-										stationNameVar VARCHAR(50), countryCodeVar VARCHAR(2))
+										stationNameVar VARCHAR(100), countryCodeVar VARCHAR(2))
 BEGIN
 
 		IF ( SELECT COUNT(*) FROM station WHERE idStation = IFNULL(idStationVar, idStation) 
@@ -163,7 +163,7 @@ COUNTRY______________________________________________________________________
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS readCountry;
-CREATE PROCEDURE readCountry (countryCodeVar VARCHAR(2), countryNameVar VARCHAR(50))
+CREATE PROCEDURE readCountry (countryCodeVar VARCHAR(2), countryNameVar VARCHAR(100))
 BEGIN
 		IF (SELECT COUNT(*) FROM country WHERE countryCode = IFNULL(countryCodeVar, countryCode) 
 													AND countryName = IFNULL(countryNameVar, countryName)) = 0 THEN
@@ -184,7 +184,7 @@ STATE________________________________________________________________________
 */
 DELIMITER $$
 DROP PROCEDURE IF EXISTS readState;
-CREATE PROCEDURE readState (stateCodeVar VARCHAR(2), stateNameVar VARCHAR(50))
+CREATE PROCEDURE readState (stateCodeVar VARCHAR(2), stateNameVar VARCHAR(100))
 BEGIN
 		IF (SELECT COUNT(*) FROM state WHERE stateCode = IFNULL(stateCodeVar, stateCode) 
 													AND stateName = IFNULL(stateNameVar, stateName)) = 0 THEN
@@ -232,8 +232,8 @@ STATION______________________________________________________________________
 DELIMITER $$
 DROP PROCEDURE if EXISTS updateStation;
 CREATE PROCEDURE updateStation (idStationVar VARCHAR(11), latitudeVar REAL, longitudeVar REAL,
-											elevationVar REAL, stateCodeVar VARCHAR(2), stationNameVar VARCHAR(50),
-											gsnFlagVar VARCHAR(3), hcnCrnFlagVar VARCHAR(3), wmoldVar VARCHAR(3),
+											elevationVar REAL, stateCodeVar VARCHAR(2), stationNameVar VARCHAR(100),
+											gsnFlagVar VARCHAR(3), hcnCrnFlagVar VARCHAR(3), wmoldVar VARCHAR(50),
 											countryCodeVar VARCHAR(2))
 BEGIN 
 	# an id is required to modify
@@ -277,7 +277,7 @@ COUNTRY______________________________________________________________________
 */
 DELIMITER $$
 DROP PROCEDURE if EXISTS updateCountry;
-CREATE PROCEDURE updateCountry (countryCodeVar VARCHAR(2), countryNameVar VARCHAR(50))
+CREATE PROCEDURE updateCountry (countryCodeVar VARCHAR(2), countryNameVar VARCHAR(100))
 BEGIN 
 	# an id is required to modify
 	IF (countryCodeVar IS NULL) THEN 
@@ -308,7 +308,7 @@ STATE________________________________________________________________________
 */
 DELIMITER $$
 DROP PROCEDURE if EXISTS updateState;
-CREATE PROCEDURE updateState (stateCodeVar VARCHAR(2), stateNameVar VARCHAR(50))
+CREATE PROCEDURE updateState (stateCodeVar VARCHAR(2), stateNameVar VARCHAR(100))
 BEGIN 
 	# an id is required to modify
 	IF (stateCodeVar IS NULL) THEN 
@@ -339,7 +339,7 @@ FILE_________________________________________________________________________
 */
 DELIMITER $$
 DROP PROCEDURE IF EXISTS updateTextFile;
-CREATE PROCEDURE updateTextFile (fileNameVAR VARCHAR(50), urlVAR VARCHAR(100), processedDayVar DATE,
+CREATE PROCEDURE updateTextFile (fileNameVAR VARCHAR(100), urlVAR VARCHAR(100), processedDayVar DATE,
 										fileMd5VAR INT, fileStatusVAR VARCHAR(20))
 BEGIN 
 	# an id is required to modify
