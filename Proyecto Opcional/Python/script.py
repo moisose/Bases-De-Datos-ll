@@ -4,8 +4,8 @@ import mysql.connector
 import requests
 
 
-pw = 'password'
-puerto = '3307'
+pw = 'MARIPOSA24'
+puerto = '3306'
 
 
 
@@ -16,7 +16,7 @@ puerto = '3307'
 def executeProcedure(procedure, parameters):
    
     try:
-        conn = mysql.connector.connect(host="localhost", user='root', password= pw, port= puerto, database='windyui')
+        conn = mysql.connector.connect(host="localhost", user='root', password= pw, port= puerto, database='weather')
         cursor = conn.cursor()
         args = ("FF", 2, 2, 20, 3)
         result_args = cursor.callproc(procedure, parameters)
@@ -50,7 +50,7 @@ def readCountries():
     for line in lines:
         code = line[:2]
         name = line[3:]
-        print(code + "\n" + name)
+        executeProcedure('createCountry', [code, name])
 
   
 
@@ -68,7 +68,7 @@ def readStates():
     for line in lines:
         code = line[:2]
         name = line[3:]
-        print(code + "\n" + name)
+        executeProcedure('createState', [code, name])
 
 
     file.close()
@@ -88,6 +88,7 @@ def readStations():
     for line in lines:
         print('\n' + line)
         stationId = line[:11]
+        countryCode = stationId[0:2]
         latitude = line[12:20].replace(' ', '')
         longitude = line[21:30].replace(' ', '')
         elevation = line[31:37].replace(' ', '')
@@ -97,7 +98,7 @@ def readStations():
         hcnFlag = line[76:79].replace(' ', '')
         wmoId = line[80:85].replace(' ', '')
         
-        print(stationId + "\n" + latitude + "\n" + longitude + "\n" + elevation + "\n" + state + "\n" + name + "\n" + gsnFlag + "\n" + hcnFlag + "\n" + wmoId)
+        executeProcedure('createStation', [stationId, latitude, longitude, elevation, state, name, gsnFlag, hcnFlag, wmoId, countryCode])
 
 
     file.close()
