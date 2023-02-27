@@ -100,19 +100,18 @@ FILE_________________________________________________________________________
 -> @param: 
 -> @output: result
 */
-
 DELIMITER $$
 DROP PROCEDURE IF EXISTS createTextFile;
-CREATE PROCEDURE createTextFile ( fileCodeVAR INT, fileNameVAR VARCHAR(50), urlVAR VARCHAR(100),
+CREATE PROCEDURE createTextFile (fileNameVAR VARCHAR(50), urlVAR VARCHAR(100),
 										fileMd5VAR INT, fileStateVAR VARCHAR(20))
 BEGIN
-	IF ISNULL(fileCodeVAR) OR ISNULL(fileNameVAR) OR ISNULL(urlVAR) THEN 
+	IF ISNULL(fileNameVAR) OR ISNULL(urlVAR) THEN 
 		SELECT "There are values NULL";
-	ELSEIF (SELECT COUNT(*) FROM textFile WHERE fileCode = fileCodeVAR) != 0 THEN
+	ELSEIF (SELECT COUNT(*) FROM textFile WHERE fileName = fileNameVAR) != 0 THEN
 		SELECT "The File already exists";
 	ELSE
-		INSERT INTO textFile (fileCode, fileName, url, fileMd5, fileState, processedDay)
-									VALUES (fileCodeVar, fileNameVar, urlVar, fileMd5Var, fileStateVar, (SELECT DATE(NOW())));
+		INSERT INTO textFile (FileName, url, fileMd5, fileState, processedDay)
+									VALUES (fileNameVar, urlVar, fileMd5Var, fileStateVar, (SELECT DATE(NOW())));
 											#(SELECT DATE_FORMAT(NOW(), "%m-%d-%Y")));
 		SELECT "The file has been created";
 	END IF;
@@ -120,7 +119,7 @@ BEGIN
 END;
 $$
 
-#CALL createTextFile (NULL, "Prueba.txt","jaksls.com", 1672, "Descargado" );
+#CALL createTextFile ("Prueba.txt","jaksls.com", 1672, "Descargado" );
 
 
 #-------------------------------------READ------------------------------------
@@ -205,22 +204,21 @@ FILE_________________________________________________________________________
 */
 DELIMITER $$
 DROP PROCEDURE IF EXISTS readTextFile;
-CREATE PROCEDURE readTextFile ( fileCodeVAR INT, fileNameVAR VARCHAR(50), urlVAR VARCHAR(100),
+CREATE PROCEDURE readTextFile ( fileNameVAR VARCHAR(50), urlVAR VARCHAR(100),
 										fileStateVAR VARCHAR(20))
 BEGIN
-		IF (SELECT COUNT(*) FROM textFile WHERE fileCode = IFNULL(fileCodeVAR, fileCode) 
-													AND fileName = IFNULL(fileNameVAR, fileName) AND
+		IF (SELECT COUNT(*) FROM textFile WHERE fileName = IFNULL(fileNameVAR, fileName) AND
 													url = IFNULL(urlVAR, url) AND 
 													fileState = IFNULL(fileStateVAR, fileState)) = 0 THEN
 			SELECT "There is no file with those specifications " AS "Result";
 		ELSE
-			SELECT fileCode, fileName, url, fileMd5, fileState, processedDay FROM textFile 
-					WHERE fileCode = IFNULL(fileCodeVAR, fileCode) AND fileName = IFNULL(fileNameVAR, fileName) 
+			SELECT fileName, url, fileMd5, fileState, processedDay FROM textFile 
+					WHERE fileName = IFNULL(fileNameVAR, fileName) 
 					AND url = IFNULL(urlVAR, url) AND fileState = IFNULL(fileStateVAR, fileState);
 		END IF;
 END;
 $$
-#CALL readTextFile(NULL, NULL, NULL, NULL);
+#CALL readTextFile(NULL, NULL, NULL);
 
 #-----------------------------------UPDATE-----------------------------------
 #STATION______________________________________________________________________

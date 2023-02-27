@@ -4,8 +4,8 @@
 import os
 import mysql.connector
 
-pw = 'ContraseñaMariaDb'
-puerto = 'Puerto'
+pw = 'password'
+puerto = '3307'
 
 # inserts row in a table
 # @restrictions: none
