@@ -1,44 +1,11 @@
 # ---> pip3 install mariadb
-#import mariadb
-#import pickle
 import os
 import mysql.connector
+import requests
+
 
 pw = 'password'
 puerto = '3307'
-
-# inserts row in a table
-# @restrictions: none
-# @param: the INSERT query
-# @output: none
-def insertRow(query):
-    try:
-        conn = mysql.connector.connect(host = "localhost", user='root', password= pw, port= puerto, database='Prueba');
-    except mysql.connector.Error as e:
-        print('Error')
-
-    cursor = conn.cursor()
-    cursor.execute(query)
-
-    conn.commit()
-
-
-
-# reads a certain row in a table
-# @restrictions: none
-# @param: the SELECT query and the parameters (tuple of strings)
-# @output: none
-def readRow(query, parameters):
-    try:
-        conn = mysql.connector.connect(host = "localhost", user='root', password= pw, port= puerto, database='Prueba')
-    except mysql.connector.Error as e:
-        print('Error')
-
-    cursor = conn.cursor()
-    cursor.execute(query)
-
-    #for parameters in cursor:
-    #    print(parameters)
 
 
 
@@ -74,29 +41,33 @@ def executeProcedure(procedure, parameters):
 # @param: none
 # @output: none
 def readCountries():
-    file = open("ghcnd-countries.txt","r")
-    lines = file.readlines()
+    url = 'https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-countries.txt'
+    file = requests.get(url)
+    
+    string = file.content.decode('utf-8')
+    lines = string.rsplit('\n')
 
     for line in lines:
         code = line[:2]
-        name = line[3:].replace(' ', '')
+        name = line[3:]
         print(code + "\n" + name)
 
-
-    file.close()
-        
+  
 
 # reads states.txt and inserts in table weather.states
 # @restrictions: none
 # @param: none
 # @output: none
 def readStates():
-    file = open("ghcnd-states.txt","r")
-    lines = file.readlines()
+    url = 'https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-states.txt'
+    file = requests.get(url)
+    
+    string = file.content.decode('utf-8')
+    lines = string.rsplit('\n')
 
     for line in lines:
         code = line[:2]
-        name = line[3:].replace(' ', '')
+        name = line[3:]
         print(code + "\n" + name)
 
 
@@ -108,8 +79,11 @@ def readStates():
 # @param: none
 # @output: none
 def readStations():
-    file = open("ghcnd-stations.txt","r")
-    lines = file.readlines()
+    url = 'https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt'
+    file = requests.get(url)
+    
+    string = file.content.decode('utf-8')
+    lines = string.rsplit('\n')
 
     for line in lines:
         print('\n' + line)
@@ -121,7 +95,7 @@ def readStations():
         name = line[41:71]
         gsnFlag = line[72:75].replace(' ', '')
         hcnFlag = line[76:79].replace(' ', '')
-        wmoId = line[80:].replace(' ', '')
+        wmoId = line[80:85].replace(' ', '')
         
         print(stationId + "\n" + latitude + "\n" + longitude + "\n" + elevation + "\n" + state + "\n" + name + "\n" + gsnFlag + "\n" + hcnFlag + "\n" + wmoId)
 
