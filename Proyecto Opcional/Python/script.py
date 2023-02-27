@@ -4,6 +4,8 @@
 import os
 import mysql.connector
 
+pw = 'ContraseñaMariaDb'
+puerto = 'Puerto'
 
 # inserts row in a table
 # @restrictions: none
@@ -11,7 +13,7 @@ import mysql.connector
 # @output: none
 def insertRow(query):
     try:
-        conn = mysql.connector.connect(host = "localhost", user='root', password='MARIPOSA24', port='3306', database='Prueba');
+        conn = mysql.connector.connect(host = "localhost", user='root', password= pw, port= puerto, database='Prueba');
     except mysql.connector.Error as e:
         print('Error')
 
@@ -28,7 +30,7 @@ def insertRow(query):
 # @output: none
 def readRow(query, parameters):
     try:
-        conn = mysql.connector.connect(host = "localhost", user='root', password='MARIPOSA24', port='3306', database='Prueba')
+        conn = mysql.connector.connect(host = "localhost", user='root', password= pw, port= puerto, database='Prueba')
     except mysql.connector.Error as e:
         print('Error')
 
@@ -47,7 +49,7 @@ def readRow(query, parameters):
 def executeProcedure(procedure, parameters):
    
     try:
-        conn = mysql.connector.connect(host="localhost", user='root', passwd='MARIPOSA24', port='3306', database='Prueba')
+        conn = mysql.connector.connect(host="localhost", user='root', password= pw, port= puerto, database='windyui')
         cursor = conn.cursor()
         args = ("FF", 2, 2, 20, 3)
         result_args = cursor.callproc(procedure, parameters)

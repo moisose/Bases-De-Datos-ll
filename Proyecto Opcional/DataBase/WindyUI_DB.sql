@@ -72,17 +72,5 @@ ALTER TABLE Station
 	
 
 
-#Pruebas
 
-
-#CALL createState("CF", "CALIFORNIA");
-#SELECT * FROM state;
-#CALL createCountry("EU", "Estados");
-#SELECT * FROM country;
-
-#CALL createStation("PRUEBA2", 12.8, 12.2, 21, NULL, "NOMBRE", "123", "123", "123", NULL);
-
-#SELECT * FROM station;
-
-#SELECT COUNT(*) FROM country WHERE countryCode = "EU"
 	
