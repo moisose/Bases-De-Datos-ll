@@ -1,3 +1,4 @@
+USE weather;
 #-------------------------------CRUD PROCEDURES-------------------------------
 
 #-----------------------------------CREATES-----------------------------------
@@ -103,15 +104,15 @@ FILE_________________________________________________________________________
 DELIMITER $$
 DROP PROCEDURE IF EXISTS createTextFile;
 CREATE PROCEDURE createTextFile (fileNameVAR VARCHAR(50), urlVAR VARCHAR(100),
-										fileMd5VAR INT, fileStateVAR VARCHAR(20))
+										fileMd5VAR INT, fileStatusVar VARCHAR(20))
 BEGIN
 	IF ISNULL(fileNameVAR) OR ISNULL(urlVAR) THEN 
 		SELECT "There are values NULL";
 	ELSEIF (SELECT COUNT(*) FROM textFile WHERE fileName = fileNameVAR) != 0 THEN
 		SELECT "The File already exists";
 	ELSE
-		INSERT INTO textFile (FileName, url, fileMd5, fileState, processedDay)
-									VALUES (fileNameVar, urlVar, fileMd5Var, fileStateVar, (SELECT DATE(NOW())));
+		INSERT INTO textFile (FileName, url, fileMd5, fileStatus, processedDay)
+									VALUES (fileNameVar, urlVar, fileMd5Var, fileStatusVar, (SELECT DATE(NOW())));
 											#(SELECT DATE_FORMAT(NOW(), "%m-%d-%Y")));
 		SELECT "The file has been created";
 	END IF;
@@ -205,16 +206,16 @@ FILE_________________________________________________________________________
 DELIMITER $$
 DROP PROCEDURE IF EXISTS readTextFile;
 CREATE PROCEDURE readTextFile ( fileNameVAR VARCHAR(50), urlVAR VARCHAR(100),
-										fileStateVAR VARCHAR(20))
+										fileStatusVar VARCHAR(20))
 BEGIN
 		IF (SELECT COUNT(*) FROM textFile WHERE fileName = IFNULL(fileNameVAR, fileName) AND
 													url = IFNULL(urlVAR, url) AND 
-													fileState = IFNULL(fileStateVAR, fileState)) = 0 THEN
+													fileStatus = IFNULL(fileStatusVar, fileStatus)) = 0 THEN
 			SELECT "There is no file with those specifications " AS "Result";
 		ELSE
-			SELECT fileName, url, fileMd5, fileState, processedDay FROM textFile 
+			SELECT fileName, url, fileMd5, fileStatus, processedDay FROM textFile 
 					WHERE fileName = IFNULL(fileNameVAR, fileName) 
-					AND url = IFNULL(urlVAR, url) AND fileState = IFNULL(fileStateVAR, fileState);
+					AND url = IFNULL(urlVAR, url) AND fileStatus = IFNULL(fileStatusVar, fileStatus);
 		END IF;
 END;
 $$
@@ -262,7 +263,7 @@ BEGIN
         
         WHERE station.idStation = idStationVar;
         SELECT "The station has been successfully modified.";
-	END if;
+	END IF;
 	
 END;
 $$
@@ -293,7 +294,7 @@ BEGIN
         
         WHERE country.countryCode = countryCodeVar;
         SELECT "The country has been successfully modified.";
-	END if;
+	END IF;
 	
 END;
 $$
@@ -324,7 +325,7 @@ BEGIN
         
         WHERE state.stateCode = stateCodeVar;
         SELECT "The state has been successfully modified.";
-	END if;
+	END IF;
 	
 END;
 $$
@@ -337,9 +338,9 @@ FILE_________________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE if EXISTS updateTextFile;
+DROP PROCEDURE IF EXISTS updateTextFile;
 CREATE PROCEDURE updateTextFile (fileNameVAR VARCHAR(50), urlVAR VARCHAR(100), processedDayVar DATE,
-										fileMd5VAR INT, fileStateVAR VARCHAR(20))
+										fileMd5VAR INT, fileStatusVAR VARCHAR(20))
 BEGIN 
 	# an id is required to modify
 	IF (fileNameVAR IS NULL) THEN 
@@ -355,11 +356,11 @@ BEGIN
 		UPDATE textfile SET textfile.url = IFNULL(urlVAR, textfile.url),  
 			textfile.processedDay = IFNULL(processedDayVar, textfile.processedDay),
 			textfile.fileMd5 = IFNULL(fileMd5VAR, textfile.fileMd5),
-			textfile.fileState = IFNULL(fileStateVAR, textfile.fileState)
+			textfile.fileStatus = IFNULL(fileStatusVAR, textfile.fileStatus)
         
         WHERE textfile.fileName = fileNameVAR;
         SELECT "The textFile has been successfully modified.";
-	END if;
+	END IF;
 	
 END;
 $$
@@ -373,7 +374,7 @@ STATION______________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE if EXISTS deleteStation;
+DROP PROCEDURE IF EXISTS deleteStation;
 CREATE PROCEDURE deleteStation (idStationV INT)
 BEGIN
 	DECLARE message VARCHAR(60);
@@ -401,7 +402,7 @@ COUNTRY______________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE if EXISTS deleteCountry;
+DROP PROCEDURE IF EXISTS deleteCountry;
 CREATE PROCEDURE deleteCountry (countryCodeV VARCHAR(2))
 BEGIN
 	DECLARE message VARCHAR(60);
@@ -429,7 +430,7 @@ STATE________________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE if EXISTS deleteState;
+DROP PROCEDURE IF EXISTS deleteState;
 CREATE PROCEDURE deleteState (stateCodeV VARCHAR(2))
 BEGIN
 	DECLARE message VARCHAR(60);
@@ -457,7 +458,7 @@ FILE_________________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE if EXISTS deleteTextFile;
+DROP PROCEDURE IF EXISTS deleteTextFile;
 CREATE PROCEDURE deleteTextFile (fileNameV VARCHAR(50))
 BEGIN
 	DECLARE message VARCHAR(60);
