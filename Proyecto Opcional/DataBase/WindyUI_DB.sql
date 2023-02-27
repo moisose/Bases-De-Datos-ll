@@ -14,10 +14,10 @@
 			I SEMESTRE, 2023
 */
 
-DROP DATABASE IF EXISTS WindyUI;
-CREATE DATABASE WindyUI;
+DROP DATABASE IF EXISTS weather;
+CREATE DATABASE weather;
 
-USE WindyUI;
+USE weather;
 
 #----------------------------------------------TABLES-----------------------------------------------
 #Table Station 
@@ -53,8 +53,7 @@ CREATE TABLE State (
 #Table Files
 DROP TABLE IF EXISTS textFile;
 CREATE TABLE textFile (
-		fileCode INT PRIMARY KEY AUTO_INCREMENT,
-		fileName VARCHAR(50),  
+		fileName VARCHAR(50) PRIMARY KEY,  
 		url VARCHAR(100),
 		processedDay DATE,
 		fileMd5 INT,
