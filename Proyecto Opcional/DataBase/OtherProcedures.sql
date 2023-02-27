@@ -19,7 +19,7 @@ BEGIN
 			CALL createTextFile(fileNameVar, urlVar, fileMd5Var, fileStatusVar);
 			SELECT "The file has been created";
 		ELSEIF (SELECT fileMd5 FROM textFile WHERE fileName = fileNameVar) = fileMd5Var THEN
-			#CALL createTextFile(fileNameVar, urlVar, fileMd5Var, fileStatusVar);
+			#CALL createTextFile(fileNameVar, urlVar, fileMd5Var, fileStatusVar);country
 			SELECT "The file has no changes";
 		ELSE
 			CALL updateTextFile(fileNameVar, NULL, (SELECT DATE(NOW())), fileMd5Var, fileStatusVar);
