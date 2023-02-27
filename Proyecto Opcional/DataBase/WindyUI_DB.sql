@@ -15,7 +15,7 @@
 */
 
 #DROP DATABASE IF EXISTS weather;
-CREATE DATABASE weather;
+#CREATE DATABASE weather;
 
 USE weather;
 
@@ -29,10 +29,10 @@ CREATE TABLE Station (
 		longitude REAL,
 		elevation REAL,
 		stateCode VARCHAR(2),
-		stationName VARCHAR(50),
+		stationName VARCHAR(100),
 		gsnFlag VARCHAR(3),
 		hcnCrnFlag VARCHAR(3),
-		wmold VARCHAR(3),
+		wmold VARCHAR(50),
 		countryCode VARCHAR(2)
 );
 	
@@ -40,14 +40,14 @@ CREATE TABLE Station (
 DROP TABLE IF EXISTS Country;
 CREATE TABLE Country (
 		countryCode VARCHAR(2) PRIMARY KEY,
-		countryName VARCHAR(50)
+		countryName VARCHAR(100)
 );
 
 #Table States 
 DROP TABLE IF EXISTS State;
 CREATE TABLE State (
 		stateCode VARCHAR(2) PRIMARY KEY,
-		stateName VARCHAR(50)
+		stateName VARCHAR(100)
 );
 
 #Table Files
