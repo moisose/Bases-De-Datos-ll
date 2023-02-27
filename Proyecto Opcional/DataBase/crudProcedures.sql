@@ -221,20 +221,265 @@ $$
 #CALL readTextFile(NULL, NULL, NULL);
 
 #-----------------------------------UPDATE-----------------------------------
-#STATION______________________________________________________________________
-#COUNTRY______________________________________________________________________
-#STATE________________________________________________________________________
-#FILE_________________________________________________________________________
+/*
+STATION______________________________________________________________________
+-> 
+-> @restrictions: 
+-> @param: 
+-> @output: result
+*/
+DELIMITER $$
+DROP PROCEDURE if EXISTS updateStation;
+CREATE PROCEDURE updateStation (idStationVar VARCHAR(11), latitudeVar REAL, longitudeVar REAL,
+											elevationVar REAL, stateCodeVar VARCHAR(2), stationNameVar VARCHAR(50),
+											gsnFlagVar VARCHAR(3), hcnCrnFlagVar VARCHAR(3), wmoldVar VARCHAR(3),
+											countryCodeVar VARCHAR(2))
+BEGIN 
+	# an id is required to modify
+	IF (idStationVar IS NULL) THEN 
+		SELECT "You must enter the id to be able to modify the station." AS "Result";
+	# check that the station exists	
+	ELSEIF (SELECT COUNT(*) FROM station WHERE station.idStation = idStationVar) = 0 THEN
+		SELECT "The station does not exist." AS "Result";
+	# check that the country exists	
+	ELSEIF (SELECT COUNT(*) FROM country WHERE country.countryCode = countryCodeVar) = 0 THEN
+		SELECT "The new country does not exist." AS "Result";
+	# check that the state exists
+	ELSEIF (SELECT COUNT(*) FROM state WHERE state.stateCode = stateCodeVar) = 0 THEN
+		SELECT "The new state does not exist." AS "Result";
+	# the desired data is modified
+	ELSE
+		UPDATE station SET station.latitude = IFNULL(latitudeVar, station.latitude),
+        station.longitude = IFNULL(longitudeVar, station.longitude),
+        station.elevation = IFNULL(elevationVar, station.elevation),
+        station.stateCode = IFNULL(stateCodeVar, station.stateCode),
+        station.stationName = IFNULL(stationNameVar, station.stationName),
+        station.gsnFlag = IFNULL(gsnFlagVar, station.gsnFlag),
+        station.hcnCrnFlag = IFNULL(hcnCrnFlagVar, station.hcnCrnFlag),
+        station.wmold = IFNULL(wmoldVar, station.wmold),
+        station.countryCode = IFNULL(countryCodeVar, station.countryCode)
+        
+        
+        WHERE station.idStation = idStationVar;
+        SELECT "The station has been successfully modified.";
+	END if;
+	
+END;
+$$
+
+/*
+COUNTRY______________________________________________________________________
+-> 
+-> @restrictions: 
+-> @param: 
+-> @output: result
+*/
+DELIMITER $$
+DROP PROCEDURE if EXISTS updateCountry;
+CREATE PROCEDURE updateCountry (countryCodeVar VARCHAR(2), countryNameVar VARCHAR(50))
+BEGIN 
+	# an id is required to modify
+	IF (countryCodeVar IS NULL) THEN 
+		SELECT "You must enter the id to be able to modify the country." AS "Result";
+	# check that the country exists	
+	ELSEIF (SELECT COUNT(*) FROM country WHERE country.countryCode = countryCodeVar) = 0 THEN
+		SELECT "The country does not exist." AS "Result";
+	# check that the country name does not exists	
+	ELSEIF (SELECT COUNT(*) FROM country WHERE country.countryName = countryNameVar) = 1 THEN
+		SELECT "The new country name already exist." AS "Result";
+	# the desired data is modified
+	ELSE
+		UPDATE country SET country.countryName = IFNULL(countryNameVar, country.countryName)  
+        
+        WHERE country.countryCode = countryCodeVar;
+        SELECT "The country has been successfully modified.";
+	END if;
+	
+END;
+$$
+
+/*
+STATE________________________________________________________________________
+-> 
+-> @restrictions: 
+-> @param: 
+-> @output: result
+*/
+DELIMITER $$
+DROP PROCEDURE if EXISTS updateState;
+CREATE PROCEDURE updateState (stateCodeVar VARCHAR(2), stateNameVar VARCHAR(50))
+BEGIN 
+	# an id is required to modify
+	IF (stateCodeVar IS NULL) THEN 
+		SELECT "You must enter the id to be able to modify the country." AS "Result";
+	# check that the country exists	
+	ELSEIF (SELECT COUNT(*) FROM state WHERE state.stateCode = stateCodeVar) = 0 THEN
+		SELECT "The state does not exist." AS "Result";
+	# check that the state name does not exists	
+	ELSEIF (SELECT COUNT(*) FROM state WHERE state.stateName = stateNameVar) = 1 THEN
+		SELECT "The new state name already exist." AS "Result";
+	# the desired data is modified
+	ELSE
+		UPDATE state SET state.stateName = IFNULL(stateNameVar, state.stateName)  
+        
+        WHERE state.stateCode = stateCodeVar;
+        SELECT "The state has been successfully modified.";
+	END if;
+	
+END;
+$$
+
+/*
+FILE_________________________________________________________________________
+-> 
+-> @restrictions: 
+-> @param: 
+-> @output: result
+*/
+DELIMITER $$
+DROP PROCEDURE if EXISTS updateTextFile;
+CREATE PROCEDURE updateTextFile (fileNameVAR VARCHAR(50), urlVAR VARCHAR(100), processedDayVar DATE,
+										fileMd5VAR INT, fileStateVAR VARCHAR(20))
+BEGIN 
+	# an id is required to modify
+	IF (fileNameVAR IS NULL) THEN 
+		SELECT "You must enter the fileName to be able to modify the country." AS "Result";
+	# check that the textFile exists	
+	ELSEIF (SELECT COUNT(*) FROM textfile WHERE textfile.fileName = fileNameVAR) = 0 THEN
+		SELECT "The textFile does not exist." AS "Result";
+	# check that the new url does not exists	
+	ELSEIF (SELECT COUNT(*) FROM textfile WHERE textfile.url = urlVAR) = 1 THEN
+		SELECT "The new url already exist." AS "Result";
+	# the desired data is modified
+	ELSE
+		UPDATE textfile SET textfile.url = IFNULL(urlVAR, textfile.url),  
+			textfile.processedDay = IFNULL(processedDayVar, textfile.processedDay),
+			textfile.fileMd5 = IFNULL(fileMd5VAR, textfile.fileMd5),
+			textfile.fileState = IFNULL(fileStateVAR, textfile.fileState)
+        
+        WHERE textfile.fileName = fileNameVAR;
+        SELECT "The textFile has been successfully modified.";
+	END if;
+	
+END;
+$$
 
 #-----------------------------------DELETE-----------------------------------
-#STATION______________________________________________________________________
-#COUNTRY______________________________________________________________________
-#STATE________________________________________________________________________
-#FILE_________________________________________________________________________
+/*
+STATION______________________________________________________________________
+-> 
+-> @restrictions: 
+-> @param: 
+-> @output: result
+*/
+DELIMITER $$
+DROP PROCEDURE if EXISTS deleteStation;
+CREATE PROCEDURE deleteStation (idStationV INT)
+BEGIN
+	DECLARE message VARCHAR(60);
+    # error handling - fk
+	DECLARE EXIT HANDLER FOR 1451 
+		SELECT "ERROR - The station cannot be deleted." AS Result;
+    
+    IF (idStationV IS NULL) THEN
+		SET message = "ERROR - Cannot enter null data";
+	ELSEIF (SELECT COUNT(*) FROM station WHERE station.idStation = idStationV) = 0 THEN
+		SET message = "ERROR - There is no station with the entered id.";
+	ELSE
+		DELETE FROM station WHERE station.idStation = idStationV;
+		SET message = "Delete successfully.";
+	END IF;
+    SELECT message AS Result;
+END;
+$$
+
+/*
+COUNTRY______________________________________________________________________
+-> 
+-> @restrictions: 
+-> @param: 
+-> @output: result
+*/
+DELIMITER $$
+DROP PROCEDURE if EXISTS deleteCountry;
+CREATE PROCEDURE deleteCountry (countryCodeV VARCHAR(2))
+BEGIN
+	DECLARE message VARCHAR(60);
+    # error handling - fk
+	DECLARE EXIT HANDLER FOR 1451 
+		SELECT "ERROR - The country cannot be deleted." AS Result;
+    
+    IF (countryCodeV IS NULL) THEN
+		SET message = "ERROR - Cannot enter null data";
+	ELSEIF (SELECT COUNT(*) FROM country WHERE country.countryCode = countryCodeV) = 0 THEN
+		SET message = "ERROR - There is no country with the entered code.";
+	ELSE
+		DELETE FROM country WHERE country.countryCode = countryCodeV;
+		SET message = "Delete successfully.";
+	END IF;
+    SELECT message AS Result;
+END;
+$$
+
+/*
+STATE________________________________________________________________________
+-> 
+-> @restrictions: 
+-> @param: 
+-> @output: result
+*/
+DELIMITER $$
+DROP PROCEDURE if EXISTS deleteState;
+CREATE PROCEDURE deleteState (stateCodeV VARCHAR(2))
+BEGIN
+	DECLARE message VARCHAR(60);
+    # error handling - fk
+	DECLARE EXIT HANDLER FOR 1451 
+		SELECT "ERROR - The state cannot be deleted." AS Result;
+    
+    IF (stateCodeV IS NULL) THEN
+		SET message = "ERROR - Cannot enter null data";
+	ELSEIF (SELECT COUNT(*) FROM state WHERE state.stateCode = stateCodeV) = 0 THEN
+		SET message = "ERROR - There is no state with the entered code.";
+	ELSE
+		DELETE FROM state WHERE state.stateCode = stateCodeV;
+		SET message = "Delete successfully.";
+	END IF;
+    SELECT message AS Result;
+END;
+$$
+
+/*
+FILE_________________________________________________________________________
+-> 
+-> @restrictions: 
+-> @param: 
+-> @output: result
+*/
+DELIMITER $$
+DROP PROCEDURE if EXISTS deleteTextFile;
+CREATE PROCEDURE deleteTextFile (fileNameV VARCHAR(50))
+BEGIN
+	DECLARE message VARCHAR(60);
+    # error handling - fk
+	DECLARE EXIT HANDLER FOR 1451 
+		SELECT "ERROR - The textFile cannot be deleted." AS Result;
+    
+    IF (fileNameV IS NULL) THEN
+		SET message = "ERROR - Cannot enter null data";
+	ELSEIF (SELECT COUNT(*) FROM textfile WHERE textfile.fileName = fileNameV) = 0 THEN
+		SET message = "ERROR - There is no textFile with the entered file name.";
+	ELSE
+		DELETE FROM textfile WHERE textfile.fileName = fileNameV;
+		SET message = "Delete successfully.";
+	END IF;
+    SELECT message AS Result;
+END;
+$$
 
 
-
-
+# ==============================================================================================
+# ==============================================================================================
 #Pruebas
 
 
@@ -255,4 +500,38 @@ $$
 
 #SELECT * FROM station;
 
-							
+
+
+# ============
+#CALL updateStation(null, null, null, null, null, null, null, null, null, null)
+
+
+
+
+#INSERT INTO country (countryCode, countryName)
+#				VALUES ("CR", "Costa Rica");
+#CALL updateCountry("CR", "Costa Ricaa");
+#SELECT * FROM country;	
+
+
+
+
+#INSERT INTO state (stateCode, stateName)
+#				VALUES ("AB", "ALBERTA");
+				
+#CALL updateState("AB", "ALBERTAA");
+
+#SELECT * FROM state;		
+
+
+
+
+
+#SELECT * FROM country;
+#CALL deleteCountry("CR");				
+
+
+
+
+#SELECT * FROM state;
+#CALL deleteState("AB");
