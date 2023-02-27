@@ -14,7 +14,7 @@
 			I SEMESTRE, 2023
 */
 
-DROP DATABASE IF EXISTS weather;
+#DROP DATABASE IF EXISTS weather;
 CREATE DATABASE weather;
 
 USE weather;
@@ -57,7 +57,7 @@ CREATE TABLE textFile (
 		url VARCHAR(100),
 		processedDay DATE,
 		fileMd5 INT,
-		fileState VARCHAR(20)
+		fileStatus VARCHAR(20)
 );
 
 #FOREING KEYS-------------------------------------------------------
