@@ -2,10 +2,11 @@
 import os
 import mysql.connector
 import requests
+import hashlib
 
 
 
-pw = ''
+pw = 'MhlDahiana'
 puerto = '3307'
 
 
@@ -34,24 +35,34 @@ def executeProcedure(procedure, parameters):
             cursor.close()
             conn.close()
             print("MySQL connection is closed")
-
+    return cursor
  
 
 # reads countries.txt and inserts in table weather.countries
 # @restrictions: none
 # @param: none
-# @output: none
+# @output: noneexecuteProcedure('createCountry', [code, name])
 def readCountries():
     url = 'https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-countries.txt'
     file = requests.get(url)
     
     string = file.content.decode('utf-8')
     lines = string.rsplit('\n')
+    md5 = getMd5(string)
+    cursor = executeProcedure('loadFile', ["ghcnd-countries.txt", url, str(md5), "Descargado"])
+    for result in cursor.stored_results():
+        print("Resultado", result.fetchall())
+        if result[0][0] == "The file has been created" or result[0][0] == 'The textFile has been successfully modified.':
+            for line in lines:
+                code = line[:2]
+                name = line[3:]
+                executeProcedure('createCountry', [code, name])
+            print("El archivo se modifico")
+        else:
+            print("El archivo no se modifico")
 
-    for line in lines:
-        code = line[:2]
-        name = line[3:]
-        executeProcedure('createCountry', [code, name])
+    
+    
 
   
 
@@ -106,7 +117,13 @@ def readStations():
 
         
 
-
+def getMd5(string):
+    hashSha = hashlib.sha256()
+    hashSha.update(string.encode())
+    print (hashSha.hexdigest())
+    return hashSha
+    
+   
 
 
     
