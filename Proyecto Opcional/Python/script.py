@@ -4,6 +4,7 @@ import mysql.connector
 import requests
 
 
+
 pw = ''
 puerto = '3307'
 
