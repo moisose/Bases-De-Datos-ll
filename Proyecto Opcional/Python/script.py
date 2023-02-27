@@ -4,8 +4,8 @@ import mysql.connector
 import requests
 
 
-pw = 'MARIPOSA24'
-puerto = '3306'
+pw = 'bases'
+puerto = '3307'
 
 
 
