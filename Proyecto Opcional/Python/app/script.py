@@ -5,12 +5,12 @@ import requests
 import hashlib
 
 
-
+#Values
 pw = 'MhlDahiana'
 puerto = '3307'
 
 
-
+#-------------------------------------------Funtions------------------------------------
 # executes a stored procedure
 # @restrictions: none
 # @param: the name of the stored prcedure and the parameters of the stored procedure (array of strings)
@@ -37,7 +37,7 @@ def executeProcedure(procedure, parameters):
             print("MySQL connection is closed")
     return cursor
  
-
+#--------------------------------------------------------------------------------------------------
 # reads countries.txt and inserts in table weather.countries
 # @restrictions: none
 # @param: none
@@ -61,11 +61,7 @@ def readCountries():
         else:
             print("El archivo no se modifico")
 
-    
-    
-
-  
-
+#----------------------------------------------------------------------------------------------------------------
 # reads states.txt and inserts in table weather.states
 # @restrictions: none
 # @param: none
@@ -77,15 +73,22 @@ def readStates():
     string = file.content.decode('utf-8')
     lines = string.rsplit('\n')
 
-    for line in lines:
-        code = line[:2]
-        name = line[3:]
-        executeProcedure('createState', [code, name])
 
-
+    md5 = getMd5(string)
+    cursor = executeProcedure('loadFile', ["ghcnd-states.txt", url, str(md5), "Descargado"])
+    for result in cursor.stored_results():
+        print("Resultado", result.fetchall())
+        if result[0][0] == "The file has been created" or result[0][0] == 'The textFile has been successfully modified.':
+            for line in lines:
+                code = line[:2]
+                name = line[3:]
+                executeProcedure('createState', [code, name])
+            print("El archivo se modifico")
+        else:
+            print("El archivo no se modifico")
     file.close()
     
-
+#-------------------------------------------------------------------------------------------
 # reads stations.txt and inserts in table weather.stations
 # @restrictions: none
 # @param: none
@@ -96,37 +99,55 @@ def readStations():
     
     string = file.content.decode('utf-8')
     lines = string.rsplit('\n')
+    
+    md5 = getMd5(string)
+    cursor = executeProcedure('loadFile', ["ghcnd-stations.txt", url, str(md5), "Descargado"])
+    for result in cursor.stored_results():
+        print("Resultado", result.fetchall())
+        if result[0][0] == "The file has been created" or result[0][0] == 'The textFile has been successfully modified.':
+            for line in lines:
+                print('\n' + line)
+                stationId = line[:11]
+                countryCode = stationId[0:2]
+                latitude = line[12:20].replace(' ', '')
+                longitude = line[21:30].replace(' ', '')
+                elevation = line[31:37].replace(' ', '')
+                state = line[38:40].replace(' ', '')
+                name = line[41:71]
+                gsnFlag = line[72:75].replace(' ', '')
+                hcnFlag = line[76:79].replace(' ', '')
+                wmoId = line[80:85].replace(' ', '')
+                executeProcedure('createStation', [stationId, latitude, longitude, elevation, state, name, gsnFlag, hcnFlag, wmoId, countryCode])
+            print("El archivo se modifico")
+        else:
+            print("El archivo no se modifico")
 
-    for line in lines:
-        print('\n' + line)
-        stationId = line[:11]
-        countryCode = stationId[0:2]
-        latitude = line[12:20].replace(' ', '')
-        longitude = line[21:30].replace(' ', '')
-        elevation = line[31:37].replace(' ', '')
-        state = line[38:40].replace(' ', '')
-        name = line[41:71]
-        gsnFlag = line[72:75].replace(' ', '')
-        hcnFlag = line[76:79].replace(' ', '')
-        wmoId = line[80:85].replace(' ', '')
         
-        executeProcedure('createStation', [stationId, latitude, longitude, elevation, state, name, gsnFlag, hcnFlag, wmoId, countryCode])
+
 
 
     file.close()
 
         
-
+#------------------------------------------------------------------------------------------------------------------------------
+# Calculate the MD5 of a string
+# @restrictions: none
+# @param: a string 
+# @output: the hash of the string
 def getMd5(string):
     hashSha = hashlib.sha256()
     hashSha.update(string.encode())
     print (hashSha.hexdigest())
     return hashSha
     
-   
+#-------------------------------------------------------------------------------------------------------------------------
+def init ():
+    readCountries()
+    readStates()
+    readStations()
 
-
-    
+#_______________________________________________________MAIN_____________________________________________________________
+init()
 
 
 
