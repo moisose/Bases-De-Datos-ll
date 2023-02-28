@@ -38,7 +38,7 @@ ____________________________________________________________________________
 */
 DELIMITER $$
 DROP PROCEDURE IF EXISTS loadFileFolder;
-CREATE PROCEDURE loadFileFolder (fileNameVar VARCHAR(50), urlVar VARCHAR(100), fileMd5Var INT, 
+CREATE PROCEDURE loadFileFolder (fileNameVar VARCHAR(50), urlVar VARCHAR(100), fileMd5Var VARCHAR(10000), 
 												fileStatusVar VARCHAR(20))
 BEGIN
 		IF ISNULL(fileNameVar) OR ISNULL(urlVar) OR ISNULL(fileStatusVar) THEN
@@ -56,4 +56,31 @@ END;
 $$
 
 #CALL loadFileFolder("PRUEBA", "HPPT.JJKWOK.COM", NULL, "Listado");
+
+/*
+____________________________________________________________________________
+-> Procedure that verifies if a folder file has the same md5
+-> @restrictions: Values null on file name or md5
+-> @param: file name and md5
+-> @output: result
+*/
+DELIMITER $$
+DROP FUNCTION IF EXISTS sameFolderFileMD5;
+CREATE FUNCTION sameFolderFileMD5 (fileNameVar VARCHAR(50), fileMd5Var VARCHAR(10000)) RETURNS BOOL
+BEGIN
+		IF ISNULL(fileNameVar) OR ISNULL(fileMd5Var) THEN
+			RETURN TRUE;
+		ELSEIF (SELECT COUNT(*) FROM textFile WHERE fileName = fileNameVar) = 0 THEN
+			RETURN TRUE;
+		ELSEIF (SELECT fileMd5 FROM textFile WHERE fileName = fileNameVar) = fileMd5Var THEN
+			CALL updateTextFile(fileNameVar, NULL, NULL, NULL, "PROCESSED");
+			RETURN TRUE;
+		ELSE
+			CALL updateTextFile(fileNameVar, NULL, NULL, fileMd5Var, "DOWNLOADED");
+			RETURN FALSE;
+		END IF;
+END;												
+$$
+
+#textfileCALL sameFolderFileMD5("PRUEBA", 1111);
 
