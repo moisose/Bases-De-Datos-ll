@@ -1,6 +1,40 @@
 import pika
 import sys
 import os
+import requests
+from script import sameFolderFileMD5
+import hashlib
+
+def getMD5(string):
+    hashSha = hashlib.sha256()
+    hashSha.update(string.encode())
+    #print (hashSha.hexdigest())
+    return hashSha.hexdigest()
+
+# # reads a single file of the gov/pub/data/ghcn/daily/all/ folder
+# # procedure sameFolderFileMD5 is called, if result is 0 the
+# # index is added to elastic search
+# # @restrictions: none
+# # @param: url
+# # @output: none
+def readFolderFile(url):
+   file = requests.get(url)
+   fileName = str(url[50:])
+   fileName = fileName[2:-1]
+      
+   string = file.content.decode('utf-8')
+   
+   # changes the md5 if its different, changes the state either way and gets the flag "sameMD5"
+   sameMD5 = sameFolderFileMD5("sameFolderFileMD5", [fileName, getMD5(string), 0])
+   print(sameMD5)
+   
+   # if the file has changed it is published in elastic search
+   if (not sameMD5):
+        index = {
+       "fileName": fileName,
+       "contents": string
+       }
+       # insert elastic search index publication here
 
 # USE THIS FOR THE CRONJOB
 #==============================================
@@ -15,7 +49,7 @@ import os
 INPUT_QUEUE = 'TO_PROCESS'
 
 def callback(ch, method, properties, body):
-    print(body)
+    readFolderFile(body)
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 channel = connection.channel()
@@ -42,3 +76,4 @@ channel.start_consuming()
 
 # channel_input.start_consuming()
 #======================================================================================================
+        

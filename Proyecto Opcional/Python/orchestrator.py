@@ -22,7 +22,7 @@ def readFolder():
 
     # Making a GET request
     r = requests.get('https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/')
-    
+
     # Parsing the HTML
     soup = BeautifulSoup(r.content, 'html.parser')
 
