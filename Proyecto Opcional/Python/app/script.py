@@ -5,12 +5,12 @@ import requests
 import hashlib
 
 
+#Values
+pw = 'password'
+puerto = '3307'
 
-pw = 'MARIPOSA24'
-puerto = '3306'
 
-
-
+#-------------------------------------------Funtions------------------------------------
 # executes a stored procedure
 # @restrictions: none
 # @param: the name of the stored prcedure and the parameters of the stored procedure (array of strings)
@@ -45,7 +45,7 @@ def executeProcedure(procedure, parameters):
         
     return resultArray
  
-
+#--------------------------------------------------------------------------------------------------
 # reads countries.txt and inserts in table weather.countries
 # @restrictions: none
 # @param: none
@@ -71,11 +71,7 @@ def readCountries():
         else:
             print("El archivo no se modifico")
 
-    
-    
-
-  
-
+#----------------------------------------------------------------------------------------------------------------
 # reads states.txt and inserts in table weather.states
 # @restrictions: none
 # @param: none
@@ -102,7 +98,7 @@ def readStates():
 
     file.close()
     
-
+#-------------------------------------------------------------------------------------------
 # reads stations.txt and inserts in table weather.stations
 # @restrictions: none
 # @param: none
@@ -137,19 +133,25 @@ def readStations():
             print("El archivo no se modifico")
 
     file.close()
-
-        
-
+   
+#------------------------------------------------------------------------------------------------------------------------------
+# Calculate the MD5 of a string
+# @restrictions: none
+# @param: a string 
+# @output: the hash of the string
 def getMd5(string):
     hashSha = hashlib.sha256()
     hashSha.update(string.encode())
-    #print (hashSha.hexdigest())
     return hashSha.hexdigest()
     
-   
+#-------------------------------------------------------------------------------------------------------------------------
+def init ():
+    readCountries()
+    readStates()
+    readStations()
 
-
-    
+#_______________________________________________________MAIN_____________________________________________________________
+init()
 
 
 
