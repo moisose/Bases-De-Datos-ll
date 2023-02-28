@@ -6,7 +6,7 @@ import hashlib
 
 
 #Values
-pw = 'MhlDahiana'
+pw = 'password'
 puerto = '3307'
 
 
@@ -16,26 +16,34 @@ puerto = '3307'
 # @param: the name of the stored prcedure and the parameters of the stored procedure (array of strings)
 # @output: none
 def executeProcedure(procedure, parameters):
-   
+    resultArray = []
     try:
         conn = mysql.connector.connect(host="localhost", user='root', password= pw, port= puerto, database='weather')
         cursor = conn.cursor()
         args = ("FF", 2, 2, 20, 3)
         result_args = cursor.callproc(procedure, parameters)
-        for result in cursor.stored_results():
-             print(result.fetchall())
-        conn.commit()
+
         
+        for result in cursor.stored_results():
+             resultArray.append(result.fetchall())
+             #print(resultArray)
+        conn.commit()
 
-    except mysql.connector.Error as error:
-        print("Failed to execute stored procedure: {}".format(error))
-
-    finally:
         if (conn.is_connected()):
             cursor.close()
             conn.close()
-            print("MySQL connection is closed")
-    return cursor
+            stored_results = cursor.stored_results()
+            #print("MySQL connection is closed")
+        
+
+    except mysql.connector.Error as error:
+        pass
+        #print("Failed to execute stored procedure: {}".format(error))
+
+    finally:
+        pass
+        
+    return resultArray
  
 #--------------------------------------------------------------------------------------------------
 # reads countries.txt and inserts in table weather.countries
@@ -48,10 +56,12 @@ def readCountries():
     
     string = file.content.decode('utf-8')
     lines = string.rsplit('\n')
+    
     md5 = getMd5(string)
-    cursor = executeProcedure('loadFile', ["ghcnd-countries.txt", url, str(md5), "Descargado"])
-    for result in cursor.stored_results():
-        print("Resultado", result.fetchall())
+    stored_results = executeProcedure('loadFile', ["ghcnd-countries.txt", url, str(md5).encode(), "Descargado"])
+    print(stored_results)
+    
+    for result in stored_results:
         if result[0][0] == "The file has been created" or result[0][0] == 'The textFile has been successfully modified.':
             for line in lines:
                 code = line[:2]
@@ -73,19 +83,19 @@ def readStates():
     string = file.content.decode('utf-8')
     lines = string.rsplit('\n')
 
-
     md5 = getMd5(string)
-    cursor = executeProcedure('loadFile', ["ghcnd-states.txt", url, str(md5), "Descargado"])
-    for result in cursor.stored_results():
-        print("Resultado", result.fetchall())
+    stored_results = executeProcedure('loadFile', ["ghcnd-states.txt", url, str(md5).encode(), "Descargado"])
+    print(stored_results)
+    
+    for result in stored_results:
         if result[0][0] == "The file has been created" or result[0][0] == 'The textFile has been successfully modified.':
             for line in lines:
                 code = line[:2]
                 name = line[3:]
                 executeProcedure('createState', [code, name])
-            print("El archivo se modifico")
         else:
             print("El archivo no se modifico")
+
     file.close()
     
 #-------------------------------------------------------------------------------------------
@@ -99,14 +109,14 @@ def readStations():
     
     string = file.content.decode('utf-8')
     lines = string.rsplit('\n')
-    
+
     md5 = getMd5(string)
-    cursor = executeProcedure('loadFile', ["ghcnd-stations.txt", url, str(md5), "Descargado"])
-    for result in cursor.stored_results():
-        print("Resultado", result.fetchall())
+    stored_results = executeProcedure('loadFile', ["ghcnd-stations.txt", url, str(md5).encode(), "Descargado"])
+    print(stored_results)
+    
+    for result in stored_results:
         if result[0][0] == "The file has been created" or result[0][0] == 'The textFile has been successfully modified.':
             for line in lines:
-                print('\n' + line)
                 stationId = line[:11]
                 countryCode = stationId[0:2]
                 latitude = line[12:20].replace(' ', '')
@@ -117,18 +127,13 @@ def readStations():
                 gsnFlag = line[72:75].replace(' ', '')
                 hcnFlag = line[76:79].replace(' ', '')
                 wmoId = line[80:85].replace(' ', '')
+                
                 executeProcedure('createStation', [stationId, latitude, longitude, elevation, state, name, gsnFlag, hcnFlag, wmoId, countryCode])
-            print("El archivo se modifico")
         else:
             print("El archivo no se modifico")
 
-        
-
-
-
     file.close()
-
-        
+   
 #------------------------------------------------------------------------------------------------------------------------------
 # Calculate the MD5 of a string
 # @restrictions: none
