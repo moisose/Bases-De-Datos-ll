@@ -104,7 +104,7 @@ FILE_________________________________________________________________________
 DELIMITER $$
 DROP PROCEDURE IF EXISTS createTextFile;
 CREATE PROCEDURE createTextFile (fileNameVAR VARCHAR(50), urlVAR VARCHAR(100),
-										fileMd5VAR INT, fileStatusVar VARCHAR(20))
+										fileMd5VAR VARCHAR(130), fileStatusVar VARCHAR(20))
 BEGIN
 	IF ISNULL(fileNameVAR) OR ISNULL(urlVAR) THEN 
 		SELECT "There are values NULL";
@@ -340,7 +340,7 @@ FILE_________________________________________________________________________
 DELIMITER $$
 DROP PROCEDURE IF EXISTS updateTextFile;
 CREATE PROCEDURE updateTextFile (fileNameVAR VARCHAR(100), urlVAR VARCHAR(100), processedDayVar DATE,
-										fileMd5VAR INT, fileStatusVAR VARCHAR(20))
+										fileMd5VAR VARCHAR(130), fileStatusVAR VARCHAR(20))
 BEGIN 
 	# an id is required to modify
 	IF (fileNameVAR IS NULL) THEN 

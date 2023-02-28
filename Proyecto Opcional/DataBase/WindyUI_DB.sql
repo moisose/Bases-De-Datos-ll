@@ -56,7 +56,7 @@ CREATE TABLE textFile (
 		fileName VARCHAR(50) PRIMARY KEY,  
 		url VARCHAR(100),
 		processedDay DATE,
-		fileMd5 INT,
+		fileMd5 VARCHAR(130),
 		fileStatus VARCHAR(20)
 );
 
