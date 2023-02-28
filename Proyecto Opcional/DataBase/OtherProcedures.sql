@@ -10,8 +10,8 @@ ____________________________________________________________________________
 */
 DELIMITER $$
 DROP PROCEDURE IF EXISTS loadFile;
-CREATE PROCEDURE loadFile (fileNameVar VARCHAR(50), urlVar VARCHAR(100), fileMd5Var INT, 
-												fileStatusVar VARCHAR(20))
+CREATE PROCEDURE loadFile (fileNameVar VARCHAR(50), urlVar VARCHAR(100), fileMd5Var VARCHAR(130), 
+									fileStatusVar VARCHAR(20))
 BEGIN
 		IF ISNULL(fileNameVar) OR ISNULL(urlVar) OR ISNULL(fileMd5Var) OR ISNULL(fileStatusVar) THEN
 			SELECT "There are values NULL";
@@ -38,7 +38,7 @@ ____________________________________________________________________________
 */
 DELIMITER $$
 DROP PROCEDURE IF EXISTS loadFileFolder;
-CREATE PROCEDURE loadFileFolder (fileNameVar VARCHAR(50), urlVar VARCHAR(100), fileMd5Var INT, 
+CREATE PROCEDURE loadFileFolder (fileNameVar VARCHAR(50), urlVar VARCHAR(100), fileMd5Var VARCHAR(130), 
 												fileStatusVar VARCHAR(20))
 BEGIN
 		IF ISNULL(fileNameVar) OR ISNULL(urlVar) OR ISNULL(fileStatusVar) THEN
