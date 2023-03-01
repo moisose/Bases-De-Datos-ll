@@ -6,7 +6,7 @@ WORKDIR /app
 COPY app/. .
 
 # Ejecutar el archivo al iniciar la imagen en un contenedor.
-
+RUN pip install --no-cache-dir -r requirements.txt
 CMD ["python", "./script.py"]
 
 #sudo docker build -t {nombreImagen} . 
