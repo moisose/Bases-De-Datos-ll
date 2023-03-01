@@ -1,6 +1,4 @@
 import pika
-import sys
-import os
 import requests
 from script import sameFolderFileMD5
 import hashlib
@@ -17,15 +15,17 @@ def getMD5(string):
 # # @restrictions: none
 # # @param: url
 # # @output: none
-def readFolderFile(url):
+def readFolderFile(url, OUTPUT_QUEUE):
    file = requests.get(url)
+   # gets name from url
    fileName = str(url[50:])
+   # parse the annoying caracters
    fileName = fileName[2:-1]
       
    string = file.content.decode('utf-8')
    
    # changes the md5 if its different, changes the state either way and gets the flag "sameMD5"
-   sameMD5 = sameFolderFileMD5("sameFolderFileMD5", [fileName, getMD5(string), 0])
+   sameMD5 = sameFolderFileMD5("sameFolderFileMD5", [fileName, getMD5(string)+"", 0])
    print(sameMD5)
    
    # if the file has changed it is published in elastic search
@@ -34,7 +34,10 @@ def readFolderFile(url):
        "fileName": fileName,
        "contents": string
        }
-       # insert elastic search index publication here
+        # publish message to rabbitMQ queue TO_PARSE
+        channel.basic_publish(exchange='', routing_key=OUTPUT_QUEUE, body=fileName)
+
+        # elastic search index publication here
 
 # USE THIS FOR THE CRONJOB
 #==============================================
@@ -48,8 +51,14 @@ def readFolderFile(url):
 # FOR THE MOMENT USE THIS
 INPUT_QUEUE = 'TO_PROCESS'
 
+# FOR THE MOMENT USE THIS
+OUTPUT_QUEUE = 'TO_PARSE'
+connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+channel = connection.channel()
+channel.queue_declare(queue=OUTPUT_QUEUE)
+
 def callback(ch, method, properties, body):
-    readFolderFile(body)
+   readFolderFile(body, OUTPUT_QUEUE)
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 channel = connection.channel()

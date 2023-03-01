@@ -65,22 +65,24 @@ ____________________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP FUNCTION IF EXISTS sameFolderFileMD5;
-CREATE FUNCTION sameFolderFileMD5 (fileNameVar VARCHAR(50), fileMd5Var VARCHAR(10000)) RETURNS BOOL
+DROP PROCEDURE IF EXISTS sameFolderFileMD5;
+CREATE PROCEDURE sameFolderFileMD5 (fileNameVar VARCHAR(50), fileMd5Var VARCHAR(10000), OUT sameMD5 INT)
 BEGIN
-		IF ISNULL(fileNameVar) OR ISNULL(fileMd5Var) THEN
-			RETURN TRUE;
+		IF ISNULL(fileNameVar) THEN
+			SET sameMD5 = 1;
 		ELSEIF (SELECT COUNT(*) FROM textFile WHERE fileName = fileNameVar) = 0 THEN
-			RETURN TRUE;
+			SET sameMD5 = 1;
 		ELSEIF (SELECT fileMd5 FROM textFile WHERE fileName = fileNameVar) = fileMd5Var THEN
+			SET sameMD5 = 1;
 			CALL updateTextFile(fileNameVar, NULL, NULL, NULL, "PROCESSED");
-			RETURN TRUE;
 		ELSE
+			SET sameMD5 = 0;
 			CALL updateTextFile(fileNameVar, NULL, NULL, fileMd5Var, "DOWNLOADED");
-			RETURN FALSE;
 		END IF;
+
 END;												
 $$
 
-#textfileCALL sameFolderFileMD5("PRUEBA", 1111);
+#CALL sameFolderFileMD5("PRUEBA", "2222", @sameMD5);
+#sameFolderFileMD5sameFolderFileMD5SELECT @sameMD5;
 
