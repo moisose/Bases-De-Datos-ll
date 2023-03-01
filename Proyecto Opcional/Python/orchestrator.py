@@ -26,6 +26,8 @@ def readFolder():
     # Parsing the HTML
     soup = BeautifulSoup(r.content, 'html.parser')
 
+    print('termino el request')
+
     # RABITMQ
     # USE THIS FOR THE CRONJOB
     #=================================================
@@ -49,7 +51,6 @@ def readFolder():
     channel = connection.channel()
     channel.queue_declare(queue=OUTPUT_QUEUE)
 
-    print('termino el request')
 
     # find all the anchor tags with "href"
     # the count is used to ommit the first 5 links
@@ -65,8 +66,7 @@ def readFolder():
             print(url)
 
             # message for rabbitmq
-            msg = url
-            channel.basic_publish(exchange='', routing_key=OUTPUT_QUEUE, body=msg)
+            channel.basic_publish(exchange='', routing_key=OUTPUT_QUEUE, body=url)
             
             executeProcedure("loadFileFolder", [name, url, md5, state])
 
