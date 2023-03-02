@@ -5,7 +5,10 @@ config:
     name: orchestrator
     output_queue: "TO_PROCESS"
     image: moisose/componente1
-
+  componente2:
+    name: receiver
+    output_queue: "TO_PARSE"
+    image: moisose/componente2
   # This can be use for a deployment
 
   # componente2:

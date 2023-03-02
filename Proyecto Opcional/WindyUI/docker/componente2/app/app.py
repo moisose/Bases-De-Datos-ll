@@ -13,13 +13,9 @@ OUTPUT_QUEUE=os.getenv('OUTPUT_QUEUE')
 INPUT_QUEUE=os.getenv('INPUT_QUEUE')
 
 def callback(ch, method, properties, body):
-    json_object = json.loads(body)
-    localtime = time.localtime()
-    result = time.strftime("%I:%M:%S %p", localtime)
-    msg = "{\"data\": [ {\"msg\":\""+result+"\", \"hostname\": \""+hostname+"\"}]}"
-    json_object["data"].append({"msg": result, "hostname": hostname})
-    channel_output.basic_publish(exchange='', routing_key=OUTPUT_QUEUE, body=json.dumps(json_object))
-    print(json_object)
+    print(body)
+    
+    channel_output.basic_publish(exchange='', routing_key=OUTPUT_QUEUE, body="")
 
 
 credentials_input = pika.PlainCredentials('user', RABBIT_MQ_PASSWORD)
