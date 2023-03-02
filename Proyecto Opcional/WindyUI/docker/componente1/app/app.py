@@ -7,10 +7,10 @@ import requests
 from bs4 import BeautifulSoup
 
 hostname = os.getenv('HOSTNAME')
-interval = int(os.getenv('EVENT_INTERVAL'))
+#interval = int(os.getenv('EVENT_INTERVAL'))
 RABBIT_MQ=os.getenv('RABBITMQ')
 RABBIT_MQ_PASSWORD=os.getenv('RABBITPASS')
-OUTPUT_QUEUE=os.getenv('TO_PROCESS')
+OUTPUT_QUEUE=os.getenv('OUTPUT_QUEUE')
 
 credentials = pika.PlainCredentials('user', RABBIT_MQ_PASSWORD)
 parameters = pika.ConnectionParameters(host=RABBIT_MQ, credentials=credentials) 

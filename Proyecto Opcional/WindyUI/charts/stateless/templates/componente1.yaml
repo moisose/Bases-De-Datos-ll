@@ -18,8 +18,6 @@ spec:
             env:
               - name: RABBITMQ
                 value: "stateful-rabbitmq"
-              - name: EVENT_INTERVAL
-                value: "{{ .Values.config.componente1.interval }}"
               - name: OUTPUT_QUEUE
                 value: {{ .Values.config.componente1.output_queue }}
               - name: RABBITPASS
@@ -28,8 +26,4 @@ spec:
                     name: stateful-rabbitmq
                     key: rabbitmq-password
                     optional: false
-            command:
-            - /bin/sh
-            - -c
-            - date; echo Cronjob Example
           restartPolicy: OnFailure
