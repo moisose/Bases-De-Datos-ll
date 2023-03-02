@@ -57,3 +57,32 @@ $$
 
 #CALL loadFileFolder("PRUEBA", "HPPT.JJKWOK.COM", NULL, "Listado");
 
+/*
+____________________________________________________________________________
+-> Procedure that verifies if a folder file has the same md5
+-> @restrictions: Values null on file name or md5
+-> @param: file name and md5
+-> @output: result
+*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS sameFolderFileMD5;
+CREATE PROCEDURE sameFolderFileMD5 (fileNameVar VARCHAR(50), fileMd5Var VARCHAR(10000), OUT sameMD5 INT)
+BEGIN
+		IF ISNULL(fileNameVar) THEN
+			SET sameMD5 = 1;
+		ELSEIF (SELECT COUNT(*) FROM textFile WHERE fileName = fileNameVar) = 0 THEN
+			SET sameMD5 = 1;
+		ELSEIF (SELECT fileMd5 FROM textFile WHERE fileName = fileNameVar) = fileMd5Var THEN
+			SET sameMD5 = 1;
+			CALL updateTextFile(fileNameVar, NULL, NULL, NULL, "PROCESSED");
+		ELSE
+			SET sameMD5 = 0;
+			CALL updateTextFile(fileNameVar, NULL, NULL, fileMd5Var, "DOWNLOADED");
+		END IF;
+
+END;												
+$$
+
+#CALL sameFolderFileMD5("PRUEBA", "2222", @sameMD5);
+#sameFolderFileMD5sameFolderFileMD5SELECT @sameMD5;
+
