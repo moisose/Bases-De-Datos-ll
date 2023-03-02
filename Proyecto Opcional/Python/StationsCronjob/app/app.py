@@ -61,7 +61,10 @@ def getMd5(string):
 # @output: none
 def readStations():
     url = 'https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt'
-    file = requests.get(url)
+    try:
+        file = requests.get(url)
+    except:
+        return "The page is not responding"
     
     string = file.content.decode('utf-8')
     lines = string.rsplit('\n')
