@@ -5,7 +5,7 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import date
-from script import executeProcedure
+from bdConnection import executeProcedure
 
 import pika
 

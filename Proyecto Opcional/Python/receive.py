@@ -1,6 +1,6 @@
 import pika
 import requests
-from script import sameFolderFileMD5
+from bdConnection import sameFolderFileMD5
 import hashlib
 
 def getMD5(string):
