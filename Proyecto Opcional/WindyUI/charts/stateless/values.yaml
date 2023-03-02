@@ -6,8 +6,10 @@ config:
     output_queue: "TO_PROCESS"
     image: moisose/componente1
   componente2:
+    replicas: 1
     name: receiver
     output_queue: "TO_PARSE"
+    input_queue: "TO_PROCESS"
     image: moisose/componente2
   # This can be use for a deployment
 
