@@ -2,6 +2,7 @@ import os
 import mysql.connector
 import requests
 import hashlib
+#import Python.DatabaseConn 
 
 
 #Values
@@ -61,7 +62,10 @@ def getMd5(string):
 # @output: noneexecuteProcedure('createCountry', [code, name])
 def readCountries():
     url = 'https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-countries.txt'
-    file = requests.get(url)
+    try:
+        file = requests.get(url)
+    except:
+        return "The page is not responding"
     
     string = file.content.decode('utf-8')
     lines = string.rsplit('\n')
@@ -80,32 +84,6 @@ def readCountries():
         else:
             print("El archivo no se modifico")
 
-#----------------------------------------------------------------------------------------------------------------
-# reads states.txt and inserts in table weather.states
-# @restrictions: none
-# @param: none
-# @output: none
-def readStates():
-    url = 'https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-states.txt'
-    file = requests.get(url)
-    
-    string = file.content.decode('utf-8')
-    lines = string.rsplit('\n')
-
-    md5 = getMd5(string)
-    stored_results = executeProcedure('loadFile', ["ghcnd-states.txt", url, str(md5).encode(), "Descargado"])
-    print(stored_results)
-    
-    for result in stored_results:
-        if result[0][0] == "The file has been created" or result[0][0] == 'The textFile has been successfully modified.':
-            for line in lines:
-                code = line[:2]
-                name = line[3:]
-                executeProcedure('createState', [code, name])
-        else:
-            print("El archivo no se modifico")
-
-    file.close()
 
 #_______________________________________________________MAIN_____________________________________________________________
-readCountries()
+#readCountries()
