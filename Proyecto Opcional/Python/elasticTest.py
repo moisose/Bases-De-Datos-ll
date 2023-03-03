@@ -1,15 +1,20 @@
-import pika
-from elasticsearch.helpers import scan
+import json
 from elasticsearch import Elasticsearch
+from elasticsearch.helpers import scan
 
-# FOR THE MOMENT USE THIS
-INPUT_QUEUE = 'TO_PARSE'
-
-#===============================================
-# elastic search file index creation
 es = Elasticsearch(['http://localhost:9200'], basic_auth=('elastic', 'AJCcCwWNgEhIHm1KQJPe'))
-#===============================================
 
+print(es.ping())
+
+# to create and delete an index
+
+#es.indices.create(index="files")
+
+#es.indices.delete(index="files")
+
+# for inserting json string
+#es.index(index='files', document=json.loads('{"fileName":"jane", "contents":"data"}'))
+#es.index(index='files', document=json.loads('{"fileName":"jane2", "contents":"data"}'))
 
 # returns the JSON string of the given file retrived from elasticsearch
 # @restrictions: none
@@ -44,22 +49,6 @@ def getFileElasticSearch(fileName):
 
     return hit
 
-def callback(ch, method, properties, body):
-    body = str(body)[2:-1]
+fileName = 'AGE00147706.dly'
 
-    print("rabbitmq fileName: " + body)
-    print("new string: ")
-    # get JSON string with filename and contents
-    print(getFileElasticSearch(body))
-    print("==============================")
-    # body is the name of the file
-
-
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
-channel = connection.channel()
-
-channel.queue_declare(queue=INPUT_QUEUE)
-channel.basic_consume(queue=INPUT_QUEUE, on_message_callback=callback, auto_ack=True)
-
-channel.start_consuming()
-
+print(getFileElasticSearch(fileName))

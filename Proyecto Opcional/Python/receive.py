@@ -2,6 +2,9 @@ import pika
 import requests
 from bdConnection import sameFolderFileMD5
 import hashlib
+from elasticsearch import Elasticsearch
+import json
+import time
 
 def getMD5(string):
     hashSha = hashlib.sha256()
@@ -22,22 +25,25 @@ def readFolderFile(url, OUTPUT_QUEUE):
    # parse the annoying caracters
    fileName = fileName[2:-1]
       
-   string = file.content.decode('utf-8')
+   string = str(file.content.decode('utf-8'))
    
    # changes the md5 if its different, changes the state either way and gets the flag "sameMD5"
-   sameMD5 = sameFolderFileMD5("sameFolderFileMD5", [fileName, getMD5(string)+"", 0])
+   sameMD5 = sameFolderFileMD5("sameFolderFileMD5", [fileName, getMD5(string)+"1", 0])
    print(sameMD5)
    
    # if the file has changed it is published in elastic search
    if (not sameMD5):
-        index = {
-       "fileName": fileName,
-       "contents": string
-       }
+        
+        # elastic search index publication here
+        # ** change this for isaac's function
+        jsonFile = '{"fileName":"' + fileName + '", ' + '"contents"'+ ':"' + string + '"}'
+        es.index(index='files', document=json.loads(jsonFile, strict=False))
+
+        time.sleep(2)
+
         # publish message to rabbitMQ queue TO_PARSE
         channel.basic_publish(exchange='', routing_key=OUTPUT_QUEUE, body=fileName)
 
-        # elastic search index publication here
 
 # USE THIS FOR THE CRONJOB
 #==============================================
@@ -56,6 +62,13 @@ OUTPUT_QUEUE = 'TO_PARSE'
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 channel = connection.channel()
 channel.queue_declare(queue=OUTPUT_QUEUE)
+
+#===============================================
+# elastic search file index creation
+es = Elasticsearch(['http://localhost:9200'], basic_auth=('elastic', 'AJCcCwWNgEhIHm1KQJPe'))
+
+es.indices.create(index="files")
+#===============================================
 
 def callback(ch, method, properties, body):
    readFolderFile(body, OUTPUT_QUEUE)
