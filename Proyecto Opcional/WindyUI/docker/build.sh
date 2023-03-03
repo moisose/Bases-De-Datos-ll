@@ -46,7 +46,3 @@ sudo docker build -t fiozelaya/mariadbclient .
 sudo docker images
 sudo docker push fiozelaya/mariadbclient
 
-kubectl apply -f countriesCronjob.yaml
-kubectl apply -f statesCronjob.yaml
-kubectl apply -f stationsCronjob.yaml
-kubectl apply -f mariadb-db.yaml
