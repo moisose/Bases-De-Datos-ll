@@ -12,5 +12,4 @@ spec:
           - name: states-cronjob
             image: fiozelaya/states-cronjob
             command: ["/bin/sh"]
-            args: ["-c", "date; states cronjob"] 
-          restartPolicy: Never
+          restartPolicy: OnFailure

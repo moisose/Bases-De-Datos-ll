@@ -8,6 +8,12 @@
 	Profesor: Nereo Campos Araya
     
 			   Estudiantes: 
+	Fiorella Zelaya Coto - 2021
+	Isaac Araya Solano
+	Joxan Fuertes Villegas - 
+	Melany Salas Fernández - 2021121147
+	Moises Solano Espinoza -2021
+	
 			   
 
     
@@ -15,7 +21,7 @@
 */
 
 #DROP DATABASE IF EXISTS weather;
-#CREATE DATABASE weather;
+CREATE DATABASE IF NOT EXISTS weather;
 
 USE weather;
 
@@ -60,8 +66,8 @@ CREATE TABLE textFile (
 		fileStatus VARCHAR(20)
 );
 
-#FOREING KEYS-------------------------------------------------------
 
+#FOREING KEYS-------------------------------------------------------
 #Station with country
 ALTER TABLE Station
 	ADD CONSTRAINT StationXCountry FOREIGN KEY (CountryCode) REFERENCES Country(countryCode);

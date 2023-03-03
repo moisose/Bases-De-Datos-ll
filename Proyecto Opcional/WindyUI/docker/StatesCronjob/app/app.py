@@ -1,3 +1,4 @@
+#-----------------------------Libraries--------------------------------
 import os
 import mysql.connector
 import requests

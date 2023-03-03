@@ -12,5 +12,4 @@ spec:
           - name: stations-cronjob
             image: fiozelaya/stations-cronjob
             command: ["/bin/sh"]
-            args: ["-c", "date; stations cronjob"] 
-          restartPolicy: Never
+          restartPolicy: OnFailure
