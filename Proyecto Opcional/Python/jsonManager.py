@@ -15,9 +15,8 @@ This method receives the name of a file and its contents and creates a file call
 def processorJson(name, contents):
     result = {"filename" : name, "contents": contents}
 
-    with open("processor.json", "w") as write_file:
-        json.dump(result, write_file)
-
+    result = str(result)
+    
     return result
 
 
@@ -43,8 +42,7 @@ def parserJson(filename, listOfData):
     result = {"filename" : filename,
               "data" : dictionaryResults}
     
-    with open("parser.json", "w") as write_file:
-        json.dump(result, write_file)
+    result = str(result)
 
     return result
 
@@ -55,30 +53,36 @@ This method receives a json and transform its data and creates a file called tra
 
 
 def transformationJson(jsonParsed):
-    for i in json["data"]:
-        date = i["date"]
-        stationId = i["station_id"]
+
+    jsonParsed = eval(jsonParsed)
+
+    for i in range(0, len(jsonParsed["data"])) :
+        
+        date = jsonParsed["data"][i]["date"]
+        stationId = jsonParsed["data"][i]["station_id"]
 
         tempDict = {
-            "station_id": i["station_id"],
-            "date": i["date"],
+            "station_id": jsonParsed["data"][i]["station_id"],
+            "date": jsonParsed["data"][i]["date"],
             "month": date[0:4],
             "year": date[4:6], 
-            "type": i["type"],
-            "value": i["value"],
-            "mflag": i["mflag"],
-            "qflag": i["qflag"],
-            "sflag": i["sflag"],
+            "type": jsonParsed["data"][i]["type"],
+            "value": jsonParsed["data"][i]["value"],
+            "mflag": jsonParsed["data"][i]["mflag"],
+            "qflag": jsonParsed["data"][i]["qflag"],
+            "sflag": jsonParsed["data"][i]["sflag"],
             "FIPS_country_code" : stationId[0:2],
             "network_code" : stationId[2:3],
             "real_station_id" : stationId[3:12],
-            "type_name" : typeNames[i["type"]]
+            "type_name" : typeNames[jsonParsed["data"][i]["type"]]
         }
 
-        i = tempDict
+        jsonParsed["data"][i] = tempDict
 
-    with open("transformation.json", "w") as write_file:
-        json.dump(jsonParsed, write_file)
+    jsonParsed = str(jsonParsed)
+    print("*****")
+    print(jsonParsed)
+    print("*****")
 
     return jsonParsed
 
@@ -87,3 +91,18 @@ This method performs an sql request and gets the information missing to add it t
 """
 def stationTransformation():
     print()
+
+# tmp = {"filename" : "test",
+#             "data":[{
+#             "station_id": "AEM00041217",
+#             "date": "198301",
+#             "type": "TMAX",
+#             "value": "298",
+#             "mflag": "B",
+#             "qflag": "M",
+#             "sflag": "A"
+#             }]}
+
+# tmp = str(tmp)
+
+# transformationJson(tmp)
