@@ -28,8 +28,8 @@ USE weather;
 #----------------------------------------------TABLES-----------------------------------------------
 #Table Station 
 #
-DROP TABLE IF EXISTS Station;
-CREATE TABLE Station (
+DROP TABLE IF EXISTS station;
+CREATE TABLE station (
 		idStation VARCHAR(11) PRIMARY KEY,
 		latitude REAL,
 		longitude REAL,
@@ -43,15 +43,15 @@ CREATE TABLE Station (
 );
 	
 #Table States 
-DROP TABLE IF EXISTS Country;
-CREATE TABLE Country (
+DROP TABLE IF EXISTS country;
+CREATE TABLE country (
 		countryCode VARCHAR(2) PRIMARY KEY,
 		countryName VARCHAR(100)
 );
 
 #Table States 
-DROP TABLE IF EXISTS State;
-CREATE TABLE State (
+DROP TABLE IF EXISTS state;
+CREATE TABLE state (
 		stateCode VARCHAR(2) PRIMARY KEY,
 		stateName VARCHAR(100)
 );
@@ -69,10 +69,10 @@ CREATE TABLE textFile (
 
 #FOREING KEYS-------------------------------------------------------
 #Station with country
-ALTER TABLE Station
+ALTER TABLE station
 	ADD CONSTRAINT StationXCountry FOREIGN KEY (CountryCode) REFERENCES Country(countryCode);
 #Station with state
-ALTER TABLE Station
+ALTER TABLE station
 	ADD CONSTRAINT StationXState FOREIGN KEY (stateCode) REFERENCES State(stateCode);	
 	
 
