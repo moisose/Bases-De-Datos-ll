@@ -1,15 +1,20 @@
 USE weather;
 #---------------------------OTHER PROCEDURES------------------------------------------
 
+#DROPS
+DROP PROCEDURE IF EXISTS loadFile;
+DROP PROCEDURE IF EXISTS loadFileFolder;
+DROP PROCEDURE IF EXISTS sameFolderFileMD5;
+
+
 /*
-____________________________________________________________________________
+______________________________________________________________________________________
 -> Procedure for update and create files
 -> @restrictions: Values null on file name, url or status
 -> @param: file name, url, md5 and status
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS loadFile;
 CREATE PROCEDURE loadFile (fileNameVar VARCHAR(50), urlVar VARCHAR(100), fileMd5Var VARCHAR(130), 
 									fileStatusVar VARCHAR(20))
 BEGIN
@@ -37,7 +42,6 @@ ____________________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS loadFileFolder;
 CREATE PROCEDURE loadFileFolder (fileNameVar VARCHAR(50), urlVar VARCHAR(100), fileMd5Var VARCHAR(130), 
 												fileStatusVar VARCHAR(20))
 BEGIN
@@ -65,7 +69,6 @@ ____________________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS sameFolderFileMD5;
 CREATE PROCEDURE sameFolderFileMD5 (fileNameVar VARCHAR(50), fileMd5Var VARCHAR(10000), OUT sameMD5 INT)
 BEGIN
 		IF ISNULL(fileNameVar) THEN
@@ -83,6 +86,4 @@ BEGIN
 END;												
 $$
 
-#CALL sameFolderFileMD5("PRUEBA", "2222", @sameMD5);
-#sameFolderFileMD5sameFolderFileMD5SELECT @sameMD5;
 

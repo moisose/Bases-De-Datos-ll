@@ -12,5 +12,4 @@ spec:
           - name: countries-cronjob
             image: fiozelaya/countries-cronjob
             command: ["/bin/sh"]
-            args: ["-c", "date; echo countries cronjob"] 
-          restartPolicy: Never
+          restartPolicy: OnFailure
