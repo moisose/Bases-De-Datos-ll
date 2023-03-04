@@ -11,6 +11,20 @@ config:
     output_queue: "TO_PARSE"
     input_queue: "TO_PROCESS"
     image: moisose/componente2
+  countriesCronjob:
+    name: countries-cronjob 
+    image: moisose/countries-cronjob
+  statesCronjob:
+    name: states-cronjob 
+    image: moisose/states-cronjob
+  stationsCronjob:
+    name: stations-cronjob 
+    image: moisose/stations-cronjob
+  mariadbDb:
+    mapName: script-db
+    name: mariadb-init
+    volumeName: scripts
+    image: moisose/mariadbclient
   # This can be use for a deployment
 
   # componente2:

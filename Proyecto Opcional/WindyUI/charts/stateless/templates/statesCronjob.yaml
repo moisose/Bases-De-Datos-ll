@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: states-cronjob
+  name: {{ .Values.config.statesCronjob.name }}
 spec:
   schedule: "0 5 * * *"
   jobTemplate:
@@ -9,7 +9,7 @@ spec:
       template:
         spec:
           containers:
-          - name: states-cronjob
-            image: fiozelaya/states-cronjob
+          - name: {{ .Values.config.statesCronjob.name }}
+            image: {{ .Values.config.statesCronjob.image }}
             command: ["/bin/sh"]
           restartPolicy: OnFailure
