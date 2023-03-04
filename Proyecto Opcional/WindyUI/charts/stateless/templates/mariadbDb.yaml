@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: script-db
+  name: {{ .Values.config.mariadbDb.mapName }}
   namespace: {{ .Values.namespace }}
 data:
 {{ (.Files.Glob "sql/db.sql").AsConfig | indent 2 }}
@@ -9,20 +9,20 @@ data:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: mariadb-init
+  name: {{ .Values.config.mariadbDb.name }}
 spec:
   template:
     spec:
       volumes:
-      - name: scripts
+      - name: {{ .Values.config.mariadbDb.volumeName }}
         configMap:
-          name: script-db
+          name: {{ .Values.config.mariadbDb.mapName }}
           defaultMode: 0777
       containers:
       - name: pi
-        image: fiozelaya/mariadbclient
+        image: {{ .Values.config.mariadbDb.image }}
         volumeMounts:
-        - name: scripts
+        - name: {{ .Values.config.mariadbDb.volumeName }}
           mountPath: /scripts
         env:
           - name: MARIADBHOST
@@ -33,9 +33,7 @@ spec:
                 name: stateful-mariadb
                 key: mariadb-root-password
                 optional: false
-          - name: MARIADBPORT
-            value: "3306"
         command: ["/bin/sh"]
         args: ["-c", "mysql -p$(MARIADBPASS) -uroot -h$(MARIADBHOST) < /scripts/db.sql; mysql -p$(MARIADBPASS) -uroot -h$(MARIADBHOST) -e \"SHOW DATABASES\""]
-      restartPolicy: OnFailure
+      restartPolicy: Never
   backoffLimit: 4
