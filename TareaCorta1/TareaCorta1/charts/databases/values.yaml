@@ -1,0 +1,28 @@
+mongodb:
+  enabled: false
+postgresql-ha:
+  enabled: false
+mariadb-galera:
+  enabled: false
+elastic:
+  enabled: true
+  version: 8.6.1
+  replicas: 1
+  name: ic4302
+kibana:
+  version: 8.6.1
+  replicas: 1
+  name: ic4302
+prometheus-elasticsearch-exporter:
+  env:
+    ES_USERNAME: elastic
+  extraEnvSecrets:
+    ES_PASSWORD:
+      secret: ic4302-es-elastic-user
+      key: elastic
+  es:
+    uri: http://ic4302-es-http:9200
+    cluster_settings: true
+  serviceMonitor:
+    enabled: true
+    namespace: monitoring

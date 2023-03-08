@@ -1,0 +1,11 @@
+{{ if .Values.elastic.enabled }}
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: {{ .Values.kibana.name }}
+spec:
+  version: {{ .Values.kibana.version }}
+  count: {{ .Values.kibana.replicas }}
+  elasticsearchRef:
+    name: {{ .Values.kibana.name }}
+{{ end }}
