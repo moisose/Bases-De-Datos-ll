@@ -1,0 +1,18 @@
+{{- range $key, $value := $.Values.dashboards }}
+{{- if $value.enable }}
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: {{ $value.name }}-dashboard
+  namespace: {{ $.Values.prometheus.namespace }}
+  labels:
+    app: grafana
+spec:
+  json: >
+{{ $.Files.Get (printf "dashboards/%s" $value.file)  | indent 4 }}
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "Prometheus"
+{{- end }}
+{{- end }}

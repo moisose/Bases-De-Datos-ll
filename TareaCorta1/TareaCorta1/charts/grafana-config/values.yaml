@@ -1,0 +1,7 @@
+prometheus: 
+  namespace: monitoring
+dashboards:
+  elasticsearch:
+    name: elasticsearch
+    file: elasticsearch.json
+    enable: true
