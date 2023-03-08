@@ -1,0 +1,15 @@
+dependencies:
+- name: mongodb
+  repository: https://charts.bitnami.com/bitnami
+  version: 13.6.7
+- name: postgresql-ha
+  repository: https://charts.bitnami.com/bitnami
+  version: 11.1.2
+- name: mariadb-galera
+  repository: https://charts.bitnami.com/bitnami
+  version: 7.4.14
+- name: prometheus-elasticsearch-exporter
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 5.0.0
+digest: sha256:787b59b8b8ef1b11614559227c36bba0573bb8ec7e5a50380dd0e78191e3e4ce
+generated: "2023-03-08T00:16:05.53424481-06:00"
