@@ -2,29 +2,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.config.componente2.name }}
+  name: {{ .Values.config.processorDeployment.name }}
   labels:
-    app: {{ .Values.config.componente2.name }}
+    app: {{ .Values.config.processorDeployment.name }}
 spec:
-  replicas: {{ .Values.config.componente2.replicas }}
+  replicas: {{ .Values.config.processorDeployment.replicas }}
   selector:
     matchLabels:
-      app: {{ .Values.config.componente2.name }}
+      app: {{ .Values.config.processorDeployment.name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.config.componente2.name }}
+        app: {{ .Values.config.processorDeployment.name }}
     spec:
       containers:
-      - name: {{ .Values.config.componente2.name }}
-        image: {{ .Values.config.componente2.image }}
+      - name: {{ .Values.config.processorDeployment.name }}
+        image: {{ .Values.config.processorDeployment.image }}
         env:
           - name: RABBITMQ
             value: "stateful-rabbitmq"
           - name: INPUT_QUEUE
-            value: {{ .Values.config.componente2.input_queue }}
+            value: {{ .Values.config.processorDeployment.input_queue }}
           - name: OUTPUT_QUEUE
-            value: {{ .Values.config.componente2.output_queue }}
+            value: {{ .Values.config.processorDeployment.output_queue }}
           - name: RABBITPASS
             valueFrom:
               secretKeyRef:

@@ -91,6 +91,8 @@ De igual forma, se conecta con la base de datos en **MariaDB** mediante el modul
 
 ### **Orchestrator CronJob**
 
+
+
 ### **Processor**
 
 ### **Parser**
