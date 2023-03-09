@@ -45,7 +45,7 @@
 ### **Countries/States CronJob**
 
 El countries y states cronjobs consiste en dos componentes de tipo Cronjob que se ejecutan una vez al día. <br>
-Estos estan compuestos por una **caperta app**, ubicada en **WindyUI -> Docker -> CountriesCronjob**, o en caso de states, **StatesCronjob** que contiene:
+Estos estan compuestos por una **carpeta app**, ubicada en **WindyUI -> Docker -> CountriesCronjob**, o en caso de states, **StatesCronjob** que contiene:
 
 * **app.py:** Consiste en un achivo python que se encarga de leer el archivo "ghcnd-countries.txt" de la página del NOA, mediante los modulos requests, ademas, se calcula el MD5 del archivo y se crea la conexión con MariaDB, cargando los países a la base de datos de WindyUI. <br>
 
