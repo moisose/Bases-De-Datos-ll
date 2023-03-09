@@ -2,9 +2,9 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ .Values.config.componente1.name }}
+  name: {{ .Values.config.orchestratorCronjob.name }}
   labels:
-    app: {{ .Values.config.componente1.name }}
+    app: {{ .Values.config.orchestratorCronjob.name }}
 spec:
   schedule: "*/2 * * * *"         
   jobTemplate:
@@ -12,14 +12,14 @@ spec:
       template:
         spec: 
           containers:
-          - name: {{ .Values.config.componente1.name }}
-            image: {{ .Values.config.componente1.image }} 
+          - name: {{ .Values.config.orchestratorCronjob.name }}
+            image: {{ .Values.config.orchestratorCronjob.image }} 
             imagePullPolicy: IfNotPresent
             env:
               - name: RABBITMQ
                 value: "stateful-rabbitmq"
               - name: OUTPUT_QUEUE
-                value: {{ .Values.config.componente1.output_queue }}
+                value: {{ .Values.config.orchestratorCronjob.output_queue }}
               - name: RABBITPASS
                 valueFrom:
                   secretKeyRef:

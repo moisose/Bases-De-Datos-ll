@@ -8,3 +8,5 @@ class test_mariadb(unittest.TestCase):
         result = executeProcedure("createCountry", ["CR", "Costa Rica"])
         self.assertEqual(result[0][0], "The country has been created")
 
+if __name__=="__main__":
+    unittest.main()

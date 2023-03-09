@@ -1,16 +1,16 @@
 #!/bin/bash
 sudo docker login
-cd componente1
-sudo docker build -t moisose/componente1 .
+cd orchestratorCronjob
+sudo docker build -t moisose/orchestrator-cronjob .
 sudo docker images
-sudo docker push moisose/componente1
+sudo docker push moisose/orchestrator-cronjob
 
 cd ..
-cd componente2
+cd processorDeployment
 
-sudo docker build -t moisose/componente2 .
+sudo docker build -t moisose/processor-deployment .
 sudo docker images
-sudo docker push moisose/componente2
+sudo docker push moisose/processor-deployment
 
 # cd componente2
 # sudo docker build -t username/componente2 .
