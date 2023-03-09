@@ -48,6 +48,8 @@ def readFolder():
             msg = url
             channel.basic_publish(exchange='', routing_key=OUTPUT_QUEUE, body=msg)
 
+            #executeProcedure("loadFileFolder", [name, url, md5, state])
+
         if count == 40:
             break
         count += 1

@@ -85,13 +85,31 @@ En el countries/states cronjob tambien se encuentra el **dockerfile** necesario 
 
 ![dockerFile.py](Resources/dockerFileCronjobs.png)
 
-Tambien usan el template **countriesCronjob.yaml** (en caso de countries) o el template **statesCronjob.yaml** (en caso de states), estos estam ubicados en **WindyUI -> charts -> stateless -> template**, cada uno de estos archivos sigue la estructura de un cronjob. <br>
+Tambien usan el template **countriesCronjob.yaml** (en caso de countries) o el template **statesCronjob.yaml** (en caso de states), estos están ubicados en **WindyUI -> charts -> stateless -> template**, cada uno de estos archivos sigue la estructura de un cronjob. <br>
 
 De igual forma, se conecta con la base de datos en **MariaDB** mediante el modulo **mysql.connector**, que se encarga de hacer una llamada a la funcion **"executeProcedure"**, que recibe el nombre del procedimiento a utilizar, más los parametros del procedimiento, en forma de lista de strings no con None en caso de tener datos NULL.
 
 ### **Orchestrator CronJob**
 
+Este es un componente tipo Cronjob, que se ejecuta una vez al día y se encarga de listar los archivos de la página **[www.ncei.noaa.gov](https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/)**.
 
+Estos estan compuestos por una **caperta app**, ubicada en **WindyUI/Docker/orchestratorCronjob** que contiene: <br>
+
+![stations.py](Resources/orchestrator.png)
+
+- **app.py:** este es un archivo Python que se conecta a la página del noaa y lista todos los archivos, se toma cada dirección que se encuentra y se manda un mensaje a la cola de rabbitmq llamada TO_PROCESS, y se agrega o actualiza la tabla weather.files con los datos del archivo. Todo lo que se utiliza en este .py se maneja por variables de entorno, como el nombre de la cola y los credenciales de rabbitmq.
+
+![stations.py](Resources/orchestratorApp.png)
+
+- **requirements.txt:** Archivo que contiene los modulos necesarios para el .py.
+
+![stations.py](Resources/orchestratorR.png)
+
+Se usa el template llamado **orchestratorCronjob.yaml** que es de tipo cronjob, ubicado en la carpeta **WindyUI/charts/stateless/templates/**.
+
+En la carpeta orchestratorCronjob se encuentra el dockerfile para la creación e la imagen y publicación a dockerhub, que será usada en los componentes cronjob.
+
+![dockerFile.py](Resources/dockerFileCronjobs.png)
 
 ### **Processor**
 
