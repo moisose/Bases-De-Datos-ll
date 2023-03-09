@@ -26,3 +26,9 @@ prometheus-elasticsearch-exporter:
   serviceMonitor:
     enabled: true
     namespace: monitoring
+mariadb:
+  enabled: false
+  auth:
+    rootPassword: "mR76MbXDS"
+postgresql:
+  enabled: false
