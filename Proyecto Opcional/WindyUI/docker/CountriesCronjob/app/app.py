@@ -6,8 +6,8 @@ import hashlib
 
 
 #Values
-pw = 'password'
-puerto = '3307'
+pw = 'MARIPOSA24'
+puerto = '3306'
 
 
 #-------------------------------------------Functions------------------------------------
@@ -37,12 +37,13 @@ def executeProcedure(procedure, parameters):
         
 
     except mysql.connector.Error as error:
-        pass
+        return ['error']
         #print("Failed to execute stored procedure: {}".format(error))
 
     finally:
         pass
-        
+
+    print(resultArray)
     return resultArray
 
 #------------------------------------------------------------------------------------------------------------------------------
@@ -61,6 +62,7 @@ def getMd5(string):
 # @param: none
 # @output: noneexecuteProcedure('createCountry', [code, name])
 def readCountries():
+    varResult = ''
     url = 'https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-countries.txt'
     try:
         file = requests.get(url)
@@ -73,6 +75,9 @@ def readCountries():
     md5 = getMd5(string)
     stored_results = executeProcedure('loadFile', ["ghcnd-countries.txt", url, str(md5).encode(), "Descargado"])
     print(stored_results)
+
+    if stored_results[0] == 'error':
+        return 'Conexion fallida'
     
     for result in stored_results:
         if result[0][0] == "The file has been created" or result[0][0] == 'The textFile has been successfully modified.':
@@ -80,9 +85,11 @@ def readCountries():
                 code = line[:2]
                 name = line[3:]
                 executeProcedure('createCountry', [code, name])
-            print("El archivo se modifico")
+            varResult = "El archivo se modifico"
         else:
-            print("El archivo no se modifico")
+            varResult = "El archivo no se modifico"
+
+    return varResult
 
 
 #_______________________________________________________MAIN_____________________________________________________________
