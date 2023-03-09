@@ -1,5 +1,6 @@
 import json
 
+# Types dictionary
 typeNames = {
     "PRCP" : "Precipitation (tenths of mm)",
    	"SNOW" : "Snowfall (mm)",
