@@ -1,13 +1,17 @@
-## **Instituto Tecnológico de Costa Rica**  
+## **Instituto Tecnológico de Costa Rica**
+
 ## **IC4302 - Bases de Datos II** 
+
 ## **Documentación Proyecto Opcional** 
-### **Profesor**: Nereo Campos Araya <br> 
-### **Estudiantes**: 
+
+### **Profesor**: Nereo Campos Araya 
+
+### **Estudiantes**:
+
 * Fiorella Zelaya Coto - 2021453615
-* Joxan Fuertes Villegas -
 * Isaac Araya Solano -
-* Melany Salas Fernández - 2021121147 
-* Moisés Solano Espinoza - 2021
+* Melany Salas Fernández - 2021121147
+* Moisés Solano Espinoza - 2021144322
 
 -------------------------------
 
@@ -75,7 +79,7 @@ Estos estan compuestos por una **caperta app**, ubicada en **WindyUI -> Docker -
 
 * **app.py:** Consiste en un achivo python que se encarga de leer el archivo "ghcnd-stations.txt" de la página del NOA, mediante los modulos requests, ademas, se calcula el MD5 del archivo y se crea la conexión con MariaDB, cargando las estaciones a la base de datos de WindyUI. <br>
 
-![readStations.py](Resources/readSta.png)
+<img src="Resources/readSta.png" alt="drawing" width="600"/>
 
 * **requirements.txt:** Archivo que contiene los modulos necesarios para el .py. <br>
 
@@ -99,7 +103,8 @@ Estos estan compuestos por una **caperta app**, ubicada en **WindyUI/Docker/orch
 
 - **app.py:** este es un archivo Python que se conecta a la página del noaa y lista todos los archivos, se toma cada dirección que se encuentra y se manda un mensaje a la cola de rabbitmq llamada TO_PROCESS, y se agrega o actualiza la tabla weather.files con los datos del archivo. Todo lo que se utiliza en este .py se maneja por variables de entorno, como el nombre de la cola y los credenciales de rabbitmq.
 
-![stations.py](Resources/orchestratorApp.png)
+<img src="Resources/orchestratorApp.png" alt="drawing" width="570"/>
+
 
 - **requirements.txt:** Archivo que contiene los modulos necesarios para el .py.
 
@@ -119,7 +124,8 @@ En la carpeta orchestratorCronjob se encuentra el dockerfile para la creación e
 
 * **Función excecuteProcedure**: Es una función que se encarga de hacer la conexión con la base de datos en MariaDB y ejecutar el proceso almacenado que recibe por parametros. Retorna un arreglo con los resultados que da la base de datos al cargar los datos. Si falla en hacer la conexion, retorna un arreglo con el string 'error'. <br>
 
-![execute.py](Resources/executeP.png)
+<img src="Resources/executeP.png" alt="executeProcedurte" width="500"/>
+
 
 * **Función getMD5**: Esta función se encarga de calcular el md5 de un archivo, este es usado para saber si el archivo ha sido modificado. Recibe un string con lo que contiene el archivo y retorna el calculo del MD5. <br>
 
@@ -139,7 +145,7 @@ En la carpeta orchestratorCronjob se encuentra el dockerfile para la creación e
 
 * **Procedure readStations:** Este procedure se encarga de descargar el archivo txt que contiene los datos (id, codigo de pais, latitud, longitud, elevacion, estado, nombre, gsn, hcn, wmo) mediante la utilizacion de la libreria requests. Una vez descargado, calcula el md5 utilizando la funcion getMd5(). Luego, mediante la funcion executeProcedure() se ejecuta el proceso almacenado loadFile en MariaDB para revisar el md5 y guardar el archivo en la base de datos *weather*. Finalmente, si la conexion con la base de datos falla se retorna un string 'Conexion fallida', de lo contrario, dependiendo del resultado del proceso almacenado, se lee el archivo txt y se agregan los datos a la base de datos o simplemente no se modifica el archivo. Se retorna un string "El archivo se modifico" o "El archivo no se modifico".<br>
 
-![loadF.py](Resources/readStations.png)
+<img src="Resources/readStations.png" alt="readStations" width="500"/>
 
 -------------------------------
 
@@ -147,7 +153,15 @@ En la carpeta orchestratorCronjob se encuentra el dockerfile para la creación e
 
 ### **Prueba de Station CronJob**
 
+Es esta prueba se verifica que la conexión de la base de datos se haga correctamente.
+
+![pruebaUnitaria1.py](Resources/pruebaUnitaria2.png)
+
 ### **Prueba de Countries/States CronJob**
+
+Es esta prueba se verifica que la conexión de la base de datos se haga correctamente.
+
+![pruebaUnitaria2.py](Resources/pruebaUnitaria3.png)
 
 ### **Prueba de Orchestrator CronJob**
 
@@ -158,6 +172,16 @@ En la carpeta orchestratorCronjob se encuentra el dockerfile para la creación e
 -------------------------------
 
 ## **Resultados de pruebas unitarias**
+
+### **Prueba de Station CronJob**
+
+### **Prueba de Countries/States CronJob**
+
+### **Prueba de Orchestrator CronJob**
+
+### **Pruebo de Processor**
+
+### **Pruebo de Parser**
 
 -------------------------------
 
@@ -188,9 +212,3 @@ En la carpeta orchestratorCronjob se encuentra el dockerfile para la creación e
 8- El tener una buena comunicación tiene como resultado un proyecto de calidad y organizado que avanza progresivamente. <br>
 9- Es importante la realización de pruebas para garantizar el buen funcionamiento del programa. <br>
 10- Para reforzar habilidades y mejorar de forma continua, es importante continuar la investigación de los temas que se estudiaron. <br>
-
--------------------------------
-
-## **Referencias Bibliográficas**
-
-(La documentación debe cubrir todos los componentes implementados o instalados/configurados, en caso de que algún componente no se encuentre implementado, no se podrá documentar y tendrá un impacto en la completitud de la documentación.)
