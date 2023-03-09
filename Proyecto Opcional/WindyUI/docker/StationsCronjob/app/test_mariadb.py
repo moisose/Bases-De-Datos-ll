@@ -5,7 +5,7 @@ from app import *
 class test_mariadb(unittest.TestCase):
 
     def test_createCountry(self):   
-        result = readCountries()
+        result = readStations()
         self.assertNotEqual(result, "Conexion fallida")
 
 if __name__=="__main__":
