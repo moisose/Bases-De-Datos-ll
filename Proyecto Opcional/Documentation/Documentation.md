@@ -117,7 +117,7 @@ En la carpeta orchestratorCronjob se encuentra el dockerfile para la creación e
 
 ### **Otros**
 
-* **Función excecuteProcedure**: Es una función que se encarga de hacer la conexión con la base de datos en MariaDB. Retorna un arreglo con los resultados que da la base de datos al cargar los datos. <br>
+* **Función excecuteProcedure**: Es una función que se encarga de hacer la conexión con la base de datos en MariaDB y ejecutar el proceso almacenado que recibe por parametros. Retorna un arreglo con los resultados que da la base de datos al cargar los datos. Si falla en hacer la conexion, retorna un arreglo con el string 'error'. <br>
 
 ![execute.py](Resources/executeP.png)
 
@@ -125,9 +125,21 @@ En la carpeta orchestratorCronjob se encuentra el dockerfile para la creación e
 
 ![md5.py](Resources/md5.png)
 
-* **Procedure loadFile:** Este procedure se encarga de verificar el md5 de los archivos, para saber si el archivo es totalmente nuevo y hay que crear un nuevo textFile, o si el md5 del archivo cambio y hay que actualizar los datos, o si el archivo sigue igual y no hay cambios en los datos.
+* **Procedure loadFile:** Este procedure se encarga de verificar el md5 de los archivos, para saber si el archivo es totalmente nuevo y hay que crear un nuevo textFile, o si el md5 del archivo cambio y hay que actualizar los datos, o si el archivo sigue igual y no hay cambios en los datos. <br>
 
 ![loadF.py](Resources/loadFile.png)
+
+* **Procedure readCountries:** Este procedure se encarga de descargar el archivo txt que contiene los datos (codigo de pais, nombre de pais) mediante la utilizacion de la libreria requests. Una vez descargado, calcula el md5 utilizando la funcion getMd5(). Luego, mediante la funcion executeProcedure() se ejecuta el proceso almacenado loadFile en MariaDB para revisar el md5 y guardar el archivo en la base de datos *weather*. Finalmente, si la conexion con la base de datos falla se retorna un string 'Conexion fallida', de lo contrario, dependiendo del resultado del proceso almacenado, se lee el archivo txt y se agregan los datos a la base de datos o simplemente no se modifica el archivo. Se retorna un string "El archivo se modifico" o "El archivo no se modifico".<br>
+
+![loadF.py](Resources/readCountries.png)
+
+* **Procedure readStates:** Este procedure se encarga de descargar el archivo txt que contiene los datos (codigo de estado, nombre de estado) mediante la utilizacion de la libreria requests. Una vez descargado, calcula el md5 utilizando la funcion getMd5(). Luego, mediante la funcion executeProcedure() se ejecuta el proceso almacenado loadFile en MariaDB para revisar el md5 y guardar el archivo en la base de datos *weather*. Finalmente, si la conexion con la base de datos falla se retorna un string 'Conexion fallida', de lo contrario, dependiendo del resultado del proceso almacenado, se lee el archivo txt y se agregan los datos a la base de datos o simplemente no se modifica el archivo. Se retorna un string "El archivo se modifico" o "El archivo no se modifico".<br>
+
+![loadF.py](Resources/readStates.png)
+
+* **Procedure readStations:** Este procedure se encarga de descargar el archivo txt que contiene los datos (id, codigo de pais, latitud, longitud, elevacion, estado, nombre, gsn, hcn, wmo) mediante la utilizacion de la libreria requests. Una vez descargado, calcula el md5 utilizando la funcion getMd5(). Luego, mediante la funcion executeProcedure() se ejecuta el proceso almacenado loadFile en MariaDB para revisar el md5 y guardar el archivo en la base de datos *weather*. Finalmente, si la conexion con la base de datos falla se retorna un string 'Conexion fallida', de lo contrario, dependiendo del resultado del proceso almacenado, se lee el archivo txt y se agregan los datos a la base de datos o simplemente no se modifica el archivo. Se retorna un string "El archivo se modifico" o "El archivo no se modifico".<br>
+
+![loadF.py](Resources/readStations.png)
 
 -------------------------------
 
