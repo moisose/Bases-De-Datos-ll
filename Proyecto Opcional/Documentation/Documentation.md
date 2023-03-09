@@ -105,6 +105,10 @@ De igual forma, se conecta con la base de datos en **MariaDB** mediante el modul
 
 ![md5.py](Resources/md5.png)
 
+* **Procedure loadFile:** Este procedure se encarga de verificar el md5 de los archivos, para saber si el archivo es totalmente nuevo y hay que crear un nuevo textFile, o si el md5 del archivo cambio y hay que actualizar los datos, o si el archivo sigue igual y no hay cambios en los datos.
+
+![loadF.py](Resources/loadFile.png)
+
 -------------------------------
 
 ## **Pruebas**
