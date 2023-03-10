@@ -1,1 +1,4 @@
 pika
+elasticsearch
+requests==2.28.2
+mysql-connector==2.2.9
