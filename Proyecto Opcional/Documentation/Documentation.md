@@ -103,8 +103,9 @@ Estos estan compuestos por una **caperta app**, ubicada en **WindyUI/Docker/orch
 
 - **app.py:** este es un archivo Python que se conecta a la página del noaa y lista todos los archivos, se toma cada dirección que se encuentra y se manda un mensaje a la cola de rabbitmq llamada TO_PROCESS, y se agrega o actualiza la tabla weather.files con los datos del archivo. Todo lo que se utiliza en este .py se maneja por variables de entorno, como el nombre de la cola y los credenciales de rabbitmq.
 
+<center>
 <img src="Resources/orchestratorApp.png" alt="drawing" width="570"/>
-
+</center>
 
 - **requirements.txt:** Archivo que contiene los modulos necesarios para el .py.
 
@@ -145,8 +146,9 @@ En la carpeta orchestratorCronjob se encuentra el dockerfile para la creación e
 
 * **Procedure readStations:** Este procedure se encarga de descargar el archivo txt que contiene los datos (id, codigo de pais, latitud, longitud, elevacion, estado, nombre, gsn, hcn, wmo) mediante la utilizacion de la libreria requests. Una vez descargado, calcula el md5 utilizando la funcion getMd5(). Luego, mediante la funcion executeProcedure() se ejecuta el proceso almacenado loadFile en MariaDB para revisar el md5 y guardar el archivo en la base de datos *weather*. Finalmente, si la conexion con la base de datos falla se retorna un string 'Conexion fallida', de lo contrario, dependiendo del resultado del proceso almacenado, se lee el archivo txt y se agregan los datos a la base de datos o simplemente no se modifica el archivo. Se retorna un string "El archivo se modifico" o "El archivo no se modifico".<br>
 
+<center>
 <img src="Resources/readStations.png" alt="readStations" width="500"/>
-
+</center>
 -------------------------------
 
 ## **Pruebas**
@@ -176,6 +178,13 @@ Es esta prueba se verifica que la conexión de la base de datos se haga correcta
 ### **Prueba de Station CronJob**
 
 ### **Prueba de Countries/States CronJob**
+
+#### States
+Cuando la conexión con la base datos falla, la imagen no se crea.
+
+<center>
+<img src="Resources/PUStatesFailed.png" alt="unitTestStates" />
+</center>
 
 ### **Prueba de Orchestrator CronJob**
 
