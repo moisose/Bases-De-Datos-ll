@@ -3,8 +3,8 @@
 ## **Group Repo** 
 ### **Professor**: Nereo Campos Araya <br> 
 ### **Students**: 
-* Fiorella Zelaya Coto -
-* Joxan Fuertes Villegas -
-* Isaac Araya Solano -
+* Fiorella Zelaya Coto - 2021453615
+* Isaac Araya Solano - 2018151703
 * Melany Salas Fernández - 2021121147 
-* Moisés Solano Espinoza - 2021
+* Moisés Solano Espinoza - 2021144322
+* Pablo Arias Navarro - 2021024635
