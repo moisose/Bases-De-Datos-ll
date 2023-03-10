@@ -4,11 +4,12 @@ import requests
 import hashlib
 #import Python.DatabaseConn 
 
-
-#Values
-pw = 'MARIPOSA24'
-puerto = '3306'
-
+# environment variables
+HOST = os.getenv('MARIADBHOST')
+PASSWORD = os.getenv('MARIADBPASS')
+PORT = '3306'
+USER = 'root'
+DATABASE = 'weather'
 
 #-------------------------------------------Functions------------------------------------
 # executes a stored procedure
@@ -18,7 +19,7 @@ puerto = '3306'
 def executeProcedure(procedure, parameters):
     resultArray = []
     try:
-        conn = mysql.connector.connect(host="localhost", user='root', password= pw, port= puerto, database='weather')
+        conn = mysql.connector.connect(host=HOST, user=USER, password= PASSWORD, port= PORT, database=DATABASE)
         cursor = conn.cursor()
         args = ("FF", 2, 2, 20, 3)
         result_args = cursor.callproc(procedure, parameters)

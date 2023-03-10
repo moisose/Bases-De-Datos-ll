@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: {{ .Values.config.statesCronjob.name }}
 spec:
-  schedule: "0 5 * * *"
+  schedule: "*/5 * * * *"
   jobTemplate:
     spec:
       template:
@@ -11,5 +11,13 @@ spec:
           containers:
           - name: {{ .Values.config.statesCronjob.name }}
             image: {{ .Values.config.statesCronjob.image }}
-            command: ["/bin/sh"]
+            env:
+              - name: MARIADBHOST
+                value: "stateful-mariadb"
+              - name: MARIADBPASS
+                valueFrom:
+                  secretKeyRef:
+                    name: stateful-mariadb
+                    key: mariadb-root-password
+                    optional: false
           restartPolicy: OnFailure
