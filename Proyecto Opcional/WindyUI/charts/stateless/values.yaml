@@ -1,16 +1,16 @@
 config:
   # make one for each component and add environment variables
   # and docker container
-  componente1:
+  orchestratorCronjob:
     name: orchestrator-cronjob
     output_queue: "TO_PROCESS"
-    image: moisose/orchestratorCronjob
-  componente2:
+    image: moisose/orchestrator-cronjob
+  processorDeployment:
     replicas: 1
     name: processor-deployment
     output_queue: "TO_PARSE"
     input_queue: "TO_PROCESS"
-    image: moisose/processorDeployment
+    image: moisose/processor-deployment
   countriesCronjob:
     name: countries-cronjob 
     image: moisose/countries-cronjob
