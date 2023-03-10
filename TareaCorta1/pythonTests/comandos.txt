@@ -1,2 +1,0 @@
-pip install flask psycopg2-binary
-pip install flask flask-mysqldb
