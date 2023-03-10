@@ -97,7 +97,7 @@ De igual forma, se conecta con la base de datos en **MariaDB** mediante el modul
 
 Este es un componente tipo Cronjob, que se ejecuta una vez al día y se encarga de listar los archivos de la página **[www.ncei.noaa.gov](https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/)**.
 
-Estos estan compuestos por una **caperta app**, ubicada en **WindyUI/Docker/orchestratorCronjob** que contiene: <br>
+Está estan compuestos por una **caperta app**, ubicada en **WindyUI/Docker/orchestratorCronjob** que contiene: <br>
 
 ![stations.py](Resources/orchestrator.png)
 
@@ -119,6 +119,31 @@ En la carpeta orchestratorCronjob se encuentra el dockerfile para la creación e
 
 ### **Processor**
 
+Este es un componente de Kubernets tipo deployment que va a estar esperando trabajo de la cola TO_PROCESS de rabbitmq.
+Lo que hace es tomar el mensaje de la cola y descargar el archivo, calcula el MD5 y se verifica por si existen datos nuevos. 
+Se maneja un índice en Elasticsearch que guardará el nombre y el contenido de los nuevos archivos. 
+También se tendrá otra cola de rabbitmq llamada TO_PROCESS en la que se enviarán mensajes al componente Parser.
+
+Está compuesto por una **caperta app**, ubicada en **WindyUI/Docker/processorDeployment/** que contiene: <br>
+
+![requi.py](Resources/processor.png)
+
+- **app.py:** este es un archivo Python que va a recibir mensajes de la cola TO_PROCESS, en cada uno va a venir el enlace de descarga de un archivo. Se calcula el MD5 para saber si es igual o diferente, si es diferente se sube al índice de Elasticsearch y se actualiza el estado en la base de datos de mariadb. 
+    - Finalmente se publica a la cola TO_PARSE el nombre del archivo para que este sea parseado.
+  
+<center>
+<img src="Resources/processorPy.png" alt="drawing" width="570"/>
+</center>
+
+- **requirements.txt:** Archivo que contiene los modulos necesarios para el .py.
+
+![stations.py](Resources/processorReq.png)
+
+Se usa el template llamado **orchestratorCronjob.yaml** que es de tipo cronjob, ubicado en la carpeta **WindyUI/charts/stateless/templates/**.
+
+En la carpeta orchestratorCronjob se encuentra el dockerfile para la creación e la imagen y publicación a dockerhub, que será usada en los componentes cronjob.
+
+![dockerFile.py](Resources/dockerFileCronjobs.png)
 
 ### **Parser**
 
@@ -193,9 +218,13 @@ Es esta prueba se verifica que la conexión de la base de datos se haga correcta
 
 ### **Prueba de Orchestrator CronJob**
 
-### **Pruebo de Processor**
+<center>
+<img src="Resources/UTorchestrator.png" alt="unitTestStates" />
+</center>
 
-### **Pruebo de Parser**
+### **Prueba de Processor**
+
+### **Prueba de Parser**
 
 -------------------------------
 
@@ -203,7 +232,15 @@ Es esta prueba se verifica que la conexión de la base de datos se haga correcta
 
 ### **Prueba de Station CronJob**
 
+<center>
+<img src="Resources/PUStations.png" alt="unitTestStates" />
+</center>
+
 ### **Prueba de Countries/States CronJob**
+
+<center>
+<img src="Resources/PUCountries.png" alt="unitTestStates" />
+</center>
 
 #### States
 Cuando la conexión con la base datos falla, la imagen no se crea.
@@ -214,9 +251,13 @@ Cuando la conexión con la base datos falla, la imagen no se crea.
 
 ### **Prueba de Orchestrator CronJob**
 
-### **Pruebo de Processor**
+<center>
+<img src="Resources/PUOrchestrator.png" alt="unitTestStates" />
+</center>
 
-### **Pruebo de Parser**
+### **Prueba de Processor**
+
+### **Prueba de Parser**
 
 -------------------------------
 

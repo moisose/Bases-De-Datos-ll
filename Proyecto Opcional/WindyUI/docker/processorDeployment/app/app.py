@@ -9,17 +9,19 @@ import hashlib
 import json
 from elasticsearch import Elasticsearch
 
+# Environment variables for rabbitmq
 hostname = os.getenv('HOSTNAME')
 RABBIT_MQ=os.getenv('RABBITMQ')
 RABBIT_MQ_PASSWORD=os.getenv('RABBITPASS')
 OUTPUT_QUEUE=os.getenv('OUTPUT_QUEUE')
 INPUT_QUEUE=os.getenv('INPUT_QUEUE')
 
+# Environment variables for elasticsearch
 ESENDPOINT=os.getenv('ESENDPOINT')
 ESPASSWORD=os.getenv('ESPASSWORD')
 ESINDEX=os.getenv('ESINDEX')
 
-# environment variables
+# environment variables for mariadb
 HOST = os.getenv('MARIADBHOST')
 PASSWORD = os.getenv('MARIADBPASS')
 PORT = '3306'
@@ -29,7 +31,7 @@ DATABASE = 'weather'
 
 # executes the sameFolderFileMD5 stored procedure
 # @restrictions: none
-# @param: the name of the stored prcedure and the parameters of the stored procedure (array of strings)
+# @param: the name of the stored procedure and the parameters of the stored procedure (array of strings)
 # @output: none
 def sameFolderFileMD5(procedure, parameters):
     sameMD5 = 0
@@ -121,4 +123,5 @@ connection_output = pika.BlockingConnection(parameters_output)
 channel_output = connection_output.channel()
 channel_output.queue_declare(queue=OUTPUT_QUEUE)
 
+# everything in the TO_PROCESS queue begins to be consumed
 channel_input.start_consuming()
