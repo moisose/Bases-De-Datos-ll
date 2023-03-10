@@ -69,7 +69,7 @@ def readStations():
     
     string = file.content.decode('utf-8')
     lines = string.rsplit('\n')
-    print(lines)
+    # print(lines)
 
     md5 = getMd5(string)
     stored_results = executeProcedure('loadFile', ["ghcnd-stations.txt", url, str(md5).encode(), "Descargado"])
