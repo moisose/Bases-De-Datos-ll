@@ -6,7 +6,7 @@ metadata:
   labels:
     app: {{ .Values.config.orchestratorCronjob.name }}
 spec:
-  schedule: "*/5 * * * *"         
+  schedule: "0 6 * * *"         
   jobTemplate:
     spec:
       template:

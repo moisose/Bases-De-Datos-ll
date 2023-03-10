@@ -7,24 +7,27 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
+# Environment variables for rabbitmq
 hostname = os.getenv('HOSTNAME')
-#interval = int(os.getenv('EVENT_INTERVAL'))
 RABBIT_MQ=os.getenv('RABBITMQ')
 RABBIT_MQ_PASSWORD=os.getenv('RABBITPASS')
 OUTPUT_QUEUE=os.getenv('OUTPUT_QUEUE')
 
-credentials = pika.PlainCredentials('user', RABBIT_MQ_PASSWORD)
-parameters = pika.ConnectionParameters(host=RABBIT_MQ, credentials=credentials) 
-connection = pika.BlockingConnection(parameters)
-channel = connection.channel()
-channel.queue_declare(queue=OUTPUT_QUEUE)
-
-# environment variables
+# environment variables for mariadb
 HOST = os.getenv('MARIADBHOST')
 PASSWORD = os.getenv('MARIADBPASS')
 PORT = '3306'
 USER = 'root'
 DATABASE = 'weather'
+
+
+# rabbitmq queue declaration
+# this is the TO_PROCESS queue 
+credentials = pika.PlainCredentials('user', RABBIT_MQ_PASSWORD)
+parameters = pika.ConnectionParameters(host=RABBIT_MQ, credentials=credentials) 
+connection = pika.BlockingConnection(parameters)
+channel = connection.channel()
+channel.queue_declare(queue=OUTPUT_QUEUE)
 
 #-------------------------------------------Functions------------------------------------
 # executes a stored procedure
@@ -61,6 +64,10 @@ def executeProcedure(procedure, parameters):
         
     return resultArray
 
+# read the files url in the noaa page
+# @restrictions: none
+# @param: none
+# @output: none
 def readFolder():
     print('empezó el request')
     # root of the NOOA website to add to the files url
@@ -91,7 +98,11 @@ def readFolder():
             msg = url
             channel.basic_publish(exchange='', routing_key=OUTPUT_QUEUE, body=msg)
 
-            executeProcedure("loadFileFolder", [name, url, md5, state])
+            # a record will be added or updated in the weather.files table
+            try:
+                executeProcedure("loadFileFolder", [name, url, md5, state])
+            except:
+                return "Conexion fallida"
 
         if count == 40:
             break
