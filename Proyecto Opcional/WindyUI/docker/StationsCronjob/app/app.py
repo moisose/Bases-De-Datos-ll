@@ -3,12 +3,12 @@ import mysql.connector
 import requests
 import hashlib
 
-
-#Values
-pw = 'password'
-puerto = '3307'
-
-
+# environment variables
+HOST = os.getenv('MARIADBHOST')
+PASSWORD = os.getenv('MARIADBPASS')
+PORT = '3306'
+USER = 'root'
+DATABASE = 'weather'
 #-------------------------------------------Functions------------------------------------
 # executes a stored procedure
 # @restrictions: none
@@ -17,7 +17,7 @@ puerto = '3307'
 def executeProcedure(procedure, parameters):
     resultArray = []
     try:
-        conn = mysql.connector.connect(host="localhost", user='root', password= pw, port= puerto, database='weather')
+        conn = mysql.connector.connect(host=HOST, user=USER, password= PASSWORD, port= PORT, database=DATABASE)
         cursor = conn.cursor()
         args = ("FF", 2, 2, 20, 3)
         result_args = cursor.callproc(procedure, parameters)
@@ -36,7 +36,7 @@ def executeProcedure(procedure, parameters):
         
 
     except mysql.connector.Error as error:
-        pass
+        return ['error']
         #print("Failed to execute stored procedure: {}".format(error))
 
     finally:
@@ -60,6 +60,7 @@ def getMd5(string):
 # @param: none
 # @output: none
 def readStations():
+    varResult = ''
     url = 'https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt'
     try:
         file = requests.get(url)
@@ -68,10 +69,14 @@ def readStations():
     
     string = file.content.decode('utf-8')
     lines = string.rsplit('\n')
+    print(lines)
 
     md5 = getMd5(string)
     stored_results = executeProcedure('loadFile', ["ghcnd-stations.txt", url, str(md5).encode(), "Descargado"])
     print(stored_results)
+
+    if stored_results[0] == 'error':
+        return 'Conexion fallida'
     
     for result in stored_results:
         if result[0][0] == "The file has been created" or result[0][0] == 'The textFile has been successfully modified.':
@@ -86,12 +91,15 @@ def readStations():
                 gsnFlag = line[72:75].replace(' ', '')
                 hcnFlag = line[76:79].replace(' ', '')
                 wmoId = line[80:85].replace(' ', '')
-                
-                executeProcedure('createStation', [stationId, latitude, longitude, elevation, state, name, gsnFlag, hcnFlag, wmoId, countryCode])
+                print(stationId, latitude, longitude, elevation, state, name, gsnFlag, hcnFlag, wmoId, countryCode)
+                executeProcedure('createstation', [stationId, latitude, longitude, elevation, state, name, gsnFlag, hcnFlag, wmoId, countryCode])
+            varResult = 'El archivo se modifico'
         else:
             print("El archivo no se modifico")
+            varResult = 'El archivo no se modifico'
 
     file.close()
+    return varResult
 
 
 #_______________________________________________________MAIN_____________________________________________________________

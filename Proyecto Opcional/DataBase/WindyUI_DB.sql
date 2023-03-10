@@ -8,6 +8,12 @@
 	Profesor: Nereo Campos Araya
     
 			   Estudiantes: 
+	Fiorella Zelaya Coto - 2021
+	Isaac Araya Solano
+	Joxan Fuertes Villegas - 
+	Melany Salas Fernández - 2021121147
+	Moises Solano Espinoza -2021
+	
 			   
 
     
@@ -15,15 +21,15 @@
 */
 
 #DROP DATABASE IF EXISTS weather;
-#CREATE DATABASE weather;
+CREATE DATABASE IF NOT EXISTS weather;
 
 USE weather;
 
 #----------------------------------------------TABLES-----------------------------------------------
 #Table Station 
 #
-DROP TABLE IF EXISTS Station;
-CREATE TABLE Station (
+DROP TABLE IF EXISTS station;
+CREATE TABLE station (
 		idStation VARCHAR(11) PRIMARY KEY,
 		latitude REAL,
 		longitude REAL,
@@ -37,15 +43,15 @@ CREATE TABLE Station (
 );
 	
 #Table States 
-DROP TABLE IF EXISTS Country;
-CREATE TABLE Country (
+DROP TABLE IF EXISTS country;
+CREATE TABLE country (
 		countryCode VARCHAR(2) PRIMARY KEY,
 		countryName VARCHAR(100)
 );
 
 #Table States 
-DROP TABLE IF EXISTS State;
-CREATE TABLE State (
+DROP TABLE IF EXISTS state;
+CREATE TABLE state (
 		stateCode VARCHAR(2) PRIMARY KEY,
 		stateName VARCHAR(100)
 );
@@ -60,13 +66,13 @@ CREATE TABLE textFile (
 		fileStatus VARCHAR(20)
 );
 
-#FOREING KEYS-------------------------------------------------------
 
+#FOREING KEYS-------------------------------------------------------
 #Station with country
-ALTER TABLE Station
+ALTER TABLE station
 	ADD CONSTRAINT StationXCountry FOREIGN KEY (CountryCode) REFERENCES Country(countryCode);
 #Station with state
-ALTER TABLE Station
+ALTER TABLE station
 	ADD CONSTRAINT StationXState FOREIGN KEY (stateCode) REFERENCES State(stateCode);	
 	
 

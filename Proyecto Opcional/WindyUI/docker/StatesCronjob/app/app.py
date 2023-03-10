@@ -1,13 +1,15 @@
+#-----------------------------Libraries--------------------------------
 import os
 import mysql.connector
 import requests
 import hashlib
 
-
-#Values
-pw = 'password'
-puerto = '3307'
-
+# environment variables
+HOST = os.getenv('MARIADBHOST')
+PASSWORD = os.getenv('MARIADBPASS')
+PORT = '3306'
+USER = 'root'
+DATABASE = 'weather'
 
 #-------------------------------------------Functions------------------------------------
 # executes a stored procedure
@@ -17,7 +19,7 @@ puerto = '3307'
 def executeProcedure(procedure, parameters):
     resultArray = []
     try:
-        conn = mysql.connector.connect(host="localhost", user='root', password= pw, port= puerto, database='weather')
+        conn = mysql.connector.connect(host=HOST, user=USER, password= PASSWORD, port= PORT, database=DATABASE)
         cursor = conn.cursor()
         args = ("FF", 2, 2, 20, 3)
         result_args = cursor.callproc(procedure, parameters)
@@ -36,7 +38,7 @@ def executeProcedure(procedure, parameters):
         
 
     except mysql.connector.Error as error:
-        pass
+        return ['error']
         #print("Failed to execute stored procedure: {}".format(error))
 
     finally:
@@ -61,6 +63,7 @@ def getMd5(string):
 # @param: none
 # @output: none
 def readStates():
+    varResult = ''
     url = 'https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-states.txt'
     try:
         file = requests.get(url)
@@ -73,6 +76,9 @@ def readStates():
     md5 = getMd5(string)
     stored_results = executeProcedure('loadFile', ["ghcnd-states.txt", url, str(md5).encode(), "Descargado"])
     print(stored_results)
+
+    if stored_results[0] == 'error':
+        return 'Conexion fallida'
     
     for result in stored_results:
         if result[0][0] == "The file has been created" or result[0][0] == 'The textFile has been successfully modified.':
@@ -80,10 +86,13 @@ def readStates():
                 code = line[:2]
                 name = line[3:]
                 executeProcedure('createState', [code, name])
+            varResult = 'El archivo se modifico'
         else:
             print("El archivo no se modifico")
+            varResult = "El archivo no se modifico"
 
     file.close()
+    return varResult
 
 
 #_______________________________________________________MAIN_____________________________________________________________

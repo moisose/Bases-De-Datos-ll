@@ -1,16 +1,16 @@
 #!/bin/bash
 sudo docker login
-cd componente1
-sudo docker build -t moisose/componente1 .
+cd orchestratorCronjob
+sudo docker build -t moisose/orchestrator-cronjob .
 sudo docker images
-sudo docker push moisose/componente1
+sudo docker push moisose/orchestrator-cronjob
 
 cd ..
-cd componente2
+cd processorDeployment
 
-sudo docker build -t moisose/componente2 .
+sudo docker build -t moisose/processor-deployment .
 sudo docker images
-sudo docker push moisose/componente2
+sudo docker push moisose/processor-deployment
 
 # cd componente2
 # sudo docker build -t username/componente2 .
@@ -21,32 +21,28 @@ sudo docker push moisose/componente2
 cd ..
 cd CountriesCronjob
 
-sudo docker build -t fiozelaya/countries-cronjob .
+sudo docker build -t moisose/countries-cronjob .
 sudo docker images
-sudo docker push fiozelaya/countries-cronjob
+sudo docker push moisose/countries-cronjob
 
 cd ..
 cd StatesCronjob
 
-sudo docker build -t fiozelaya/states-cronjob .
+sudo docker build -t moisose/states-cronjob .
 sudo docker images
-sudo docker push fiozelaya/states-cronjob
+sudo docker push moisose/states-cronjob
 
 cd ..
 cd StationsCronjob
 
-sudo docker build -t fiozelaya/stations-cronjob .
+sudo docker build -t moisose/stations-cronjob .
 sudo docker images
-sudo docker push fiozelaya/stations-cronjob
+sudo docker push moisose/stations-cronjob
 
 cd ..
 cd mariadb-client
 
-sudo docker build -t fiozelaya/mariadbclient .
+sudo docker build -t moisose/mariadbclient .
 sudo docker images
-sudo docker push fiozelaya/mariadbclient
+sudo docker push moisose/mariadbclient
 
-kubectl apply -f countriesCronjob.yaml
-kubectl apply -f statesCronjob.yaml
-kubectl apply -f stationsCronjob.yaml
-kubectl apply -f mariadb-db.yaml

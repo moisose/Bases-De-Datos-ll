@@ -15,14 +15,62 @@ import pika
 # connection = pika.BlockingConnection(parameters)
 # channel = connection.channel()
 # channel.queue_declare(queue=OUTPUT_QUEUE)
+from elasticsearch.helpers import scan
+from elasticsearch import Elasticsearch
 
 # FOR THE MOMENT USE THIS
 INPUT_QUEUE = 'TO_PARSE'
 OUTPUT_QUEUE = "TO_TRANSFORM"
 
+#===============================================
+# elastic search file index creation
+es = Elasticsearch(['http://localhost:9200'], basic_auth=('elastic', 'AJCcCwWNgEhIHm1KQJPe'))
+#===============================================
+
+
+# returns the JSON string of the given file retrived from elasticsearch
+# @restrictions: none
+# @param: the name of the file that will be retrieved from elasticsearch
+# @output: JSON string of the given file
+def getFileElasticSearch(fileName):
+
+    hit = ""
+
+    query = {
+        "query":{
+            "match": {
+            "fileName.keyword": fileName
+            }
+        }
+    }
+
+    # Scan function to get all the data. 
+    rel = scan(client=es,             
+               query=query,                                     
+               scroll='1m',
+               index='files',
+               raise_on_error=True,
+               preserve_order=False,
+               clear_scroll=True)
+
+    # We need only '_source', which has all the fields required.
+    # This elimantes the elasticsearch metdata like _id, _type, _index.
+    result = list(rel)
+    if (result != []):
+        hit = result[0]['_source']
+
+    return hit
+
 def callback(ch, method, properties, body):
     body = str(body)[2:-1]
-    print(body)
+
+    print("rabbitmq fileName: " + body)
+    print("new string: ")
+    # get JSON string with filename and contents
+    print(getFileElasticSearch(body))
+    print("==============================")
+    # body is the name of the file
+
 
 connection_input = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 channel_input = connection_input.channel()
