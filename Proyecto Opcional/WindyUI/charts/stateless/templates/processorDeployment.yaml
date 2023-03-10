@@ -31,3 +31,13 @@ spec:
                 name: stateful-rabbitmq
                 key: rabbitmq-password
                 optional: false
+          - name: ESENDPOINT
+            value: ic4302-es-http
+          - name: ESPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ic4302-es-elastic-user
+                key: elastic
+                optional: false
+          - name: ESINDEX
+            value: files
