@@ -6,3 +6,9 @@ kibana:
   version: 8.6.1
   replicas: 1
   name: ic4302
+rabbitmq:
+  auth:
+    password: "4NBKnQOhNi65Yi0qnGhJXXNZ0Ri1Us"
+mariadb:
+  auth:
+    rootPassword: "mR76MbXDS"

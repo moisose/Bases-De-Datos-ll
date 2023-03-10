@@ -1,0 +1,29 @@
+# template for cronjobs with rabbitmq environment
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.config.orchestratorCronjob.name }}
+  labels:
+    app: {{ .Values.config.orchestratorCronjob.name }}
+spec:
+  schedule: "*/5 * * * *"         
+  jobTemplate:
+    spec:
+      template:
+        spec: 
+          containers:
+          - name: {{ .Values.config.orchestratorCronjob.name }}
+            image: {{ .Values.config.orchestratorCronjob.image }} 
+            imagePullPolicy: IfNotPresent
+            env:
+              - name: RABBITMQ
+                value: "stateful-rabbitmq"
+              - name: OUTPUT_QUEUE
+                value: {{ .Values.config.orchestratorCronjob.output_queue }}
+              - name: RABBITPASS
+                valueFrom:
+                  secretKeyRef:
+                    name: stateful-rabbitmq
+                    key: rabbitmq-password
+                    optional: false
+          restartPolicy: OnFailure

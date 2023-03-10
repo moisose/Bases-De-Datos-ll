@@ -51,8 +51,6 @@ def parserJson(filename, listOfData):
 """
 This method receives a json and transform its data and creates a file called transformation.json
 """
-
-
 def transformationJson(jsonParsed):
 
     jsonParsed = eval(jsonParsed)

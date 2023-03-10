@@ -1,6 +1,29 @@
 USE weather;
 #-------------------------------CRUD PROCEDURES-------------------------------
 
+#DROPS
+DROP PROCEDURE IF EXISTS createStation;
+DROP PROCEDURE IF EXISTS createCountry;
+DROP PROCEDURE IF EXISTS createState;
+DROP PROCEDURE IF EXISTS createTextFile;
+#--------------------------------------
+DROP PROCEDURE IF EXISTS readStation;
+DROP PROCEDURE IF EXISTS readCountry;
+DROP PROCEDURE IF EXISTS readState;
+DROP PROCEDURE IF EXISTS readTextFile;
+#--------------------------------------
+DROP PROCEDURE if EXISTS updateStation;
+DROP PROCEDURE if EXISTS updateCountry;
+DROP PROCEDURE if EXISTS updateState;
+DROP PROCEDURE IF EXISTS updateTextFile;
+#--------------------------------------
+DROP PROCEDURE IF EXISTS deleteStation;
+DROP PROCEDURE IF EXISTS deleteCountry;
+DROP PROCEDURE IF EXISTS deleteState;
+DROP PROCEDURE IF EXISTS deleteTextFile;
+
+
+
 #-----------------------------------CREATES-----------------------------------
 /*
 STATION______________________________________________________________________
@@ -13,7 +36,6 @@ STATION______________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS createStation;
 CREATE PROCEDURE createStation (idStationVar VARCHAR(11), latitudeVar REAL, longitudeVar REAL,
 											elevationVar REAL, stateCodeVar VARCHAR(2), stationNameVar VARCHAR(100),
 											gsnFlagVar VARCHAR(3), hcnCrnFlagVar VARCHAR(3), wmoldVar VARCHAR(50),
@@ -55,7 +77,6 @@ COUNTRY______________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS createCountry;
 CREATE PROCEDURE createCountry (countryCodeVar VARCHAR(2), countryNameVar VARCHAR(100))
 BEGIN
 	IF ISNULL(countryCodeVar) OR ISNULL(countryNameVar) THEN
@@ -78,7 +99,6 @@ STATE________________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS createState;
 CREATE PROCEDURE createState (stateCodeVar VARCHAR(2), stateNameVar VARCHAR(100))
 BEGIN
 	IF ISNULL(stateCodeVar) OR ISNULL(stateNameVar) THEN 
@@ -102,7 +122,6 @@ FILE_________________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS createTextFile;
 CREATE PROCEDURE createTextFile (fileNameVAR VARCHAR(50), urlVAR VARCHAR(100),
 										fileMd5VAR VARCHAR(130), fileStatusVar VARCHAR(20))
 BEGIN
@@ -133,7 +152,6 @@ STATION______________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS readStation;
 CREATE PROCEDURE readStation (idStationVar VARCHAR(11), stateCodeVar VARCHAR(2), 
 										stationNameVar VARCHAR(100), countryCodeVar VARCHAR(2))
 BEGIN
@@ -162,7 +180,6 @@ COUNTRY______________________________________________________________________
 */
 
 DELIMITER $$
-DROP PROCEDURE IF EXISTS readCountry;
 CREATE PROCEDURE readCountry (countryCodeVar VARCHAR(2), countryNameVar VARCHAR(100))
 BEGIN
 		IF (SELECT COUNT(*) FROM country WHERE countryCode = IFNULL(countryCodeVar, countryCode) 
@@ -183,7 +200,6 @@ STATE________________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS readState;
 CREATE PROCEDURE readState (stateCodeVar VARCHAR(2), stateNameVar VARCHAR(100))
 BEGIN
 		IF (SELECT COUNT(*) FROM state WHERE stateCode = IFNULL(stateCodeVar, stateCode) 
@@ -204,7 +220,6 @@ FILE_________________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS readTextFile;
 CREATE PROCEDURE readTextFile ( fileNameVAR VARCHAR(50), urlVAR VARCHAR(100),
 										fileStatusVar VARCHAR(20))
 BEGIN
@@ -230,7 +245,6 @@ STATION______________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE if EXISTS updateStation;
 CREATE PROCEDURE updateStation (idStationVar VARCHAR(11), latitudeVar REAL, longitudeVar REAL,
 											elevationVar REAL, stateCodeVar VARCHAR(2), stationNameVar VARCHAR(100),
 											gsnFlagVar VARCHAR(3), hcnCrnFlagVar VARCHAR(3), wmoldVar VARCHAR(50),
@@ -276,7 +290,6 @@ COUNTRY______________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE if EXISTS updateCountry;
 CREATE PROCEDURE updateCountry (countryCodeVar VARCHAR(2), countryNameVar VARCHAR(100))
 BEGIN 
 	# an id is required to modify
@@ -307,7 +320,6 @@ STATE________________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE if EXISTS updateState;
 CREATE PROCEDURE updateState (stateCodeVar VARCHAR(2), stateNameVar VARCHAR(100))
 BEGIN 
 	# an id is required to modify
@@ -338,7 +350,6 @@ FILE_________________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS updateTextFile;
 CREATE PROCEDURE updateTextFile (fileNameVAR VARCHAR(100), urlVAR VARCHAR(100), processedDayVar DATE,
 										fileMd5VAR VARCHAR(130), fileStatusVAR VARCHAR(20))
 BEGIN 
@@ -374,7 +385,6 @@ STATION______________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS deleteStation;
 CREATE PROCEDURE deleteStation (idStationV INT)
 BEGIN
 	DECLARE message VARCHAR(60);
@@ -402,7 +412,6 @@ COUNTRY______________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS deleteCountry;
 CREATE PROCEDURE deleteCountry (countryCodeV VARCHAR(2))
 BEGIN
 	DECLARE message VARCHAR(60);
@@ -430,7 +439,6 @@ STATE________________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS deleteState;
 CREATE PROCEDURE deleteState (stateCodeV VARCHAR(2))
 BEGIN
 	DECLARE message VARCHAR(60);
@@ -458,7 +466,6 @@ FILE_________________________________________________________________________
 -> @output: result
 */
 DELIMITER $$
-DROP PROCEDURE IF EXISTS deleteTextFile;
 CREATE PROCEDURE deleteTextFile (fileNameV VARCHAR(50))
 BEGIN
 	DECLARE message VARCHAR(60);
@@ -478,61 +485,3 @@ BEGIN
 END;
 $$
 
-
-# ==============================================================================================
-# ==============================================================================================
-#Pruebas
-
-
-#CALL createState(NULL, "CALIFORNIA");
-#SELECT * FROM state;
-#CALL createCountry(NULL, "Estados");
-#SELECT * FROM country;
-
-#CALL createStation("PRUEBA2", 12.8, 12.2, 21, NULL, "NOMBRE", "123", "123", "123", "EU");
-
-#SELECT * FROM station;
-
-#SELECT COUNT(*) FROM country WHERE countryCode = "EU"
-#CALL readStation("HEKL", NULL, NULL, NULL);
-#CALL readCountry(NULL, NULL);
-#CALL readState("EH", NULL);
-
-
-#SELECT * FROM station;
-
-
-
-# ============
-#CALL updateStation(null, null, null, null, null, null, null, null, null, null)
-
-
-
-
-#INSERT INTO country (countryCode, countryName)
-#				VALUES ("CR", "Costa Rica");
-#CALL updateCountry("CR", "Costa Ricaa");
-#SELECT * FROM country;	
-
-
-
-
-#INSERT INTO state (stateCode, stateName)
-#				VALUES ("AB", "ALBERTA");
-				
-#CALL updateState("AB", "ALBERTAA");
-
-#SELECT * FROM state;		
-
-
-
-
-
-#SELECT * FROM country;
-#CALL deleteCountry("CR");				
-
-
-
-
-#SELECT * FROM state;
-#CALL deleteState("AB");

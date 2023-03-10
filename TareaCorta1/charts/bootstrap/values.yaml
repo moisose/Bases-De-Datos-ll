@@ -1,0 +1,5 @@
+namespaces:
+  - app
+  - elastic
+  - mongo
+  - mysql

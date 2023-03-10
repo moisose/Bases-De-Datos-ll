@@ -1,16 +1,23 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: states-cronjob
+  name: {{ .Values.config.statesCronjob.name }}
 spec:
-  schedule: "0 5 * * *"
+  schedule: "*/5 * * * *"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
-          - name: states-cronjob
-            image: fiozelaya/states-cronjob
-            command: ["/bin/sh"]
-            args: ["-c", "date; states cronjob"] 
-          restartPolicy: Never
+          - name: {{ .Values.config.statesCronjob.name }}
+            image: {{ .Values.config.statesCronjob.image }}
+            env:
+              - name: MARIADBHOST
+                value: "stateful-mariadb"
+              - name: MARIADBPASS
+                valueFrom:
+                  secretKeyRef:
+                    name: stateful-mariadb
+                    key: mariadb-root-password
+                    optional: false
+          restartPolicy: OnFailure
