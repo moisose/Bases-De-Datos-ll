@@ -6,8 +6,8 @@ import hashlib
 
 
 #Values
-pw = 'MARIPOSA24'
-puerto = '3306'
+pw = 'MhlDahiana'
+puerto = '3307'
 
 
 #-------------------------------------------Functions------------------------------------
@@ -18,7 +18,7 @@ puerto = '3306'
 def executeProcedure(procedure, parameters):
     resultArray = []
     try:
-        conn = mysql.connector.connect(host="localhost", user='root', password= pw, port= puerto, database='weather')
+        conn = mysql.connector.connect(host= "192.168.251.151", user='root', password= pw, port= puerto, database='weather')
         cursor = conn.cursor()
         args = ("FF", 2, 2, 20, 3)
         result_args = cursor.callproc(procedure, parameters)
