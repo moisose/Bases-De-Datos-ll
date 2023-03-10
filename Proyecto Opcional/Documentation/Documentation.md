@@ -9,7 +9,7 @@
 ### **Estudiantes**:
 
 * Fiorella Zelaya Coto - 2021453615
-* Isaac Araya Solano -
+* Isaac Araya Solano - 2018151703
 * Melany Salas Fernández - 2021121147
 * Moisés Solano Espinoza - 2021144322
 
@@ -119,6 +119,7 @@ En la carpeta orchestratorCronjob se encuentra el dockerfile para la creación e
 
 ### **Processor**
 
+
 ### **Parser**
 
 ### **Otros**
@@ -149,6 +150,31 @@ En la carpeta orchestratorCronjob se encuentra el dockerfile para la creación e
 <center>
 <img src="Resources/readStations.png" alt="readStations" width="500"/>
 </center>
+
+* **Función processorJson** Esta es una función que se encarga de recibir la información de los archivos publicados en la cola to_process y transformaro al formato Json necesario, donde se colocan tanto el nombre del archivo como sus contenidos. 
+
+<center>
+<img src="Resources/processorJson.png" alt="processorJson" width="500"/>
+</center>
+
+* **Función parserJson** Esta es una función que se encarga de transformar la información de cada set de datos extraídos del archivo y convertirlos en formato Json para luego ser publicados en la cola to_transform. En esta se recibe la información del station_id, date, type, value, mflag, qflag y sflag. Después de recibir esa información se crea un solo json que tiene el nombre del archivo y luego la lista de datos.   
+
+<center>
+<img src="Resources/parserJson.png" alt="parserJson" width="500"/>
+</center>
+
+* **Función transformationJson** Esta es una función que recibe un archivo json proveniente de la cola to_transform que tiene el formato producido por la función parserJson. El objetivo de esta función es obtener más información a partir del json recibido fragmentando la fecha, el station_id y agregando el nombre del type. En este método se utiliza un diccionario que incluye los tipos indicados en la especificación del proyecto. De ese diccionario se extrae el nombre completo que se relaciona al acrónimo presente en el atributo type de cada json. Además se extrae de la fecha el mes y el año de los datos y luego se extrae del station_id el código de país, el código de network y el idetificador de estación real. 
+
+<center>
+Este es el diccionario de tipos:
+<img src="Resources/typesDictionary.png" alt="typesDictionary" width="500"/>
+
+Función transformationJson:
+
+
+<img src="Resources/transformationJson.png" alt="transformationJson" width="500"/>
+</center>
+
 -------------------------------
 
 ## **Pruebas**
