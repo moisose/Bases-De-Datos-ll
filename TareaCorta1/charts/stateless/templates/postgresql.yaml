@@ -1,0 +1,41 @@
+{{ if .Values.postgresql.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.config.postgresql.mapName }}
+  namespace: {{ .Values.namespace }}
+data:
+{{ (.Files.Glob "sql/db.sql").AsConfig | indent 2 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.config.postgresql.name }}
+spec:
+  template:
+    spec:
+      volumes:
+      - name: {{ .Values.config.postgresql.volumeName }}
+        configMap:
+          name: {{ .Values.config.postgresql.mapName }}
+          defaultMode: 0777
+      containers:
+      - name: pi
+        image: {{ .Values.config.postgresql.image }}
+        volumeMounts:
+        - name: {{ .Values.config.postgresql.volumeName }}
+          mountPath: /scripts
+        env:
+          - name: DB_HOST
+            value: "databases-postgresql"
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                name: databases-postgresql
+                key: postgres-password
+                optional: false
+        command: ["/bin/sh"]
+        args: ["-c", "PGPASSWORD=$(DB_PASS) psql -h $(DB_HOST) -U postgres < \"/scripts/db.sql\""]
+      restartPolicy: Never
+  backoffLimit: 8
+{{ end }}

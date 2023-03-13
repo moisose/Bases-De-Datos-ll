@@ -7,7 +7,11 @@ config:
     volumeName: scripts
     image: melanysf/mariadb-client
   # This can be use for a deployment
-
+  postgresql:
+    mapName: script-db
+    name: postgresql-init
+    volumeName: scripts
+    image: fiozelaya/postgresql-client
   # componente2:
   #   replicas: 1
   #   name: componente2
