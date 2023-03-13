@@ -1,9 +1,24 @@
 mongodb:
   enabled: false
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: "monitoring"
 postgresql-ha:
   enabled: false
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: "monitoring"
 mariadb-galera:
   enabled: false
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: "monitoring"
 elastic:
   enabled: false
   version: 8.6.1
@@ -27,11 +42,21 @@ prometheus-elasticsearch-exporter:
     enabled: true
     namespace: monitoring
 mariadb:
-  enabled: true
+  enabled: false
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: "monitoring"
   auth:
     rootPassword: "mR76MbXDS"
 postgresql:
   enabled: false
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: "monitoring"
 
 config:
   mariadb:
