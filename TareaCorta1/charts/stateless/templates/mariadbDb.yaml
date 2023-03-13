@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.config.mariadb.mapName }}
+  name: {{ .Values.config.mariadbDb.mapName }}
   namespace: {{ .Values.namespace }}
 data:
 {{ (.Files.Glob "sql/db.sql").AsConfig | indent 2 }}
@@ -9,20 +9,20 @@ data:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Values.config.mariadb.name }}
+  name: {{ .Values.config.mariadbDb.name }}
 spec:
   template:
     spec:
       volumes:
-      - name: {{ .Values.config.mariadb.volumeName }}
+      - name: {{ .Values.config.mariadbDb.volumeName }}
         configMap:
-          name: {{ .Values.config.mariadb.mapName }}
+          name: {{ .Values.config.mariadbDb.mapName }}
           defaultMode: 0777
       containers:
       - name: pi
-        image: {{ .Values.config.mariadb.image }}
+        image: {{ .Values.config.mariadbDb.image }}
         volumeMounts:
-        - name: {{ .Values.config.mariadb.volumeName }}
+        - name: {{ .Values.config.mariadbDb.volumeName }}
           mountPath: /scripts
         env:
           - name: MARIADBHOST

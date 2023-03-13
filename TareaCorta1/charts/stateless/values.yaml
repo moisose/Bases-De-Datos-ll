@@ -1,0 +1,16 @@
+config:
+  # make one for each component and add environment variables
+  # and docker container
+  mariadbDb:
+    mapName: script-db
+    name: mariadb-init
+    volumeName: scripts
+    image: melanysf/mariadb-client
+  # This can be use for a deployment
+
+  # componente2:
+  #   replicas: 1
+  #   name: componente2
+  #   output_queue: ""
+  #   input_queue: ""
+  #   image: username/componente2
