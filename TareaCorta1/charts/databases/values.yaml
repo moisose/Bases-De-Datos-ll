@@ -49,7 +49,7 @@ mariadb:
       enabled: true
       namespace: "monitoring"
   auth:
-    rootPassword: "mR76MbXDS"
+    rootPassword: "1234"
 postgresql:
   enabled: false
   metrics:
