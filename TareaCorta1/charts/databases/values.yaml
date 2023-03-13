@@ -5,7 +5,7 @@ postgresql-ha:
 mariadb-galera:
   enabled: false
 elastic:
-  enabled: true
+  enabled: false
   version: 8.6.1
   replicas: 1
   name: ic4302
@@ -27,8 +27,15 @@ prometheus-elasticsearch-exporter:
     enabled: true
     namespace: monitoring
 mariadb:
-  enabled: false
+  enabled: true
   auth:
     rootPassword: "mR76MbXDS"
 postgresql:
   enabled: false
+
+config:
+  mariadb:
+    mapName: script-db
+    name: mariadb-init
+    volumeName: scripts
+    image: melanysf/mariadb-client
