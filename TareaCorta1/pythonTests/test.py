@@ -1,17 +1,40 @@
-from flask import Flask
+import requests
+import threading
+import time
 
-app = Flask(__name__)
+BASE = "http://127.0.0.1:5000/"
 
-@app.route('/')
-def hello():
-    return 'Hello, World!'
+listaNombres = ["Isaac Araya", "Fiorella Zelaya", "Melany Salas", "Moisés Solano", "Pablo Arias"]
 
-@app.route('/test')
-def bye():
-    return 'Bye, World!'
+def test1():
+    while(True):
+        response = requests.get(BASE)
+        print("==>")
+        print(response.json())
+        time.sleep(1)
 
-if __name__ == '__main__':
-    app.run()
+def test2():
+    while(True):
+        response = requests.get(BASE)
+        print("-->")
+        print(response.json())
+        time.sleep(1)
+
+def test3():
+    for i in listaNombres:
+        response = requests.get(BASE + "mariadb/" + i)
+        print("==>")
+        print(response.json())
+        time.sleep(1)
+
+thread1 = threading.Thread(target=test1)
+thread2 = threading.Thread(target=test2)
+thread3 = threading.Thread(target=test3)
+
+thread1.start()
+thread2.start()
+#thread3.start()
+
 
 """
 Para igualar el puerto del contenedor Docker con el puerto del servidor local, puedes usar la opción -p (o --publish) cuando ejecutas el contenedor.
