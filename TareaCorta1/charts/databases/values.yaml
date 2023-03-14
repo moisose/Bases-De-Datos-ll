@@ -1,10 +1,12 @@
 mongodb:
-  enabled: false
+  enabled: true
   metrics:
     enabled: true
     serviceMonitor:
       enabled: true
       namespace: "monitoring"
+  auth:
+     rootPassword: "1234"
 postgresql-ha:
   enabled: false
   metrics:
@@ -51,7 +53,7 @@ mariadb:
   auth:
     rootPassword: "1234"
 postgresql:
-  enabled: true
+  enabled: false
   metrics:
     enabled: false
     serviceMonitor:

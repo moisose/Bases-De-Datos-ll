@@ -1,0 +1,43 @@
+{{ if .Values.mongodb.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.config.mongodb.mapName }}
+  namespace: {{ .Values.namespace }}
+data:
+{{ (.Files.Glob "sql/dat.json").AsConfig | indent 2 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.config.mongodb.name }}
+spec:
+  template:
+    spec:
+      volumes:
+      - name: {{ .Values.config.mongodb.volumeName }}
+        configMap:
+          name: {{ .Values.config.mongodb.mapName }}
+          defaultMode: 0777
+      containers:
+      - name: pi
+        image: {{ .Values.config.mongodb.image }}
+        volumeMounts:
+        - name: {{ .Values.config.mongodb.volumeName }}
+          mountPath: /scripts
+        env:
+          - name: MONGODB_HOST
+            value: "databases-mongodb"
+          - name: MONGODB_PASS
+            valueFrom:
+              secretKeyRef:
+                name: databases-mongodb
+                key: mongodb-root-password
+                optional: false
+        command: ["/bin/sh"]
+        args: ["-c", "mongosh --host $(MONGODB_HOST) --port 27017 -u root -p $(MONGODB_PASS) --eval \"db.getSiblingDB('database_name').createCollection('collection_name');\" ", "show dbs;"]
+        volumeMounts:
+      restartPolicy: Never
+  backoffLimit: 8
+{{ end }}
+
