@@ -1,3 +1,4 @@
-flask
+Flask
+Flask-RESTful
 psycopg2-binary
 flask-mysqldb
