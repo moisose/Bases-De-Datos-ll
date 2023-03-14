@@ -15,11 +15,6 @@ class Testing(Resource):
         counter += 1
         return {"info" : "this is the test " + str(counter)}
 
-class HelloWorld(Resource):
-    def get(self):
-        return {"hello": "world"}
-
-api.add_resource(HelloWorld, '/helloworld')
 api.add_resource(Testing, '/')
 
 if __name__ == '__main__':
