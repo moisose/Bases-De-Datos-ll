@@ -12,6 +12,11 @@ config:
     name: postgresql-init
     volumeName: scripts
     image: fiozelaya/postgresql-client
+  mongodb:
+    mapName: script-db
+    name: mongodb-init
+    volumeName: scripts
+    image: fiozelaya/mongodb-client
   # componente2:
   #   replicas: 1
   #   name: componente2

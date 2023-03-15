@@ -15,7 +15,7 @@ sleep 5
 helm upgrade --install monitoring-stack monitoring-stack
 sleep 5
 helm upgrade --install databases databases
-sleep 60
+sleep 5
 helm upgrade --install stateless stateless -f databases/values.yaml
 sleep 5
 helm upgrade --install grafana-config grafana-config
