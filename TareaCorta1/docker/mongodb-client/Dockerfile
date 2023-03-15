@@ -1,12 +1,12 @@
- FROM ubuntu:latest
+FROM ubuntu:latest
 
- RUN apt-get update && \
-     apt-get upgrade -y
- RUN apt-get update && \
-     apt-get install -y curl
+RUN apt-get update && apt-get install -y gnupg wget
 
- RUN curl -O https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2004-x86_64-100.5.0.deb
- RUN dpkg -i mongodb-database-tools-ubuntu2004-x86_64-100.5.0.deb
+RUN wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add -
 
+RUN echo "deb http://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list
 
+RUN apt-get update && apt-get install -y mongodb-mongosh
 
+WORKDIR /app
+CMD ["mongosh"]

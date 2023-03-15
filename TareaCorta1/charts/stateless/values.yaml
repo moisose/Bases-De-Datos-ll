@@ -5,18 +5,18 @@ config:
     mapName: script-db
     name: mariadb-init
     volumeName: scripts
-    image: melanysf/mariadb-client
+    image: moisose/mariadb-client
   # This can be use for a deployment
   postgresql:
     mapName: script-db
     name: postgresql-init
     volumeName: scripts
-    image: fiozelaya/postgresql-client
+    image: moisose/postgresql-client
   mongodb:
     mapName: script-db
     name: mongodb-init
     volumeName: scripts
-    image: fiozelaya/mongodb-client
+    image: moisose/mongodb-client
   # componente2:
   #   replicas: 1
   #   name: componente2
