@@ -5,6 +5,8 @@ mongodb:
     serviceMonitor:
       enabled: true
       namespace: "monitoring"
+  auth:
+     rootPassword: "1234"
 postgresql-ha:
   enabled: false
   metrics:

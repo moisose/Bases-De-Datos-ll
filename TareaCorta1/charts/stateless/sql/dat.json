@@ -1,0 +1,1 @@
+[  {    "nombre": "Camisa",    "precio": 20.50,    "descripcion": "Camisa de manga corta para hombre",    "cantidad": 100  },  {    "nombre": "Pantalón",    "precio": 35.99,    "descripcion": "Pantalón de mezclilla para mujer",    "cantidad": 50  },  {    "nombre": "Zapatos",    "precio": 50.00,    "descripcion": "Zapatos deportivos para niños",    "cantidad": 25  }]
