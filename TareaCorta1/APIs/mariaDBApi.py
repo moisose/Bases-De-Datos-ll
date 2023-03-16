@@ -13,29 +13,32 @@ app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = "root"
 app.config['MYSQL_PASSWORD'] = 'Idas4918'
 app.config['MYSQL_DB'] = 'babynames'
+app.config['MYSQL_PORT'] = 3306 
 mysql = MySQL(app)
 
 # Configuración del analizador de argumentos
 parser = reqparse.RequestParser()
-parser.add_argument('birthyear')
-parser.add_argument('gender')
-parser.add_argument('ethnicity')
-parser.add_argument('nm')
-parser.add_argument('cnt')
-parser.add_argument('rnk')
-parser.add_argument('id')
+parser.add_argument('birthyear', type=int)
+parser.add_argument('gender', type=str)
+parser.add_argument('ethnicity', type=str)
+parser.add_argument('nm', type=str)
+parser.add_argument('cnt', type=int)
+parser.add_argument('rnk', type=int)
+parser.add_argument('id', type=int)
 
 class BabyName(Resource):
     def get(self):
         # Leer todos los registros de la tabla
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM BabyName")
-        rows = cur.fetchall()
-        cur.close()
-        return {'data': rows}
+        try:
+            cur = mysql.connection.cursor()
+            cur.execute("SELECT * FROM BabyName")
+            rows = cur.fetchall()
+            cur.close()
+            return {'data': rows}
+        except:
+            return {'data': "Consulta fallida."}
 
     def post(self):
-        # Insertar un nuevo registro en la tabla
         args = parser.parse_args()
         birthyear = args['birthyear']
         gender = args['gender']
@@ -75,6 +78,7 @@ class BabyName(Resource):
         cur.close()
         return {'status': 'success', 'data': args}
 
+"""
 class BabyNameById(Resource):
     def get(self, id):
         # Leer un registro específico de la tabla según su ID
@@ -86,9 +90,10 @@ class BabyNameById(Resource):
             return {'data': row}
         else:
             return {'status': 'error', 'message': 'No se encontró el registro con el ID especificado'}
+"""
         
 api.add_resource(BabyName, '/babynames')
-api.add_resource(BabyNameById, '/babynames/int:id')
+#api.add_resource(BabyNameById, '/babynames/int:id')
 
 if __name__ == '__main__':
     app.run(debug=True)
@@ -113,5 +118,11 @@ se elimina el registro con el ID especificado utilizando el procedimiento almace
 En general, este ejemplo debe proporcionarte una buena base para crear tu propia API en Flask-Restful que trabaje con una base de datos MariaDB y 
 procedimientos almacenados. Solo asegúrate de ajustar las configuraciones de conexión de la base de datos en la sección "Configuración de conexión a la base de datos" 
 para que coincidan con tu propia base de datos.
+
+USE babynames;
+SELECT * FROM babyname;
+#INSERT INTO `babyname` (`birthyear`, `gender`, `ethnicity`, `bbyName`, `cnt`, `rnk`)
+#VALUES (2010, 'F', 'Hispanic', 'Sophia', 1000, 1);
+
 
 """
