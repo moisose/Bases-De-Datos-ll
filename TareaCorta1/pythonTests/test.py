@@ -21,7 +21,9 @@ def test2():
         time.sleep(1)
 
 def test3():
+    #response = requests.post(BASE + "babynames/{'birthyear':1990, 'gender':'F', 'ethnicity':'Asian', 'nm':1, 'cnt':2, 'rnk':3}")
     response = requests.get(BASE + "babynames/")
+    print(response)
     # for i in listaNombres:
         
     #     print("==>")
@@ -34,7 +36,8 @@ thread3 = threading.Thread(target=test3)
 
 #thread1.start()
 #thread2.start()
-thread3.start()
+#thread3.start()
+test3()
 
 
 """

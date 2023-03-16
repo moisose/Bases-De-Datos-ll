@@ -25,11 +25,11 @@ CREATE TABLE IF NOT EXISTS `babyname` (
   `birthyear` int(11) DEFAULT NULL,
   `gender` varchar(10) DEFAULT NULL,
   `ethnicity` varchar(50) DEFAULT NULL,
-  `nm` int(11) DEFAULT NULL,
+  `bbyName` VARCHAR(50) DEFAULT NULL,
   `cnt` int(11) DEFAULT NULL,
   `rnk` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=LATIN1_SWEDISH_CI;
 
 -- Data exporting was unselected.
 
@@ -52,13 +52,13 @@ CREATE PROCEDURE `sp_BabyName_Insert`(
    p_birthyear INT,
    p_gender VARCHAR(10),
    p_ethnicity VARCHAR(50),
-   p_nm INT,
+   p_bbyName VARCHAR(50),
    p_cnt INT,
    p_rnk INT
 )
 BEGIN
-  INSERT INTO BabyName (birthyear, gender, ethnicity, nm, cnt, rnk)
-  VALUES (p_birthyear, p_gender, p_ethnicity, p_nm, p_cnt, p_rnk);
+  INSERT INTO BabyName (birthyear, gender, ethnicity, bbyName, cnt, rnk)
+  VALUES (p_birthyear, p_gender, p_ethnicity, p_bbyName, p_cnt, p_rnk);
 END//
 DELIMITER ;
 
@@ -83,7 +83,7 @@ CREATE PROCEDURE `sp_BabyName_Update`(
    p_birthyear INT,
    p_gender VARCHAR(10),
    p_ethnicity VARCHAR(50),
-   p_nm INT,
+   p_bbyName VARCHAR(50),
    p_cnt INT,
    p_rnk INT
 )
@@ -92,7 +92,7 @@ BEGIN
   SET birthyear = p_birthyear,
       gender = p_gender,
       ethnicity = p_ethnicity,
-      nm = p_nm,
+      bbyName = p_bbyName,
       cnt = p_cnt,
       rnk = p_rnk
   WHERE id = p_id;
