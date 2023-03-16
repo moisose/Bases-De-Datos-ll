@@ -1,3 +1,6 @@
+#CREATE DATABASE BabyNames;
+
+
 CREATE TABLE BabyName (
   id INT AUTO_INCREMENT PRIMARY KEY,
   birthyear INT,
@@ -8,37 +11,44 @@ CREATE TABLE BabyName (
   rnk INT
 );
 
+DELIMITER $$
+USE BabyNames;
 CREATE PROCEDURE sp_BabyName_Insert (
-  IN p_birthyear INT,
-  IN p_gender VARCHAR(10),
-  IN p_ethnicity VARCHAR(50),
-  IN p_nm INT,
-  IN p_cnt INT,
-  IN p_rnk INT
+   p_birthyear INT,
+   p_gender VARCHAR(10),
+   p_ethnicity VARCHAR(50),
+   p_nm INT,
+   p_cnt INT,
+   p_rnk INT
 )
 BEGIN
   INSERT INTO BabyName (birthyear, gender, ethnicity, nm, cnt, rnk)
   VALUES (p_birthyear, p_gender, p_ethnicity, p_nm, p_cnt, p_rnk);
-END;
+END;$$
 
+DELIMITER ;
 
+DELIMITER $$
 CREATE PROCEDURE sp_BabyName_Select (
-  IN p_id INT
+   p_id INT
 )
 BEGIN
   SELECT *
   FROM BabyName
   WHERE id = p_id;
-END;
+END;$$
 
+DELIMITER ;
+
+DELIMITER $$
 CREATE PROCEDURE sp_BabyName_Update (
-  IN p_id INT,
-  IN p_birthyear INT,
-  IN p_gender VARCHAR(10),
-  IN p_ethnicity VARCHAR(50),
-  IN p_nm INT,
-  IN p_cnt INT,
-  IN p_rnk INT
+   p_id INT,
+   p_birthyear INT,
+   p_gender VARCHAR(10),
+   p_ethnicity VARCHAR(50),
+   p_nm INT,
+   p_cnt INT,
+   p_rnk INT
 )
 BEGIN
   UPDATE BabyName
@@ -49,14 +59,19 @@ BEGIN
       cnt = p_cnt,
       rnk = p_rnk
   WHERE id = p_id;
-END;
+END;$$
+
+DELIMITER ;
 
 
+DELIMITER $$
 CREATE PROCEDURE sp_BabyName_Delete (
-  IN p_id INT
+   p_id INT
 )
 BEGIN
   DELETE FROM BabyName
   WHERE id = p_id;
-END;
+END;$$
+
+DELIMITER ;
 
