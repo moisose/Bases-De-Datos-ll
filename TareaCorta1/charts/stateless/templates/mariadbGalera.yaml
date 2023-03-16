@@ -1,0 +1,42 @@
+{{ if .Values.config.mariadbgalera }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.config.mariadbGalera.mapName }}
+  namespace: {{ .Values.namespace }}
+data:
+{{ (.Files.Glob "sql/db.sql").AsConfig | indent 2 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.config.mariadbGalera.name }}
+spec:
+  template:
+    spec:
+      volumes:
+      - name: {{ .Values.config.mariadbGalera.volumeName }}
+        configMap:
+          name: {{ .Values.config.mariadbGalera.mapName }}
+          defaultMode: 0777
+      containers:
+      - name: pi
+        image: {{ .Values.config.mariadbGalera.image }}
+        volumeMounts:
+        - name: {{ .Values.config.mariadbGalera.volumeName }}
+          mountPath: /scripts
+        env:
+          - name: MARIADBGALERAHOST
+            value: "databases-mariadb-galera"
+          - name: MARIADBGALERAPASS
+            valueFrom:
+              secretKeyRef:
+                name: databases-mariadb-galera
+                key: mariadb-root-password
+                optional: false
+        command: ["/bin/sh"]
+        args: ["-c", "mysql -p$(MARIADBGALERAPASS) -uroot -h$(MARIADBGALERAHOST) < /scripts/db.sql; mysql -p$(MARIADBGALERAPASS) -uroot -h$(MARIADBGALERAHOST) -e \"SHOW DATABASES\""]
+      restartPolicy: Never
+  backoffLimit: 7
+
+{{ end }}

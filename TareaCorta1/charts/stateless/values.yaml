@@ -17,6 +17,11 @@ config:
     name: mongodb-init
     volumeName: scripts
     image: moisose/mongodb-client
+  mariadbGalera:
+    mapName: script-db
+    name: mariadb-galera-init
+    volumeName: scripts
+    image: moisose/mariadb-galera-client
   # componente2:
   #   replicas: 1
   #   name: componente2

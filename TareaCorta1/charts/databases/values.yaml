@@ -21,6 +21,10 @@ mariadb-galera:
     serviceMonitor:
       enabled: true
       namespace: "monitoring"
+  rootUser:
+    password: "1234"
+  db:
+    password: "1234"
 elastic:
   enabled: false
   version: 8.6.1
@@ -62,3 +66,5 @@ postgresql:
   auth:
     postgresPassword: "1234"
 
+config:
+  mariadbgalera: false

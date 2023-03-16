@@ -5,6 +5,11 @@ sudo docker build -t moisose/mariadb-client .
 sudo docker images
 sudo docker push moisose/mariadb-client
 
+cd ../mariadb-galera-client
+sudo docker build -t moisose/mariadb-galera-client .
+sudo docker images
+sudo docker push moisose/mariadb-galera-client
+
 cd ../postgresql-client
 sudo docker build -t moisose/postgresql-client .
 sudo docker images
