@@ -6,12 +6,12 @@ import os
 app = Flask(__name__)
 api = Api(app)
 
-print(os.getenv('MARIADBHOST'), os.getenv('MARIADBPASS'), os.getenv('MARIADB_DB'))
+#print(os.getenv('MARIADBHOST'), os.getenv('MARIADBPASS'), os.getenv('MARIADB_DB'))
 
 # Configuración de conexión a la base de datos
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = "root"
-app.config['MYSQL_PASSWORD'] = 'MARIPOSA24'
+app.config['MYSQL_PASSWORD'] = 'Idas4918'
 app.config['MYSQL_DB'] = 'babynames'
 mysql = MySQL(app)
 
