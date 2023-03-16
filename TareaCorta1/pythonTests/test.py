@@ -21,19 +21,23 @@ def test2():
         time.sleep(1)
 
 def test3():
-    for i in listaNombres:
-        response = requests.get(BASE + "mariadb/" + i)
-        print("==>")
-        print(response.json())
-        time.sleep(1)
+    #response = requests.post(BASE + "babynames/{'birthyear':1990, 'gender':'F', 'ethnicity':'Asian', 'nm':1, 'cnt':2, 'rnk':3}")
+    response = requests.get(BASE + "babynames/")
+    print(response)
+    # for i in listaNombres:
+        
+    #     print("==>")
+    #     print(response.json())
+    #     time.sleep(1)
 
 thread1 = threading.Thread(target=test1)
 thread2 = threading.Thread(target=test2)
 thread3 = threading.Thread(target=test3)
 
-thread1.start()
-thread2.start()
+#thread1.start()
+#thread2.start()
 #thread3.start()
+test3()
 
 
 """
