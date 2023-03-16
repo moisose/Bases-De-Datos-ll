@@ -1,15 +1,18 @@
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 from flask_mysqldb import MySQL
+import os
 
 app = Flask(__name__)
 api = Api(app)
 
+print(os.getenv('MARIADBHOST'), os.getenv('MARIADBPASS'), os.getenv('MARIADB_DB'))
+
 # Configuración de conexión a la base de datos
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'yourusername'
-app.config['MYSQL_PASSWORD'] = 'yourpassword'
-app.config['MYSQL_DB'] = 'yourdatabase'
+app.config['MYSQL_USER'] = "root"
+app.config['MYSQL_PASSWORD'] = 'MARIPOSA24'
+app.config['MYSQL_DB'] = 'babynames'
 mysql = MySQL(app)
 
 # Configuración del analizador de argumentos
@@ -67,7 +70,7 @@ class BabyName(Resource):
         args = parser.parse_args()
         id = args['id']
         cur = mysql.connection.cursor()
-        cur.callproc('sp_BabyName_Delete', (id,))
+        cur.callproc('sp_BabyName_Delete', (id))
         mysql.connection.commit()
         cur.close()
         return {'status': 'success', 'data': args}
@@ -76,7 +79,7 @@ class BabyNameById(Resource):
     def get(self, id):
         # Leer un registro específico de la tabla según su ID
         cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM BabyName WHERE id = %s", (id,))
+        cur.execute("SELECT * FROM BabyName WHERE id = %s", (id))
         row = cur.fetchone()
         cur.close()
         if row is not None:
