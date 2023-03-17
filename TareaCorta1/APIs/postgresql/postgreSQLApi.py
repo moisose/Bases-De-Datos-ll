@@ -60,21 +60,3 @@ COMANDOS:
 cd TareaCorta1/APIs/postgresql
 python postgreSQLApi.py
 """
-
-
-class BabyName(Resource):
-    def get(self):
-        try:
-            # Leer todos los registros de la tabla
-            cur = conn.cursor()
-            cur.execute("SELECT * FROM BabyName")
-            rows = cur.fetchall()
-            cur.close()
-            return {'data': rows}
-        except:
-            return {'status': 'failed'}
-
-api.add_resource(BabyName, '/babynames')
-
-if __name__ == '__main__':
-    app.run(debug=True)
