@@ -1,5 +1,5 @@
-from flask import Flask, request
-from flask_restful import Api, Resource, reqparse
+from flask import Flask
+from flask_restful import Api, Resource
 from flask_mysqldb import MySQL
 import csv
 import random
