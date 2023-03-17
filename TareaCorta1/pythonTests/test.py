@@ -1,7 +1,6 @@
 import requests
-import threading
-import time
 import json
+import random
 
 
 BASE = "http://127.0.0.1:5000/"
@@ -9,28 +8,20 @@ BASE = "http://127.0.0.1:5000/"
 
 def testLoad():
     url = BASE + "babynames"
-    data = {"birthyear": 1990, "gender": "F", "ethnicity": "Hispanic", "nm": "Carlos", "cnt": 2, "rnk": 3}
-
-    headers = {'Content-type': 'application/json'}
-    response = requests.post(url, data=json.dumps(data), headers=headers)
+    response = requests.post(url)
     print(response)
     print(response.json())
 
-def testUpdate(jsonInput):
+def testUpdate():
     url = BASE + "babynames"
-    data = jsonInput
-
-    headers = {'Content-type': 'application/json'}
-    response = requests.put(url, data=json.dumps(data), headers=headers)
+    response = requests.put(url)
     print(response)
     print(response.json())
 
-def testDelete(id):
+def testDelete():
     url = BASE + "babynames"
-    data = {"id": id}
 
-    headers = {'Content-type': 'application/json'}
-    response = requests.delete(url, data=json.dumps(data), headers=headers)
+    response = requests.delete(url)
     print(response)
     print(response.json())
 
@@ -38,6 +29,8 @@ def testRead():
     response = requests.get(BASE + "babynames")
     print(response)
     print(response.json())
+    # print("===")
+    # print(random.choice(response.json()["data"])[0])
 
 
 
@@ -57,19 +50,10 @@ def menu():
             testLoad()
 
         elif opcion == 3:
-            id = int(input("Ingrese el id del que desea actualizar: "))
-            birthyear = int(input("Ingrese el id del que desea actualizar: "))
-            gender = input("Ingrese el id del que desea actualizar: ")
-            ethnicity = input("Ingrese el id del que desea actualizar: ")
-            nm = input("Ingrese el id del que desea actualizar: ")
-            cnt = int(input("Ingrese el id del que desea actualizar: "))
-            rnk = int(input("Ingrese el id del que desea actualizar: "))
-            jsonInput = {"id": id, "birthyear": birthyear, "gender": gender, "ethnicity": ethnicity, "nm": nm, "cnt": cnt, "rnk": rnk}
-            testUpdate(jsonInput)
+            testUpdate()
 
         elif opcion == 4:
-            id = int(input("Ingrese el id del que desea eliminar: "))
-            testDelete(id)
+            testDelete()
 
         else:
             print("La opción no es válida.")

@@ -1,12 +1,17 @@
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 from flask_mysqldb import MySQL
+import csv
+import random
 import os
 
 app = Flask(__name__)
 api = Api(app)
 
 #print(os.getenv('MARIADBHOST'), os.getenv('MARIADBPASS'), os.getenv('MARIADB_DB'))
+
+#Lista de datos extraídos del csv
+data = []
 
 # Configuración de conexión a la base de datos
 app.config['MYSQL_HOST'] = 'localhost'
@@ -16,15 +21,18 @@ app.config['MYSQL_DB'] = 'babynames'
 app.config['MYSQL_PORT'] = 3306 
 mysql = MySQL(app)
 
-# Configuración del analizador de argumentos
-parser = reqparse.RequestParser()
-parser.add_argument('birthyear', type=int)
-parser.add_argument('gender', type=str)
-parser.add_argument('ethnicity', type=str)
-parser.add_argument('nm', type=str)
-parser.add_argument('cnt', type=int)
-parser.add_argument('rnk', type=int)
-parser.add_argument('id', type=int)
+# Función que lee los datos del archivo csv
+def csvReader():
+    with open('babynames.csv', newline='') as archivo:
+        lector_csv = csv.reader(archivo, delimiter=',', quotechar='"')
+        counter = 0
+        
+        for fila in lector_csv:
+            counter += 1
+            data.append(fila)
+            if counter >= 1000:
+                break
+    #print("=====>", len(data))
 
 class BabyName(Resource):
     def get(self):
@@ -36,66 +44,61 @@ class BabyName(Resource):
             cur.close()
             return {'data': rows}
         except:
-            return {'data': "Consulta fallida."}
+            return {'status': 'failed'}
 
     def post(self):
-        args = parser.parse_args()
-        birthyear = args['birthyear']
-        gender = args['gender']
-        ethnicity = args['ethnicity']
-        nm = args['nm']
-        cnt = args['cnt']
-        rnk = args['rnk']
-        cur = mysql.connection.cursor()
-        cur.callproc('sp_BabyName_Insert', (birthyear, gender, ethnicity, nm, cnt, rnk))
-        mysql.connection.commit()
-        cur.close()
-        return {'status': 'success', 'data': args}
+        try:
+            args = random.choice(data)
+            birthyear = args[0]
+            gender = args[1]
+            ethnicity = args[2]
+            nm = args[3]
+            cnt = args[4]
+            rnk = args[5]
+            cur = mysql.connection.cursor()
+            cur.callproc('sp_BabyName_Insert', (birthyear, gender, ethnicity, nm, cnt, rnk))
+            mysql.connection.commit()
+            cur.close()
+            return {'status': 'success', 'data': args}
+        except:
+            return {'status': 'failed'}
 
     def put(self):
         # Actualizar un registro existente en la tabla
-        args = parser.parse_args()
-        id = args['id']
-        birthyear = args['birthyear']
-        gender = args['gender']
-        ethnicity = args['ethnicity']
-        nm = args['nm']
-        cnt = args['cnt']
-        rnk = args['rnk']
-        cur = mysql.connection.cursor()
-        cur.callproc('sp_BabyName_Update', (id, birthyear, gender, ethnicity, nm, cnt, rnk))
-        mysql.connection.commit()
-        cur.close()
-        return {'status': 'success', 'data': args}
+        try:
+            args = random.choice(data)
+            id = random.choice(self.get()["data"])[0]
+            birthyear = args[0]
+            gender = args[1]
+            ethnicity = args[2]
+            nm = args[3]
+            cnt = args[4]
+            rnk = args[5]
+            cur = mysql.connection.cursor()
+            cur.callproc('sp_BabyName_Update', (id, birthyear, gender, ethnicity, nm, cnt, rnk))
+            mysql.connection.commit()
+            cur.close()
+            return {'status': 'success', 'idUpdated': id, "data":args}
+        except:
+            return {'status': 'failed'}
 
     def delete(self):
+        try:
         # Eliminar un registro de la tabla
-        args = parser.parse_args()
-        id = args['id']
-        cur = mysql.connection.cursor()
-        cur.callproc('sp_BabyName_Delete', (id))
-        mysql.connection.commit()
-        cur.close()
-        return {'status': 'success', 'data': args}
-
-"""
-class BabyNameById(Resource):
-    def get(self, id):
-        # Leer un registro específico de la tabla según su ID
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM BabyName WHERE id = %s", (id))
-        row = cur.fetchone()
-        cur.close()
-        if row is not None:
-            return {'data': row}
-        else:
-            return {'status': 'error', 'message': 'No se encontró el registro con el ID especificado'}
-"""
+            id = random.choice(self.get()["data"])[0]
+            cur = mysql.connection.cursor()
+            cur.callproc('sp_BabyName_Delete', (id,))
+            mysql.connection.commit()
+            cur.close()
+            return {'status': 'success', 'id': id}
+        except:
+            return {'status': 'failed'}
         
 api.add_resource(BabyName, '/babynames')
 #api.add_resource(BabyNameById, '/babynames/int:id')
 
 if __name__ == '__main__':
+    csvReader()
     app.run(debug=True)
 
 
@@ -106,19 +109,6 @@ CREATE TABLE Persona (
   nombre VARCHAR(50) NOT NULL,
   PRIMARY KEY (id)
 );
-
-
-En este ejemplo, se crean dos recursos (clases) que manejan las solicitudes de la API. La clase "BabyName" maneja las solicitudes GET, POST, PUT y DELETE para la tabla completa,
-mientras que la clase "BabyNameById" maneja la solicitud GET para un registro específico de la tabla.
-
-Para las solicitudes POST y PUT, los valores de los campos se toman de los argumentos de la solicitud utilizando el analizador de argumentos de Flask-Restful. 
-Luego, se llama al procedimiento almacenado correspondiente en la base de datos utilizando la conexión MySQL. Para la solicitud DELETE, 
-se elimina el registro con el ID especificado utilizando el procedimiento almacenado correspondiente.
-
-En general, este ejemplo debe proporcionarte una buena base para crear tu propia API en Flask-Restful que trabaje con una base de datos MariaDB y 
-procedimientos almacenados. Solo asegúrate de ajustar las configuraciones de conexión de la base de datos en la sección "Configuración de conexión a la base de datos" 
-para que coincidan con tu propia base de datos.
-
 USE babynames;
 SELECT * FROM babyname;
 #INSERT INTO `babyname` (`birthyear`, `gender`, `ethnicity`, `bbyName`, `cnt`, `rnk`)
