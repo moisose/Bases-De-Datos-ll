@@ -8,8 +8,6 @@ import os
 app = Flask(__name__)
 api = Api(app)
 
-#print(os.getenv('MARIADBHOST'), os.getenv('MARIADBPASS'), os.getenv('MARIADB_DB'))
-
 #Lista de datos extraídos del csv
 data = []
 
