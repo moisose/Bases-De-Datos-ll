@@ -6,7 +6,7 @@ CREATE TABLE BabyName (
   birthyear INT,
   gender VARCHAR(10),
   ethnicity VARCHAR(50),
-  nm INT,
+  bbyName VARCHAR(50),
   cnt INT,
   rnk INT
 );
@@ -17,13 +17,13 @@ CREATE PROCEDURE sp_BabyName_Insert (
    p_birthyear INT,
    p_gender VARCHAR(10),
    p_ethnicity VARCHAR(50),
-   p_nm INT,
+   p_bbyName VARCHAR(50),
    p_cnt INT,
    p_rnk INT
 )
 BEGIN
-  INSERT INTO BabyName (birthyear, gender, ethnicity, nm, cnt, rnk)
-  VALUES (p_birthyear, p_gender, p_ethnicity, p_nm, p_cnt, p_rnk);
+  INSERT INTO BabyName (birthyear, gender, ethnicity, bbyName, cnt, rnk)
+  VALUES (p_birthyear, p_gender, p_ethnicity, p_bbyName, p_cnt, p_rnk);
 END;$$
 
 DELIMITER ;
@@ -46,7 +46,7 @@ CREATE PROCEDURE sp_BabyName_Update (
    p_birthyear INT,
    p_gender VARCHAR(10),
    p_ethnicity VARCHAR(50),
-   p_nm INT,
+   p_bbyName VARCHAR(50),
    p_cnt INT,
    p_rnk INT
 )
@@ -55,7 +55,7 @@ BEGIN
   SET birthyear = p_birthyear,
       gender = p_gender,
       ethnicity = p_ethnicity,
-      nm = p_nm,
+      bbyName = p_bbyName,
       cnt = p_cnt,
       rnk = p_rnk
   WHERE id = p_id;
