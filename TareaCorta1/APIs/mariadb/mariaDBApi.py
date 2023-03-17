@@ -95,7 +95,6 @@ api.add_resource(BabyName, '/babynames')
 
 if __name__ == '__main__':
     csvReader()
-    print(len(data))
     app.run(debug=True)
 
 
