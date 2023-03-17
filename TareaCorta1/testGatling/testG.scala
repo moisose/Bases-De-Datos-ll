@@ -18,7 +18,7 @@ class testDataset extends Simulation {
   /*define scenario*/
   val scn = scenario("escenario")
     .exec(http("peticion")
-      .get("/")
+      .post("/babynames")
       .check(status.is(200)) /*Verifies status equals 200*/
     )
   /*Users per second*/
