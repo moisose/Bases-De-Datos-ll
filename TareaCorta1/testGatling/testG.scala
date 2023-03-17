@@ -16,13 +16,36 @@ class testDataset extends Simulation {
   /*define http dir*/
   val httpConf = http.baseUrl("http://127.0.0.1:5000")
   /*define scenario*/
-  val scn = scenario("escenario")
-    .exec(http("peticion")
+
+  val createD = scenario("Crear datos")
+    .exec(http("Create")
       .post("/babynames")
       .check(status.is(200)) /*Verifies status equals 200*/
     )
+
+  val selectD = scenario("Obtener datos")
+    .exec(http("Select")
+      .get("/babynames")
+      .check(status.is(200)) /*Verifies status equals 200*/
+    )
+
+  val updateD = scenario("Actualizar datos")
+    .exec(http("Update")
+      .put("/babynames")
+      .check(status.is(200)) /*Verifies status equals 200*/
+    )
+  
+  val deleteD = scenario("Borrar datos")
+    .exec(http("Delete")
+      .delete("/babynames")
+      .check(status.is(200)) /*Verifies status equals 200*/
+    )
+
   /*Users per second*/
   setUp(
-    scn.inject(constantUsersPerSec(5) during (30 seconds))
+    createD.inject(constantUsersPerSec(5) during (30 seconds)),
+    selectD.inject(constantUsersPerSec(10) during (30 seconds)),
+    updateD.inject(constantUsersPerSec(2) during (30 seconds)),
+    deleteD.inject(constantUsersPerSec(5) during (15 seconds))
   ).protocols(httpConf)
 }
