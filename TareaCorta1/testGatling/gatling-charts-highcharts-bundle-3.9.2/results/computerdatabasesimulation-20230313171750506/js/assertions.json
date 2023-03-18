@@ -1,0 +1,10 @@
+{
+  "simulation": "computerdatabase.ComputerDatabaseSimulation",
+  "simulationId": "computerdatabasesimulation-20230313171750506",
+  "start": 1678727872139,
+  "description": "run",
+  "scenarios": ["Users", "Admins"],
+  "assertions": [
+
+  ]
+}

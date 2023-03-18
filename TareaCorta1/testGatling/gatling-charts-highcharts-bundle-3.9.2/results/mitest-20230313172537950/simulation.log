@@ -1,0 +1,451 @@
+RUN	MiTest	mitest	1678728337950	run	3.9.2
+REQUEST		petición	1678728339762	1678728339763	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728339781
+USER	Mi Escenario	START	1678728339781
+REQUEST		petición	1678728339889	1678728339889	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728339890
+USER	Mi Escenario	END	1678728339890
+REQUEST		petición	1678728340096	1678728340096	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728340097
+USER	Mi Escenario	END	1678728340097
+REQUEST		petición	1678728340304	1678728340304	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728340304
+USER	Mi Escenario	START	1678728340304
+REQUEST		petición	1678728340491	1678728340491	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728340491
+USER	Mi Escenario	END	1678728340491
+REQUEST		petición	1678728340696	1678728340696	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728340696
+USER	Mi Escenario	START	1678728340696
+REQUEST		petición	1678728340903	1678728340903	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728340904
+USER	Mi Escenario	END	1678728340904
+REQUEST		petición	1678728341094	1678728341094	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728341094
+USER	Mi Escenario	END	1678728341094
+REQUEST		petición	1678728341302	1678728341302	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728341303
+USER	Mi Escenario	END	1678728341303
+REQUEST		petición	1678728341509	1678728341509	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728341510
+USER	Mi Escenario	END	1678728341510
+REQUEST		petición	1678728341700	1678728341700	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728341700
+USER	Mi Escenario	END	1678728341700
+REQUEST		petición	1678728341892	1678728341892	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728341893
+USER	Mi Escenario	END	1678728341893
+REQUEST		petición	1678728342084	1678728342084	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728342084
+USER	Mi Escenario	END	1678728342084
+REQUEST		petición	1678728342291	1678728342291	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728342292
+USER	Mi Escenario	END	1678728342292
+REQUEST		petición	1678728342482	1678728342482	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728342483
+USER	Mi Escenario	START	1678728342483
+REQUEST		petición	1678728342691	1678728342691	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728342691
+USER	Mi Escenario	START	1678728342691
+REQUEST		petición	1678728342882	1678728342882	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728342883
+USER	Mi Escenario	END	1678728342883
+REQUEST		petición	1678728343089	1678728343089	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728343089
+USER	Mi Escenario	START	1678728343089
+REQUEST		petición	1678728343280	1678728343280	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728343280
+USER	Mi Escenario	END	1678728343280
+REQUEST		petición	1678728343487	1678728343487	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728343488
+USER	Mi Escenario	END	1678728343488
+REQUEST		petición	1678728343696	1678728343696	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728343697
+USER	Mi Escenario	START	1678728343697
+REQUEST		petición	1678728343887	1678728343887	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728343887
+USER	Mi Escenario	END	1678728343887
+REQUEST		petición	1678728344079	1678728344079	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728344079
+USER	Mi Escenario	START	1678728344079
+REQUEST		petición	1678728344286	1678728344286	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728344286
+USER	Mi Escenario	END	1678728344286
+REQUEST		petición	1678728344492	1678728344493	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728344493
+USER	Mi Escenario	END	1678728344493
+REQUEST		petición	1678728344683	1678728344683	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728344684
+USER	Mi Escenario	END	1678728344684
+REQUEST		petición	1678728344888	1678728344888	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728344889
+USER	Mi Escenario	START	1678728344889
+REQUEST		petición	1678728345079	1678728345079	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728345080
+USER	Mi Escenario	END	1678728345080
+REQUEST		petición	1678728345286	1678728345286	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728345287
+USER	Mi Escenario	START	1678728345287
+REQUEST		petición	1678728345494	1678728345494	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728345495
+USER	Mi Escenario	START	1678728345495
+REQUEST		petición	1678728345700	1678728345700	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728345700
+USER	Mi Escenario	END	1678728345700
+REQUEST		petición	1678728345888	1678728345889	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728345889
+USER	Mi Escenario	END	1678728345889
+REQUEST		petición	1678728346094	1678728346094	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728346095
+USER	Mi Escenario	START	1678728346095
+REQUEST		petición	1678728346283	1678728346283	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728346284
+USER	Mi Escenario	START	1678728346284
+REQUEST		petición	1678728346490	1678728346490	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728346491
+USER	Mi Escenario	START	1678728346491
+REQUEST		petición	1678728346682	1678728346682	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728346682
+USER	Mi Escenario	END	1678728346683
+REQUEST		petición	1678728346888	1678728346888	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728346888
+USER	Mi Escenario	END	1678728346888
+REQUEST		petición	1678728347092	1678728347092	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728347092
+USER	Mi Escenario	END	1678728347092
+REQUEST		petición	1678728347283	1678728347283	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728347284
+USER	Mi Escenario	END	1678728347284
+REQUEST		petición	1678728347488	1678728347488	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728347489
+USER	Mi Escenario	END	1678728347489
+REQUEST		petición	1678728347694	1678728347694	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728347695
+USER	Mi Escenario	START	1678728347695
+REQUEST		petición	1678728347885	1678728347885	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728347885
+USER	Mi Escenario	START	1678728347885
+REQUEST		petición	1678728348092	1678728348092	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728348093
+USER	Mi Escenario	END	1678728348093
+REQUEST		petición	1678728348284	1678728348285	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728348285
+USER	Mi Escenario	END	1678728348285
+REQUEST		petición	1678728348491	1678728348492	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728348492
+USER	Mi Escenario	START	1678728348492
+REQUEST		petición	1678728348685	1678728348685	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728348686
+USER	Mi Escenario	END	1678728348686
+REQUEST		petición	1678728348890	1678728348890	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728348891
+USER	Mi Escenario	START	1678728348891
+REQUEST		petición	1678728349080	1678728349080	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728349081
+USER	Mi Escenario	START	1678728349081
+REQUEST		petición	1678728349287	1678728349287	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728349288
+USER	Mi Escenario	START	1678728349288
+REQUEST		petición	1678728349493	1678728349493	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728349494
+USER	Mi Escenario	END	1678728349494
+REQUEST		petición	1678728349685	1678728349693	KO	j.n.UnknownHostException: Host desconocido (probandoGatling.com)
+USER	Mi Escenario	END	1678728349693
+USER	Mi Escenario	START	1678728349693
+REQUEST		petición	1678728349891	1678728349891	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728349892
+USER	Mi Escenario	END	1678728349892
+REQUEST		petición	1678728350082	1678728350082	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728350083
+USER	Mi Escenario	START	1678728350083
+REQUEST		petición	1678728350290	1678728350290	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728350290
+USER	Mi Escenario	END	1678728350290
+REQUEST		petición	1678728350481	1678728350481	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728350482
+USER	Mi Escenario	END	1678728350482
+REQUEST		petición	1678728350690	1678728350690	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728350690
+USER	Mi Escenario	START	1678728350690
+REQUEST		petición	1678728350881	1678728350881	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728350881
+USER	Mi Escenario	END	1678728350881
+REQUEST		petición	1678728351086	1678728351086	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728351087
+USER	Mi Escenario	START	1678728351087
+REQUEST		petición	1678728351293	1678728351293	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728351294
+USER	Mi Escenario	START	1678728351294
+REQUEST		petición	1678728351484	1678728351484	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728351485
+USER	Mi Escenario	START	1678728351485
+REQUEST		petición	1678728351690	1678728351690	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728351691
+USER	Mi Escenario	END	1678728351691
+REQUEST		petición	1678728351881	1678728351881	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728351881
+USER	Mi Escenario	START	1678728351881
+REQUEST		petición	1678728352082	1678728352082	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728352083
+USER	Mi Escenario	END	1678728352083
+REQUEST		petición	1678728352292	1678728352292	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728352293
+USER	Mi Escenario	END	1678728352293
+REQUEST		petición	1678728352482	1678728352482	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728352483
+USER	Mi Escenario	END	1678728352483
+REQUEST		petición	1678728352688	1678728352688	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728352689
+USER	Mi Escenario	END	1678728352690
+REQUEST		petición	1678728352880	1678728352880	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728352881
+USER	Mi Escenario	END	1678728352880
+REQUEST		petición	1678728353086	1678728353086	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728353086
+USER	Mi Escenario	END	1678728353086
+REQUEST		petición	1678728353294	1678728353294	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728353294
+USER	Mi Escenario	START	1678728353294
+REQUEST		petición	1678728353483	1678728353483	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728353483
+USER	Mi Escenario	START	1678728353483
+REQUEST		petición	1678728353690	1678728353690	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728353691
+USER	Mi Escenario	END	1678728353691
+REQUEST		petición	1678728353879	1678728353879	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728353880
+USER	Mi Escenario	END	1678728353880
+REQUEST		petición	1678728354085	1678728354086	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728354086
+USER	Mi Escenario	END	1678728354086
+REQUEST		petición	1678728354291	1678728354291	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728354292
+USER	Mi Escenario	END	1678728354292
+REQUEST		petición	1678728354480	1678728354481	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728354481
+USER	Mi Escenario	END	1678728354481
+REQUEST		petición	1678728354686	1678728354686	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728354686
+USER	Mi Escenario	START	1678728354686
+REQUEST		petición	1678728354893	1678728354893	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728354894
+USER	Mi Escenario	END	1678728354894
+REQUEST		petición	1678728355084	1678728355085	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728355085
+USER	Mi Escenario	START	1678728355085
+REQUEST		petición	1678728355292	1678728355292	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728355293
+USER	Mi Escenario	END	1678728355293
+REQUEST		petición	1678728355484	1678728355484	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728355484
+USER	Mi Escenario	END	1678728355484
+REQUEST		petición	1678728355687	1678728355687	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728355687
+USER	Mi Escenario	START	1678728355687
+REQUEST		petición	1678728355883	1678728355883	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728355884
+USER	Mi Escenario	END	1678728355884
+REQUEST		petición	1678728356084	1678728356084	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728356084
+USER	Mi Escenario	END	1678728356084
+REQUEST		petición	1678728356283	1678728356284	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728356284
+USER	Mi Escenario	END	1678728356284
+REQUEST		petición	1678728356483	1678728356483	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728356484
+USER	Mi Escenario	END	1678728356484
+REQUEST		petición	1678728356687	1678728356688	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728356688
+USER	Mi Escenario	START	1678728356688
+REQUEST		petición	1678728356879	1678728356879	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728356879
+USER	Mi Escenario	START	1678728356879
+REQUEST		petición	1678728357086	1678728357086	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728357087
+USER	Mi Escenario	END	1678728357087
+REQUEST		petición	1678728357293	1678728357294	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728357294
+USER	Mi Escenario	END	1678728357294
+REQUEST		petición	1678728357484	1678728357484	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728357485
+USER	Mi Escenario	END	1678728357485
+REQUEST		petición	1678728357691	1678728357691	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728357691
+USER	Mi Escenario	END	1678728357691
+REQUEST		petición	1678728357883	1678728357883	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728357884
+USER	Mi Escenario	END	1678728357884
+REQUEST		petición	1678728358082	1678728358082	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728358082
+USER	Mi Escenario	START	1678728358082
+REQUEST		petición	1678728358293	1678728358293	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728358294
+USER	Mi Escenario	END	1678728358294
+REQUEST		petición	1678728358485	1678728358485	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728358486
+USER	Mi Escenario	END	1678728358486
+REQUEST		petición	1678728358688	1678728358689	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728358689
+USER	Mi Escenario	END	1678728358689
+REQUEST		petición	1678728358889	1678728358889	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728358890
+USER	Mi Escenario	END	1678728358890
+REQUEST		petición	1678728359081	1678728359081	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728359081
+USER	Mi Escenario	END	1678728359081
+REQUEST		petición	1678728359290	1678728359290	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728359291
+USER	Mi Escenario	START	1678728359291
+REQUEST		petición	1678728359479	1678728359480	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728359480
+USER	Mi Escenario	START	1678728359480
+REQUEST		petición	1678728359686	1678728359686	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728359686
+USER	Mi Escenario	START	1678728359686
+REQUEST		petición	1678728359893	1678728359910	KO	j.n.UnknownHostException: Host desconocido (probandoGatling.com)
+USER	Mi Escenario	START	1678728359911
+USER	Mi Escenario	END	1678728359911
+REQUEST		petición	1678728360084	1678728360084	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728360085
+USER	Mi Escenario	END	1678728360085
+REQUEST		petición	1678728360292	1678728360293	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728360293
+USER	Mi Escenario	END	1678728360293
+REQUEST		petición	1678728360485	1678728360485	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728360486
+USER	Mi Escenario	START	1678728360486
+REQUEST		petición	1678728360692	1678728360692	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728360693
+USER	Mi Escenario	START	1678728360693
+REQUEST		petición	1678728360882	1678728360883	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728360883
+USER	Mi Escenario	END	1678728360883
+REQUEST		petición	1678728361088	1678728361089	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728361089
+USER	Mi Escenario	END	1678728361089
+REQUEST		petición	1678728361278	1678728361278	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728361279
+USER	Mi Escenario	END	1678728361279
+REQUEST		petición	1678728361481	1678728361481	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728361481
+USER	Mi Escenario	END	1678728361481
+REQUEST		petición	1678728361682	1678728361682	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728361682
+USER	Mi Escenario	START	1678728361682
+REQUEST		petición	1678728361890	1678728361890	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728361891
+USER	Mi Escenario	END	1678728361891
+REQUEST		petición	1678728362083	1678728362083	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728362083
+USER	Mi Escenario	START	1678728362083
+REQUEST		petición	1678728362290	1678728362290	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728362290
+USER	Mi Escenario	END	1678728362290
+REQUEST		petición	1678728362481	1678728362481	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728362481
+USER	Mi Escenario	END	1678728362481
+REQUEST		petición	1678728362682	1678728362682	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728362683
+USER	Mi Escenario	END	1678728362683
+REQUEST		petición	1678728362884	1678728362884	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728362885
+USER	Mi Escenario	START	1678728362885
+REQUEST		petición	1678728363094	1678728363094	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728363095
+USER	Mi Escenario	END	1678728363095
+REQUEST		petición	1678728363283	1678728363283	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728363283
+USER	Mi Escenario	END	1678728363283
+REQUEST		petición	1678728363483	1678728363484	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728363484
+USER	Mi Escenario	END	1678728363484
+REQUEST		petición	1678728363691	1678728363691	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728363692
+USER	Mi Escenario	END	1678728363691
+REQUEST		petición	1678728363884	1678728363885	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728363885
+USER	Mi Escenario	END	1678728363885
+REQUEST		petición	1678728364084	1678728364085	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728364085
+USER	Mi Escenario	END	1678728364085
+REQUEST		petición	1678728364293	1678728364293	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728364293
+USER	Mi Escenario	END	1678728364293
+REQUEST		petición	1678728364482	1678728364482	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728364483
+USER	Mi Escenario	START	1678728364483
+REQUEST		petición	1678728364683	1678728364683	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728364684
+USER	Mi Escenario	END	1678728364684
+REQUEST		petición	1678728364885	1678728364885	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728364886
+USER	Mi Escenario	END	1678728364886
+REQUEST		petición	1678728365090	1678728365090	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728365091
+USER	Mi Escenario	START	1678728365091
+REQUEST		petición	1678728365285	1678728365285	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728365286
+USER	Mi Escenario	END	1678728365286
+REQUEST		petición	1678728365485	1678728365486	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728365486
+USER	Mi Escenario	START	1678728365486
+REQUEST		petición	1678728365679	1678728365679	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728365680
+USER	Mi Escenario	START	1678728365680
+REQUEST		petición	1678728365881	1678728365881	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728365882
+USER	Mi Escenario	END	1678728365882
+REQUEST		petición	1678728366095	1678728366095	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728366095
+USER	Mi Escenario	END	1678728366096
+REQUEST		petición	1678728366288	1678728366289	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728366289
+USER	Mi Escenario	START	1678728366289
+REQUEST		petición	1678728366484	1678728366484	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728366484
+USER	Mi Escenario	START	1678728366484
+REQUEST		petición	1678728366679	1678728366679	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728366679
+USER	Mi Escenario	END	1678728366679
+REQUEST		petición	1678728366883	1678728366883	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728366883
+USER	Mi Escenario	END	1678728366883
+REQUEST		petición	1678728367081	1678728367081	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728367081
+USER	Mi Escenario	END	1678728367081
+REQUEST		petición	1678728367286	1678728367286	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728367287
+USER	Mi Escenario	END	1678728367287
+REQUEST		petición	1678728367483	1678728367483	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728367483
+USER	Mi Escenario	END	1678728367483
+REQUEST		petición	1678728367684	1678728367684	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728367684
+USER	Mi Escenario	END	1678728367684
+REQUEST		petición	1678728367884	1678728367884	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728367884
+USER	Mi Escenario	END	1678728367884
+REQUEST		petición	1678728368094	1678728368094	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728368095
+USER	Mi Escenario	START	1678728368095
+REQUEST		petición	1678728368280	1678728368281	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728368281
+USER	Mi Escenario	END	1678728368281
+REQUEST		petición	1678728368481	1678728368481	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728368482
+USER	Mi Escenario	END	1678728368482
+REQUEST		petición	1678728368691	1678728368691	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728368691
+USER	Mi Escenario	END	1678728368692
+REQUEST		petición	1678728368886	1678728368886	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728368887
+USER	Mi Escenario	END	1678728368887
+REQUEST		petición	1678728369085	1678728369085	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	END	1678728369086
+USER	Mi Escenario	START	1678728369086
+REQUEST		petición	1678728369283	1678728369283	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728369283
+USER	Mi Escenario	END	1678728369283
+REQUEST		petición	1678728369481	1678728369481	KO	j.n.UnknownHostException: probandoGatling.com
+USER	Mi Escenario	START	1678728369481
+USER	Mi Escenario	END	1678728369481

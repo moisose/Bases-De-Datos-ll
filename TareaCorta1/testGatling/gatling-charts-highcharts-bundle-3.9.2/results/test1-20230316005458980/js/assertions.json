@@ -1,0 +1,10 @@
+{
+  "simulation": "PruebaDatabase.test1",
+  "simulationId": "test1-20230316005458980",
+  "start": 1678928100354,
+  "description": "",
+  "scenarios": ["Users"],
+  "assertions": [
+
+  ]
+}

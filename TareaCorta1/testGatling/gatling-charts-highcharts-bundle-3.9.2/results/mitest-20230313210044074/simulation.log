@@ -1,0 +1,126 @@
+RUN	MiTest	mitest	1678741244074	run	3.9.2
+USER	Mi Escenario	START	1678741245640
+REQUEST		petición	1678741245621	1678741245644	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741245654
+USER	Mi Escenario	START	1678741245758
+REQUEST		petición	1678741245757	1678741245761	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741245762
+USER	Mi Escenario	START	1678741245965
+REQUEST		petición	1678741245962	1678741245970	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741245971
+USER	Mi Escenario	START	1678741246167
+REQUEST		petición	1678741246164	1678741246171	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741246172
+USER	Mi Escenario	START	1678741246370
+REQUEST		petición	1678741246368	1678741246375	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741246376
+USER	Mi Escenario	START	1678741246573
+REQUEST		petición	1678741246571	1678741246576	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741246576
+USER	Mi Escenario	START	1678741246774
+REQUEST		petición	1678741246772	1678741246778	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741246779
+USER	Mi Escenario	START	1678741246976
+REQUEST		petición	1678741246974	1678741246980	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741246980
+USER	Mi Escenario	START	1678741247164
+REQUEST		petición	1678741247162	1678741247168	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741247171
+USER	Mi Escenario	START	1678741247365
+REQUEST		petición	1678741247363	1678741247369	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741247370
+USER	Mi Escenario	START	1678741247568
+REQUEST		petición	1678741247565	1678741247572	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741247574
+USER	Mi Escenario	START	1678741247757
+REQUEST		petición	1678741247755	1678741247787	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741247788
+USER	Mi Escenario	START	1678741247957
+REQUEST		petición	1678741247955	1678741247959	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741247960
+USER	Mi Escenario	START	1678741248160
+REQUEST		petición	1678741248159	1678741248163	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741248163
+USER	Mi Escenario	START	1678741248371
+REQUEST		petición	1678741248366	1678741248376	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741248377
+USER	Mi Escenario	START	1678741248555
+REQUEST		petición	1678741248553	1678741248558	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741248559
+USER	Mi Escenario	START	1678741248755
+REQUEST		petición	1678741248754	1678741248759	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741248759
+USER	Mi Escenario	START	1678741248958
+REQUEST		petición	1678741248957	1678741248961	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741248961
+USER	Mi Escenario	START	1678741249159
+REQUEST		petición	1678741249158	1678741249162	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741249163
+USER	Mi Escenario	START	1678741249359
+REQUEST		petición	1678741249358	1678741249362	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741249363
+USER	Mi Escenario	START	1678741249563
+REQUEST		petición	1678741249562	1678741249568	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741249569
+USER	Mi Escenario	START	1678741249763
+REQUEST		petición	1678741249762	1678741249767	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741249768
+USER	Mi Escenario	START	1678741249967
+REQUEST		petición	1678741249966	1678741249976	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741249976
+USER	Mi Escenario	START	1678741250156
+REQUEST		petición	1678741250155	1678741250159	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741250159
+USER	Mi Escenario	START	1678741250358
+REQUEST		petición	1678741250357	1678741250362	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741250363
+USER	Mi Escenario	START	1678741250563
+REQUEST		petición	1678741250562	1678741250568	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741250569
+USER	Mi Escenario	START	1678741250764
+REQUEST		petición	1678741250763	1678741250768	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741250768
+USER	Mi Escenario	START	1678741250953
+REQUEST		petición	1678741250952	1678741250956	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741250957
+USER	Mi Escenario	START	1678741251159
+REQUEST		petición	1678741251158	1678741251162	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741251163
+USER	Mi Escenario	START	1678741251362
+REQUEST		petición	1678741251360	1678741251365	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741251367
+USER	Mi Escenario	START	1678741251566
+REQUEST		petición	1678741251564	1678741251571	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741251572
+USER	Mi Escenario	START	1678741251753
+REQUEST		petición	1678741251752	1678741251757	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741251758
+USER	Mi Escenario	START	1678741251956
+REQUEST		petición	1678741251955	1678741251959	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741251960
+USER	Mi Escenario	START	1678741252160
+REQUEST		petición	1678741252159	1678741252163	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741252164
+USER	Mi Escenario	START	1678741252363
+REQUEST		petición	1678741252362	1678741252367	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741252368
+USER	Mi Escenario	START	1678741252565
+REQUEST		petición	1678741252564	1678741252580	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741252582
+USER	Mi Escenario	START	1678741252751
+REQUEST		petición	1678741252750	1678741252755	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741252756
+USER	Mi Escenario	START	1678741252956
+REQUEST		petición	1678741252955	1678741252959	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741252960
+USER	Mi Escenario	START	1678741253162
+REQUEST		petición	1678741253161	1678741253165	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741253166
+USER	Mi Escenario	START	1678741253365
+REQUEST		petición	1678741253363	1678741253369	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741253370
+USER	Mi Escenario	START	1678741253568
+REQUEST		petición	1678741253566	1678741253571	KO	j.n.ConnectException: Connection refused: no further information
+USER	Mi Escenario	END	1678741253572
+USER	Mi Escenario	START	1678741253755
+REQUEST		petición	1678741253754	1678741253758	KO	
