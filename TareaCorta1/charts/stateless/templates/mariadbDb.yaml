@@ -5,7 +5,7 @@ metadata:
   name: {{ .Values.config.mariadbDb.mapName }}
   namespace: {{ .Values.namespace }}
 data:
-{{ (.Files.Glob "sql/mariadb.sql").AsConfig | indent 2 }}
+{{ (.Files.Glob "sql/babynames.sql").AsConfig | indent 2 }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -27,7 +27,7 @@ spec:
           mountPath: /scripts
         env:
           - name: MARIADBHOST
-            value: "databases-mariadb"
+            value: "databases-mariadb-master-node"
           - name: MARIADBPASS
             valueFrom:
               secretKeyRef:
@@ -37,8 +37,8 @@ spec:
           - name: MARIADB_DATABASE
             value: babynames
         command: ["/bin/sh"]
-        args: ["-c", "mysql -p$(MARIADBPASS) -uroot -h$(MARIADBHOST) < /scripts/mariadb.sql; mysql -p$(MARIADBPASS) -uroot -h$(MARIADBHOST) -e \"SHOW DATABASES\""]
+        args: ["-c", "mysql -p$(MARIADBPASS) -uroot -h$(MARIADBHOST) < /scripts/babynames.sql; mysql -p$(MARIADBPASS) -uroot -h$(MARIADBHOST) -e \"SHOW DATABASES\""]
       restartPolicy: Never
-  backoffLimit: 4
+  backoffLimit: 7
 
 {{ end }}
