@@ -1,0 +1,301 @@
+RUN	MiTest	mitest	1678726120921	run	3.9.2
+USER	Mi Escenario	START	1678726122929
+USER	Mi Escenario	START	1678726122969
+USER	Mi Escenario	START	1678726123079
+USER	Mi Escenario	START	1678726123174
+USER	Mi Escenario	START	1678726123282
+USER	Mi Escenario	START	1678726123377
+USER	Mi Escenario	START	1678726123471
+USER	Mi Escenario	START	1678726123581
+USER	Mi Escenario	START	1678726123676
+USER	Mi Escenario	START	1678726123785
+USER	Mi Escenario	START	1678726123879
+USER	Mi Escenario	START	1678726123973
+USER	Mi Escenario	START	1678726124084
+USER	Mi Escenario	START	1678726124179
+USER	Mi Escenario	START	1678726124273
+USER	Mi Escenario	START	1678726124383
+USER	Mi Escenario	START	1678726124477
+USER	Mi Escenario	START	1678726124590
+USER	Mi Escenario	START	1678726124682
+USER	Mi Escenario	START	1678726124776
+USER	Mi Escenario	START	1678726124886
+USER	Mi Escenario	START	1678726124966
+USER	Mi Escenario	START	1678726125060
+USER	Mi Escenario	START	1678726125172
+USER	Mi Escenario	START	1678726125267
+USER	Mi Escenario	START	1678726125361
+USER	Mi Escenario	START	1678726125470
+USER	Mi Escenario	START	1678726125566
+USER	Mi Escenario	START	1678726125661
+USER	Mi Escenario	START	1678726125772
+USER	Mi Escenario	START	1678726125866
+USER	Mi Escenario	START	1678726125960
+USER	Mi Escenario	START	1678726126070
+USER	Mi Escenario	START	1678726126164
+USER	Mi Escenario	START	1678726126273
+USER	Mi Escenario	START	1678726126368
+USER	Mi Escenario	START	1678726126462
+USER	Mi Escenario	START	1678726126572
+USER	Mi Escenario	START	1678726126665
+USER	Mi Escenario	START	1678726126759
+USER	Mi Escenario	START	1678726126870
+USER	Mi Escenario	START	1678726126964
+USER	Mi Escenario	START	1678726127058
+USER	Mi Escenario	START	1678726127168
+USER	Mi Escenario	START	1678726127262
+USER	Mi Escenario	START	1678726127372
+USER	Mi Escenario	START	1678726127467
+USER	Mi Escenario	START	1678726127561
+USER	Mi Escenario	START	1678726127671
+USER	Mi Escenario	START	1678726127765
+USER	Mi Escenario	START	1678726127876
+USER	Mi Escenario	START	1678726127970
+USER	Mi Escenario	START	1678726128063
+USER	Mi Escenario	START	1678726128158
+USER	Mi Escenario	START	1678726128269
+USER	Mi Escenario	START	1678726128362
+USER	Mi Escenario	START	1678726128472
+USER	Mi Escenario	START	1678726128567
+USER	Mi Escenario	START	1678726128661
+USER	Mi Escenario	START	1678726128771
+USER	Mi Escenario	START	1678726128865
+USER	Mi Escenario	START	1678726128961
+USER	Mi Escenario	START	1678726129071
+USER	Mi Escenario	START	1678726129165
+USER	Mi Escenario	START	1678726129259
+USER	Mi Escenario	START	1678726129369
+USER	Mi Escenario	START	1678726129463
+USER	Mi Escenario	START	1678726129574
+USER	Mi Escenario	START	1678726129668
+USER	Mi Escenario	START	1678726129762
+USER	Mi Escenario	START	1678726129873
+USER	Mi Escenario	START	1678726129967
+USER	Mi Escenario	START	1678726130062
+USER	Mi Escenario	START	1678726130172
+USER	Mi Escenario	START	1678726130266
+USER	Mi Escenario	START	1678726130362
+USER	Mi Escenario	START	1678726130472
+USER	Mi Escenario	START	1678726130566
+USER	Mi Escenario	START	1678726130661
+USER	Mi Escenario	START	1678726130771
+USER	Mi Escenario	START	1678726130865
+USER	Mi Escenario	START	1678726130959
+USER	Mi Escenario	START	1678726131069
+USER	Mi Escenario	START	1678726131163
+USER	Mi Escenario	START	1678726131273
+USER	Mi Escenario	START	1678726131367
+USER	Mi Escenario	START	1678726131461
+USER	Mi Escenario	START	1678726131571
+USER	Mi Escenario	START	1678726131665
+USER	Mi Escenario	START	1678726131759
+USER	Mi Escenario	START	1678726131869
+USER	Mi Escenario	START	1678726131963
+USER	Mi Escenario	START	1678726132057
+USER	Mi Escenario	START	1678726132167
+USER	Mi Escenario	START	1678726132261
+USER	Mi Escenario	START	1678726132372
+USER	Mi Escenario	START	1678726132466
+USER	Mi Escenario	START	1678726132560
+USER	Mi Escenario	START	1678726132671
+USER	Mi Escenario	START	1678726132764
+REQUEST		Mi Petición	1678726122926	1678726132935	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726132951
+REQUEST		Mi Petición	1678726122967	1678726132976	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726132977
+REQUEST		Mi Petición	1678726123077	1678726133086	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726133087
+REQUEST		Mi Petición	1678726123172	1678726133182	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726133183
+REQUEST		Mi Petición	1678726123281	1678726133292	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726133292
+REQUEST		Mi Petición	1678726123375	1678726133386	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726133387
+REQUEST		Mi Petición	1678726123469	1678726133480	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726133481
+REQUEST		Mi Petición	1678726123579	1678726133590	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726133591
+REQUEST		Mi Petición	1678726123674	1678726133684	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726133685
+REQUEST		Mi Petición	1678726123784	1678726133794	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726133794
+REQUEST		Mi Petición	1678726123878	1678726133888	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726133889
+REQUEST		Mi Petición	1678726123972	1678726133982	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726133983
+REQUEST		Mi Petición	1678726124082	1678726134091	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726134092
+REQUEST		Mi Petición	1678726124177	1678726134186	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726134186
+REQUEST		Mi Petición	1678726124271	1678726134280	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726134280
+REQUEST		Mi Petición	1678726124382	1678726134390	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726134391
+REQUEST		Mi Petición	1678726124477	1678726134484	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726134485
+REQUEST		Mi Petición	1678726124589	1678726134595	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726134595
+REQUEST		Mi Petición	1678726124681	1678726134689	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726134690
+REQUEST		Mi Petición	1678726124775	1678726134783	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726134783
+REQUEST		Mi Petición	1678726124885	1678726134893	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726134893
+REQUEST		Mi Petición	1678726124965	1678726134971	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726134972
+REQUEST		Mi Petición	1678726125060	1678726135066	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726135066
+REQUEST		Mi Petición	1678726125171	1678726135176	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726135176
+REQUEST		Mi Petición	1678726125266	1678726135270	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726135270
+REQUEST		Mi Petición	1678726125360	1678726135364	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726135365
+REQUEST		Mi Petición	1678726125470	1678726135474	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726135475
+REQUEST		Mi Petición	1678726125565	1678726135568	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726135569
+REQUEST		Mi Petición	1678726125660	1678726135663	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726135664
+REQUEST		Mi Petición	1678726125771	1678726135774	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726135774
+REQUEST		Mi Petición	1678726125865	1678726135868	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726135869
+REQUEST		Mi Petición	1678726125959	1678726135963	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726135964
+REQUEST		Mi Petición	1678726126069	1678726136074	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726136075
+REQUEST		Mi Petición	1678726126163	1678726136168	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726136169
+REQUEST		Mi Petición	1678726126272	1678726136278	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726136278
+REQUEST		Mi Petición	1678726126367	1678726136372	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726136373
+REQUEST		Mi Petición	1678726126461	1678726136466	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726136467
+REQUEST		Mi Petición	1678726126571	1678726136576	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726136577
+REQUEST		Mi Petición	1678726126665	1678726136670	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726136671
+REQUEST		Mi Petición	1678726126759	1678726136764	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726136765
+REQUEST		Mi Petición	1678726126869	1678726136874	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726136875
+REQUEST		Mi Petición	1678726126963	1678726136968	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726136969
+REQUEST		Mi Petición	1678726127057	1678726137062	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726137063
+REQUEST		Mi Petición	1678726127167	1678726137174	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726137175
+REQUEST		Mi Petición	1678726127261	1678726137269	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726137270
+REQUEST		Mi Petición	1678726127371	1678726137379	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726137380
+REQUEST		Mi Petición	1678726127466	1678726137474	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726137474
+REQUEST		Mi Petición	1678726127560	1678726137568	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726137569
+REQUEST		Mi Petición	1678726127670	1678726137679	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726137679
+REQUEST		Mi Petición	1678726127764	1678726137773	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726137774
+REQUEST		Mi Petición	1678726127875	1678726137885	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726137885
+REQUEST		Mi Petición	1678726127968	1678726137979	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726137979
+REQUEST		Mi Petición	1678726128062	1678726138073	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726138073
+REQUEST		Mi Petición	1678726128157	1678726138167	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726138168
+REQUEST		Mi Petición	1678726128268	1678726138277	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726138278
+REQUEST		Mi Petición	1678726128361	1678726138372	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726138373
+REQUEST		Mi Petición	1678726128471	1678726138482	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726138482
+REQUEST		Mi Petición	1678726128566	1678726138576	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726138576
+REQUEST		Mi Petición	1678726128660	1678726138670	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726138671
+REQUEST		Mi Petición	1678726128770	1678726138780	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726138781
+REQUEST		Mi Petición	1678726128864	1678726138874	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726138875
+REQUEST		Mi Petición	1678726128960	1678726138969	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726138970
+REQUEST		Mi Petición	1678726129070	1678726139080	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726139080
+REQUEST		Mi Petición	1678726129164	1678726139174	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726139175
+REQUEST		Mi Petición	1678726129258	1678726139268	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726139268
+REQUEST		Mi Petición	1678726129368	1678726139377	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726139378
+REQUEST		Mi Petición	1678726129462	1678726139472	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726139472
+REQUEST		Mi Petición	1678726129573	1678726139581	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726139582
+REQUEST		Mi Petición	1678726129667	1678726139676	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726139676
+REQUEST		Mi Petición	1678726129761	1678726139769	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726139770
+REQUEST		Mi Petición	1678726129872	1678726139879	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726139880
+REQUEST		Mi Petición	1678726129966	1678726139973	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726139974
+REQUEST		Mi Petición	1678726130061	1678726140068	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726140068
+REQUEST		Mi Petición	1678726130171	1678726140178	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726140178
+REQUEST		Mi Petición	1678726130265	1678726140272	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726140272
+REQUEST		Mi Petición	1678726130360	1678726140366	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726140366
+REQUEST		Mi Petición	1678726130471	1678726140475	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726140476
+REQUEST		Mi Petición	1678726130566	1678726140570	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726140570
+REQUEST		Mi Petición	1678726130660	1678726140664	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726140665
+REQUEST		Mi Petición	1678726130770	1678726140774	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726140774
+REQUEST		Mi Petición	1678726130864	1678726140868	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726140868
+REQUEST		Mi Petición	1678726130958	1678726140962	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726140963
+REQUEST		Mi Petición	1678726131068	1678726141072	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726141073
+REQUEST		Mi Petición	1678726131162	1678726141166	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726141167
+REQUEST		Mi Petición	1678726131272	1678726141276	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726141277
+REQUEST		Mi Petición	1678726131366	1678726141370	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726141371
+REQUEST		Mi Petición	1678726131460	1678726141464	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726141465
+REQUEST		Mi Petición	1678726131570	1678726141574	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726141575
+REQUEST		Mi Petición	1678726131664	1678726141668	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726141669
+REQUEST		Mi Petición	1678726131758	1678726141763	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726141764
+REQUEST		Mi Petición	1678726131868	1678726141873	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726141873
+REQUEST		Mi Petición	1678726131962	1678726141966	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726141967
+REQUEST		Mi Petición	1678726132056	1678726142061	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726142061
+REQUEST		Mi Petición	1678726132166	1678726142171	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726142172
+REQUEST		Mi Petición	1678726132260	1678726142265	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726142266
+REQUEST		Mi Petición	1678726132371	1678726142375	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726142375
+REQUEST		Mi Petición	1678726132465	1678726142469	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726142470
+REQUEST		Mi Petición	1678726132559	1678726142563	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726142564
+REQUEST		Mi Petición	1678726132670	1678726142673	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726142674
+REQUEST		Mi Petición	1678726132763	1678726142767	KO	i.n.c.ConnectTimeoutException: connection timed out: miapp.com/35.184.250.133:443
+USER	Mi Escenario	END	1678726142768

@@ -1,0 +1,10 @@
+{
+  "simulation": "MiTest2",
+  "simulationId": "mitest2-20230313211609899",
+  "start": 1678742171549,
+  "description": "run",
+  "scenarios": ["Mi Escenario"],
+  "assertions": [
+
+  ]
+}
