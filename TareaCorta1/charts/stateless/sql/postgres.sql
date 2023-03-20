@@ -13,18 +13,10 @@
 /* SQLINES DEMO *** L_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
--- SQLINES DEMO *** structure for babynames
-DROP DATABASE IF EXISTS babynames;
-CREATE DATABASE babynames /* SQLINES DEMO *** RACTER SET latin1 COLLATE latin1_swedish_ci */;
-SET SCHEMA 'babynames';
-
--- SQLINES DEMO ***  for table babynames.babyname
-DROP TABLE IF EXISTS babyname;
--- SQLINES LICENSE FOR EVALUATION USE ONLY
-CREATE SEQUENCE babyname_seq;
+SET TRANSACTION READ WRITE;
 
 CREATE TABLE IF NOT EXISTS babyname (
-  id int NOT NULL DEFAULT NEXTVAL ('babyname_seq'),
+  id serial,
   birthyear int DEFAULT NULL,
   gender varchar(10) DEFAULT NULL,
   ethnicity varchar(50) DEFAULT NULL,
@@ -34,7 +26,66 @@ CREATE TABLE IF NOT EXISTS babyname (
   PRIMARY KEY (id)
 ) ;
 
-/* SQLINES DEMO *** E=IFNULL(@OLD_SQL_MODE, '') */;
-/* SQLINES DEMO *** _KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
-/* SQLINES DEMO *** ER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/* SQLINES DEMO *** ES=IFNULL(@OLD_SQL_NOTES, 1) */;
+create or replace procedure sp_BabyName_Delete(
+   p_id INT
+)
+language plpgsql    
+as $$
+begin
+  DELETE FROM BabyName
+  WHERE id = p_id;
+end;$$;
+
+create or replace procedure sp_BabyName_Insert(
+   p_birthyear INT,
+   p_gender VARCHAR(10),
+   p_ethnicity VARCHAR(50),
+   p_bbyName VARCHAR(50),
+   p_cnt INT,
+   p_rnk INT
+)
+language plpgsql    
+as $$
+begin
+  INSERT INTO BabyName (birthyear, gender, ethnicity, bbyName, cnt, rnk)
+  VALUES (p_birthyear, p_gender, p_ethnicity, p_bbyName, p_cnt, p_rnk);
+end;$$;
+
+create or replace procedure sp_BabyName_Select(
+   p_id INT
+)
+language plpgsql    
+as $$
+declare
+  result_record BabyName%rowtype;
+begin
+  SELECT *
+  INTO result_record
+  FROM BabyName
+  WHERE id = p_id;
+  
+  -- Print the result
+  RAISE NOTICE 'Result: %, %', result_record.name, result_record.gender;
+end;$$;
+
+create or replace procedure sp_BabyName_Update(
+   p_id INT,
+   p_birthyear INT,
+   p_gender VARCHAR(10),
+   p_ethnicity VARCHAR(50),
+   p_bbyName VARCHAR(50),
+   p_cnt INT,
+   p_rnk INT
+)
+language plpgsql    
+as $$
+begin
+  UPDATE BabyName
+  SET birthyear = p_birthyear,
+      gender = p_gender,
+      ethnicity = p_ethnicity,
+      bbyName = p_bbyName,
+      cnt = p_cnt,
+      rnk = p_rnk
+  WHERE id = p_id;
+end;$$;
