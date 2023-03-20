@@ -19,6 +19,8 @@ postgresqlha:
   global:
     postgresql:
       password: "1234"
+    pgpool:
+      adminPassword: "12345"
 mariadbgalera:
   enabled: false
   replicaCount: 2
