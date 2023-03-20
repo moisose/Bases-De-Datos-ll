@@ -33,7 +33,7 @@ dependencies:
     version: "11.1.2"
     repository: https://charts.bitnami.com/bitnami
     alias: postgresqlha
-    condition: postgresql-ha.enabled
+    condition: postgresqlha.enabled
   - name: mariadb-galera
     version: "7.4.14"
     repository: https://charts.bitnami.com/bitnami
