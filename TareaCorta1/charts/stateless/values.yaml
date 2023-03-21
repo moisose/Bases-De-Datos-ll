@@ -26,18 +26,22 @@ config:
     replicas: 1
     name: appMariaDB-deployment
     image: moisose/appMariaDB
+    nameApp: nodeportApp
   appPostgresDeployment:
     replicas: 1
     name: appPostgres-deployment
     image: moisoseappPostgres
+    nameApp: nodeportApp
   appMongoDBDeployment:
     replicas: 1
     name: appMongoDB-deployment
     image: moisose/appMongoDB
+    nameApp: nodeportApp
   appElasticDeployment:
     replicas: 1
     name: appElastic-deployment
     image: moisose/appElastic
+    nameApp: nodeportApp
   # componente2:
   #   replicas: 1
   #   name: componente2

@@ -1,10 +1,10 @@
-# template for deployments with rabbitmq environment
+{{ if .Values.mariadb.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.config.appMariaDBDeployment.name }}
   labels:
-    app: {{ .Values.config.appMariaDBDeployment.name }}
+    app: {{ .Values.config.appMariaDBDeployment.nameApp }}
 spec:
   replicas: {{ .Values.config.appMariaDBDeployment.replicas }}
   selector:
@@ -30,6 +30,7 @@ spec:
           - name: MARIADBD_DB
             value: babynames
           - name: MARIADBUSER
-            value: 'root'
+            value: root
           - name: MARIADBPORT
             value: 3306
+{{ end }}
