@@ -79,8 +79,11 @@ def readStations():
         return 'Conexion fallida'
     
     for result in stored_results:
+        cont = 0
         if result[0][0] == "The file has been created" or result[0][0] == 'The textFile has been successfully modified.':
             for line in lines:
+                if cont == 40:
+                    break
                 stationId = line[:11]
                 countryCode = stationId[0:2]
                 latitude = line[12:20].replace(' ', '')
@@ -93,6 +96,7 @@ def readStations():
                 wmoId = line[80:85].replace(' ', '')
                 print(stationId, latitude, longitude, elevation, state, name, gsnFlag, hcnFlag, wmoId, countryCode)
                 executeProcedure('createstation', [stationId, latitude, longitude, elevation, state, name, gsnFlag, hcnFlag, wmoId, countryCode])
+                cont =+ 1
             varResult = 'El archivo se modifico'
         else:
             print("El archivo no se modifico")
