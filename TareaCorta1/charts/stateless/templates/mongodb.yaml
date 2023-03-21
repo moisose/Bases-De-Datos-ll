@@ -35,7 +35,7 @@ spec:
                 key: mongodb-root-password
                 optional: false
         command: ["/bin/sh"]
-        args: ["-c", "mongosh --host $(MONGODB_HOST) --port 27017 -u root -p $(MONGODB_PASS) --eval \"db.getSiblingDB('ropa').createCollection('ropa').insertMany(JSON.parse(cat(\'/scripts/dat.json\')));\""]
+        args: ["-c", "mongosh --host $(MONGODB_HOST) --port 27017 -u root -p $(MONGODB_PASS) --eval \"db.getSiblingDB('database_name').createCollection('collection_name');\";"]
         volumeMounts:
       restartPolicy: Never
   backoffLimit: 8

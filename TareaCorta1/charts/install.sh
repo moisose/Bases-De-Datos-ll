@@ -10,12 +10,13 @@
 # cd ../monitoring-stack
 # helm dependency build --skip-refresh
 # cd ..
+kubectl delete pvc --all --force --grace-period=0 -n default
 helm upgrade --install bootstrap bootstrap
 sleep 5
 helm upgrade --install monitoring-stack monitoring-stack
 sleep 5
 helm upgrade --install databases databases
-sleep 30
+sleep 120
 helm upgrade --install stateless stateless -f databases/values.yaml
 sleep 5
 helm upgrade --install grafana-config grafana-config

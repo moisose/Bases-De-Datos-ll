@@ -1,4 +1,4 @@
-{{ if .Values.config.mariadbgalera }}
+{{ if .Values.mariadbgalera.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -27,15 +27,15 @@ spec:
           mountPath: /scripts
         env:
           - name: MARIADBGALERAHOST
-            value: "databases-mariadb-galera"
+            value: "databases-mariadbgalera"
           - name: MARIADBGALERAPASS
             valueFrom:
               secretKeyRef:
-                name: databases-mariadb-galera
+                name: databases-mariadbgalera
                 key: mariadb-root-password
                 optional: false
         command: ["/bin/sh"]
-        args: ["-c", "mysql -p$(MARIADBGALERAPASS) -uroot -h$(MARIADBGALERAHOST) < /scripts/db.sql; mysql -p$(MARIADBGALERAPASS) -uroot -h$(MARIADBGALERAHOST) -e \"SHOW DATABASES\""]
+        args: ["-c", "mysql -p$(MARIADBGALERAPASS) -u root -h$(MARIADBGALERAHOST) < /scripts/db.sql; mysql -p$(MARIADBGALERAPASS) -u root -h$(MARIADBGALERAHOST) -e \"SHOW DATABASES\""]
       restartPolicy: Never
   backoffLimit: 7
 
