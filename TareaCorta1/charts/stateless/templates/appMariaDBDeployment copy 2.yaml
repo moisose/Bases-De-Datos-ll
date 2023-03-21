@@ -1,0 +1,35 @@
+# template for deployments with rabbitmq environment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.config.appMariaDBDeployment.name }}
+  labels:
+    app: {{ .Values.config.appMariaDBDeployment.name }}
+spec:
+  replicas: {{ .Values.config.appMariaDBDeployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.config.appMariaDBDeployment.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.config.appMariaDBDeployment.name }}
+    spec:
+      containers:
+      - name: {{ .Values.config.appMariaDBDeployment.name }}
+        image: {{ .Values.config.appMariaDBDeployment.image }}
+        env:
+          - name: MARIADBHOST
+            value: 'localhost'
+          - name: MARIADBPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: databases-mariadb
+                key: mariadb-root-password
+                optional: false
+          - name: MARIADBD_DB
+            value: babynames
+          - name: MARIADBUSER
+            value: 'root'
+          - name: MARIADBPORT
+            value: 3306
