@@ -19,3 +19,8 @@ cd ../mongodb-client
 sudo docker build -t moisose/mongodb-client .
 sudo docker images
 sudo docker push moisose/mongodb-client
+
+cd ../../APIs/mariadb
+sudo docker build -t melanysf/mariadb-conn .
+sudo docker images
+sudo docker push melanysf/mariadb-conn
