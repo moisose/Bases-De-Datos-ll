@@ -1,5 +1,7 @@
 mongodb:
   enabled: false
+  architecture: replicaset
+  replicaCount: 3
   metrics:
     enabled: true
     serviceMonitor:
@@ -7,15 +9,21 @@ mongodb:
       namespace: "monitoring"
   auth:
      rootPassword: "1234"
-postgresql-ha:
-  enabled: false
+postgresqlha:
+  enabled: true
   metrics:
     enabled: true
     serviceMonitor:
       enabled: true
       namespace: "monitoring"
-mariadb-galera:
+  global:
+    postgresql:
+      password: "1234"
+    pgpool:
+      adminPassword: "12345"
+mariadbgalera:
   enabled: false
+  replicaCount: 2
   metrics:
     enabled: true
     serviceMonitor:
@@ -48,7 +56,13 @@ prometheus-elasticsearch-exporter:
     enabled: true
     namespace: monitoring
 mariadb:
-  enabled: true
+  enabled: false
+  architecture: replication
+  primary:
+    name: "master-node"
+  secondary:
+    name: "slave"
+    replicaCount: 2
   metrics:
     enabled: true
     serviceMonitor:
@@ -65,6 +79,3 @@ postgresql:
       namespace: "monitoring"
   auth:
     postgresPassword: "1234"
-
-config:
-  mariadbgalera: false

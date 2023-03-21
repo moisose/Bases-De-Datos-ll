@@ -14,9 +14,9 @@ data = []
 # Configuración de conexión a la base de datos
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = "root"
-app.config['MYSQL_PASSWORD'] = 'Idas4918'
+app.config['MYSQL_PASSWORD'] = 'MhlDahiana'
 app.config['MYSQL_DB'] = 'babynames'
-app.config['MYSQL_PORT'] = 3306 
+app.config['MYSQL_PORT'] = 3307 
 mysql = MySQL(app)
 
 # Función que lee los datos del archivo csv
@@ -101,6 +101,6 @@ if __name__ == '__main__':
 """
 COMANDOS:
 
-cd TareaCorta1/APIs/mariadb
-python mariaDBApi.py
+cd TareaCorta1/APIs/mariadb/app
+python3 mariaDBApi.py
 """
