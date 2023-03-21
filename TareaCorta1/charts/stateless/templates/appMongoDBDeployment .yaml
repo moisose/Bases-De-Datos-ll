@@ -1,10 +1,10 @@
-# template for deployments with rabbitmq environment
+{{ if .Values.mongodb.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.config.appMongoDBDeployment.name }}
   labels:
-    app: {{ .Values.config.appMongoDBDeployment.name }}
+    app: {{ .Values.config.appMongoDBDeployment.nameApp }}
 spec:
   replicas: {{ .Values.config.appMongoDBDeployment.replicas }}
   selector:
@@ -19,4 +19,5 @@ spec:
       - name: {{ .Values.config.appMongoDBDeployment.name }}
         image: {{ .Values.config.appMongoDBDeployment.image }}
         env:
+{{ end }}
           

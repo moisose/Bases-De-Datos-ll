@@ -1,10 +1,10 @@
-# template for deployments with rabbitmq environment
+{{ if .Values.postgresql.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.config.appPostgresDeployment.name }}
   labels:
-    app: {{ .Values.config.appPostgresDeployment.name }}
+    app: {{ .Values.config.appPostgresDeployment.nameApp }}
 spec:
   replicas: {{ .Values.config.appPostgresDeployment.replicas }}
   selector:
@@ -19,4 +19,5 @@ spec:
       - name: {{ .Values.config.appPostgresDeployment.name }}
         image: {{ .Values.config.appPostgresDeployment.image }}
         env:
+{{ end }}
           

@@ -21,6 +21,6 @@ sudo docker images
 sudo docker push moisose/mongodb-client
 
 cd ../../APIs/mariadb
-sudo docker build -t melanysf/mariadb-conn .
+sudo docker build -t moisose/appmariadb .
 sudo docker images
-sudo docker push melanysf/mariadb-conn
+sudo docker push moisose/appmariadb
