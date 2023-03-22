@@ -2,22 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.config.appMariaDBDeployment.name }}
+  name: {{ .Values.config.apiMariaDBDeployment.name }}
   labels:
-    app: {{ .Values.config.appMariaDBDeployment.nameApp }}
+    app: {{ .Values.config.apiMariaDBDeployment.nameApp }}
 spec:
-  replicas: {{ .Values.config.appMariaDBDeployment.replicas }}
+  replicas: {{ .Values.config.apiMariaDBDeployment.replicas }}
   selector:
     matchLabels:
-      app: {{ .Values.config.appMariaDBDeployment.name }}
+      app: {{ .Values.config.apiMariaDBDeployment.name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.config.appMariaDBDeployment.name }}
+        app: {{ .Values.config.apiMariaDBDeployment.name }}
     spec:
       containers:
-      - name: {{ .Values.config.appMariaDBDeployment.name }}
-        image: {{ .Values.config.appMariaDBDeployment.image }}
+      - name: {{ .Values.config.apiMariaDBDeployment.name }}
+        image: {{ .Values.config.apiMariaDBDeployment.image }}
         env:
           - name: MARIADBHOST
             value: 'localhost'
@@ -28,9 +28,9 @@ spec:
                 key: mariadb-root-password
                 optional: false
           - name: MARIADBD_DB
-            value: babynames
+            value: 'babynames'
           - name: MARIADBUSER
-            value: root
+            value: 'root'
           - name: MARIADBPORT
-            value: 3306
+            value: '3306'
 {{ end }}

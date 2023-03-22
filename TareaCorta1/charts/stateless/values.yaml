@@ -22,25 +22,25 @@ config:
     name: mariadb-galera-init
     volumeName: scripts
     image: moisose/mariadb-galera-client
-  appMariaDBDeployment:
+  apiMariaDBDeployment:
     replicas: 1
-    name: appMariaDB-deployment
-    image: moisose/appMariaDB
+    name: apimariadb-deployment
+    image: fiozelaya/apimariadb
     nameApp: nodeportApp
-  appPostgresDeployment:
+  apiPostgresDeployment:
     replicas: 1
-    name: appPostgres-deployment
-    image: moisoseappPostgres
+    name: apipostgres-deployment
+    image: moisose/apipostgres
     nameApp: nodeportApp
-  appMongoDBDeployment:
+  apiMongoDBDeployment:
     replicas: 1
-    name: appMongoDB-deployment
-    image: moisose/appMongoDB
+    name: apimongodb-deployment
+    image: moisose/apimongodb
     nameApp: nodeportApp
-  appElasticDeployment:
+  apiElasticDeployment:
     replicas: 1
-    name: appElastic-deployment
-    image: moisose/appElastic
+    name: apielastic-deployment
+    image: moisose/apielastic
     nameApp: nodeportApp
   # componente2:
   #   replicas: 1
