@@ -1,0 +1,36 @@
+{{ if .Values.mariadb.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.config.apiMariaDBDeployment.name }}
+  labels:
+    app: {{ .Values.config.apiMariaDBDeployment.nameApp }}
+spec:
+  replicas: {{ .Values.config.apiMariaDBDeployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.config.apiMariaDBDeployment.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.config.apiMariaDBDeployment.name }}
+    spec:
+      containers:
+      - name: {{ .Values.config.apiMariaDBDeployment.name }}
+        image: {{ .Values.config.apiMariaDBDeployment.image }}
+        env:
+          - name: MARIADBHOST
+            value: 'localhost'
+          - name: MARIADBPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: databases-mariadb
+                key: mariadb-root-password
+                optional: false
+          - name: MARIADBD_DB
+            value: 'babynames'
+          - name: MARIADBUSER
+            value: 'root'
+          - name: MARIADBPORT
+            value: '3306'
+{{ end }}

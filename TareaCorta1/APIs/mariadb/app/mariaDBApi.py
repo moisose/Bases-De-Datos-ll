@@ -12,16 +12,19 @@ api = Api(app)
 data = []
 
 # Configuración de conexión a la base de datos
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = "root"
-app.config['MYSQL_PASSWORD'] = 'MhlDahiana'
-app.config['MYSQL_DB'] = 'babynames'
-app.config['MYSQL_PORT'] = 3307 
+app.config['MYSQL_HOST'] = os.getenv('MARIADBHOST')
+app.config['MYSQL_USER'] = os.getenv('MARIADBUSER')
+app.config['MYSQL_PASSWORD'] = os.getenv('MARIADBPASSWORD')
+app.config['MYSQL_DB'] = os.getenv('MARIADB_DB')
+app.config['MYSQL_PORT'] = os.getenv('MARIADBPORT')
 mysql = MySQL(app)
+
+# ruta del archivo dentro del contenedor de docker
+ruta_archivo = os.environ.get('ARCHIVO_CSV')
 
 # Función que lee los datos del archivo csv
 def csvReader():
-    with open('../babynames.csv', newline='') as archivo:
+    with open(str(ruta_archivo), newline='') as archivo:
         lector_csv = csv.reader(archivo, delimiter=',', quotechar='"')
         counter = 0
         
