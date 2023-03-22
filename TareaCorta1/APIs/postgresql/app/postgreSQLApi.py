@@ -16,8 +16,6 @@ conn = psycopg2.connect(
     password="mypassword"
 )
 
-#print(os.getenv('MARIADBHOST'), os.getenv('MARIADBPASS'), os.getenv('MARIADB_DB'))
-
 #Lista de datos extraídos del csv
 data = []
 
