@@ -12,6 +12,8 @@ client = Elasticsearch(
 
 # Successful response!
 client.info() """
+
+
 from elasticsearch import Elasticsearch
 from elasticsearch.exceptions import ConnectionError
 
