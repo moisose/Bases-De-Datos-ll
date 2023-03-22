@@ -1,0 +1,4 @@
+Flask==2.2.3
+Flask-MySQLdb==1.0.1
+Flask-RESTful==0.3.9
+psycopg2==2.9.5
