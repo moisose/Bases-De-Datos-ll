@@ -1,0 +1,23 @@
+{{ if .Values.postgresql.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.config.appPostgresDeployment.name }}
+  labels:
+    app: {{ .Values.config.appPostgresDeployment.nameApp }}
+spec:
+  replicas: {{ .Values.config.appPostgresDeployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.config.appPostgresDeployment.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.config.appPostgresDeployment.name }}
+    spec:
+      containers:
+      - name: {{ .Values.config.appPostgresDeployment.name }}
+        image: {{ .Values.config.appPostgresDeployment.image }}
+        env:
+{{ end }}
+          
