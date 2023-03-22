@@ -1,0 +1,23 @@
+{{ if .Values.mongodb.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.config.appMongoDBDeployment.name }}
+  labels:
+    app: {{ .Values.config.appMongoDBDeployment.nameApp }}
+spec:
+  replicas: {{ .Values.config.appMongoDBDeployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.config.appMongoDBDeployment.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.config.appMongoDBDeployment.name }}
+    spec:
+      containers:
+      - name: {{ .Values.config.appMongoDBDeployment.name }}
+        image: {{ .Values.config.appMongoDBDeployment.image }}
+        env:
+{{ end }}
+          
