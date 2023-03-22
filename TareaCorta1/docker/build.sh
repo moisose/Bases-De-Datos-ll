@@ -21,6 +21,7 @@ sudo docker images
 sudo docker push moisose/mongodb-client
 
 cd ../../APIs/mariadb
-sudo docker build -t fiozelaya/apimariadb .
+sudo docker build -t moisose/apimariadb -f Dockerfile ../.
+#sudo docker build -t fiozelaya/apimariadb .
 sudo docker images
-sudo docker push fiozelaya/apimariadb
+sudo docker push moisose/apimariadb

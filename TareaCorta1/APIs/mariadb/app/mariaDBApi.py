@@ -5,6 +5,7 @@ import csv
 import random
 import os
 
+
 app = Flask(__name__)
 api = Api(app)
 
@@ -24,7 +25,7 @@ ruta_archivo = os.environ.get('ARCHIVO_CSV')
 
 # Función que lee los datos del archivo csv
 def csvReader():
-    with open(str(ruta_archivo), newline='') as archivo:
+    with open(str("/app/babynames.csv"), newline='') as archivo:
         lector_csv = csv.reader(archivo, delimiter=',', quotechar='"')
         counter = 0
         
