@@ -30,7 +30,7 @@ config:
   apiPostgresDeployment:
     replicas: 1
     name: apipostgres-deployment
-    image: isaac4918/apipostgres
+    image: moisose/apipostgres
     nameApp: apipostgres-deployment
   apiMongoDBDeployment:
     replicas: 1
