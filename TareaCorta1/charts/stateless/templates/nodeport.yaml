@@ -1,13 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mi-servicio-nodeport
+  name: apimariadb-deploymentsava
+  labels:
+    app: nodeportApp
 spec:
   type: NodePort
   selector:
-    app: nodeportApp
+    app: apimariadb-deployment
   ports:
     - protocol: TCP
-      port: 5000 #80
-      targetPort: 5000 #8080
-      nodePort: 30000 #30080
+      port: 80 #80
+      targetPort: 80 #8080
+      nodePort: 30080 #30080

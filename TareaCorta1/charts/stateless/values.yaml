@@ -25,8 +25,8 @@ config:
   apiMariaDBDeployment:
     replicas: 1
     name: apimariadb-deployment
-    image: fiozelaya/apimariadb
-    nameApp: nodeportApp
+    image: moisose/apimariadb
+    nameApp: apimariadb-deployment
   apiPostgresDeployment:
     replicas: 1
     name: apipostgres-deployment
@@ -37,11 +37,15 @@ config:
     name: apimongodb-deployment
     image: moisose/apimongodb
     nameApp: nodeportApp
-  apiElasticDeployment:
+  appElasticDeployment:
     replicas: 1
-    name: apielastic-deployment
-    image: moisose/apielastic
+    name: appelastic-deployment
+    image: moisose/appelastic
     nameApp: nodeportApp
+  elasticConnection:
+    replicas: 1
+    name: elastic-connection
+    image: melanysf/elastic-search-connection
   # componente2:
   #   replicas: 1
   #   name: componente2
