@@ -23,7 +23,7 @@ data = []
 
 # Función que lee los datos del archivo csv
 def csvReader():
-    with open('../../babynames.csv', newline='') as archivo:
+    with open('/app/babynames.csv', newline='') as archivo:
         lector_csv = csv.reader(archivo, delimiter=',', quotechar='"')
         counter = 0
         
@@ -42,8 +42,8 @@ class BabyName(Resource):
             rows = cur.fetchall()
             cur.close()
             return {'data': rows}
-        except:
-            return {'status': 'failed'}
+        except Exception as e:
+            return {'status': str(e)}
         
     def post(self):
         try:
@@ -59,8 +59,8 @@ class BabyName(Resource):
             conn.commit()
             cur.close()
             return {'status': 'success', 'data': args}
-        except:
-            return {'status': 'failed'}
+        except Exception as e:
+            return {'status': str(e)}
 
     def put(self):
         # Actualizar un registro existente en la tabla
@@ -78,8 +78,8 @@ class BabyName(Resource):
             conn.commit()
             cur.close()
             return {'status': 'success', 'idUpdated': id, "data":args}
-        except:
-            return {'status': 'failed'}
+        except Exception as e:
+            return {'status': str(e)}
 
     def delete(self):
         try:
@@ -90,8 +90,8 @@ class BabyName(Resource):
             conn.commit()
             cur.close()
             return {'status': 'success', 'id': id}
-        except:
-            return {'status': 'failed'}
+        except Exception as e:
+            return {'status': str(e)}
         
 api.add_resource(BabyName, '/babynames')
 
