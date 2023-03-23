@@ -53,7 +53,7 @@ CREATE PROCEDURE `sp_BabyName_Delete`(
    p_id INT
 )
 BEGIN
-  DELETE FROM BabyName
+  DELETE FROM babyname
   WHERE id = p_id;
 END$$
 
@@ -77,7 +77,7 @@ CREATE PROCEDURE `sp_BabyName_Insert`(
    p_rnk INT
 )
 BEGIN
-  INSERT INTO BabyName (birthyear, gender, ethnicity, bbyName, cnt, rnk)
+  INSERT INTO babyname (birthyear, gender, ethnicity, bbyName, cnt, rnk)
   VALUES (p_birthyear, p_gender, p_ethnicity, p_bbyName, p_cnt, p_rnk);
 END$$
 
@@ -97,7 +97,7 @@ CREATE PROCEDURE `sp_BabyName_Select`(
 )
 BEGIN
   SELECT *
-  FROM BabyName
+  FROM babyname
   WHERE id = p_id;
 END$$
 
@@ -122,7 +122,7 @@ CREATE PROCEDURE `sp_BabyName_Update`(
    p_rnk INT
 )
 BEGIN
-  UPDATE BabyName
+  UPDATE babyname
   SET birthyear = p_birthyear,
       gender = p_gender,
       ethnicity = p_ethnicity,
