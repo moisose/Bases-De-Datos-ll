@@ -31,6 +31,6 @@ sudo docker images
 sudo docker push melanysf/elastic-search-connection
 
 cd ../../APIs/postgresql
-sudo docker build -t isaac4918/apipostgres -f Dockerfile ../.
+sudo docker build -t moisose/apipostgres -f Dockerfile ../.
 sudo docker images
-sudo docker push isaac4918/apipostgres
+sudo docker push moisose/apipostgres
