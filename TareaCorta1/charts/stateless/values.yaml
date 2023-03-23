@@ -31,7 +31,7 @@ config:
     replicas: 1
     name: apipostgres-deployment
     image: moisose/apipostgres
-    nameApp: nodeportApp
+    nameApp: apipostgres-deployment
   apiMongoDBDeployment:
     replicas: 1
     name: apimongodb-deployment

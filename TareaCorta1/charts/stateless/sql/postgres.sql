@@ -15,7 +15,7 @@
 
 SET TRANSACTION READ WRITE;
 
-CREATE TABLE IF NOT EXISTS babyname (
+CREATE TABLE IF NOT EXISTS babynames.babyname (
   id serial,
   birthyear int DEFAULT NULL,
   gender varchar(10) DEFAULT NULL,
@@ -26,17 +26,17 @@ CREATE TABLE IF NOT EXISTS babyname (
   PRIMARY KEY (id)
 ) ;
 
-create or replace procedure sp_BabyName_Delete(
+create or replace procedure babynames.sp_BabyName_Delete(
    p_id INT
 )
 language plpgsql    
 as $$
 begin
-  DELETE FROM BabyName
+  DELETE FROM babyname
   WHERE id = p_id;
 end;$$;
 
-create or replace procedure sp_BabyName_Insert(
+create or replace procedure babynames.sp_BabyName_Insert(
    p_birthyear INT,
    p_gender VARCHAR(10),
    p_ethnicity VARCHAR(50),
@@ -47,11 +47,11 @@ create or replace procedure sp_BabyName_Insert(
 language plpgsql    
 as $$
 begin
-  INSERT INTO BabyName (birthyear, gender, ethnicity, bbyName, cnt, rnk)
+  INSERT INTO babyname (birthyear, gender, ethnicity, bbyName, cnt, rnk)
   VALUES (p_birthyear, p_gender, p_ethnicity, p_bbyName, p_cnt, p_rnk);
 end;$$;
 
-create or replace procedure sp_BabyName_Select(
+create or replace procedure babynames.sp_BabyName_Select(
    p_id INT
 )
 language plpgsql    
@@ -61,14 +61,14 @@ declare
 begin
   SELECT *
   INTO result_record
-  FROM BabyName
+  FROM babyname
   WHERE id = p_id;
   
   -- Print the result
   RAISE NOTICE 'Result: %, %', result_record.name, result_record.gender;
 end;$$;
 
-create or replace procedure sp_BabyName_Update(
+create or replace procedure babynames.sp_BabyName_Update(
    p_id INT,
    p_birthyear INT,
    p_gender VARCHAR(10),
@@ -80,7 +80,7 @@ create or replace procedure sp_BabyName_Update(
 language plpgsql    
 as $$
 begin
-  UPDATE BabyName
+  UPDATE babyname
   SET birthyear = p_birthyear,
       gender = p_gender,
       ethnicity = p_ethnicity,

@@ -32,7 +32,7 @@ def csvReader():
         for fila in lector_csv:
             counter += 1
             data.append(fila)
-            if counter >= 1000:
+            if counter >= 2000:
                 break
 
 class BabyName(Resource):
@@ -92,7 +92,7 @@ class BabyName(Resource):
             id = random.choice(self.get()["data"])[0]
             cur = mysql.connection.cursor()
             cur.execute("USE babynames;")
-            cur.callproc('sp_BabyName_Delete', (id,))
+            cur.callproc('babynames.sp_BabyName_Delete', (id,))
             mysql.connection.commit()
             cur.close()
             return {'status': 'success', 'id': id}
