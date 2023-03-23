@@ -31,7 +31,19 @@
 
 5- Ejecutar el comando **bash install.sh**, si da error al ejecutar, intente con el comando **dos2unix install.sh** y, posteriormente, ejecute de nuevo **bash install.sh**, ya con esto, deberia ver los distintos pods en lens
 
-6- Para desinstalar, ejecute el comando **bash uninstall.sh**
+6- Una vez instalado y cuando los pods estan arriba, abrir la carpeta **Gatling** e ir a **gatling-charts-highcharts-bundle-3.9.2/bin** y jecutar **galing.bat**
+
+7- Esperar que abra la consola.
+
+8- Una vez abierta, seleccionar la opción **[1]** presionando las teclas 1, seguido de enter.
+
+9- Aparecera lo siguente, debe presionar la tecla enter nuevamente pata que la prueba de carga comience.
+
+10- Puede entrar a la dirección que sale en consola para verificar la cantidad de usuarios que lograron conectarse con éxito.
+
+11- Posteriormente, pued eobservar las métricas en **Grafana**, entrando a...
+
+15- Para desinstalar, ejecute el comando **bash uninstall.sh**
 
 # **Configuración de las herramientas**
 
