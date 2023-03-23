@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.config.elasticConnection.name }}
+  labels:
+    app: {{ .Values.config.elasticConnection.name }}
+spec:
+  replicas: {{ .Values.config.elasticConnection.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.config.elasticConnection.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.config.elasticConnection.name }}
+    spec:
+      containers:
+      - name: {{ .Values.config.elasticConnection.name }}
+        image: {{ .Values.config.elasticConnection.image }}
+        env:
+          - name: ESENDPOINT
+            value: ic4302-es-http
+          - name: ESPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ic4302-es-elastic-user
+                key: elastic
+                optional: false
+          - name: ESINDEX
+            value: messages
