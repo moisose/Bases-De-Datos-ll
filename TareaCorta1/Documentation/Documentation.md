@@ -18,6 +18,7 @@
 
 * Pablo Arias Navarro - 2021024635
 
+---
 # **Guía de instalación y uso de la tarea**
 
 1- Descomprimir el archivo .zip y abrir la linea de comandos en la unicación de la carpeta **tareaCorta1**
