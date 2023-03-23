@@ -5,7 +5,7 @@ metadata:
   name: {{ .Values.config.postgresql.mapName }}
   namespace: {{ .Values.namespace }}
 data:
-{{ (.Files.Glob "sql/world.sql").AsConfig | indent 2 }}
+{{ (.Files.Glob "sql/postgres.sql").AsConfig | indent 2 }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -35,7 +35,7 @@ spec:
                 key: postgres-password
                 optional: false
         command: ["/bin/sh"]
-        args: ["-c", "PGPASSWORD=$(DB_PASS) psql -h $(DB_HOST) -U postgres < \"/scripts/world.sql\""]
+        args: ["-c", "PGPASSWORD=$(DB_PASS) psql -h $(DB_HOST) -U postgres -c \"CREATE DATABASE babynames;\"; PGPASSWORD=$(DB_PASS) psql -h $(DB_HOST) -U postgres -d babynames -a -f \"/scripts/postgres.sql\""]
       restartPolicy: Never
   backoffLimit: 8
 {{ end }}

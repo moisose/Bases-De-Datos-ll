@@ -10,10 +10,11 @@ api = Api(app)
 
 # Configuración de conexión a la base de datos
 conn = psycopg2.connect(
-    host="localhost",
-    database="babynames",
-    user="postgres",
-    password="mypassword"
+    host=os.getenv('PGSQL_HOST'),
+    database=os.getenv('PGSQL_DB'),
+    user=os.getenv('PGSQLUSER'),
+    password=os.getenv('PGSQL_PASS'),
+    port=os.getenv('PGSQL_PORT'), 
 )
 
 #Lista de datos extraídos del csv
@@ -22,7 +23,7 @@ data = []
 
 # Función que lee los datos del archivo csv
 def csvReader():
-    with open('../../babynames.csv', newline='') as archivo:
+    with open('/app/babynames.csv', newline='') as archivo:
         lector_csv = csv.reader(archivo, delimiter=',', quotechar='"')
         counter = 0
         
@@ -37,12 +38,12 @@ class BabyName(Resource):
         try:
             # Leer todos los registros de la tabla
             cur = conn.cursor()
-            cur.execute("SELECT * FROM BabyName")
+            cur.execute("SELECT * FROM babynames.babyname")
             rows = cur.fetchall()
             cur.close()
             return {'data': rows}
-        except:
-            return {'status': 'failed'}
+        except Exception as e:
+            return {'status': str(e)}
         
     def post(self):
         try:
@@ -53,13 +54,13 @@ class BabyName(Resource):
             nm = args[3]
             cnt = args[4]
             rnk = args[5]
-            cur = psycopg2.connection.cursor()
-            cur.callproc('sp_BabyName_Insert', (birthyear, gender, ethnicity, nm, cnt, rnk))
-            psycopg2.connection.commit()
+            cur = conn.cursor()
+            cur.callproc('babynames.sp_BabyName_Insert', (birthyear, gender, ethnicity, nm, cnt, rnk))
+            conn.commit()
             cur.close()
             return {'status': 'success', 'data': args}
-        except:
-            return {'status': 'failed'}
+        except Exception as e:
+            return {'status': str(e)}
 
     def put(self):
         # Actualizar un registro existente en la tabla
@@ -72,25 +73,25 @@ class BabyName(Resource):
             nm = args[3]
             cnt = args[4]
             rnk = args[5]
-            cur = psycopg2.connection.cursor()
-            cur.callproc('sp_BabyName_Update', (id, birthyear, gender, ethnicity, nm, cnt, rnk))
-            psycopg2.connection.commit()
+            cur = conn.cursor()
+            cur.callproc('babynames.sp_BabyName_Update', (id, birthyear, gender, ethnicity, nm, cnt, rnk))
+            conn.commit()
             cur.close()
             return {'status': 'success', 'idUpdated': id, "data":args}
-        except:
-            return {'status': 'failed'}
+        except Exception as e:
+            return {'status': str(e)}
 
     def delete(self):
         try:
         # Eliminar un registro de la tabla
             id = random.choice(self.get()["data"])[0]
-            cur = psycopg2.connection.cursor()
-            cur.callproc('sp_BabyName_Delete', (id,))
-            psycopg2.connection.commit()
+            cur = conn.cursor()
+            cur.callproc('babynames.sp_BabyName_Delete', (id,))
+            conn.commit()
             cur.close()
             return {'status': 'success', 'id': id}
-        except:
-            return {'status': 'failed'}
+        except Exception as e:
+            return {'status': str(e)}
         
 api.add_resource(BabyName, '/babynames')
 
