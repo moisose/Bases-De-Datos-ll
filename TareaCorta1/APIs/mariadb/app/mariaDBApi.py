@@ -17,11 +17,11 @@ app.config['MYSQL_HOST'] = os.getenv('MARIADBHOST')
 app.config['MYSQL_USER'] = os.getenv('MARIADBUSER')
 app.config['MYSQL_PASSWORD'] = os.getenv('MARIADBPASSWORD')
 app.config['MYSQL_DB'] = os.getenv('MARIADB_DB')
-app.config['MYSQL_PORT'] = os.getenv('MARIADBPORT')
+app.config['MYSQL_PORT'] = int(os.getenv('MARIADBPORT'))
 mysql = MySQL(app)
 
 # ruta del archivo dentro del contenedor de docker
-ruta_archivo = os.environ.get('ARCHIVO_CSV')
+#ruta_archivo = os.environ.get('ARCHIVO_CSV')
 
 # Función que lee los datos del archivo csv
 def csvReader():
@@ -40,12 +40,13 @@ class BabyName(Resource):
         # Leer todos los registros de la tabla
         try:
             cur = mysql.connection.cursor()
-            cur.execute("SELECT * FROM BabyName")
+            cur.execute("SELECT * FROM babynames.babyname")
             rows = cur.fetchall()
             cur.close()
             return {'data': rows}
-        except:
-            return {'status': 'failed'}
+        except Exception as e:
+            print(e)
+            return {'status': str(e)}
 
     def post(self):
         try:
@@ -57,12 +58,13 @@ class BabyName(Resource):
             cnt = args[4]
             rnk = args[5]
             cur = mysql.connection.cursor()
-            cur.callproc('sp_BabyName_Insert', (birthyear, gender, ethnicity, nm, cnt, rnk))
+            cur.execute("USE babynames;")
+            cur.callproc('babynames.sp_BabyName_Insert', (birthyear, gender, ethnicity, nm, cnt, rnk))
             mysql.connection.commit()
             cur.close()
             return {'status': 'success', 'data': args}
-        except:
-            return {'status': 'failed'}
+        except Exception as e:
+            return {'status': str(e)}
 
     def put(self):
         # Actualizar un registro existente en la tabla
@@ -76,18 +78,20 @@ class BabyName(Resource):
             cnt = args[4]
             rnk = args[5]
             cur = mysql.connection.cursor()
-            cur.callproc('sp_BabyName_Update', (id, birthyear, gender, ethnicity, nm, cnt, rnk))
+            cur.execute("USE babynames;")
+            cur.callproc('babynames.sp_BabyName_Update', (id, birthyear, gender, ethnicity, nm, cnt, rnk))
             mysql.connection.commit()
             cur.close()
             return {'status': 'success', 'idUpdated': id, "data":args}
-        except:
-            return {'status': 'failed'}
+        except Exception as e:
+            return {'status': str(e)}
 
     def delete(self):
         try:
         # Eliminar un registro de la tabla
             id = random.choice(self.get()["data"])[0]
             cur = mysql.connection.cursor()
+            cur.execute("USE babynames;")
             cur.callproc('sp_BabyName_Delete', (id,))
             mysql.connection.commit()
             cur.close()
@@ -99,7 +103,8 @@ api.add_resource(BabyName, '/babynames')
 
 if __name__ == '__main__':
     csvReader()
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000)
+    #app.run(host="0.0.0.0", port=5000)
 
 
 """
