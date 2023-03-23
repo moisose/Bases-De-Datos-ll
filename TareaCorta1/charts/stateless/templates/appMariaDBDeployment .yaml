@@ -18,9 +18,12 @@ spec:
       containers:
       - name: {{ .Values.config.apiMariaDBDeployment.name }}
         image: {{ .Values.config.apiMariaDBDeployment.image }}
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 5000
         env:
           - name: MARIADBHOST
-            value: 'localhost'
+            value: "databases-mariadb-master-node"
           - name: MARIADBPASSWORD
             valueFrom:
               secretKeyRef:
@@ -33,4 +36,21 @@ spec:
             value: 'root'
           - name: MARIADBPORT
             value: '3306'
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.config.apiMariaDBDeployment.nameApp }}
+  labels:
+    app: {{ .Values.config.apiMariaDBDeployment.nameApp }}
+spec:
+  ports:
+  - port: 5000
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: {{ .Values.config.apiMariaDBDeployment.nameApp }}
+  type: NodePort
+  
 {{ end }}
