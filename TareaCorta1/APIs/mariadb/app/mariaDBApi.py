@@ -92,7 +92,7 @@ class BabyName(Resource):
             id = random.choice(self.get()["data"])[0]
             cur = mysql.connection.cursor()
             cur.execute("USE babynames;")
-            cur.callproc('sp_BabyName_Delete', (id,))
+            cur.callproc('babynames.sp_BabyName_Delete', (id,))
             mysql.connection.commit()
             cur.close()
             return {'status': 'success', 'id': id}
