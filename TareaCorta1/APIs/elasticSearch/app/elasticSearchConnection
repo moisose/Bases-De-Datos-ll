@@ -27,6 +27,6 @@ try:
     client = Elasticsearch("https://"+ESENDPOINT+":9200", basic_auth=("elastic", ESPASSWORD), verify_certs=False)
     # Realiza una operación de prueba
     client.info()
-except ConnectionError:
+except ConnectionError as e:
     print("Error de conexion")
 
