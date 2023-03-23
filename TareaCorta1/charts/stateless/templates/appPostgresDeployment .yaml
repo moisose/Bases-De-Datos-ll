@@ -2,22 +2,57 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.config.appPostgresDeployment.name }}
+  name: {{ .Values.config.apiPostgresDeployment.name }}
   labels:
-    app: {{ .Values.config.appPostgresDeployment.nameApp }}
+    app: {{ .Values.config.apiPostgresDeployment.nameApp }}
 spec:
-  replicas: {{ .Values.config.appPostgresDeployment.replicas }}
+  replicas: {{ .Values.config.apiPostgresDeployment.replicas }}
   selector:
     matchLabels:
-      app: {{ .Values.config.appPostgresDeployment.name }}
+      app: {{ .Values.config.apiPostgresDeployment.name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.config.appPostgresDeployment.name }}
+        app: {{ .Values.config.apiPostgresDeployment.name }}
     spec:
       containers:
-      - name: {{ .Values.config.appPostgresDeployment.name }}
-        image: {{ .Values.config.appPostgresDeployment.image }}
+      - name: {{ .Values.config.apiPostgresDeployment.name }}
+        image: {{ .Values.config.apiPostgresDeployment.image }}
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 5000
         env:
+          - name: PGSQL_HOST
+            value: "databases-postgresql"
+          - name: PGSQL_PASS
+            valueFrom:
+              secretKeyRef:
+                name: databases-postgresql
+                key: postgres-password
+                optional: false
+          - name: PGSQL_DB
+            value: 'babynames'
+          - name: PGSQLUSER
+            value: 'postgres'
+          - name: PGSQL_PORT
+            value: '5432'
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.config.apiPostgresDeployment.nameApp }}
+  labels:
+    app: {{ .Values.config.apiPostgresDeployment.nameApp }}
+spec:
+  ports:
+  - port: 5000
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: {{ .Values.config.apiPostgresDeployment.nameApp }}
+  type: NodePort
+
+
 {{ end }}
           
