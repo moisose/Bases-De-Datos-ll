@@ -37,11 +37,15 @@ config:
     name: apimongodb-deployment
     image: moisose/apimongodb
     nameApp: nodeportApp
-  apiElasticDeployment:
+  appElasticDeployment:
     replicas: 1
-    name: apielastic-deployment
-    image: moisose/apielastic
+    name: appelastic-deployment
+    image: moisose/appelastic
     nameApp: nodeportApp
+  elasticConnection:
+    replicas: 1
+    name: elastic-connection
+    image: melanysf/elastic-search-connection
   # componente2:
   #   replicas: 1
   #   name: componente2
