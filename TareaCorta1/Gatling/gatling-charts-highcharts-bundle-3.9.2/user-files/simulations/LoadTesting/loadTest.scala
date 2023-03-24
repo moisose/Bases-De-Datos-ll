@@ -13,16 +13,10 @@ import scala.concurrent.duration._
 Class testDataset
 */
 class testDataset extends Simulation {
-  //http dir
-  val myEnvVar = "30000"
 
-  println(myEnvVar)
+  /*define http dir*/
+  val httpConf = http.baseUrl("http://127.0.0.1:30000")
 
-  val httpDir = "http://127.0.0.1"
-  val httpPort = myEnvVar
-
-  //define http dir
-  val httpConf = http.baseUrl(httpDir + ":" + httpPort)
 
   //define scenario for creating data
   val createD = scenario("Crear datos")
