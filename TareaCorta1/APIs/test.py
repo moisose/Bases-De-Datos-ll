@@ -42,6 +42,7 @@ def menu():
         print("2.Load Test")
         print("3.Update Test")
         print("4.Delete Test")
+        print("5.Salir")
         opcion = int(input("Ingrese la opción que desea usar: "))
         
         if opcion == 1:
@@ -55,6 +56,10 @@ def menu():
 
         elif opcion == 4:
             testDelete()
+
+        elif opcion == 5:
+            print("\nAdiós!\n")
+            break
 
         else:
             print("La opción no es válida.")
