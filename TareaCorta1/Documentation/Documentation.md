@@ -1,3 +1,5 @@
+# Documentation
+
 ## **Instituto Tecnológico de Costa Rica**
 
 ## **IC4302 - Bases de Datos II**
@@ -8,40 +10,53 @@
 
 ### **Estudiantes**:
 
-* Fiorella Zelaya Coto - 2021453615
-
-* Isaac Araya Solano - 2018151703
-
-* Melany Salas Fernández - 2021121147
-
-* Moisés Solano Espinoza - 2021144322
-
-* Pablo Arias Navarro - 2021024635
+- Fiorella Zelaya Coto - 2021453615
+- Isaac Araya Solano - 2018151703
+- Melany Salas Fernández - 2021121147
+- Moisés Solano Espinoza - 2021144322
+- Pablo Arias Navarro - 2021024635
 
 ---
+
 # **Guía de instalación y uso de la tarea**
 
-1- Descomprimir el archivo .zip y abrir la linea de comandos en la unicación de la carpeta **tareaCorta1**
+1- Descomprimir el archivo .zip y abrir la linea de comandos wsl en la ubicación de la carpeta **tareaCorta1**
+
+![paso1](resources/paso1.png)
 
 2- Ir a la carpeta **docker** con el comando **cd docker**
 
+![paso2](resources/paso2.png)
+
 3- Ejecutar el comando **bash build.sh**, si da error al ejecutar, intente con el comando **dos2unix build.sh** y, posteriormente, ejecute de nuevo **bash build.sh**
+
+![paso3](resources/paso3.png)
 
 4- Ir a la carpeta **charts** con el comando **cd ../charts**
 
-5- Ejecutar el comando **bash install.sh**, si da error al ejecutar, intente con el comando **dos2unix install.sh** y, posteriormente, ejecute de nuevo **bash install.sh**, ya con esto, deberia ver los distintos pods en lens
+![paso4](resources/paso4.png)
 
-6- Una vez instalado y cuando los pods estan arriba, abrir la carpeta **Gatling** e ir a **gatling-charts-highcharts-bundle-3.9.2/bin** y jecutar **galing.bat**
+5- Ejecutar el comando **bash install.sh**, si da error al ejecutar, intente con el comando **dos2unix install.sh** y, posteriormente, ejecute de nuevo **bash install.sh**, ya con esto, debería ver los distintos pods en lens
+
+![paso5](resources/paso5.png) →Hay que tomar captura xd
+
+6- Una vez instalado y cuando los pods estan arriba, abrir la carpeta **Gatling** e ir a **gatling-charts-highcharts-bundle-3.9.2/bin** y ejecutar **galing.bat**
+
+![paso6](resources/paso6.png)
 
 7- Esperar que abra la consola.
 
 8- Una vez abierta, seleccionar la opción **[1]** presionando las teclas 1, seguido de enter.
 
-9- Aparecera lo siguente, debe presionar la tecla enter nuevamente pata que la prueba de carga comience.
+![paso8](resources/paso8.png)
+
+9- Aparecerá lo siguiente, debe presionar la tecla enter nuevamente pata que la prueba de carga comience.
+
+![paso9](resources/paso9.png)
 
 10- Puede entrar a la dirección que sale en consola para verificar la cantidad de usuarios que lograron conectarse con éxito.
 
-11- Posteriormente, pued eobservar las métricas en **Grafana**, entrando a...
+11- Posteriormente, puede observar las métricas en **Grafana**, entrando a…
 
 15- Para desinstalar, ejecute el comando **bash uninstall.sh**
 
@@ -57,7 +72,7 @@
 
 # **Pruebas de carga realizadas**
 
-Se realizo una prueba de carga con...
+Se realizo una prueba de carga con…
 
 # **Conclusiones**
 
@@ -75,7 +90,7 @@ Se realizo una prueba de carga con...
 
 7- Se debe asegurar un código legible y entendible.
 
-8-
+8- 
 
 9-
 
