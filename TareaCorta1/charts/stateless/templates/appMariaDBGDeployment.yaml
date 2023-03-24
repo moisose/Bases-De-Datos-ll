@@ -1,0 +1,60 @@
+{{ if .Values.mariadbgalera.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.config.apiMariaDBGDeployment.name }}
+  labels:
+    app: {{ .Values.config.apiMariaDBGDeployment.nameApp }}
+spec:
+  replicas: {{ .Values.config.apiMariaDBGDeployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.config.apiMariaDBGDeployment.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.config.apiMariaDBGDeployment.name }}
+    spec:
+      containers:
+      - name: {{ .Values.config.apiMariaDBGDeployment.name }}
+        image: {{ .Values.config.apiMariaDBGDeployment.image }}
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 5000
+        env:
+          - name: MARIADBHOST
+            value: "databases-mariadbgalera"
+          - name: MARIADBPASSWORD
+          
+            valueFrom:
+              secretKeyRef:
+                name: databases-mariadbgalera
+                key: mariadb-root-password
+                optional: false
+          - name: MARIADBD_DB
+            value: 'babynames'
+          - name: MARIADBUSER
+            value: 'root'
+          - name: MARIADBPORT
+            value: '3306'
+          - name: NODE_PORT
+            value: "$(NODE_PORT)"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.config.apiMariaDBGDeployment.nameApp }}
+  labels:
+    app: {{ .Values.config.apiMariaDBGDeployment.nameApp }}
+spec:
+  ports:
+  - port: 5000
+    protocol: TCP
+    targetPort: 5000
+    nodePort: 30000
+  selector:
+    app: {{ .Values.config.apiMariaDBGDeployment.nameApp }}
+  type: NodePort
+  
+{{ end }}

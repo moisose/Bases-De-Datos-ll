@@ -27,11 +27,21 @@ config:
     name: apimariadb-deployment
     image: moisose/apimariadb
     nameApp: apimariadb-deployment
+  apiMariaDBGDeployment:
+    replicas: 1
+    name: apimariadbga-deployment
+    image: moisose/apimariadb
+    nameApp: apimariadbga-deployment
   apiPostgresDeployment:
+    replicas: 1
+    name: apipostgresha-deployment
+    image: moisose/apipostgres
+    nameApp: apipostgresha-deployment
+  apiPostgreshaDeployment:
     replicas: 1
     name: apipostgres-deployment
     image: moisose/apipostgres
-    nameApp: apipostgres-deployment
+    nameApp: apipostgresha-deployment
   apiMongoDBDeployment:
     replicas: 1
     name: apimongodb-deployment
