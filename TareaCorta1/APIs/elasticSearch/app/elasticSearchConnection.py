@@ -117,19 +117,3 @@ if __name__ == '__main__':
     print("endpoint: ",ESENDPOINT)
     print("password: ",ESPASSWORD)
     print("indexName: ",ESINDEX)
-
-# def startConnection():
-#     num = 0
-#     while True:
-#         try:
-#             num+=1
-#             body = '{"brth_yr": 2011, "gndr": "FEMALE", "ethcty": "HISPANIC"}'
-#             # Crea una instancia del cliente apuntando al host de Elasticsearch a través de HTTP
-#             json_object = json.loads(body)
-#             client = Elasticsearch("http://"+ESENDPOINT+":9200", basic_auth=("elastic", ESPASSWORD), verify_certs=False)
-#             resp = client.index(index=ESINDEX, id=num, document=json_object)
-#             # Realiza una operación de prueba
-#             client.info().body
-#             print("connection successful")
-#         except ConnectionError as e:
-#             print("Error de conexion: ", str(e))
