@@ -83,10 +83,6 @@ Dentro del Job se declaran las variables de entorno y se asigna el valor de cada
 Asimismo, en este Job se indica el comando que se debe ejecutar en *args*, el cual se encarga de cargar el archivo sql *(babynames.sql)* que contiene las tablas y los procedimientos almacenados de la base de datos. 
 
 
-## API 
-
-
-
 <br>
 
 ## MariaDB Galera
@@ -104,9 +100,6 @@ Para iniciar el cliente de MariaDB Galera que permite acceder a la base de datos
 Dentro del Job se declaran las variables de entorno y se asigna el valor de cada una. Se declaran las variables de entorno para el *host y password*. También se utilizan los valores de las configuraciones que guardamos en stateless/values.yaml para asignar la imagen que le corresponde al Pod y asignar nombres a volúmenes u otros.
 
 Asimismo, en este Job se indica el comando que se debe ejecutar en *args*, el cual se encarga de cargar el archivo sql *(babynames.sql)* que contiene las tablas y los procedimientos almacenados de la base de datos. 
-
-## API
-
 
 <br>
 
@@ -126,11 +119,9 @@ Dentro del Job se declaran las variables de entorno y se asigna el valor de cada
 
 Asimismo, en este Job se indica el comando que se debe ejecutar en *args*, el cual se encarga de cargar el archivo sql *(postgres.sql)* que contiene las tablas y los procedimientos almacenados de la base de datos. 
 
-## API
-
 <br>
 
-# PostGreSQL High Availability
+## PostGreSQL High Availability
 
 Para instalar el cliente de PostGreSQL High Availability se creó la misma imagen de PostGreSQL que incluye al cliente utilizando un Dockerfile. En nombre de esta imagen se guarda en el archivo ubicado en stateless/values.yaml que contiene otros valores de configuracion como el mapName, name y volumeName. Se utiliza la misma configuración de PostGreSQL.
 
@@ -147,10 +138,28 @@ Dentro del Job se declaran las variables de entorno y se asigna el valor de cada
 Asimismo, en este Job se indica el comando que se debe ejecutar en *args*, el cual se encarga de cargar el archivo sql *(postgres.sql)* que contiene las tablas y los procedimientos almacenados de la base de datos. 
 
 
-
 ## ElasticSearch
 
 ## MongoDB
+
+<br>
+
+## API con Flask
+
+Para realizar las pruebas de carga se necesita usar Gatling, pero no todas las bases de datos tienen una interfaz para utilizar endpoints HTTP, por lo que se necesitó usar una aplicación intermediaria. 
+
+Esta aplicación se desarrolló en Python utilizando la librería Flask. Cada base de datos utiliza un API distinto.
+
+Para poder ejecutar un API de la base de datos se debe tener un Deployment corriendo en Kubernetes. Para lograr esto, se creó la imagen de cada API con un Dockerfile. El nombre de las imágenes se guarda en el archivo ubicado en stateless/values.yaml junto a otras configuraciones que servirán para configurar el Deployment, como name y nameApp. 
+
+![databases/valuesyaml](resources/valuesyaml_APIs.png)
+
+El Deployment de cada API se ubica en la carpeta charts/stateless/templates. Todos los Deployments siguen la misma estructura: Primero se define el servicio de tipo Deployment y luego un Servicio de NodePort para exponer el puerto y que se pueda comunicar el API con la base de datos. 
+
+En el archivo yaml del Deployment de cada API se accede a los valores definidos en el archivo values.yaml para configurar el Deployment, como nombres de volúmenes o labels. También se definen las variables de entorno con sus valores.
+
+El servicio NodePort de todos los Deployments están configurados en el port 5000, targetPort 5000, nodePort 3000 y porotocol TCP. Aquí también se accede a los valores definidos en el archivo values.yaml para configurar algunos aspectos como el nombre de la app del selector o labels.
+
 
 # **Pruebas de carga realizadas**
 
