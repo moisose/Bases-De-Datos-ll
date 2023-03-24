@@ -1,0 +1,59 @@
+{{ if .Values.postgresqlha.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.config.apiPostgreshaDeployment.name }}
+  labels:
+    app: {{ .Values.config.apiPostgreshaDeployment.nameApp }}
+spec:
+  replicas: {{ .Values.config.apiPostgreshaDeployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.config.apiPostgreshaDeployment.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.config.apiPostgreshaDeployment.name }}
+    spec:
+      containers:
+      - name: {{ .Values.config.apiPostgreshaDeployment.name }}
+        image: {{ .Values.config.apiPostgreshaDeployment.image }}
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 5000
+        env:
+          - name: PGSQL_HOST
+            value: "databases-postgresqlha-postgresql"
+          - name: PGSQL_PASS
+            valueFrom:
+              secretKeyRef:
+                name: databases-postgresqlha-postgresql
+                key: password
+                optional: false
+          - name: PGSQL_DB
+            value: 'babynames'
+          - name: PGSQLUSER
+            value: 'postgres'
+          - name: PGSQL_PORT
+            value: '5432'
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.config.apiPostgreshaDeployment.nameApp }}
+  labels:
+    app: {{ .Values.config.apiPostgreshaDeployment.nameApp }}
+spec:
+  ports:
+  - port: 5000
+    protocol: TCP
+    targetPort: 5000
+    nodePort: 30000
+  selector:
+    app: {{ .Values.config.apiPostgreshaDeployment.nameApp }}
+  type: NodePort
+
+
+{{ end }}
+          

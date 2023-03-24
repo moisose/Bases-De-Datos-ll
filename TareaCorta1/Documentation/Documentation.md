@@ -24,6 +24,10 @@
 
 ![paso1](resources/paso1.png)
 
+Posteriormente, puede ir a las carperpetas **charts\databases** donde encontrará el archivo **values.yaml**, aquí podrá escoger la base de datos a monitorear cambiando el valor de **enabled**
+
+![paso1.2](resources/paso1.2.png)
+
 2- Ir a la carpeta **docker** con el comando **cd docker**
 
 ![paso2](resources/paso2.png)
@@ -38,7 +42,7 @@
 
 5- Ejecutar el comando **bash install.sh**, si da error al ejecutar, intente con el comando **dos2unix install.sh** y, posteriormente, ejecute de nuevo **bash install.sh**, ya con esto, debería ver los distintos pods en lens
 
-![paso5](resources/paso5.png) →Hay que tomar captura xd
+![paso5](resources/paso5.png) 
 
 6- Una vez instalado y cuando los pods estan arriba, abrir la carpeta **Gatling** e ir a **gatling-charts-highcharts-bundle-3.9.2/bin** y ejecutar **galing.bat**
 
