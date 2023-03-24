@@ -34,7 +34,7 @@ mariadbgalera:
   db:
     password: "1234"
 elastic:
-  enabled: false
+  enabled: true
   version: 8.6.1
   replicas: 1
   name: ic4302
