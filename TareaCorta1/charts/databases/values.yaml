@@ -34,7 +34,7 @@ mariadbgalera:
   db:
     password: "1234"
 elastic:
-  enabled: false
+  enabled: true
   version: 8.6.1
   replicas: 1
   name: ic4302
@@ -71,11 +71,12 @@ mariadb:
   auth:
     rootPassword: "1234"
 postgresql:
-  enabled: true
+  enabled: false
   metrics:
-    enabled: false
+    enabled: true
     serviceMonitor:
       enabled: true
       namespace: "monitoring"
   auth:
     postgresPassword: "1234"
+    database: "babynames"

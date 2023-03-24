@@ -6,6 +6,11 @@ metadata:
   labels:
     app: {{ .Values.config.elasticConnection.name }}
 spec:
+  version: {{.Values.elastic.version}}
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
   replicas: {{ .Values.config.elasticConnection.replicas }}
   selector:
     matchLabels:
