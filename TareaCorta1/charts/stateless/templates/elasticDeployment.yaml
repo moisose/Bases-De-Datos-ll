@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: {{ .Values.config.elasticConnection.name }}
   labels:
-    app: {{ .Values.config.elasticConnection.name }}
+    app: {{ .Values.config.elasticConnection.nameApp }}
 spec:
   version: {{.Values.elastic.version}}
   http:

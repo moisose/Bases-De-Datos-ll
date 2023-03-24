@@ -34,12 +34,12 @@ config:
     nameApp: apimariadbga-deployment
   apiPostgresDeployment:
     replicas: 1
-    name: apipostgresha-deployment
+    name: apipostgres-deployment
     image: moisose/apipostgres
-    nameApp: apipostgresha-deployment
+    nameApp: apipostgres-deployment
   apiPostgreshaDeployment:
     replicas: 1
-    name: apipostgres-deployment
+    name: apipostgresha-deployment
     image: moisose/apipostgres
     nameApp: apipostgresha-deployment
   apiMongoDBDeployment:
@@ -49,9 +49,9 @@ config:
     nameApp: nodeportApp
   elasticConnection:
     replicas: 1
-    name: elastic-connection
+    name: elastic-deployment
     image: isaac4918/elastic-search-connection
-    nameApp: apielastic-deployment
+    nameApp: elastic-deployment
   # componente2:
   #   replicas: 1
   #   name: componente2
