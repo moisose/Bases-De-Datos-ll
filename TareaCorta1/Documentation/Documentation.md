@@ -68,7 +68,85 @@ Posteriormente, puede ir a las carperpetas **charts\databases** donde encontrar�
 
 ## MariaDB
 
+Para instalar el cliente de MariaDB se creó la imagen de MariaDB que incluye al cliente utilizando un Dockerfile. En nombre de esta imagen se guarda en el archivo ubicado en stateless/values.yaml que contiene otros valores de configuracion como el mapName, name y volumeName.
+
+![stateless/valuesyaml](resources/valuesyaml_mariadb.png)
+
+En charts/databases/values.yaml se tienen algunas configuraciones para la instancia de MariaDB, como datos necesarios para la autenticación, la cantidad de replicas que se necesitan, los nombres del nodo primario y nodos secundarios, el namespace y también podemos activar o deactivar la ejecución del pod de MariaDB. 
+
+![databases/valuesyaml](resources/valuesyaml_databases_mariadb.png)
+
+Para iniciar el cliente de MariaDB que permite acceder a la base de datos se utilizó un *Job*. En el archivo *mariadbDB.yaml* se define un ConfigMap y el Job. 
+
+Dentro del Job se declaran las variables de entorno y se asigna el valor de cada una. Se declaran las variables de entorno para el *host, password y database*. También se utilizan los valores de las configuraciones que guardamos en stateless/values.yaml para asignar la imagen que le corresponde al Pod y asignar nombres a volúmenes u otros.
+
+Asimismo, en este Job se indica el comando que se debe ejecutar en *args*, el cual se encarga de cargar el archivo sql *(babynames.sql)* que contiene las tablas y los procedimientos almacenados de la base de datos. 
+
+
+## API 
+
+
+
+<br>
+
+## MariaDB Galera
+
+Para instalar el cliente de MariaDB Galera se creó la imagen de MariaDB Galera que incluye al cliente utilizando un Dockerfile. En nombre de esta imagen se guarda en el archivo ubicado en stateless/values.yaml que contiene otros valores de configuracion como el mapName, name y volumeName.
+
+![stateless/valuesyaml](resources/valuesyaml_mariadbgalera.png)
+
+En charts/databases/values.yaml se tienen algunas configuraciones para la instancia de MariaDB Galera, como la cantidad de replicas que se requieren y los datos de autenticación (contraseña) para el usuario y la base de datos. También podemos activar o deactivar la ejecución del pod de MariaDB. 
+
+![databases/valuesyaml](resources/valuesyaml_databases_mariadbgalera.png)
+
+Para iniciar el cliente de MariaDB Galera que permite acceder a la base de datos se utilizó un *Job*. En el archivo *mariadbDBGalera.yaml* se define un ConfigMap y el Job. 
+
+Dentro del Job se declaran las variables de entorno y se asigna el valor de cada una. Se declaran las variables de entorno para el *host y password*. También se utilizan los valores de las configuraciones que guardamos en stateless/values.yaml para asignar la imagen que le corresponde al Pod y asignar nombres a volúmenes u otros.
+
+Asimismo, en este Job se indica el comando que se debe ejecutar en *args*, el cual se encarga de cargar el archivo sql *(babynames.sql)* que contiene las tablas y los procedimientos almacenados de la base de datos. 
+
+## API
+
+
+<br>
+
 ## PostGreSQL
+
+Para instalar el cliente de PostGreSQL se creó la imagen de PostGreSQL que incluye al cliente utilizando un Dockerfile. En nombre de esta imagen se guarda en el archivo ubicado en stateless/values.yaml que contiene otros valores de configuracion como el mapName, name y volumeName.
+
+![stateless/valuesyaml](resources/valuesyaml_postgres.png)
+
+En charts/databases/values.yaml se tienen algunas configuraciones para la instancia de PostGreSQL, como datos necesarios para la autenticación (contraseña y nombre de base de datos), el namespace y también podemos activar o desactivar la ejecución del pod de PostGreSQL. 
+
+![databases/valuesyaml](resources/valuesyaml_databases_postgres.png)
+
+Para iniciar el cliente de PostGreSQL que permite acceder a la base de datos se utilizó un *Job*. En el archivo *postgresql.yaml* se define un ConfigMap y el Job. 
+
+Dentro del Job se declaran las variables de entorno y se asigna el valor de cada una. Se declaran las variables de entorno para el *host y password*. También se utilizan los valores de las configuraciones que guardamos en stateless/values.yaml para asignar la imagen que le corresponde al Pod y asignar nombres a volúmenes u otros.
+
+Asimismo, en este Job se indica el comando que se debe ejecutar en *args*, el cual se encarga de cargar el archivo sql *(postgres.sql)* que contiene las tablas y los procedimientos almacenados de la base de datos. 
+
+## API
+
+<br>
+
+# PostGreSQL High Availability
+
+Para instalar el cliente de PostGreSQL High Availability se creó la misma imagen de PostGreSQL que incluye al cliente utilizando un Dockerfile. En nombre de esta imagen se guarda en el archivo ubicado en stateless/values.yaml que contiene otros valores de configuracion como el mapName, name y volumeName. Se utiliza la misma configuración de PostGreSQL.
+
+![stateless/valuesyaml](resources/valuesyaml_postgres.png)
+
+En charts/databases/values.yaml se tienen algunas configuraciones para la instancia de PostGreSQL High Availability, como datos necesarios para la autenticación (contraseñas), el namespace y también podemos activar o desactivar la ejecución del pod de PostGreSQL. 
+
+![databases/valuesyaml](resources/valuesyaml_databases_postgresha.png)
+
+Para iniciar el cliente de PostGreSQL High Availability que permite acceder a la base de datos se utilizó un *Job*. En el archivo *postgresqlha.yaml* se define un ConfigMap y el Job. 
+
+Dentro del Job se declaran las variables de entorno y se asigna el valor de cada una. Se declaran las variables de entorno para el *host y password*. También se utilizan los valores de las configuraciones que guardamos en stateless/values.yaml para asignar la imagen que le corresponde al Pod y asignar nombres a volúmenes u otros.
+
+Asimismo, en este Job se indica el comando que se debe ejecutar en *args*, el cual se encarga de cargar el archivo sql *(postgres.sql)* que contiene las tablas y los procedimientos almacenados de la base de datos. 
+
+
 
 ## ElasticSearch
 
