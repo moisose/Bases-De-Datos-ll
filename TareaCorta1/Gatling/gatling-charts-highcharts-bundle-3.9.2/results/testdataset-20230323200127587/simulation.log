@@ -1,0 +1,1756 @@
+RUN	testDataset	testdataset	1679601687587	 	3.9.2
+USER	Borrar datos	START	1679601689653
+USER	Obtener datos	START	1679601689653
+USER	Crear datos	START	1679601689653
+USER	Actualizar datos	START	1679601689659
+USER	Obtener datos	START	1679601689661
+REQUEST		Select	1679601689659	1679601689662	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601689649	1679601689660	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601689649	1679601689661	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601689649	1679601689659	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601689684
+USER	Borrar datos	END	1679601689685
+USER	Obtener datos	END	1679601689685
+USER	Crear datos	END	1679601689685
+REQUEST		Update	1679601689658	1679601689685	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601689686
+USER	Borrar datos	START	1679601689757
+REQUEST		Delete	1679601689755	1679601689759	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601689759
+USER	Obtener datos	START	1679601689762
+REQUEST		Select	1679601689760	1679601689763	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601689764
+USER	Crear datos	START	1679601689764
+REQUEST		Create	1679601689763	1679601689765	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601689765
+USER	Obtener datos	START	1679601689858
+REQUEST		Select	1679601689857	1679601689860	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601689862
+USER	Obtener datos	START	1679601689957
+USER	Borrar datos	START	1679601689957
+REQUEST		Select	1679601689956	1679601689958	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601689955	1679601689958	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601689959
+USER	Obtener datos	END	1679601689960
+USER	Crear datos	START	1679601689966
+REQUEST		Create	1679601689964	1679601689967	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601689970
+USER	Actualizar datos	START	1679601690057
+REQUEST		Update	1679601690055	1679601690058	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601690059
+USER	Obtener datos	START	1679601690059
+REQUEST		Select	1679601690058	1679601690060	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601690061
+USER	Borrar datos	START	1679601690157
+USER	Obtener datos	START	1679601690157
+REQUEST		Delete	1679601690155	1679601690158	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601690158
+REQUEST		Select	1679601690156	1679601690159	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601690159
+USER	Crear datos	START	1679601690165
+REQUEST		Create	1679601690164	1679601690166	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601690167
+USER	Obtener datos	START	1679601690258
+REQUEST		Select	1679601690257	1679601690259	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601690260
+USER	Obtener datos	START	1679601690357
+USER	Borrar datos	START	1679601690358
+REQUEST		Select	1679601690357	1679601690358	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601690357	1679601690358	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601690359
+USER	Borrar datos	END	1679601690359
+USER	Crear datos	START	1679601690365
+REQUEST		Create	1679601690364	1679601690366	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601690366
+USER	Obtener datos	START	1679601690458
+REQUEST		Select	1679601690457	1679601690459	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601690460
+USER	Actualizar datos	START	1679601690556
+USER	Borrar datos	START	1679601690557
+REQUEST		Delete	1679601690556	1679601690557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601690556	1679601690558	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601690558
+USER	Borrar datos	END	1679601690558
+USER	Obtener datos	START	1679601690559
+REQUEST		Select	1679601690558	1679601690559	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601690560
+USER	Crear datos	START	1679601690566
+REQUEST		Create	1679601690565	1679601690566	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601690567
+USER	Obtener datos	START	1679601690658
+REQUEST		Select	1679601690657	1679601690659	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601690660
+USER	Obtener datos	START	1679601690757
+REQUEST		Select	1679601690756	1679601690758	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601690758
+USER	Borrar datos	START	1679601690762
+REQUEST		Delete	1679601690761	1679601690763	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601690763
+USER	Crear datos	START	1679601690768
+REQUEST		Create	1679601690767	1679601690769	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601690769
+USER	Obtener datos	START	1679601690859
+REQUEST		Select	1679601690858	1679601690859	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601690860
+USER	Obtener datos	START	1679601690960
+REQUEST		Select	1679601690959	1679601690961	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601690962
+USER	Borrar datos	START	1679601690962
+REQUEST		Delete	1679601690961	1679601690963	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601690963
+USER	Crear datos	START	1679601690967
+REQUEST		Create	1679601690966	1679601690967	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601690969
+USER	Actualizar datos	START	1679601691056
+REQUEST		Update	1679601691055	1679601691056	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601691057
+USER	Obtener datos	START	1679601691059
+REQUEST		Select	1679601691059	1679601691060	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601691061
+USER	Obtener datos	START	1679601691159
+REQUEST		Select	1679601691158	1679601691160	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601691160
+USER	Borrar datos	START	1679601691164
+REQUEST		Delete	1679601691164	1679601691165	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601691165
+USER	Crear datos	START	1679601691168
+REQUEST		Create	1679601691168	1679601691169	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601691170
+USER	Obtener datos	START	1679601691258
+REQUEST		Select	1679601691257	1679601691258	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601691259
+USER	Obtener datos	START	1679601691357
+REQUEST		Select	1679601691356	1679601691358	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601691359
+USER	Borrar datos	START	1679601691364
+REQUEST		Delete	1679601691363	1679601691364	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601691365
+USER	Crear datos	START	1679601691368
+REQUEST		Create	1679601691367	1679601691369	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601691369
+USER	Obtener datos	START	1679601691459
+REQUEST		Select	1679601691458	1679601691460	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601691460
+USER	Actualizar datos	START	1679601691556
+REQUEST		Update	1679601691555	1679601691557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601691557
+USER	Obtener datos	START	1679601691558
+REQUEST		Select	1679601691557	1679601691558	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601691559
+USER	Borrar datos	START	1679601691564
+REQUEST		Delete	1679601691563	1679601691564	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601691565
+USER	Crear datos	START	1679601691568
+REQUEST		Create	1679601691567	1679601691569	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601691569
+USER	Obtener datos	START	1679601691654
+REQUEST		Select	1679601691654	1679601691655	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601691655
+USER	Obtener datos	START	1679601691757
+USER	Borrar datos	START	1679601691757
+USER	Crear datos	START	1679601691757
+REQUEST		Delete	1679601691756	1679601691758	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601691756	1679601691758	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601691756	1679601691758	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601691758
+USER	Borrar datos	END	1679601691758
+USER	Crear datos	END	1679601691758
+USER	Obtener datos	START	1679601691855
+REQUEST		Select	1679601691854	1679601691855	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601691856
+USER	Borrar datos	START	1679601691955
+USER	Obtener datos	START	1679601691955
+REQUEST		Select	1679601691955	1679601691956	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601691955	1679601691956	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601691957
+USER	Obtener datos	END	1679601691957
+USER	Crear datos	START	1679601691958
+REQUEST		Create	1679601691957	1679601691959	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601691959
+USER	Obtener datos	START	1679601692055
+USER	Actualizar datos	START	1679601692055
+REQUEST		Select	1679601692054	1679601692055	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601692054	1679601692055	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601692056
+USER	Obtener datos	END	1679601692056
+USER	Borrar datos	START	1679601692155
+USER	Obtener datos	START	1679601692155
+REQUEST		Delete	1679601692154	1679601692155	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601692154	1679601692155	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601692156
+USER	Borrar datos	END	1679601692156
+USER	Crear datos	START	1679601692157
+REQUEST		Create	1679601692156	1679601692158	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601692158
+USER	Obtener datos	START	1679601692254
+REQUEST		Select	1679601692254	1679601692255	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601692256
+USER	Obtener datos	START	1679601692356
+USER	Borrar datos	START	1679601692356
+USER	Crear datos	START	1679601692356
+REQUEST		Delete	1679601692355	1679601692357	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601692355	1679601692357	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601692355	1679601692357	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601692357
+USER	Obtener datos	END	1679601692357
+USER	Borrar datos	END	1679601692357
+USER	Obtener datos	START	1679601692456
+REQUEST		Select	1679601692455	1679601692456	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601692457
+USER	Crear datos	START	1679601692555
+USER	Obtener datos	START	1679601692555
+USER	Borrar datos	START	1679601692555
+REQUEST		Create	1679601692555	1679601692556	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601692555	1679601692556	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601692555	1679601692556	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601692557
+USER	Borrar datos	END	1679601692557
+USER	Crear datos	END	1679601692557
+USER	Actualizar datos	START	1679601692558
+REQUEST		Update	1679601692557	1679601692559	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601692559
+USER	Obtener datos	START	1679601692656
+REQUEST		Select	1679601692656	1679601692657	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601692657
+USER	Borrar datos	START	1679601692756
+USER	Crear datos	START	1679601692756
+USER	Obtener datos	START	1679601692756
+REQUEST		Select	1679601692756	1679601692757	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601692756	1679601692757	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601692756	1679601692757	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601692757
+USER	Borrar datos	END	1679601692757
+USER	Obtener datos	END	1679601692757
+USER	Obtener datos	START	1679601692856
+REQUEST		Select	1679601692856	1679601692858	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601692858
+USER	Borrar datos	START	1679601692955
+USER	Obtener datos	START	1679601692955
+REQUEST		Delete	1679601692955	1679601692956	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601692955	1679601692956	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601692957
+USER	Obtener datos	END	1679601692957
+USER	Crear datos	START	1679601692958
+REQUEST		Create	1679601692957	1679601692959	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601692960
+USER	Obtener datos	START	1679601693055
+REQUEST		Select	1679601693054	1679601693056	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601693056
+USER	Actualizar datos	START	1679601693057
+REQUEST		Update	1679601693056	1679601693058	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601693058
+USER	Borrar datos	START	1679601693156
+USER	Crear datos	START	1679601693156
+USER	Obtener datos	START	1679601693156
+REQUEST		Create	1679601693155	1679601693157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601693155	1679601693157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601693155	1679601693157	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601693157
+USER	Crear datos	END	1679601693157
+USER	Obtener datos	END	1679601693157
+USER	Obtener datos	START	1679601693256
+REQUEST		Select	1679601693256	1679601693257	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601693257
+USER	Borrar datos	START	1679601693356
+USER	Crear datos	START	1679601693356
+REQUEST		Create	1679601693355	1679601693356	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601693355	1679601693356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601693357
+USER	Borrar datos	END	1679601693357
+USER	Obtener datos	START	1679601693360
+REQUEST		Select	1679601693359	1679601693361	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601693361
+USER	Obtener datos	START	1679601693457
+REQUEST		Select	1679601693456	1679601693458	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601693459
+USER	Crear datos	START	1679601693556
+USER	Obtener datos	START	1679601693556
+REQUEST		Create	1679601693555	1679601693556	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601693557
+REQUEST		Select	1679601693555	1679601693556	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601693557
+USER	Borrar datos	START	1679601693558
+USER	Actualizar datos	START	1679601693558
+REQUEST		Update	1679601693557	1679601693559	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601693557	1679601693559	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601693559
+USER	Borrar datos	END	1679601693559
+USER	Obtener datos	START	1679601693656
+REQUEST		Select	1679601693655	1679601693657	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601693657
+USER	Obtener datos	START	1679601693757
+USER	Borrar datos	START	1679601693757
+USER	Crear datos	START	1679601693758
+REQUEST		Select	1679601693756	1679601693758	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601693756	1679601693758	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601693759
+USER	Borrar datos	END	1679601693759
+REQUEST		Create	1679601693757	1679601693759	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601693760
+USER	Obtener datos	START	1679601693855
+REQUEST		Select	1679601693855	1679601693856	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601693856
+USER	Borrar datos	START	1679601693956
+USER	Obtener datos	START	1679601693956
+USER	Crear datos	START	1679601693956
+REQUEST		Delete	1679601693955	1679601693957	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601693955	1679601693957	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601693955	1679601693957	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601693957
+USER	Borrar datos	END	1679601693957
+USER	Crear datos	END	1679601693957
+USER	Obtener datos	START	1679601694056
+USER	Actualizar datos	START	1679601694056
+REQUEST		Update	1679601694056	1679601694057	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601694056	1679601694057	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601694058
+USER	Actualizar datos	END	1679601694058
+USER	Obtener datos	START	1679601694156
+USER	Borrar datos	START	1679601694156
+USER	Crear datos	START	1679601694156
+REQUEST		Select	1679601694155	1679601694157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601694155	1679601694157	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601694158
+USER	Borrar datos	END	1679601694158
+REQUEST		Create	1679601694155	1679601694158	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601694158
+USER	Obtener datos	START	1679601694257
+REQUEST		Select	1679601694256	1679601694257	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601694258
+USER	Obtener datos	START	1679601694356
+USER	Borrar datos	START	1679601694356
+USER	Crear datos	START	1679601694356
+REQUEST		Create	1679601694355	1679601694356	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601694355	1679601694356	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601694355	1679601694356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601694357
+USER	Crear datos	END	1679601694357
+USER	Borrar datos	END	1679601694357
+USER	Obtener datos	START	1679601694456
+REQUEST		Select	1679601694455	1679601694456	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601694457
+USER	Borrar datos	START	1679601694556
+USER	Obtener datos	START	1679601694556
+USER	Crear datos	START	1679601694556
+REQUEST		Create	1679601694555	1679601694557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601694555	1679601694557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601694555	1679601694557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601694557
+USER	Borrar datos	END	1679601694557
+USER	Obtener datos	END	1679601694557
+USER	Actualizar datos	START	1679601694558
+REQUEST		Update	1679601694557	1679601694558	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601694559
+USER	Obtener datos	START	1679601694656
+REQUEST		Select	1679601694655	1679601694657	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601694657
+USER	Borrar datos	START	1679601694755
+USER	Crear datos	START	1679601694755
+REQUEST		Create	1679601694754	1679601694756	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601694754	1679601694756	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	START	1679601694756
+USER	Crear datos	END	1679601694757
+USER	Borrar datos	END	1679601694757
+REQUEST		Select	1679601694754	1679601694758	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601694758
+USER	Obtener datos	START	1679601694856
+REQUEST		Select	1679601694855	1679601694857	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601694858
+USER	Borrar datos	START	1679601694957
+USER	Obtener datos	START	1679601694957
+USER	Crear datos	START	1679601694957
+REQUEST		Select	1679601694956	1679601694958	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601694956	1679601694958	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601694956	1679601694958	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601694959
+USER	Obtener datos	END	1679601694959
+USER	Crear datos	END	1679601694959
+USER	Obtener datos	START	1679601695056
+USER	Actualizar datos	START	1679601695056
+REQUEST		Select	1679601695056	1679601695057	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601695056	1679601695057	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601695058
+USER	Obtener datos	END	1679601695058
+USER	Crear datos	START	1679601695157
+USER	Borrar datos	START	1679601695158
+USER	Obtener datos	START	1679601695158
+REQUEST		Create	1679601695156	1679601695160	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601695156	1679601695160	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601695161
+REQUEST		Delete	1679601695156	1679601695162	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601695162
+USER	Borrar datos	END	1679601695162
+USER	Obtener datos	START	1679601695256
+REQUEST		Select	1679601695255	1679601695256	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601695257
+USER	Borrar datos	START	1679601695355
+USER	Crear datos	START	1679601695355
+USER	Obtener datos	START	1679601695355
+REQUEST		Create	1679601695355	1679601695356	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601695355	1679601695356	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601695355	1679601695356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601695356
+USER	Borrar datos	END	1679601695357
+USER	Crear datos	END	1679601695357
+USER	Obtener datos	START	1679601695457
+REQUEST		Select	1679601695457	1679601695458	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601695458
+USER	Obtener datos	START	1679601695556
+USER	Crear datos	START	1679601695556
+USER	Actualizar datos	START	1679601695556
+USER	Borrar datos	START	1679601695556
+REQUEST		Delete	1679601695555	1679601695556	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601695555	1679601695556	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601695555	1679601695557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601695555	1679601695557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601695557
+USER	Borrar datos	END	1679601695557
+USER	Obtener datos	END	1679601695557
+USER	Crear datos	END	1679601695557
+USER	Obtener datos	START	1679601695656
+REQUEST		Select	1679601695656	1679601695657	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601695657
+USER	Obtener datos	START	1679601695755
+USER	Borrar datos	START	1679601695755
+USER	Crear datos	START	1679601695755
+REQUEST		Delete	1679601695755	1679601695756	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601695755	1679601695756	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601695755	1679601695756	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601695756
+USER	Borrar datos	END	1679601695756
+USER	Obtener datos	END	1679601695756
+USER	Obtener datos	START	1679601695857
+REQUEST		Select	1679601695855	1679601695858	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601695858
+USER	Crear datos	START	1679601695956
+USER	Borrar datos	START	1679601695956
+USER	Obtener datos	START	1679601695956
+REQUEST		Delete	1679601695955	1679601695957	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601695955	1679601695957	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601695955	1679601695957	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601695957
+USER	Crear datos	END	1679601695957
+USER	Obtener datos	END	1679601695957
+USER	Actualizar datos	START	1679601696057
+USER	Obtener datos	START	1679601696057
+REQUEST		Select	1679601696056	1679601696058	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601696056	1679601696058	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601696058
+USER	Obtener datos	END	1679601696058
+USER	Borrar datos	START	1679601696156
+USER	Crear datos	START	1679601696156
+USER	Obtener datos	START	1679601696156
+REQUEST		Delete	1679601696155	1679601696157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601696155	1679601696157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601696155	1679601696157	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601696157
+USER	Borrar datos	END	1679601696157
+USER	Obtener datos	END	1679601696157
+USER	Obtener datos	START	1679601696266
+REQUEST		Select	1679601696265	1679601696266	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601696267
+USER	Obtener datos	START	1679601696355
+USER	Crear datos	START	1679601696355
+REQUEST		Create	1679601696354	1679601696356	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601696354	1679601696356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601696356
+USER	Obtener datos	END	1679601696356
+USER	Borrar datos	START	1679601696357
+REQUEST		Delete	1679601696357	1679601696358	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601696358
+USER	Obtener datos	START	1679601696456
+REQUEST		Select	1679601696456	1679601696457	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601696457
+USER	Borrar datos	START	1679601696556
+USER	Actualizar datos	START	1679601696556
+USER	Crear datos	START	1679601696556
+USER	Obtener datos	START	1679601696556
+REQUEST		Delete	1679601696555	1679601696557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601696555	1679601696557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601696555	1679601696557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601696557
+USER	Actualizar datos	END	1679601696557
+USER	Obtener datos	END	1679601696558
+REQUEST		Create	1679601696555	1679601696558	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601696558
+USER	Obtener datos	START	1679601696655
+REQUEST		Select	1679601696654	1679601696656	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601696656
+USER	Crear datos	START	1679601696754
+REQUEST		Create	1679601696754	1679601696755	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601696755
+USER	Obtener datos	START	1679601696756
+USER	Borrar datos	START	1679601696756
+REQUEST		Select	1679601696756	1679601696757	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601696756	1679601696757	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601696757
+USER	Obtener datos	END	1679601696757
+USER	Obtener datos	START	1679601696855
+REQUEST		Select	1679601696855	1679601696856	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601696856
+USER	Borrar datos	START	1679601696956
+USER	Obtener datos	START	1679601696956
+USER	Crear datos	START	1679601696956
+REQUEST		Delete	1679601696956	1679601696957	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601696956	1679601696957	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601696957
+USER	Borrar datos	END	1679601696957
+REQUEST		Create	1679601696956	1679601696957	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601696957
+USER	Actualizar datos	START	1679601697056
+USER	Obtener datos	START	1679601697056
+REQUEST		Update	1679601697056	1679601697057	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601697056	1679601697057	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601697058
+USER	Obtener datos	END	1679601697058
+USER	Obtener datos	START	1679601697155
+USER	Crear datos	START	1679601697155
+REQUEST		Create	1679601697154	1679601697155	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601697155
+USER	Borrar datos	START	1679601697158
+REQUEST		Delete	1679601697157	1679601697158	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601697158
+REQUEST		Select	1679601697154	1679601697167	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601697167
+USER	Obtener datos	START	1679601697254
+REQUEST		Select	1679601697254	1679601697255	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601697255
+USER	Crear datos	START	1679601697358
+USER	Obtener datos	START	1679601697358
+USER	Borrar datos	START	1679601697358
+REQUEST		Delete	1679601697358	1679601697359	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601697358	1679601697359	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601697358	1679601697359	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601697359
+USER	Borrar datos	END	1679601697359
+USER	Obtener datos	END	1679601697359
+USER	Obtener datos	START	1679601697455
+REQUEST		Select	1679601697454	1679601697455	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601697456
+USER	Actualizar datos	START	1679601697555
+USER	Obtener datos	START	1679601697555
+USER	Crear datos	START	1679601697555
+USER	Borrar datos	START	1679601697555
+REQUEST		Select	1679601697554	1679601697556	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601697554	1679601697556	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601697554	1679601697556	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601697556
+USER	Obtener datos	END	1679601697556
+USER	Borrar datos	END	1679601697556
+REQUEST		Update	1679601697554	1679601697556	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601697556
+USER	Obtener datos	START	1679601697656
+REQUEST		Select	1679601697655	1679601697657	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601697657
+USER	Borrar datos	START	1679601697755
+USER	Obtener datos	START	1679601697755
+USER	Crear datos	START	1679601697755
+REQUEST		Delete	1679601697755	1679601697756	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601697755	1679601697756	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601697755	1679601697756	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601697756
+USER	Obtener datos	END	1679601697756
+USER	Crear datos	END	1679601697756
+USER	Obtener datos	START	1679601697856
+REQUEST		Select	1679601697856	1679601697857	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601697857
+USER	Obtener datos	START	1679601697956
+USER	Crear datos	START	1679601697956
+USER	Borrar datos	START	1679601697957
+REQUEST		Select	1679601697956	1679601697957	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601697956	1679601697957	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601697956	1679601697957	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601697957
+USER	Borrar datos	END	1679601697958
+USER	Obtener datos	END	1679601697958
+USER	Actualizar datos	START	1679601698055
+REQUEST		Update	1679601698054	1679601698055	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601698056
+USER	Obtener datos	START	1679601698057
+REQUEST		Select	1679601698056	1679601698057	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601698058
+USER	Obtener datos	START	1679601698156
+USER	Crear datos	START	1679601698156
+USER	Borrar datos	START	1679601698156
+REQUEST		Delete	1679601698155	1679601698157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601698155	1679601698157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601698155	1679601698157	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601698157
+USER	Borrar datos	END	1679601698157
+USER	Crear datos	END	1679601698158
+USER	Obtener datos	START	1679601698256
+REQUEST		Select	1679601698255	1679601698256	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601698257
+USER	Crear datos	START	1679601698355
+REQUEST		Create	1679601698354	1679601698356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601698356
+USER	Borrar datos	START	1679601698357
+USER	Obtener datos	START	1679601698357
+REQUEST		Delete	1679601698356	1679601698358	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601698356	1679601698358	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601698358
+USER	Borrar datos	END	1679601698358
+USER	Obtener datos	START	1679601698457
+REQUEST		Select	1679601698456	1679601698457	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601698458
+USER	Obtener datos	START	1679601698557
+USER	Actualizar datos	START	1679601698557
+USER	Borrar datos	START	1679601698557
+USER	Crear datos	START	1679601698557
+REQUEST		Select	1679601698556	1679601698558	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601698556	1679601698558	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601698556	1679601698558	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601698556	1679601698559	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601698560
+USER	Obtener datos	END	1679601698560
+USER	Borrar datos	END	1679601698560
+USER	Crear datos	END	1679601698560
+USER	Obtener datos	START	1679601698655
+REQUEST		Select	1679601698655	1679601698656	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601698656
+USER	Borrar datos	START	1679601698755
+USER	Obtener datos	START	1679601698755
+USER	Crear datos	START	1679601698755
+REQUEST		Delete	1679601698754	1679601698755	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601698754	1679601698755	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601698754	1679601698755	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601698756
+USER	Borrar datos	END	1679601698756
+USER	Obtener datos	END	1679601698756
+USER	Obtener datos	START	1679601698857
+REQUEST		Select	1679601698856	1679601698857	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601698858
+USER	Borrar datos	START	1679601698955
+USER	Obtener datos	START	1679601698955
+USER	Crear datos	START	1679601698955
+REQUEST		Select	1679601698955	1679601698956	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601698955	1679601698956	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601698955	1679601698956	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601698957
+USER	Crear datos	END	1679601698957
+USER	Obtener datos	END	1679601698957
+USER	Actualizar datos	START	1679601699054
+REQUEST		Update	1679601699054	1679601699055	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601699055
+USER	Obtener datos	START	1679601699057
+REQUEST		Select	1679601699056	1679601699057	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601699057
+USER	Borrar datos	START	1679601699156
+USER	Crear datos	START	1679601699156
+USER	Obtener datos	START	1679601699156
+REQUEST		Create	1679601699156	1679601699157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601699156	1679601699157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601699156	1679601699157	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601699157
+USER	Obtener datos	END	1679601699157
+USER	Crear datos	END	1679601699157
+USER	Obtener datos	START	1679601699257
+REQUEST		Select	1679601699257	1679601699258	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601699258
+USER	Crear datos	START	1679601699356
+USER	Obtener datos	START	1679601699356
+USER	Borrar datos	START	1679601699356
+REQUEST		Select	1679601699355	1679601699356	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601699355	1679601699356	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601699355	1679601699356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601699356
+USER	Obtener datos	END	1679601699357
+USER	Borrar datos	END	1679601699357
+USER	Obtener datos	START	1679601699457
+REQUEST		Select	1679601699456	1679601699457	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601699458
+USER	Borrar datos	START	1679601699555
+USER	Actualizar datos	START	1679601699555
+USER	Crear datos	START	1679601699555
+REQUEST		Create	1679601699555	1679601699556	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601699555	1679601699556	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601699555	1679601699556	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601699556
+USER	Actualizar datos	END	1679601699556
+USER	Borrar datos	END	1679601699556
+USER	Obtener datos	START	1679601699557
+REQUEST		Select	1679601699557	1679601699558	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601699558
+USER	Obtener datos	START	1679601699655
+REQUEST		Select	1679601699655	1679601699656	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601699656
+USER	Obtener datos	START	1679601699755
+USER	Borrar datos	START	1679601699755
+REQUEST		Select	1679601699755	1679601699756	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601699755	1679601699756	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601699757
+USER	Obtener datos	END	1679601699757
+USER	Crear datos	START	1679601699758
+REQUEST		Create	1679601699757	1679601699759	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601699759
+USER	Obtener datos	START	1679601699855
+REQUEST		Select	1679601699855	1679601699856	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601699857
+USER	Obtener datos	START	1679601699956
+USER	Borrar datos	START	1679601699956
+USER	Crear datos	START	1679601699956
+REQUEST		Create	1679601699955	1679601699957	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601699955	1679601699957	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601699955	1679601699957	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601699957
+USER	Crear datos	END	1679601699957
+USER	Obtener datos	END	1679601699957
+USER	Actualizar datos	START	1679601700055
+USER	Obtener datos	START	1679601700055
+REQUEST		Select	1679601700054	1679601700056	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601700056
+REQUEST		Update	1679601700054	1679601700056	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601700056
+USER	Crear datos	START	1679601700156
+USER	Obtener datos	START	1679601700156
+USER	Borrar datos	START	1679601700156
+REQUEST		Select	1679601700155	1679601700157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601700155	1679601700157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601700155	1679601700157	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601700157
+USER	Borrar datos	END	1679601700157
+USER	Obtener datos	END	1679601700157
+USER	Obtener datos	START	1679601700256
+REQUEST		Select	1679601700255	1679601700257	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601700257
+USER	Borrar datos	START	1679601700355
+REQUEST		Delete	1679601700354	1679601700356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	START	1679601700356
+USER	Borrar datos	END	1679601700356
+REQUEST		Select	1679601700355	1679601700356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601700357
+USER	Crear datos	START	1679601700357
+REQUEST		Create	1679601700356	1679601700358	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601700358
+USER	Obtener datos	START	1679601700456
+REQUEST		Select	1679601700456	1679601700457	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601700458
+USER	Crear datos	START	1679601700556
+USER	Actualizar datos	START	1679601700556
+USER	Obtener datos	START	1679601700556
+USER	Borrar datos	START	1679601700556
+REQUEST		Delete	1679601700556	1679601700557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601700556	1679601700557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601700556	1679601700557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601700557
+USER	Obtener datos	END	1679601700557
+USER	Crear datos	END	1679601700557
+REQUEST		Update	1679601700556	1679601700557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601700558
+USER	Obtener datos	START	1679601700655
+REQUEST		Select	1679601700654	1679601700655	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601700656
+USER	Borrar datos	START	1679601700755
+USER	Crear datos	START	1679601700755
+REQUEST		Delete	1679601700754	1679601700755	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601700754	1679601700755	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601700755
+USER	Borrar datos	END	1679601700755
+USER	Obtener datos	START	1679601700757
+REQUEST		Select	1679601700756	1679601700757	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601700758
+USER	Obtener datos	START	1679601700857
+REQUEST		Select	1679601700856	1679601700857	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601700858
+USER	Borrar datos	START	1679601700955
+REQUEST		Delete	1679601700954	1679601700955	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601700956
+USER	Crear datos	START	1679601700956
+USER	Obtener datos	START	1679601700956
+REQUEST		Select	1679601700956	1679601700957	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601700956	1679601700957	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601700958
+USER	Crear datos	END	1679601700958
+USER	Obtener datos	START	1679601701056
+USER	Actualizar datos	START	1679601701056
+REQUEST		Update	1679601701055	1679601701057	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601701055	1679601701057	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601701057
+USER	Obtener datos	END	1679601701057
+USER	Obtener datos	START	1679601701155
+USER	Borrar datos	START	1679601701155
+USER	Crear datos	START	1679601701155
+REQUEST		Create	1679601701155	1679601701156	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601701155	1679601701156	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601701155	1679601701156	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601701156
+USER	Crear datos	END	1679601701156
+USER	Obtener datos	END	1679601701156
+USER	Obtener datos	START	1679601701258
+REQUEST		Select	1679601701257	1679601701260	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601701261
+USER	Crear datos	START	1679601701359
+USER	Borrar datos	START	1679601701361
+REQUEST		Create	1679601701358	1679601701361	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601701361
+USER	Obtener datos	START	1679601701361
+REQUEST		Delete	1679601701359	1679601701362	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601701363
+REQUEST		Select	1679601701358	1679601701363	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601701364
+USER	Obtener datos	START	1679601701464
+REQUEST		Select	1679601701462	1679601701481	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601701481
+USER	Borrar datos	START	1679601701554
+REQUEST		Delete	1679601701554	1679601701555	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601701555
+USER	Actualizar datos	START	1679601701556
+USER	Obtener datos	START	1679601701556
+USER	Crear datos	START	1679601701556
+REQUEST		Select	1679601701556	1679601701557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601701556	1679601701557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601701556	1679601701557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601701557
+USER	Obtener datos	END	1679601701557
+USER	Crear datos	END	1679601701557
+USER	Obtener datos	START	1679601701658
+REQUEST		Select	1679601701656	1679601701660	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601701661
+USER	Obtener datos	START	1679601701757
+USER	Crear datos	START	1679601701757
+USER	Borrar datos	START	1679601701757
+REQUEST		Delete	1679601701755	1679601701758	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601701755	1679601701759	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601701759
+REQUEST		Create	1679601701755	1679601701759	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601701759
+USER	Crear datos	END	1679601701759
+USER	Obtener datos	START	1679601701856
+REQUEST		Select	1679601701855	1679601701858	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601701859
+USER	Borrar datos	START	1679601701956
+USER	Crear datos	START	1679601701956
+USER	Obtener datos	START	1679601701956
+REQUEST		Select	1679601701955	1679601701958	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601701955	1679601701958	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601701955	1679601701958	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601701959
+USER	Crear datos	END	1679601701959
+USER	Obtener datos	END	1679601701959
+USER	Obtener datos	START	1679601702057
+USER	Actualizar datos	START	1679601702057
+REQUEST		Select	1679601702056	1679601702058	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601702056	1679601702058	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601702059
+USER	Actualizar datos	END	1679601702059
+USER	Borrar datos	START	1679601702156
+USER	Obtener datos	START	1679601702158
+REQUEST		Delete	1679601702155	1679601702158	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	START	1679601702158
+USER	Borrar datos	END	1679601702159
+REQUEST		Select	1679601702157	1679601702160	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601702156	1679601702160	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601702160
+USER	Crear datos	END	1679601702160
+USER	Obtener datos	START	1679601702258
+REQUEST		Select	1679601702256	1679601702260	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601702260
+USER	Borrar datos	START	1679601702357
+USER	Obtener datos	START	1679601702358
+USER	Crear datos	START	1679601702358
+REQUEST		Delete	1679601702355	1679601702359	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601702360
+REQUEST		Create	1679601702356	1679601702360	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601702356	1679601702360	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601702361
+USER	Obtener datos	END	1679601702361
+USER	Obtener datos	START	1679601702458
+REQUEST		Select	1679601702456	1679601702460	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601702461
+USER	Obtener datos	START	1679601702556
+USER	Borrar datos	START	1679601702556
+REQUEST		Select	1679601702555	1679601702558	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601702555	1679601702558	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601702559
+USER	Crear datos	START	1679601702559
+USER	Borrar datos	END	1679601702559
+USER	Actualizar datos	START	1679601702559
+REQUEST		Create	1679601702557	1679601702560	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601702557	1679601702560	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601702561
+USER	Crear datos	END	1679601702561
+USER	Obtener datos	START	1679601702656
+REQUEST		Select	1679601702655	1679601702659	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601702660
+USER	Borrar datos	START	1679601702758
+USER	Crear datos	START	1679601702759
+USER	Obtener datos	START	1679601702759
+REQUEST		Delete	1679601702755	1679601702760	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601702757	1679601702760	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601702762
+USER	Crear datos	END	1679601702762
+REQUEST		Select	1679601702757	1679601702763	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601702763
+USER	Obtener datos	START	1679601702856
+REQUEST		Select	1679601702855	1679601702857	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601702858
+USER	Borrar datos	START	1679601702956
+USER	Crear datos	START	1679601702956
+REQUEST		Create	1679601702955	1679601702957	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601702955	1679601702957	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	START	1679601702957
+USER	Borrar datos	END	1679601702957
+USER	Crear datos	END	1679601702957
+REQUEST		Select	1679601702956	1679601702959	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601702959
+USER	Actualizar datos	START	1679601703054
+REQUEST		Update	1679601703054	1679601703055	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601703055
+USER	Obtener datos	START	1679601703056
+REQUEST		Select	1679601703056	1679601703057	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601703057
+USER	Borrar datos	START	1679601703156
+USER	Obtener datos	START	1679601703156
+USER	Crear datos	START	1679601703156
+REQUEST		Create	1679601703156	1679601703157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601703156	1679601703157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601703156	1679601703157	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601703157
+USER	Obtener datos	END	1679601703157
+USER	Crear datos	END	1679601703157
+USER	Obtener datos	START	1679601703256
+REQUEST		Select	1679601703256	1679601703256	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601703257
+USER	Borrar datos	START	1679601703357
+USER	Crear datos	START	1679601703357
+USER	Obtener datos	START	1679601703357
+REQUEST		Delete	1679601703356	1679601703358	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601703356	1679601703358	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601703356	1679601703358	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601703358
+USER	Borrar datos	END	1679601703358
+USER	Obtener datos	END	1679601703358
+USER	Obtener datos	START	1679601703459
+REQUEST		Select	1679601703458	1679601703460	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601703460
+USER	Actualizar datos	START	1679601703554
+REQUEST		Update	1679601703554	1679601703555	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601703555
+USER	Obtener datos	START	1679601703556
+USER	Borrar datos	START	1679601703556
+USER	Crear datos	START	1679601703556
+REQUEST		Delete	1679601703556	1679601703557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601703556	1679601703557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601703556	1679601703557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601703557
+USER	Obtener datos	END	1679601703557
+USER	Crear datos	END	1679601703557
+USER	Obtener datos	START	1679601703655
+REQUEST		Select	1679601703655	1679601703655	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601703656
+USER	Crear datos	START	1679601703756
+USER	Borrar datos	START	1679601703756
+USER	Obtener datos	START	1679601703756
+REQUEST		Create	1679601703756	1679601703757	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601703756	1679601703757	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601703756	1679601703757	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601703757
+USER	Obtener datos	END	1679601703757
+USER	Crear datos	END	1679601703757
+USER	Obtener datos	START	1679601703856
+REQUEST		Select	1679601703855	1679601703856	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601703857
+USER	Borrar datos	START	1679601703955
+USER	Obtener datos	START	1679601703955
+REQUEST		Select	1679601703954	1679601703955	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601703954	1679601703955	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601703955
+USER	Obtener datos	END	1679601703955
+USER	Crear datos	START	1679601703956
+REQUEST		Create	1679601703956	1679601703957	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601703957
+USER	Obtener datos	START	1679601704054
+REQUEST		Select	1679601704054	1679601704055	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601704055
+USER	Actualizar datos	START	1679601704056
+REQUEST		Update	1679601704056	1679601704057	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601704057
+USER	Borrar datos	START	1679601704156
+USER	Obtener datos	START	1679601704156
+USER	Crear datos	START	1679601704156
+REQUEST		Create	1679601704155	1679601704156	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601704155	1679601704156	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601704155	1679601704156	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601704156
+USER	Borrar datos	END	1679601704157
+USER	Crear datos	END	1679601704157
+USER	Obtener datos	START	1679601704255
+REQUEST		Select	1679601704255	1679601704256	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601704256
+USER	Obtener datos	START	1679601704354
+REQUEST		Select	1679601704354	1679601704355	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601704355
+USER	Borrar datos	START	1679601704356
+USER	Crear datos	START	1679601704356
+REQUEST		Create	1679601704355	1679601704356	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Delete	1679601704355	1679601704356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Borrar datos	END	1679601704356
+USER	Crear datos	END	1679601704357
+USER	Obtener datos	START	1679601704456
+REQUEST		Select	1679601704455	1679601704456	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601704456
+USER	Actualizar datos	START	1679601704555
+USER	Obtener datos	START	1679601704555
+REQUEST		Update	1679601704554	1679601704555	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601704554	1679601704555	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601704555
+USER	Actualizar datos	END	1679601704555
+USER	Crear datos	START	1679601704557
+REQUEST		Create	1679601704557	1679601704558	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601704559
+USER	Obtener datos	START	1679601704656
+REQUEST		Select	1679601704655	1679601704657	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601704657
+USER	Crear datos	START	1679601704755
+USER	Obtener datos	START	1679601704755
+REQUEST		Select	1679601704754	1679601704755	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601704754	1679601704755	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601704755
+USER	Obtener datos	END	1679601704755
+USER	Obtener datos	START	1679601704855
+REQUEST		Select	1679601704855	1679601704855	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601704856
+USER	Crear datos	START	1679601704957
+USER	Obtener datos	START	1679601704957
+REQUEST		Select	1679601704957	1679601704957	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601704957	1679601704957	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601704958
+USER	Obtener datos	END	1679601704958
+USER	Obtener datos	START	1679601705056
+USER	Actualizar datos	START	1679601705056
+REQUEST		Update	1679601705056	1679601705057	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601705056	1679601705057	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601705057
+USER	Obtener datos	END	1679601705057
+USER	Crear datos	START	1679601705154
+REQUEST		Create	1679601705154	1679601705155	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601705155
+USER	Obtener datos	START	1679601705157
+REQUEST		Select	1679601705156	1679601705158	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601705158
+USER	Obtener datos	START	1679601705257
+REQUEST		Select	1679601705256	1679601705257	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601705258
+USER	Obtener datos	START	1679601705358
+USER	Crear datos	START	1679601705358
+REQUEST		Select	1679601705357	1679601705359	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601705358	1679601705359	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601705359
+USER	Crear datos	END	1679601705359
+USER	Obtener datos	START	1679601705457
+REQUEST		Select	1679601705455	1679601705459	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601705459
+USER	Obtener datos	START	1679601705556
+USER	Crear datos	START	1679601705556
+USER	Actualizar datos	START	1679601705556
+REQUEST		Select	1679601705556	1679601705557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601705556	1679601705557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601705556	1679601705557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601705557
+USER	Obtener datos	END	1679601705557
+USER	Actualizar datos	END	1679601705557
+USER	Obtener datos	START	1679601705654
+REQUEST		Select	1679601705654	1679601705654	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601705655
+USER	Crear datos	START	1679601705754
+USER	Obtener datos	START	1679601705754
+REQUEST		Select	1679601705754	1679601705755	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601705754	1679601705755	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601705755
+USER	Crear datos	END	1679601705755
+USER	Obtener datos	START	1679601705856
+REQUEST		Select	1679601705855	1679601705856	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601705857
+USER	Crear datos	START	1679601705954
+REQUEST		Create	1679601705953	1679601705954	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601705954
+USER	Obtener datos	START	1679601705955
+REQUEST		Select	1679601705955	1679601705956	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601705956
+USER	Obtener datos	START	1679601706056
+USER	Actualizar datos	START	1679601706056
+REQUEST		Update	1679601706055	1679601706057	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601706055	1679601706057	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601706057
+USER	Actualizar datos	END	1679601706057
+USER	Obtener datos	START	1679601706154
+REQUEST		Select	1679601706154	1679601706155	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601706155
+USER	Crear datos	START	1679601706156
+REQUEST		Create	1679601706156	1679601706157	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601706158
+USER	Obtener datos	START	1679601706254
+REQUEST		Select	1679601706254	1679601706255	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601706255
+USER	Crear datos	START	1679601706356
+USER	Obtener datos	START	1679601706356
+REQUEST		Select	1679601706356	1679601706357	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601706356	1679601706357	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601706357
+USER	Crear datos	END	1679601706357
+USER	Obtener datos	START	1679601706457
+REQUEST		Select	1679601706456	1679601706458	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601706458
+USER	Obtener datos	START	1679601706555
+USER	Actualizar datos	START	1679601706555
+USER	Crear datos	START	1679601706555
+REQUEST		Create	1679601706555	1679601706556	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601706555	1679601706556	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601706555	1679601706556	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601706556
+USER	Crear datos	END	1679601706556
+USER	Obtener datos	END	1679601706556
+USER	Obtener datos	START	1679601706656
+REQUEST		Select	1679601706655	1679601706657	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601706657
+USER	Crear datos	START	1679601706756
+USER	Obtener datos	START	1679601706756
+REQUEST		Create	1679601706755	1679601706756	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601706755	1679601706756	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601706757
+USER	Crear datos	END	1679601706757
+USER	Obtener datos	START	1679601706856
+REQUEST		Select	1679601706856	1679601706857	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601706857
+USER	Obtener datos	START	1679601706957
+USER	Crear datos	START	1679601706957
+REQUEST		Create	1679601706956	1679601706958	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601706956	1679601706958	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601706959
+USER	Crear datos	END	1679601706959
+USER	Actualizar datos	START	1679601707056
+USER	Obtener datos	START	1679601707056
+REQUEST		Update	1679601707056	1679601707057	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601707056	1679601707057	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601707057
+USER	Actualizar datos	END	1679601707057
+USER	Crear datos	START	1679601707157
+USER	Obtener datos	START	1679601707157
+REQUEST		Select	1679601707156	1679601707158	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601707156	1679601707158	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601707158
+USER	Crear datos	END	1679601707158
+USER	Obtener datos	START	1679601707258
+REQUEST		Select	1679601707257	1679601707259	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601707260
+USER	Crear datos	START	1679601707358
+USER	Obtener datos	START	1679601707358
+REQUEST		Create	1679601707357	1679601707360	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601707357	1679601707360	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601707360
+USER	Obtener datos	END	1679601707360
+USER	Obtener datos	START	1679601707460
+REQUEST		Select	1679601707459	1679601707461	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601707461
+USER	Crear datos	START	1679601707557
+USER	Actualizar datos	START	1679601707557
+REQUEST		Create	1679601707556	1679601707559	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	START	1679601707559
+REQUEST		Update	1679601707556	1679601707559	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601707560
+USER	Actualizar datos	END	1679601707560
+REQUEST		Select	1679601707558	1679601707561	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601707561
+USER	Obtener datos	START	1679601707658
+REQUEST		Select	1679601707657	1679601707661	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601707661
+USER	Obtener datos	START	1679601707757
+USER	Crear datos	START	1679601707757
+REQUEST		Create	1679601707756	1679601707758	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601707756	1679601707758	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601707758
+USER	Crear datos	END	1679601707759
+USER	Obtener datos	START	1679601707856
+REQUEST		Select	1679601707855	1679601707857	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601707857
+USER	Obtener datos	START	1679601707956
+USER	Crear datos	START	1679601707956
+REQUEST		Create	1679601707956	1679601707957	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601707956	1679601707957	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601707957
+USER	Crear datos	END	1679601707957
+USER	Obtener datos	START	1679601708057
+USER	Actualizar datos	START	1679601708057
+REQUEST		Select	1679601708056	1679601708057	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601708056	1679601708057	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601708057
+USER	Obtener datos	END	1679601708057
+USER	Crear datos	START	1679601708156
+USER	Obtener datos	START	1679601708156
+REQUEST		Create	1679601708156	1679601708157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601708156	1679601708157	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601708157
+USER	Crear datos	END	1679601708157
+USER	Obtener datos	START	1679601708257
+REQUEST		Select	1679601708257	1679601708258	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601708258
+USER	Crear datos	START	1679601708356
+USER	Obtener datos	START	1679601708356
+REQUEST		Create	1679601708356	1679601708357	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601708356	1679601708357	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601708357
+USER	Obtener datos	END	1679601708357
+USER	Obtener datos	START	1679601708458
+REQUEST		Select	1679601708457	1679601708458	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601708458
+USER	Actualizar datos	START	1679601708556
+REQUEST		Update	1679601708555	1679601708556	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601708557
+USER	Crear datos	START	1679601708570
+USER	Obtener datos	START	1679601708570
+REQUEST		Select	1679601708569	1679601708570	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601708569	1679601708570	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601708571
+USER	Obtener datos	END	1679601708571
+USER	Obtener datos	START	1679601708656
+REQUEST		Select	1679601708656	1679601708657	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601708657
+USER	Obtener datos	START	1679601708754
+REQUEST		Select	1679601708753	1679601708754	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601708755
+USER	Crear datos	START	1679601708756
+REQUEST		Create	1679601708756	1679601708757	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601708757
+USER	Obtener datos	START	1679601708856
+REQUEST		Select	1679601708856	1679601708857	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601708857
+USER	Obtener datos	START	1679601708954
+REQUEST		Select	1679601708954	1679601708955	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601708955
+USER	Crear datos	START	1679601708956
+REQUEST		Create	1679601708956	1679601708957	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601708957
+USER	Actualizar datos	START	1679601709055
+USER	Obtener datos	START	1679601709055
+REQUEST		Update	1679601709054	1679601709055	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601709054	1679601709055	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601709055
+USER	Actualizar datos	END	1679601709055
+USER	Obtener datos	START	1679601709155
+USER	Crear datos	START	1679601709155
+REQUEST		Create	1679601709155	1679601709156	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601709155	1679601709156	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601709156
+USER	Obtener datos	END	1679601709156
+USER	Obtener datos	START	1679601709255
+REQUEST		Select	1679601709255	1679601709256	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601709256
+USER	Obtener datos	START	1679601709355
+USER	Crear datos	START	1679601709355
+REQUEST		Create	1679601709355	1679601709356	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601709355	1679601709356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601709356
+USER	Crear datos	END	1679601709356
+USER	Obtener datos	START	1679601709456
+REQUEST		Select	1679601709455	1679601709456	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601709457
+USER	Actualizar datos	START	1679601709556
+USER	Crear datos	START	1679601709556
+USER	Obtener datos	START	1679601709556
+REQUEST		Update	1679601709556	1679601709557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601709556	1679601709557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601709556	1679601709557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601709557
+USER	Actualizar datos	END	1679601709557
+USER	Crear datos	END	1679601709557
+USER	Obtener datos	START	1679601709656
+REQUEST		Select	1679601709656	1679601709657	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601709657
+USER	Obtener datos	START	1679601709754
+REQUEST		Select	1679601709754	1679601709755	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601709755
+USER	Crear datos	START	1679601709756
+REQUEST		Create	1679601709756	1679601709757	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601709757
+USER	Obtener datos	START	1679601709856
+REQUEST		Select	1679601709855	1679601709856	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601709856
+USER	Crear datos	START	1679601709956
+USER	Obtener datos	START	1679601709956
+REQUEST		Select	1679601709955	1679601709956	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601709955	1679601709956	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601709956
+USER	Crear datos	END	1679601709956
+USER	Actualizar datos	START	1679601710054
+REQUEST		Update	1679601710054	1679601710055	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601710055
+USER	Obtener datos	START	1679601710056
+REQUEST		Select	1679601710056	1679601710057	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601710057
+USER	Obtener datos	START	1679601710156
+USER	Crear datos	START	1679601710156
+REQUEST		Create	1679601710155	1679601710157	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601710155	1679601710157	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601710157
+USER	Obtener datos	END	1679601710157
+USER	Obtener datos	START	1679601710256
+REQUEST		Select	1679601710255	1679601710256	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601710256
+USER	Obtener datos	START	1679601710356
+USER	Crear datos	START	1679601710356
+REQUEST		Select	1679601710355	1679601710356	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601710355	1679601710356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601710356
+USER	Crear datos	END	1679601710356
+USER	Obtener datos	START	1679601710456
+REQUEST		Select	1679601710455	1679601710456	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601710456
+USER	Crear datos	START	1679601710566
+USER	Obtener datos	START	1679601710566
+USER	Actualizar datos	START	1679601710566
+REQUEST		Select	1679601710565	1679601710566	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601710566
+REQUEST		Create	1679601710565	1679601710576	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601710576
+REQUEST		Update	1679601710566	1679601710578	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601710578
+USER	Obtener datos	START	1679601710655
+REQUEST		Select	1679601710655	1679601710656	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601710656
+USER	Crear datos	START	1679601710755
+USER	Obtener datos	START	1679601710755
+REQUEST		Select	1679601710755	1679601710756	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601710755	1679601710756	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601710756
+USER	Obtener datos	END	1679601710756
+USER	Obtener datos	START	1679601710855
+REQUEST		Select	1679601710855	1679601710856	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601710856
+USER	Crear datos	START	1679601710954
+USER	Obtener datos	START	1679601710954
+REQUEST		Select	1679601710954	1679601710955	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601710954	1679601710955	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601710955
+USER	Obtener datos	END	1679601710955
+USER	Obtener datos	START	1679601711055
+USER	Actualizar datos	START	1679601711055
+REQUEST		Select	1679601711054	1679601711055	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601711054	1679601711055	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601711055
+USER	Obtener datos	END	1679601711055
+USER	Crear datos	START	1679601711154
+REQUEST		Create	1679601711154	1679601711155	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601711155
+USER	Obtener datos	START	1679601711156
+REQUEST		Select	1679601711156	1679601711156	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601711156
+USER	Obtener datos	START	1679601711256
+REQUEST		Select	1679601711255	1679601711256	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601711256
+USER	Obtener datos	START	1679601711355
+USER	Crear datos	START	1679601711355
+REQUEST		Select	1679601711354	1679601711355	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601711355
+REQUEST		Create	1679601711354	1679601711366	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601711366
+USER	Obtener datos	START	1679601711454
+REQUEST		Select	1679601711454	1679601711455	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601711455
+USER	Crear datos	START	1679601711555
+USER	Actualizar datos	START	1679601711555
+USER	Obtener datos	START	1679601711555
+REQUEST		Create	1679601711555	1679601711555	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601711555	1679601711555	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601711555	1679601711555	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601711556
+USER	Actualizar datos	END	1679601711556
+USER	Crear datos	END	1679601711556
+USER	Obtener datos	START	1679601711654
+REQUEST		Select	1679601711653	1679601711654	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601711654
+USER	Crear datos	START	1679601711755
+USER	Obtener datos	START	1679601711755
+REQUEST		Select	1679601711754	1679601711755	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601711754	1679601711755	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601711755
+USER	Obtener datos	END	1679601711755
+USER	Obtener datos	START	1679601711855
+REQUEST		Select	1679601711854	1679601711855	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601711855
+USER	Crear datos	START	1679601711955
+USER	Obtener datos	START	1679601711955
+REQUEST		Create	1679601711955	1679601711955	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601711955	1679601711955	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601711955
+USER	Crear datos	END	1679601711955
+USER	Actualizar datos	START	1679601712055
+USER	Obtener datos	START	1679601712055
+REQUEST		Update	1679601712055	1679601712056	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601712055	1679601712056	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601712056
+USER	Actualizar datos	END	1679601712056
+USER	Obtener datos	START	1679601712155
+USER	Crear datos	START	1679601712155
+REQUEST		Select	1679601712155	1679601712156	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601712155	1679601712156	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601712156
+USER	Crear datos	END	1679601712156
+USER	Obtener datos	START	1679601712256
+REQUEST		Select	1679601712255	1679601712256	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601712257
+USER	Obtener datos	START	1679601712354
+REQUEST		Select	1679601712354	1679601712355	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601712355
+USER	Crear datos	START	1679601712355
+REQUEST		Create	1679601712355	1679601712356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601712356
+USER	Obtener datos	START	1679601712456
+REQUEST		Select	1679601712456	1679601712456	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601712456
+USER	Crear datos	START	1679601712555
+USER	Obtener datos	START	1679601712555
+USER	Actualizar datos	START	1679601712555
+REQUEST		Update	1679601712554	1679601712555	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601712554	1679601712555	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601712555
+USER	Obtener datos	END	1679601712555
+REQUEST		Create	1679601712554	1679601712565	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601712565
+USER	Obtener datos	START	1679601712657
+REQUEST		Select	1679601712657	1679601712657	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601712658
+USER	Crear datos	START	1679601712756
+USER	Obtener datos	START	1679601712756
+REQUEST		Select	1679601712755	1679601712756	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601712755	1679601712756	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601712756
+USER	Obtener datos	END	1679601712756
+USER	Obtener datos	START	1679601712856
+REQUEST		Select	1679601712856	1679601712857	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601712857
+USER	Crear datos	START	1679601712954
+REQUEST		Create	1679601712954	1679601712955	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601712955
+USER	Obtener datos	START	1679601712956
+REQUEST		Select	1679601712956	1679601712957	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601712957
+USER	Actualizar datos	START	1679601713055
+USER	Obtener datos	START	1679601713055
+REQUEST		Select	1679601713055	1679601713056	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601713055	1679601713056	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601713056
+USER	Actualizar datos	END	1679601713056
+USER	Crear datos	START	1679601713155
+USER	Obtener datos	START	1679601713155
+REQUEST		Create	1679601713154	1679601713155	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601713154	1679601713155	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601713155
+USER	Crear datos	END	1679601713155
+USER	Obtener datos	START	1679601713256
+REQUEST		Select	1679601713255	1679601713256	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601713256
+USER	Crear datos	START	1679601713356
+USER	Obtener datos	START	1679601713356
+REQUEST		Create	1679601713355	1679601713356	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601713355	1679601713356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601713356
+USER	Crear datos	END	1679601713356
+USER	Obtener datos	START	1679601713455
+REQUEST		Select	1679601713455	1679601713456	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601713456
+USER	Actualizar datos	START	1679601713554
+USER	Obtener datos	START	1679601713554
+REQUEST		Select	1679601713554	1679601713555	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601713554	1679601713555	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601713555
+USER	Obtener datos	END	1679601713555
+USER	Crear datos	START	1679601713556
+REQUEST		Create	1679601713556	1679601713557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601713557
+USER	Obtener datos	START	1679601713656
+REQUEST		Select	1679601713655	1679601713657	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601713657
+USER	Crear datos	START	1679601713757
+REQUEST		Create	1679601713756	1679601713761	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601713762
+USER	Obtener datos	START	1679601713763
+REQUEST		Select	1679601713762	1679601713769	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601713773
+USER	Obtener datos	START	1679601713856
+REQUEST		Select	1679601713855	1679601713856	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601713856
+USER	Obtener datos	START	1679601713956
+USER	Crear datos	START	1679601713956
+REQUEST		Select	1679601713955	1679601713956	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601713955	1679601713956	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601713956
+USER	Crear datos	END	1679601713956
+USER	Obtener datos	START	1679601714056
+REQUEST		Select	1679601714055	1679601714056	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601714057
+USER	Actualizar datos	START	1679601714057
+REQUEST		Update	1679601714055	1679601714058	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601714058
+USER	Crear datos	START	1679601714156
+USER	Obtener datos	START	1679601714156
+REQUEST		Create	1679601714156	1679601714157	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601714157
+REQUEST		Select	1679601714156	1679601714159	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601714159
+USER	Obtener datos	START	1679601714259
+REQUEST		Select	1679601714259	1679601714260	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601714260
+USER	Crear datos	START	1679601714356
+USER	Obtener datos	START	1679601714356
+REQUEST		Create	1679601714355	1679601714357	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601714355	1679601714357	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601714357
+USER	Obtener datos	END	1679601714357
+USER	Obtener datos	START	1679601714456
+REQUEST		Select	1679601714456	1679601714457	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601714457
+USER	Obtener datos	START	1679601714555
+USER	Crear datos	START	1679601714555
+USER	Actualizar datos	START	1679601714555
+REQUEST		Create	1679601714554	1679601714556	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601714554	1679601714556	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601714554	1679601714556	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601714556
+USER	Crear datos	END	1679601714556
+USER	Obtener datos	END	1679601714556
+USER	Obtener datos	START	1679601714659
+REQUEST		Select	1679601714657	1679601714660	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601714660
+USER	Crear datos	START	1679601714756
+USER	Obtener datos	START	1679601714756
+REQUEST		Create	1679601714755	1679601714756	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601714755	1679601714756	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601714757
+USER	Crear datos	END	1679601714757
+USER	Obtener datos	START	1679601714856
+REQUEST		Select	1679601714855	1679601714856	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601714856
+USER	Crear datos	START	1679601714955
+USER	Obtener datos	START	1679601714955
+REQUEST		Create	1679601714955	1679601714955	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601714955	1679601714955	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601714956
+USER	Crear datos	END	1679601714956
+USER	Actualizar datos	START	1679601715057
+USER	Obtener datos	START	1679601715058
+REQUEST		Update	1679601715055	1679601715058	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601715059
+REQUEST		Select	1679601715057	1679601715059	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601715060
+USER	Crear datos	START	1679601715155
+REQUEST		Create	1679601715155	1679601715156	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601715156
+USER	Obtener datos	START	1679601715157
+REQUEST		Select	1679601715157	1679601715158	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601715158
+USER	Obtener datos	START	1679601715255
+REQUEST		Select	1679601715255	1679601715256	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601715256
+USER	Obtener datos	START	1679601715355
+REQUEST		Select	1679601715354	1679601715355	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601715355
+USER	Crear datos	START	1679601715357
+REQUEST		Create	1679601715356	1679601715357	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601715357
+USER	Obtener datos	START	1679601715458
+REQUEST		Select	1679601715456	1679601715463	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601715464
+USER	Obtener datos	START	1679601715557
+USER	Actualizar datos	START	1679601715557
+USER	Crear datos	START	1679601715557
+REQUEST		Select	1679601715556	1679601715558	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601715556	1679601715558	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601715556	1679601715558	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601715559
+USER	Obtener datos	END	1679601715559
+USER	Actualizar datos	END	1679601715559
+USER	Obtener datos	START	1679601715658
+REQUEST		Select	1679601715656	1679601715660	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601715661
+USER	Crear datos	START	1679601715755
+USER	Obtener datos	START	1679601715755
+REQUEST		Select	1679601715754	1679601715756	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601715754	1679601715756	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601715757
+USER	Crear datos	END	1679601715757
+USER	Obtener datos	START	1679601715855
+REQUEST		Select	1679601715854	1679601715856	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601715857
+USER	Crear datos	START	1679601715963
+REQUEST		Create	1679601715957	1679601715965	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601715967
+USER	Obtener datos	START	1679601715978
+REQUEST		Select	1679601715969	1679601715982	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601715983
+USER	Actualizar datos	START	1679601716056
+USER	Obtener datos	START	1679601716056
+REQUEST		Update	1679601716055	1679601716057	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601716058
+REQUEST		Select	1679601716055	1679601716058	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601716058
+USER	Crear datos	START	1679601716156
+USER	Obtener datos	START	1679601716156
+REQUEST		Create	1679601716155	1679601716156	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601716155	1679601716156	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601716156
+USER	Obtener datos	END	1679601716156
+USER	Obtener datos	START	1679601716255
+REQUEST		Select	1679601716255	1679601716256	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601716256
+USER	Obtener datos	START	1679601716355
+USER	Crear datos	START	1679601716355
+REQUEST		Create	1679601716355	1679601716356	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601716355	1679601716356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601716356
+USER	Crear datos	END	1679601716356
+USER	Obtener datos	START	1679601716458
+REQUEST		Select	1679601716457	1679601716460	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601716460
+USER	Obtener datos	START	1679601716556
+USER	Actualizar datos	START	1679601716556
+REQUEST		Select	1679601716555	1679601716557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601716558
+REQUEST		Update	1679601716555	1679601716557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601716559
+USER	Crear datos	START	1679601716559
+REQUEST		Create	1679601716558	1679601716560	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601716560
+USER	Obtener datos	START	1679601716655
+REQUEST		Select	1679601716654	1679601716656	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601716656
+USER	Crear datos	START	1679601716756
+USER	Obtener datos	START	1679601716756
+REQUEST		Create	1679601716755	1679601716757	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601716755	1679601716757	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601716757
+USER	Obtener datos	END	1679601716757
+USER	Obtener datos	START	1679601716856
+REQUEST		Select	1679601716855	1679601716856	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601716856
+USER	Obtener datos	START	1679601716955
+USER	Crear datos	START	1679601716956
+REQUEST		Select	1679601716955	1679601716956	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601716956
+REQUEST		Create	1679601716955	1679601716956	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601716956
+USER	Obtener datos	START	1679601717055
+USER	Actualizar datos	START	1679601717055
+REQUEST		Select	1679601717055	1679601717055	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601717055	1679601717055	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601717056
+USER	Actualizar datos	END	1679601717056
+USER	Obtener datos	START	1679601717155
+USER	Crear datos	START	1679601717155
+REQUEST		Create	1679601717155	1679601717156	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601717155	1679601717156	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601717156
+USER	Crear datos	END	1679601717156
+USER	Obtener datos	START	1679601717255
+REQUEST		Select	1679601717255	1679601717256	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601717256
+USER	Crear datos	START	1679601717357
+USER	Obtener datos	START	1679601717357
+REQUEST		Select	1679601717356	1679601717357	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601717356	1679601717357	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601717358
+USER	Crear datos	END	1679601717358
+USER	Obtener datos	START	1679601717456
+REQUEST		Select	1679601717456	1679601717457	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601717457
+USER	Actualizar datos	START	1679601717556
+USER	Crear datos	START	1679601717556
+USER	Obtener datos	START	1679601717556
+REQUEST		Select	1679601717556	1679601717557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601717556	1679601717557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Create	1679601717556	1679601717557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601717557
+USER	Obtener datos	END	1679601717557
+USER	Actualizar datos	END	1679601717557
+USER	Obtener datos	START	1679601717654
+REQUEST		Select	1679601717654	1679601717655	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601717655
+USER	Obtener datos	START	1679601717756
+USER	Crear datos	START	1679601717756
+REQUEST		Create	1679601717756	1679601717757	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601717756	1679601717757	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601717758
+USER	Crear datos	END	1679601717758
+USER	Obtener datos	START	1679601717855
+REQUEST		Select	1679601717854	1679601717855	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601717855
+USER	Obtener datos	START	1679601717955
+REQUEST		Select	1679601717954	1679601717956	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601717956
+USER	Crear datos	START	1679601717960
+REQUEST		Create	1679601717959	1679601717960	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601717961
+USER	Actualizar datos	START	1679601718055
+USER	Obtener datos	START	1679601718055
+REQUEST		Update	1679601718055	1679601718056	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601718055	1679601718056	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601718056
+USER	Obtener datos	END	1679601718056
+USER	Obtener datos	START	1679601718154
+REQUEST		Select	1679601718154	1679601718154	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601718155
+USER	Crear datos	START	1679601718156
+REQUEST		Create	1679601718155	1679601718156	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601718157
+USER	Obtener datos	START	1679601718254
+REQUEST		Select	1679601718254	1679601718255	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601718255
+USER	Obtener datos	START	1679601718354
+REQUEST		Select	1679601718353	1679601718354	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601718354
+USER	Crear datos	START	1679601718356
+REQUEST		Create	1679601718355	1679601718356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601718357
+USER	Obtener datos	START	1679601718456
+REQUEST		Select	1679601718456	1679601718457	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601718457
+USER	Actualizar datos	START	1679601718554
+REQUEST		Update	1679601718554	1679601718555	KO	j.n.ConnectException: Connection refused: no further information
+USER	Actualizar datos	END	1679601718555
+USER	Obtener datos	START	1679601718556
+USER	Crear datos	START	1679601718556
+REQUEST		Create	1679601718556	1679601718557	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Select	1679601718556	1679601718557	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601718557
+USER	Crear datos	END	1679601718557
+USER	Obtener datos	START	1679601718657
+REQUEST		Select	1679601718656	1679601718658	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601718658
+USER	Crear datos	START	1679601718758
+USER	Obtener datos	START	1679601718759
+REQUEST		Create	1679601718756	1679601718759	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601718760
+REQUEST		Select	1679601718758	1679601718762	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601718763
+USER	Obtener datos	START	1679601718856
+REQUEST		Select	1679601718856	1679601718856	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601718856
+USER	Obtener datos	START	1679601718954
+REQUEST		Select	1679601718953	1679601718954	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601718954
+USER	Crear datos	START	1679601718955
+REQUEST		Create	1679601718955	1679601718966	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601718966
+USER	Obtener datos	START	1679601719055
+USER	Actualizar datos	START	1679601719055
+REQUEST		Select	1679601719055	1679601719056	KO	j.n.ConnectException: Connection refused: no further information
+REQUEST		Update	1679601719055	1679601719056	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601719056
+USER	Actualizar datos	END	1679601719056
+USER	Obtener datos	START	1679601719154
+REQUEST		Select	1679601719153	1679601719154	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601719154
+USER	Crear datos	START	1679601719155
+REQUEST		Create	1679601719155	1679601719156	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601719156
+USER	Obtener datos	START	1679601719255
+REQUEST		Select	1679601719254	1679601719255	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601719255
+USER	Obtener datos	START	1679601719355
+USER	Crear datos	START	1679601719356
+REQUEST		Select	1679601719354	1679601719356	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601719356
+REQUEST		Create	1679601719355	1679601719357	KO	j.n.ConnectException: Connection refused: no further information
+USER	Crear datos	END	1679601719357
+USER	Obtener datos	START	1679601719457
+REQUEST		Select	1679601719456	1679601719459	KO	j.n.ConnectException: Connection refused: no further information
+USER	Obtener datos	END	1679601719460
