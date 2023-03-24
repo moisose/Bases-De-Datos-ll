@@ -20,7 +20,6 @@ spec:
         value: 'babynames'
       - name: MARIADBUSER
         value: 'root'
-        telnet $MARIADBHOST $MARIADBPORT
       - name: MARIADBPORT
         value: '3306'
     command:
