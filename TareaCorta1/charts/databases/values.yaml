@@ -22,7 +22,7 @@ postgresqlha:
     pgpool:
       adminPassword: "12345"
 mariadbgalera:
-  enabled: true
+  enabled: false
   replicaCount: 2
   metrics:
     enabled: true
@@ -34,7 +34,7 @@ mariadbgalera:
   db:
     password: "1234"
 elastic:
-  enabled: false
+  enabled: true
   version: 8.6.1
   replicas: 1
   name: ic4302
