@@ -18,6 +18,8 @@ SET TRANSACTION READ WRITE;
 CREATE DATABASE babynames;
 \c babynames;
 
+SET TRANSACTION READ WRITE;
+
 CREATE TABLE IF NOT EXISTS babyname (
   id serial,
   birthyear int DEFAULT NULL,

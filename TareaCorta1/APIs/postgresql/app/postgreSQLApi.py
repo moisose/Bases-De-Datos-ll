@@ -54,6 +54,7 @@ class BabyName(Resource):
             cnt = args[4]
             rnk = args[5]
             cur = conn.cursor()
+            cur.execute("SET TRANSACTION READ WRITE;")
             cur.execute("CALL sp_BabyName_Insert("+birthyear+",'"+gender+"','"+ethnicity+"','"+nm+"',"+cnt+","+rnk+");")
             #cur.callproc('sp_BabyName_Insert', (birthyear, gender, ethnicity, nm, cnt, rnk))
             conn.commit()
@@ -74,8 +75,11 @@ class BabyName(Resource):
             cnt = args[4]
             rnk = args[5]
             cur = conn.cursor()
+            cur.execute("COMMIT;")
+            cur.execute("SET TRANSACTION READ WRITE;")
             cur.execute("CALL sp_BabyName_Update("+str(id)+","+birthyear+",'"+gender+"','"+ethnicity+"','"+nm+"',"+cnt+","+rnk+");")
             #cur.callproc('sp_BabyName_Update', (id, birthyear, gender, ethnicity, nm, cnt, rnk))
+            cur.execute("COMMIT;")
             conn.commit()
             cur.close()
             return {'status': 'success', 'idUpdated': id, "data":args}
@@ -87,6 +91,7 @@ class BabyName(Resource):
         # Eliminar un registro de la tabla
             id = random.choice(self.get()["data"])[0]
             cur = conn.cursor()
+            cur.execute("SET TRANSACTION READ WRITE;")
             cur.execute("CALL sp_BabyName_Delete("+str(id)+");")
             #cur.callproc('sp_BabyName_Delete', (id,))
             conn.commit()

@@ -5,7 +5,7 @@ metadata:
   name: {{ .Values.config.mariadbGalera.mapName }}
   namespace: {{ .Values.namespace }}
 data:
-{{ (.Files.Glob "sql/db.sql").AsConfig | indent 2 }}
+{{ (.Files.Glob "sql/babynames.sql").AsConfig | indent 2 }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -35,7 +35,7 @@ spec:
                 key: mariadb-root-password
                 optional: false
         command: ["/bin/sh"]
-        args: ["-c", "mysql -p$(MARIADBGALERAPASS) -u root -h$(MARIADBGALERAHOST) < /scripts/db.sql; mysql -p$(MARIADBGALERAPASS) -u root -h$(MARIADBGALERAHOST) -e \"SHOW DATABASES\""]
+        args: ["-c", "mysql -p$(MARIADBGALERAPASS) -u root -h$(MARIADBGALERAHOST) < /scripts/babynames.sql; mysql -p$(MARIADBGALERAPASS) -u root -h$(MARIADBGALERAHOST) -e \"SHOW DATABASES\""]
       restartPolicy: Never
   backoffLimit: 7
 
