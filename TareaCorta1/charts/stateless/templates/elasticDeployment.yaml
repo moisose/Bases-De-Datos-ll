@@ -23,6 +23,9 @@ spec:
       containers:
       - name: {{ .Values.config.elasticConnection.name }}
         image: {{ .Values.config.elasticConnection.image }}
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 5000
         env:
           - name: ESENDPOINT
             value: ic4302-es-http
@@ -34,4 +37,22 @@ spec:
                 optional: false
           - name: ESINDEX
             value: messages
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.config.elasticConnection.nameApp }}
+  labels:
+    app: {{ .Values.config.elasticConnection.nameApp }}
+spec:
+  ports:
+  - port: 5000
+    protocol: TCP
+    targetPort: 5000
+    nodePort: 30000
+  selector:
+    app: {{ .Values.config.elasticConnection.nameApp }}
+  type: NodePort
+
 {{ end }}
