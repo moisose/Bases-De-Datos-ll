@@ -45,7 +45,7 @@ config:
   elasticConnection:
     replicas: 1
     name: elastic-connection
-    image: isaac4918/elastic-search-connection
+    image: moisose/elastic-search-connection
   # componente2:
   #   replicas: 1
   #   name: componente2
