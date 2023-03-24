@@ -26,9 +26,9 @@ sudo docker images
 sudo docker push moisose/apimariadb
 
 cd ../../APIs/elasticSearch
-sudo docker build -t moisose/elastic-search-connection -f Dockerfile ../.
+sudo docker build -t isaac4918/elastic-search-connection -f Dockerfile ../.
 sudo docker images
-sudo docker push moisose/elastic-search-connection
+sudo docker push isaac4918/elastic-search-connection
 
 cd ../../APIs/postgresql
 sudo docker build -t moisose/apipostgres -f Dockerfile ../.

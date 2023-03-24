@@ -35,7 +35,7 @@ ESINDEX=os.getenv('ESINDEX')
 data = []
 
 def csvReader():
-    with open('../babynames.csv', newline='') as archivo:
+    with open('/app/babynames.csv', newline='') as archivo:
         lector_csv = csv.reader(archivo, delimiter=',', quotechar='"')
         counter = 0
         
