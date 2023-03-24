@@ -32,8 +32,8 @@ def csvReader():
         for fila in lector_csv:
             counter += 1
             data.append(fila)
-            if counter >= 2000:
-                break
+            # if counter >= 2000:
+            #     break
 
 class BabyName(Resource):
     def get(self):

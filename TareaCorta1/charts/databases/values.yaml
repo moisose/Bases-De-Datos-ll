@@ -73,9 +73,10 @@ mariadb:
 postgresql:
   enabled: true
   metrics:
-    enabled: false
+    enabled: true
     serviceMonitor:
       enabled: true
       namespace: "monitoring"
   auth:
     postgresPassword: "1234"
+    database: "babynames"
