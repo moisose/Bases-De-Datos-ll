@@ -69,6 +69,7 @@ class BabyName(Resource):
                             "cnt": args[4],
                             "rnk": args[5]}
             
+            json_data = json.dumps(selectedData)
             client = Elasticsearch("http://"+ESENDPOINT+":9200", basic_auth=("elastic", ESPASSWORD), verify_certs=False)
             
             result = client.search(index=ESINDEX, body={
