@@ -20,11 +20,11 @@
 
 # **Guía de instalación y uso de la tarea**
 
-1- Descomprimir el archivo .zip y abrir la linea de comandos wsl en la ubicación de la carpeta **tareaCorta1**
+1- Descomprimir el archivo .zip y abrir la línea de comandos wsl en la ubicación de la carpeta **tareaCorta1**
 
 ![paso1](resources/paso1.png)
 
-Posteriormente, puede ir a las carperpetas **charts\databases** donde encontrará el archivo **values.yaml**, aquí podrá escoger la base de datos a monitorear cambiando el valor de **enabled**
+Posteriormente, puede ir a las carpetas **charts\databases** donde encontrará el archivo **values.yaml**, aquí podrá escoger la base de datos a monitorear cambiando el valor de **enabled** a true
 
 ![paso1.2](resources/paso1.2.png)
 
@@ -44,7 +44,7 @@ Posteriormente, puede ir a las carperpetas **charts\databases** donde encontrar�
 
 ![paso5](resources/paso5.png) 
 
-6- Una vez instalado y cuando los pods estan arriba, abrir la carpeta **Gatling** e ir a **gatling-charts-highcharts-bundle-3.9.2/bin** y ejecutar **galing.bat**
+6- Una vez instalado y cuando los pods están arriba, abrir la carpeta **Gatling** e ir a **gatling-charts-highcharts-bundle-3.9.2/bin** y ejecutar **galing.bat**
 
 ![paso6](resources/paso6.png)
 
@@ -60,13 +60,29 @@ Posteriormente, puede ir a las carperpetas **charts\databases** donde encontrar�
 
 10- Puede entrar a la dirección que sale en consola para verificar la cantidad de usuarios que lograron conectarse con éxito.
 
-11- Posteriormente, puede observar las métricas en **Grafana**, entrando a…
+11- Posteriormente, puede observar las métricas en **Grafana**, seleccionan al pod **grafana-deployment** desde lens
 
-15- Para desinstalar, ejecute el comando **bash uninstall.sh**
+![paso11](resources/paso11.png)
+
+12-  Ir a la sección de containers-ports y seleccionar **foward** para ingresar al Grafana.
+
+![paso12](resources/paso12.png)
+
+13- Va a abrir la siguiente ventana:
+
+![paso13](resources/paso13.png)
+
+14- Para encontrar el password de grafana, dirigirse a secrets en Lens y seleccionar **grafana-admin-credentials** y ver el password, copiarlo y pegarlo en la ventana que se abrió anteriormente.
+
+![paso14](resources/paso14.png)
+
+15- Ingresar y ver las métricas.
+
+16- Para desinstalar, ejecute el comando **bash uninstall.sh**
 
 # **Configuración de las herramientas**
 
-## MariaDB
+## **MariaDB**
 
 Para instalar el cliente de MariaDB se creó la imagen de MariaDB que incluye al cliente utilizando un Dockerfile. En nombre de esta imagen se guarda en el archivo ubicado en stateless/values.yaml que contiene otros valores de configuracion como el mapName, name y volumeName.
 
@@ -81,11 +97,9 @@ Para iniciar el cliente de MariaDB que permite acceder a la base de datos se uti
 Dentro del Job se declaran las variables de entorno y se asigna el valor de cada una. Se declaran las variables de entorno para el *host, password y database*. También se utilizan los valores de las configuraciones que guardamos en stateless/values.yaml para asignar la imagen que le corresponde al Pod y asignar nombres a volúmenes u otros.
 
 Asimismo, en este Job se indica el comando que se debe ejecutar en *args*, el cual se encarga de cargar el archivo sql *(babynames.sql)* que contiene las tablas y los procedimientos almacenados de la base de datos. 
-
-
 <br>
 
-## MariaDB Galera
+## **MariaDB Galera**
 
 Para instalar el cliente de MariaDB Galera se creó la imagen de MariaDB Galera que incluye al cliente utilizando un Dockerfile. En nombre de esta imagen se guarda en el archivo ubicado en stateless/values.yaml que contiene otros valores de configuracion como el mapName, name y volumeName.
 
@@ -95,15 +109,15 @@ En charts/databases/values.yaml se tienen algunas configuraciones para la instan
 
 ![databases/valuesyaml](resources/valuesyaml_databases_mariadbgalera.png)
 
-Para iniciar el cliente de MariaDB Galera que permite acceder a la base de datos se utilizó un *Job*. En el archivo *mariadbDBGalera.yaml* se define un ConfigMap y el Job. 
+Para iniciar el cliente de MariaDB Galera que permite acceder a la base de datos se utilizó un *Job*. En el archivo *mariadbDBGalera.yaml* se define un ConfigMap y el Job.
 
 Dentro del Job se declaran las variables de entorno y se asigna el valor de cada una. Se declaran las variables de entorno para el *host y password*. También se utilizan los valores de las configuraciones que guardamos en stateless/values.yaml para asignar la imagen que le corresponde al Pod y asignar nombres a volúmenes u otros.
 
-Asimismo, en este Job se indica el comando que se debe ejecutar en *args*, el cual se encarga de cargar el archivo sql *(babynames.sql)* que contiene las tablas y los procedimientos almacenados de la base de datos. 
+Asimismo, en este Job se indica el comando que se debe ejecutar en *args*, el cual se encarga de cargar el archivo sql *(babynames.sql)* que contiene las tablas y los procedimientos almacenados de la base de datos.
 
 <br>
 
-## PostGreSQL
+## **PostGreSQL**
 
 Para instalar el cliente de PostGreSQL se creó la imagen de PostGreSQL que incluye al cliente utilizando un Dockerfile. En nombre de esta imagen se guarda en el archivo ubicado en stateless/values.yaml que contiene otros valores de configuracion como el mapName, name y volumeName.
 
@@ -113,7 +127,7 @@ En charts/databases/values.yaml se tienen algunas configuraciones para la instan
 
 ![databases/valuesyaml](resources/valuesyaml_databases_postgres.png)
 
-Para iniciar el cliente de PostGreSQL que permite acceder a la base de datos se utilizó un *Job*. En el archivo *postgresql.yaml* se define un ConfigMap y el Job. 
+Para iniciar el cliente de PostGreSQL que permite acceder a la base de datos se utilizó un *Job*. En el archivo *postgresql.yaml* se define un ConfigMap y el Job.
 
 Dentro del Job se declaran las variables de entorno y se asigna el valor de cada una. Se declaran las variables de entorno para el *host y password*. También se utilizan los valores de las configuraciones que guardamos en stateless/values.yaml para asignar la imagen que le corresponde al Pod y asignar nombres a volúmenes u otros.
 
@@ -121,7 +135,7 @@ Asimismo, en este Job se indica el comando que se debe ejecutar en *args*, el cu
 
 <br>
 
-## PostGreSQL High Availability
+## **PostGreSQL High Availability**
 
 Para instalar el cliente de PostGreSQL High Availability se creó la misma imagen de PostGreSQL que incluye al cliente utilizando un Dockerfile. En nombre de esta imagen se guarda en el archivo ubicado en stateless/values.yaml que contiene otros valores de configuracion como el mapName, name y volumeName. Se utiliza la misma configuración de PostGreSQL.
 
@@ -135,76 +149,115 @@ Para iniciar el cliente de PostGreSQL High Availability que permite acceder a la
 
 Dentro del Job se declaran las variables de entorno y se asigna el valor de cada una. Se declaran las variables de entorno para el *host y password*. También se utilizan los valores de las configuraciones que guardamos en stateless/values.yaml para asignar la imagen que le corresponde al Pod y asignar nombres a volúmenes u otros.
 
-Asimismo, en este Job se indica el comando que se debe ejecutar en *args*, el cual se encarga de cargar el archivo sql *(postgres.sql)* que contiene las tablas y los procedimientos almacenados de la base de datos. 
+Asimismo, en este Job se indica el comando que se debe ejecutar en *args*, el cual se encarga de cargar el archivo sql *(postgres.sql)* que contiene las tablas y los procedimientos almacenados de la base de datos.
 
+# **Otros componentes**
 
-## ElasticSearch
-
-## MongoDB
-
-<br>
-
-## API con Flask
+## **API con Flask**
 
 Para realizar las pruebas de carga se necesita usar Gatling, pero no todas las bases de datos tienen una interfaz para utilizar endpoints HTTP, por lo que se necesitó usar una aplicación intermediaria. 
 
 Esta aplicación se desarrolló en Python utilizando la librería Flask. Cada base de datos utiliza un API distinto.
 
-Para poder ejecutar un API de la base de datos se debe tener un Deployment corriendo en Kubernetes. Para lograr esto, se creó la imagen de cada API con un Dockerfile. El nombre de las imágenes se guarda en el archivo ubicado en stateless/values.yaml junto a otras configuraciones que servirán para configurar el Deployment, como name y nameApp. 
+Para poder ejecutar un API de la base de datos se debe tener un Deployment corriendo en Kubernetes. Para lograr esto, se creó la imagen de cada API con un Dockerfile. El nombre de las imágenes se guarda en el archivo ubicado en stateless/values.yaml junto a otras configuraciones que servirán para configurar el Deployment, como name y nameApp.
 
 ![databases/valuesyaml](resources/valuesyaml_APIs.png)
 
-El Deployment de cada API se ubica en la carpeta charts/stateless/templates. Todos los Deployments siguen la misma estructura: Primero se define el servicio de tipo Deployment y luego un Servicio de NodePort para exponer el puerto y que se pueda comunicar el API con la base de datos. 
+El Deployment de cada API se ubica en la carpeta charts/stateless/templates. Todos los Deployments siguen la misma estructura: Primero se define el servicio de tipo Deployment y luego un Servicio de NodePort para exponer el puerto y que se pueda comunicar el API con la base de datos.
 
 En el archivo yaml del Deployment de cada API se accede a los valores definidos en el archivo values.yaml para configurar el Deployment, como nombres de volúmenes o labels. También se definen las variables de entorno con sus valores.
 
 El servicio NodePort de todos los Deployments están configurados en el port 5000, targetPort 5000, nodePort 3000 y porotocol TCP. Aquí también se accede a los valores definidos en el archivo values.yaml para configurar algunos aspectos como el nombre de la app del selector o labels.
 
 
-# **Pruebas de carga realizadas**
+# **Pruebas de carga**
 
-Se realizo una prueba de carga con…
+## **Configuración de las Pruebas**
+
+Se realizó una prueba de carga con alrededor de 39000 usuarios durante 30 min.
+
+![usersPerSec](resources/userPerSecConfig.png)
+
+Para las distintas consultas se realizaron distintos escenarios, permitiendo simulación de usuarios haciendo distintas consultas de la siguiente manera:
+
+- **Post - Create**
+
+Se hace la simulación de 5 usuarios por segundo durante 30 minutos, para esto se generan escenario que va a mandar consultas post al http que se definió previamente.
+
+![post](resources/gatlingCreate.png)
+
+- **Get - Select**
+
+Se hace la simulación de 2 usuarios por segundo durante 30 minutos, se genera el escenario para enviar consultas get al http que se definió previamente.
+
+![post](resources/gatlingSelect.png)
+
+- **Put - Update**
+
+Se hace la simulación de 2 usuarios por segundo durante 30 minutos, se genera el escenario para enviar  consultas put al http que se definió previamente.
+
+![post](resources/gatlingUpdate.png)
+
+- **Delete - Delete**
+
+Se hace la simulación de 3 usuarios por segundo durante 30 minutos, se genera el escenario para enviar consultas delete al http definido.
+
+![post](resources/gatlingDelete.png)
+
+## **Resultados de las pruebas**
+
+### **1- MariaDB**
+
+### **2- MariaDB Galera**
+
+### **3- PostGreSQL**
+
+### **4- PostGre HA**
+
+### **5- Elasticsearch**
+
+### **6- MongoDB**
 
 # **Conclusiones**
 
-1- Es importante la comunicación entre el los miembros de grupo de trabajo.
+**1-** Es importante la comunicación entre el los miembros de grupo de trabajo.
 
-2- Se debe mantener la organización para poder realizar la tarea.
+**2-** Se debe mantener la organización para poder realizar la tarea.
 
-3- Entender los conceptos vistos en clase ayuda en la realización de la tarea.
+**3-** Entender los conceptos vistos en clase ayuda en la realización de la tarea.
 
-4- El tener un buen control de versiones y saber utilizar github facilita el trabajo en equipo.
+**4-** El tener un buen control de versiones y saber utilizar github facilita el trabajo en equipo.
 
-5- Se deben aplicar buenas prácticas de programación para mantener el orden.
+**5-** Se deben aplicar buenas prácticas de programación para mantener el orden.
 
-6- Mantener la estructura del proyecto es esencial
+**6-** Mantener la estructura del proyecto es esencial.
 
-7- Se debe asegurar un código legible y entendible.
+**7-** Se debe asegurar un código legible y entendible.
 
-8- 
+**8-**  Docker es una herramienta muy útil para nosotros como desarrolladores, pues nos permite ejecutar una aplicación de manera consistente en cualquier entorno, facilitando en muchos casos el desarrollo del software y aún más importante, permitiendo la portabilidad y escalabilidad de la aplicación.
 
-9-
+**9-** Grafana es una herramienta de visualización y monitoreo que es muy utilizada en una amplia gama de casos y entornos de trabajo, ya que por medio de paneles de visualización nos brinda una visualización clara de los sistemas y aplicaciones, esto nos ayuda a nosotros como usuarios, debido a que nos permite ver el rendimiento de la aplicación o sistema,  identificar problemas, reconocer  irregularidades y tomar medidas correctivas rápidamente.  
 
-10-
+**10-** Similar a Grafana, Gatling es una herramienta de mucha utilidad principalmente para ver el rendimiento de un sistema e identificar posibles errores que podrían presentarse en diferentes entornos antes de que el sistema sea lanzado o se implemente en una empresa. Con esta somos capaces de realizar pruebas de carga y estrés en el sistema para identificar posibles cuellos de botella en el rendimiento simulando grandes cargas de trabajo. Lo anterior es fundamental para nosotros, pues nos permite asegurar el buen rendimiento y funcionamiento del sistema o aplicación que estemos desarrollando.
 
 # **Recomendaciones**
 
-1- Hacer reuniones periódicas para ver el avance de la tarea.
+**1-** Hacer reuniones periódicas para ver el avance de la tarea.
 
-2- Mantener la organización de la tarea, según el ejemplo del profesor.
+**2-** Mantener la organización de la tarea, según el ejemplo del profesor.
 
-3- Repasar los conceptos vistos en clase y complementar con investigacion.
+**3-** Repasar los conceptos vistos en clase y complementar con investigación.
 
-4- Aprender a hacer uso de github.
+**4-** Aprender a hacer uso de github.
 
-5- Seguir un estandar de código.
+**5-** Seguir un estándar de código.
 
-6- Seguir aprendiendo y enriqueciendo el conocimiento después de finalizar la tarea.
+**6-** Seguir aprendiendo y enriqueciendo el conocimiento después de finalizar la tarea.
 
-7- Investigar sobre herramientas esenciales para desarrollar la solución.
+**7-** Investigar sobre las diferentes herramientas esenciales para desarrollar la solución e ir tomando apuntes sobre los aspectos importantes de cada uno de estas.
 
-8- Tener una buena estructura del proyecto y dividir el proyecto de forma funcional.
+**8-** Tener una buena estructura del proyecto y dividir el proyecto de forma funcional.
 
-9- Repartir y asignar tareas a cada integrante del equipo para progresar.
+**9-** Repartir y asignar tareas a cada integrante del equipo para progresar.
 
-10-
+**10-** Definir roles en el equipo de trabajo para mantener el orden.
