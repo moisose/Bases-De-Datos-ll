@@ -14,9 +14,12 @@ Class testDataset
 */
 class testDataset extends Simulation {
   //http dir
-  val myEnvVar = sys.env.get("NODE_PORT")
+  val myEnvVar = "30000"
+
+  println(myEnvVar)
+
   val httpDir = "http://127.0.0.1"
-  val httpPort = "5000"
+  val httpPort = myEnvVar
 
   //define http dir
   val httpConf = http.baseUrl(httpDir + ":" + httpPort)
