@@ -22,11 +22,18 @@ ESENDPOINT=os.getenv('ESENDPOINT')
 ESPASSWORD=os.getenv('ESPASSWORD')
 ESINDEX=os.getenv('ESINDEX')
 
-try:
-    # Crea una instancia del cliente apuntando al host de Elasticsearch a través de HTTP
-    client = Elasticsearch("https://"+ESENDPOINT+":9200", basic_auth=("elastic", ESPASSWORD), verify_certs=False)
-    # Realiza una operación de prueba
-    client.info()
-except ConnectionError as e:
-    print("Error de conexion")
+def startConnection():
+    try:
+        # Crea una instancia del cliente apuntando al host de Elasticsearch a través de HTTP
+        client = Elasticsearch("http://"+ESENDPOINT+":9200", basic_auth=("elastic", ESPASSWORD), verify_certs=False)
+        # Realiza una operación de prueba
+        client.info().body
+    except ConnectionError as e:
+        print("Error de conexion: ", str(e))
+
+startConnection()
+
+print("endpoint: ",ESENDPOINT)
+print("password: ",ESPASSWORD)
+print("indexName: ",ESINDEX)
 
