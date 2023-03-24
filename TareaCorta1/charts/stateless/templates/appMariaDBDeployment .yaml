@@ -25,6 +25,7 @@ spec:
           - name: MARIADBHOST
             value: "databases-mariadb-master-node"
           - name: MARIADBPASSWORD
+          
             valueFrom:
               secretKeyRef:
                 name: databases-mariadb
@@ -36,6 +37,8 @@ spec:
             value: 'root'
           - name: MARIADBPORT
             value: '3306'
+          - name: NODE_PORT
+            value: "$(NODE_PORT)"
 
 ---
 apiVersion: v1
@@ -49,6 +52,7 @@ spec:
   - port: 5000
     protocol: TCP
     targetPort: 5000
+    nodePort: 30000
   selector:
     app: {{ .Values.config.apiMariaDBDeployment.nameApp }}
   type: NodePort
