@@ -60,6 +60,12 @@ Posteriormente, puede ir a las carpetas **charts\databases** donde encontrará e
 
 10- Puede entrar a la dirección que sale en consola para verificar la cantidad de usuarios que lograron conectarse con éxito.
 
+![paso10](resources/gatlingTest.png)
+
+Si ingresa, puede que salga algo similar a lo siguiente:
+
+![Resultado Gatling](resources/gatlingResult.png)
+
 11- Posteriormente, puede observar las métricas en **Grafana**, seleccionan al pod **grafana-deployment** desde lens
 
 ![paso11](resources/paso11.png)
@@ -172,11 +178,15 @@ El servicio NodePort de todos los Deployments están configurados en el port 500
 
 # **Pruebas de carga**
 
+## **Dataset**
+
 ## **Configuración de las Pruebas**
 
-Se realizó una prueba de carga con alrededor de 39000 usuarios durante 30 min.
+Se realizó una prueba de carga con la siguiente configuración para los usuarios:
 
 ![usersPerSec](resources/userPerSecConfig.png)
+
+    Nota: Para elasticsearch la configuración de los usuarios se hace de otra manera.
 
 Para las distintas consultas se realizaron distintos escenarios, permitiendo simulación de usuarios haciendo distintas consultas de la siguiente manera:
 
@@ -212,7 +222,105 @@ Se hace la simulación de 3 usuarios por segundo durante 30 minutos, se genera e
 
 ### **3- PostGreSQL**
 
+### **4- PostGRE HA**
+
+### **5- Elasticsearch**
+
+### **6- MongoDB**
+
+## **Resultados en grafana**
+
+### **1- MariaDB**
+
+![1](resources/mariadb/1.png)
+
+![2](resources/mariadb/2.png)
+
+![3](resources/mariadb/3.png)
+
+![4](resources/mariadb/4.png)
+
+![5](resources/mariadb/5.png)
+
+![6](resources/mariadb/6.png)
+
+![7](resources/mariadb/7.png)
+
+![8](resources/mariadb/8.png)
+
+![9](resources/mariadb/9.png)
+
+![10](resources/mariadb/10.png)
+
+![11](resources/mariadb/11.png)
+
+![12](resources/mariadb/12.png)
+
+### **2- MariaDB Galera**
+![1](resources/galera/1.png)
+
+![2](resources/galera/2.png)
+
+![3](resources/galera/3.png)
+
+![4](resources/galera/4.png)
+
+![5](resources/galera/5.png)
+
+![6](resources/galera/6.png)
+
+![7](resources/galera/7.png)
+
+![8](resources/galera/8.png)
+
+![9](resources/galera/9.png)
+
+![10](resources/galera/10.png)
+
+![11](resources/galera/11.png)
+
+![12](resources/galera/12.png)
+
+![13](resources/galera/13.png)
+
+![14](resources/galera/14.png)
+
+![15](resources/galera/15.png)
+
+### **3- PostGreSQL**
+
+![1](resources/PostGreSQL/1.png)
+
+![2](resources/PostGreSQL/2.png)
+
+![3](resources/PostGreSQL/3.png)
+
+![4](resources/PostGreSQL/4.png)
+
+![5](resources/PostGreSQL/5.png)
+
+![6](resources/PostGreSQL/6.png)
+
+![7](resources/PostGreSQL/7.png)
+
+![8](resources/PostGreSQL/8.png)
+
 ### **4- PostGre HA**
+
+![1](resources/PostGreHA/1.png)
+
+![2](resources/PostGreHA/2.png)
+
+![3](resources/PostGreHA/3.png)
+
+![4](resources/PostGreHA/4.png)
+
+![5](resources/PostGreHA/5.png)
+
+![6](resources/PostGreHA/6.png)
+
+![7](resources/PostGreHA/7.png)
+
 
 ### **5- Elasticsearch**
 
