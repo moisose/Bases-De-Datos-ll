@@ -51,16 +51,16 @@ class testDataset extends Simulation {
     // Load test 5 users per Second during 30 seconds
 
     //Create 
-    createD.inject(constantUsersPerSec(5) during (30 seconds)),
+    createD.inject(constantUsersPerSec(3) during (1800 seconds)),
 
     // Select 
-    selectD.inject(constantUsersPerSec(10) during (30 seconds)),
+    selectD.inject(constantUsersPerSec(6) during (1800 seconds)),
 
     //Update
-    updateD.inject(constantUsersPerSec(2) during (30 seconds)),
+    updateD.inject(constantUsersPerSec(1) during (1800 seconds)),
 
     //Delete
-    deleteD.inject(constantUsersPerSec(5) during (15 seconds))
+    deleteD.inject(constantUsersPerSec(3) during (1800 seconds))
 
   ).protocols(httpConf)
 }

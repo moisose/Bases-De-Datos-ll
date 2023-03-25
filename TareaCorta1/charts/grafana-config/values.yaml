@@ -21,3 +21,7 @@ dashboards:
     name: mariadb
     file: mariadb.json
     enable: true
+  postgresqlha:
+    name: postgresqlha
+    file: postgresqlha.json
+    enable: true
