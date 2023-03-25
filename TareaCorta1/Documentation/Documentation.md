@@ -60,6 +60,12 @@ Posteriormente, puede ir a las carpetas **charts\databases** donde encontrará e
 
 10- Puede entrar a la dirección que sale en consola para verificar la cantidad de usuarios que lograron conectarse con éxito.
 
+![paso10](resources/gatlingTest.png)
+
+Si ingresa, puede que salga algo similar a lo siguiente:
+
+![Resultado Gatling](resources/gatlingResult.png)
+
 11- Posteriormente, puede observar las métricas en **Grafana**, seleccionan al pod **grafana-deployment** desde lens
 
 ![paso11](resources/paso11.png)
