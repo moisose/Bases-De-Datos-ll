@@ -246,7 +246,8 @@ Se hace la simulación de 3 usuarios por segundo durante 30 minutos, se genera e
 
 ### **5- Elasticsearch**
 
-### **6- MongoDB**
+![resulElasticsearch](resources/elastic/reporte_gatling_elastic.png)
+
 
 ## **Resultados en grafana**
 
@@ -304,8 +305,6 @@ Se hace la simulación de 3 usuarios por segundo durante 30 minutos, se genera e
 
 ![11](resources/galera/11.png)
 
-![12](resources/galera/12.png)
-
 ![13](resources/galera/13.png)
 
 ![14](resources/galera/14.png)
@@ -353,9 +352,25 @@ Se hace la simulación de 3 usuarios por segundo durante 30 minutos, se genera e
 
 ### **5- Elasticsearch**
 
-* Pruebas de creación, borrado, actualización y búsqueda con 
+* Pruebas de creación, borrado, actualización y búsqueda con 5 usuarios por segundo para inserciones, 10 usuarios por segundo para selects, 2 usuarios por segundo para updates y 5 usuarios por segundo para deletes. Estas configuraciones son diferentes a las bases de datos anteriores debido a que si se hacía la prueba de carga con más usuarios se caía Elasticsearch.
 
-### **6- MongoDB**
+![1](resources/elastic/1.png)
+
+![2](resources/elastic/2.png)
+
+![3](resources/elastic/3.png)
+
+![4](resources/elastic/4.png)
+
+![5](resources/elastic/5.png)
+
+![6](resources/elastic/6.png)
+
+![7](resources/elastic/7.png)
+
+# **Conclusiones de los resultados de las pruebas de carga**
+
+
 
 # **Conclusiones**
 
