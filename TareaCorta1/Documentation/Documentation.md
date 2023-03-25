@@ -218,11 +218,19 @@ Se hace la simulación de 3 usuarios por segundo durante 30 minutos, se genera e
 
 ### **1- MariaDB**
 
+![result](resources/mariadb/resultMariaDB.png)
+
 ### **2- MariaDB Galera**
+
+![resultGalera](resources/galera/resultGalera.png)
 
 ### **3- PostGreSQL**
 
+![ResulPostGreSQL](resources/PostGreSQL/gatlingpostgres.png)
+
 ### **4- PostGRE HA**
+
+![resulPHA](resources/PostGreHA/gatlingpostgresqlha.png)
 
 ### **5- Elasticsearch**
 
@@ -231,6 +239,8 @@ Se hace la simulación de 3 usuarios por segundo durante 30 minutos, se genera e
 ## **Resultados en grafana**
 
 ### **1- MariaDB**
+
+* Pruebas de creación, borrado, actualización y búsqueda
 
 ![1](resources/mariadb/1.png)
 
@@ -257,6 +267,9 @@ Se hace la simulación de 3 usuarios por segundo durante 30 minutos, se genera e
 ![12](resources/mariadb/12.png)
 
 ### **2- MariaDB Galera**
+
+* Pruebas de creación, borrado, actualización y búsqueda
+
 ![1](resources/galera/1.png)
 
 ![2](resources/galera/2.png)
@@ -289,6 +302,8 @@ Se hace la simulación de 3 usuarios por segundo durante 30 minutos, se genera e
 
 ### **3- PostGreSQL**
 
+* Pruebas de creación, borrado, actualización y búsqueda
+
 ![1](resources/PostGreSQL/1.png)
 
 ![2](resources/PostGreSQL/2.png)
@@ -307,6 +322,8 @@ Se hace la simulación de 3 usuarios por segundo durante 30 minutos, se genera e
 
 ### **4- PostGre HA**
 
+* Pruebas de creación, borrado, actualización y búsqueda
+
 ![1](resources/PostGreHA/1.png)
 
 ![2](resources/PostGreHA/2.png)
@@ -323,6 +340,8 @@ Se hace la simulación de 3 usuarios por segundo durante 30 minutos, se genera e
 
 
 ### **5- Elasticsearch**
+
+* Pruebas de creación, borrado, actualización y búsqueda con 
 
 ### **6- MongoDB**
 
