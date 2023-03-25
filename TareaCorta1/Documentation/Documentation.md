@@ -178,11 +178,15 @@ El servicio NodePort de todos los Deployments están configurados en el port 500
 
 # **Pruebas de carga**
 
+## **Dataset**
+
 ## **Configuración de las Pruebas**
 
-Se realizó una prueba de carga con alrededor de 39000 usuarios durante 30 min.
+Se realizó una prueba de carga con la siguiente configuración para los usuarios:
 
 ![usersPerSec](resources/userPerSecConfig.png)
+
+    Nota: Para elasticsearch la configuración de los usuarios se hace de otra manera.
 
 Para las distintas consultas se realizaron distintos escenarios, permitiendo simulación de usuarios haciendo distintas consultas de la siguiente manera:
 
@@ -218,7 +222,52 @@ Se hace la simulación de 3 usuarios por segundo durante 30 minutos, se genera e
 
 ### **3- PostGreSQL**
 
+### **4- PostGRE HA**
+
+### **5- Elasticsearch**
+
+### **6- MongoDB**
+
+## **Resultados en grafana**
+
+### **1- MariaDB**
+
+### **2- MariaDB Galera**
+
+### **3- PostGreSQL**
+
+![1](resources/PostGreSQL/1.png)
+
+![2](resources/PostGreSQL/2.png)
+
+![3](resources/PostGreSQL/3.png)
+
+![4](resources/PostGreSQL/4.png)
+
+![5](resources/PostGreSQL/5.png)
+
+![6](resources/PostGreSQL/6.png)
+
+![7](resources/PostGreSQL/7.png)
+
+![8](resources/PostGreSQL/8.png)
+
 ### **4- PostGre HA**
+
+![1](resources/PostGreHA/1.png)
+
+![2](resources/PostGreHA/2.png)
+
+![3](resources/PostGreHA/3.png)
+
+![4](resources/PostGreHA/4.png)
+
+![5](resources/PostGreHA/5.png)
+
+![6](resources/PostGreHA/6.png)
+
+![7](resources/PostGreHA/7.png)
+
 
 ### **5- Elasticsearch**
 
