@@ -232,7 +232,60 @@ Se hace la simulación de 3 usuarios por segundo durante 30 minutos, se genera e
 
 ### **1- MariaDB**
 
+![1](resources/mariadb/1.png)
+
+![2](resources/mariadb/2.png)
+
+![3](resources/mariadb/3.png)
+
+![4](resources/mariadb/4.png)
+
+![5](resources/mariadb/5.png)
+
+![6](resources/mariadb/6.png)
+
+![7](resources/mariadb/7.png)
+
+![8](resources/mariadb/8.png)
+
+![9](resources/mariadb/9.png)
+
+![10](resources/mariadb/10.png)
+
+![11](resources/mariadb/11.png)
+
+![12](resources/mariadb/12.png)
+
 ### **2- MariaDB Galera**
+![1](resources/galera/1.png)
+
+![2](resources/galera/2.png)
+
+![3](resources/galera/3.png)
+
+![4](resources/galera/4.png)
+
+![5](resources/galera/5.png)
+
+![6](resources/galera/6.png)
+
+![7](resources/galera/7.png)
+
+![8](resources/galera/8.png)
+
+![9](resources/galera/9.png)
+
+![10](resources/galera/10.png)
+
+![11](resources/galera/11.png)
+
+![12](resources/galera/12.png)
+
+![13](resources/galera/13.png)
+
+![14](resources/galera/14.png)
+
+![15](resources/galera/15.png)
 
 ### **3- PostGreSQL**
 
