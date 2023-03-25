@@ -14,32 +14,32 @@ Class testDataset
 */
 class testDataset extends Simulation {
 
-  /*define http dir*/
+  //http dir
   val httpConf = http.baseUrl("http://127.0.0.1:30000")
 
 
-  //define scenario for creating data
+  // scenario for creating data
   val createD = scenario("Crear datos")
     .exec(http("Create")
       .post("/babynames")
       .check(status.is(200)) /*Verifies status equals 200*/
     )
 
-  //define scenario for get information  
+  // scenario for get information  
   val selectD = scenario("Obtener datos")
     .exec(http("Select")
       .get("/babynames")
       .check(status.is(200)) /*Verifies status equals 200*/
     )
 
-  //define scenario for updating data
+  // scenario for updating data
   val updateD = scenario("Actualizar datos")
     .exec(http("Update")
       .put("/babynames")
       .check(status.is(200)) /*Verifies status equals 200*/
     )
   
-  //define scenario for deleting data
+  // scenario for deleting data
   val deleteD = scenario("Borrar datos")
     .exec(http("Delete")
       .delete("/babynames")
@@ -48,19 +48,18 @@ class testDataset extends Simulation {
 
   // Users per second 
   setUp(
-    // Load test 5 users per Second during 30 seconds
 
-    //Create 
-    createD.inject(constantUsersPerSec(3) during (1800 seconds)),
+    //Create - Load test 5 users per second during 30 minutes
+    createD.inject(constantUsersPerSec(5) during (1800 seconds)),
 
-    // Select 
-    selectD.inject(constantUsersPerSec(6) during (1800 seconds)),
+    // Select - Load test 10 users per second during 30 minutes
+    selectD.inject(constantUsersPerSec(10) during (1800 seconds)),
 
-    //Update
-    updateD.inject(constantUsersPerSec(1) during (1800 seconds)),
+    //Update - Load test 2 users per second during 30 minutes
+    updateD.inject(constantUsersPerSec(2) during (1800 seconds)),
 
-    //Delete
-    deleteD.inject(constantUsersPerSec(3) during (1800 seconds))
+    //Delete - Load test 5 users per second during 30 minutes
+    deleteD.inject(constantUsersPerSec(5) during (1800 seconds))
 
   ).protocols(httpConf)
 }
