@@ -370,7 +370,19 @@ Se hace la simulación de 3 usuarios por segundo durante 30 minutos, se genera e
 
 # **Conclusiones de los resultados de las pruebas de carga**
 
+El objetivo para las pruebas de carga era simular el comportamiento real de una base de datos, por lo que se intentó mantener un flujo constante de usuarios y consultas. En las gráficas se puede observar que no hubieron cambios radicales entre las pruebas.
 
+En la vida real los usuarios no se comportarán de una forma constante, por lo que el resultado de estas pruebas no es realista. Sin embargo, ayudan a reflejar problemas que pueden surgir en diferentes escenarios. Entre algunos problemas que se pueden identificar al realizar estas pruebas de carga son cuellos de botella.
+
+En el caso de Elasticsearch, durante la ejecución de pruebas tuvimos problemas al cargar la cantidad de usuarios que se utilizó para las pruebas de las demás bases de datos debido a que la prueba de carga generó errores ya que Elastic no soportó la cantidad de consultas. Por esta razón nos vimos obligados a disminuir la cantidad de usuarios considerablemente para asegurar una prueba de carga de al menos 30 minutos.
+
+Antes de la ejecución de las pruebas de carga el uso de disco, memoria y CPU son constantes puesto que no se está ejecutando nada. Cuando se comienza la inyección de datos, el uso comienza a aumentar.
+
+En el caso de MariaDB, se puede observar en el reporte de Gatling que el tiempo de respuesta fue menor en MariaDB Galera. Esto tiene sentido, puesto que MariaDB Galera es una versión High Availability de MariaDB.
+
+En el caso de PostgreSQL, tanto PostgresSQL como PostgreSQL High Availability dieron un buen tiempo de respuesta en el reporte de Gatling. Por otro lado, en el monitoreo en Grafana el uso de CPU y de memoria es mayor en PostgreSQL High Availability. 
+
+En el caso de Elasticsearch se puede observar en las gráficas que la cantidad de documentos del nodo aumentó una vez que se ejecutaron las pruebas de carga.
 
 # **Conclusiones**
 
