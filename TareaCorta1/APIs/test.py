@@ -3,7 +3,7 @@ import json
 import random
 
 
-BASE = "http://127.0.0.1:30000/"
+BASE = "http://127.0.0.1:49575/"
 
 
 def testLoad():

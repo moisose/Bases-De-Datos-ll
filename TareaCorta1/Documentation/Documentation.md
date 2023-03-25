@@ -180,6 +180,18 @@ El servicio NodePort de todos los Deployments están configurados en el port 500
 
 ## **Dataset**
 
+### **Dataset utilizado: “babynames.csv”**
+
+Con respecto al dataset utilizado, el cual tiene el nombre de “babynames.csv”, contiene datos relacionados con los nombres de bebés más populares por sexo y origen étnico de la madre en la ciudad de Nueva York entre los años 2011 y 2014. En resumen, este dataset posee un total de, 13962 filas y 6 columnas. Los datos incluyen elementos tales como:
+
+- **BRTH_YR:**  Año de nacimiento del bebe.
+- **GNDR:** Género.
+- **ETHCTY:** Etnia de la madre.
+- **NM:** Nombre del bebe.
+- **CNT:** Recuento del nombre.
+- **RNK:** Clarificación del nombre.
+
+
 ## **Configuración de las Pruebas**
 
 Se realizó una prueba de carga con la siguiente configuración para los usuarios:
