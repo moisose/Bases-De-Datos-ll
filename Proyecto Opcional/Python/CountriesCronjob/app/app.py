@@ -2,12 +2,16 @@ import os
 import mysql.connector
 import requests
 import hashlib
+import os
 #import Python.DatabaseConn 
 
 
 #Values
-pw = 'password'
-puerto = '3307'
+HOST = os.getenv('MARIADBHOST')
+PASSWORD = os.getenv('MARIADBPASS')
+PORT = os.getenv('MARIADBPORT')
+USER = os.getenv('MARIADBUSER')
+DATABASE = os.getenv('MARIADB_DB')
 
 
 #-------------------------------------------Functions------------------------------------
@@ -18,9 +22,8 @@ puerto = '3307'
 def executeProcedure(procedure, parameters):
     resultArray = []
     try:
-        conn = mysql.connector.connect(host="localhost", user='root', password= pw, port= puerto, database='weather')
+        conn = mysql.connector.connect(host=HOST, user=USER, password= PASSWORD, port= PORT, database=DATABASE)
         cursor = conn.cursor()
-        args = ("FF", 2, 2, 20, 3)
         result_args = cursor.callproc(procedure, parameters)
 
         

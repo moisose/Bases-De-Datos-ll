@@ -19,7 +19,6 @@ def executeProcedure(procedure, parameters):
     try:
         conn = mysql.connector.connect(host="localhost", user='root', password= pw, port= puerto, database='weather')
         cursor = conn.cursor()
-        args = ("FF", 2, 2, 20, 3)
         result_args = cursor.callproc(procedure, parameters)
 
         
