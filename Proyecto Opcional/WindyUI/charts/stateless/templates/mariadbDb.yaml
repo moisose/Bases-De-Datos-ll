@@ -33,6 +33,12 @@ spec:
                 name: stateful-mariadb
                 key: mariadb-root-password
                 optional: false
+          - name: MARIADBUSER
+            value: 'root'
+          - name: MARIADB_DB
+            value: 'weather'
+          - name: MARIADBPORT
+            value: '3306'
         command: ["/bin/sh"]
         args: ["-c", "mysql -p$(MARIADBPASS) -uroot -h$(MARIADBHOST) < /scripts/db.sql; mysql -p$(MARIADBPASS) -uroot -h$(MARIADBHOST) -e \"SHOW DATABASES\""]
       restartPolicy: Never
