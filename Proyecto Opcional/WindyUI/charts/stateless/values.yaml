@@ -1,0 +1,36 @@
+config:
+  # make one for each component and add environment variables
+  # and docker container
+  orchestratorCronjob:
+    name: orchestrator-cronjob
+    output_queue: "TO_PROCESS"
+    image: moisose/orchestrator-cronjob
+  processorDeployment:
+    replicas: 1
+    name: processor-deployment
+    output_queue: "TO_PARSE"
+    input_queue: "TO_PROCESS"
+    image: moisose/processor-deployment
+  countriesCronjob:
+    name: countries-cronjob 
+    image: moisose/countries-cronjob
+  statesCronjob:
+    name: states-cronjob 
+    image: moisose/states-cronjob
+  stationsCronjob:
+    name: stations-cronjob 
+    image: moisose/stations-cronjob
+  mariadbDb:
+    mapName: script-db
+    name: mariadb-init
+    volumeName: scripts
+    image: moisose/mariadbclient
+    nameApp: mariadb-init
+  # This can be use for a deployment
+
+  # componente2:
+  #   replicas: 1
+  #   name: componente2
+  #   output_queue: ""
+  #   input_queue: ""
+  #   image: username/componente2
