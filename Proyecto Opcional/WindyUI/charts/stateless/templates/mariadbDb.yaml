@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.config.mariadbDb.mapName }}
+  namespace: {{ .Values.namespace }}
+data:
+{{ (.Files.Glob "sql/db.sql").AsConfig | indent 2 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.config.mariadbDb.name }}
+spec:
+  template:
+    spec:
+      volumes:
+      - name: {{ .Values.config.mariadbDb.volumeName }}
+        configMap:
+          name: {{ .Values.config.mariadbDb.mapName }}
+          defaultMode: 0777
+      containers:
+      - name: pi
+        image: {{ .Values.config.mariadbDb.image }}
+        volumeMounts:
+        - name: {{ .Values.config.mariadbDb.volumeName }}
+          mountPath: /scripts
+        env:
+          - name: MARIADBHOST
+            value: "stateful-mariadb"
+          - name: MARIADBPASS
+            valueFrom:
+              secretKeyRef:
+                name: stateful-mariadb
+                key: mariadb-root-password
+                optional: false
+        command: ["/bin/sh"]
+        args: ["-c", "mysql -p$(MARIADBPASS) -uroot -h$(MARIADBHOST) < /scripts/db.sql; mysql -p$(MARIADBPASS) -uroot -h$(MARIADBHOST) -e \"SHOW DATABASES\""]
+      restartPolicy: Never
+  backoffLimit: 4
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.config.mariadbDb.nameApp }}
+  labels:
+    app: {{ .Values.config.mariadbDb.nameApp }}
+spec:
+  ports:
+  - port: 5000
+    protocol: TCP
+    targetPort: 5000
+    nodePort: 30000
+  selector:
+    app: {{ .Values.config.mariadbDb.nameApp }}
+  type: NodePort
