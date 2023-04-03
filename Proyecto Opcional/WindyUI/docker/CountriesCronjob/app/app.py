@@ -5,9 +5,12 @@ import hashlib
 #import Python.DatabaseConn 
 
 # environment variables
-HOST = os.getenv('MARIADBHOST')
-PASSWORD = os.getenv('MARIADBPASS')
-PORT = '3306'
+#HOST = os.getenv('MARIADBHOST')
+#PASSWORD = os.getenv('MARIADBPASS')
+
+HOST='stateful-mariadb'
+PASSWORD='1234'
+PORT = '5000'
 USER = 'root'
 DATABASE = 'weather'
 
@@ -23,7 +26,6 @@ def executeProcedure(procedure, parameters):
         cursor = conn.cursor()
         args = ("FF", 2, 2, 20, 3)
         result_args = cursor.callproc(procedure, parameters)
-
         
         for result in cursor.stored_results():
              resultArray.append(result.fetchall())
@@ -37,7 +39,8 @@ def executeProcedure(procedure, parameters):
             #print("MySQL connection is closed")
         
 
-    except mysql.connector.Error as error:
+    except Exception as error:
+        print(error)
         return ['error']
         #print("Failed to execute stored procedure: {}".format(error))
 
