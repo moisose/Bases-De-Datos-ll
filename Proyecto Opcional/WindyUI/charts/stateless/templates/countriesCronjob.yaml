@@ -21,3 +21,4 @@ spec:
                     key: mariadb-root-password
                     optional: false
           restartPolicy: OnFailure
+

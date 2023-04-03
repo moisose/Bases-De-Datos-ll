@@ -30,3 +30,4 @@ dependencies:
   - name: mariadb
     version: "11.4.6"
     repository: https://charts.bitnami.com/bitnami
+    

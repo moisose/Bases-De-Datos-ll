@@ -11,4 +11,5 @@ rabbitmq:
     password: "4NBKnQOhNi65Yi0qnGhJXXNZ0Ri1Us"
 mariadb:
   auth:
-    rootPassword: "mR76MbXDS"
+    rootPassword: "1234"
+  

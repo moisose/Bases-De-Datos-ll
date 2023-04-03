@@ -12,6 +12,10 @@ metadata:
   name: {{ .Values.config.mariadbDb.name }}
 spec:
   template:
+    metadata:
+      name: {{ .Values.config.mariadbDb.name }}
+      labels:
+        chart: mariadb-11.4.6
     spec:
       volumes:
       - name: {{ .Values.config.mariadbDb.volumeName }}
@@ -25,14 +29,16 @@ spec:
         - name: {{ .Values.config.mariadbDb.volumeName }}
           mountPath: /scripts
         env:
-          - name: MARIADBHOST
-            value: "stateful-mariadb"
-          - name: MARIADBPASS
-            valueFrom:
-              secretKeyRef:
-                name: stateful-mariadb
-                key: mariadb-root-password
-                optional: false
+        - name: MARIADBHOST
+          value: "stateful-mariadb"
+        - name: MARIADBPASS
+          valueFrom:
+            secretKeyRef:
+              name: stateful-mariadb
+              key: mariadb-root-password
+              optional: false
+        ports:
+        - containerPort: 5000
         command: ["/bin/sh"]
         args: ["-c", "mysql -p$(MARIADBPASS) -uroot -h$(MARIADBHOST) < /scripts/db.sql; mysql -p$(MARIADBPASS) -uroot -h$(MARIADBHOST) -e \"SHOW DATABASES\""]
       restartPolicy: Never
@@ -52,5 +58,5 @@ spec:
     targetPort: 5000
     nodePort: 30000
   selector:
-    app: {{ .Values.config.mariadbDb.nameApp }}
+    chart: mariadb-11.4.6
   type: NodePort
