@@ -435,7 +435,7 @@ CREATE TABLE Enrollment(
     enrollmentId int IDENTITY(1,1) PRIMARY KEY,
     periodId int NOT NULL,
     statusId int NOT NULL,
-    starDate date NOT NULL,
+    startDate date NOT NULL,
     endingDate date NOT NULL
 )
 GO
