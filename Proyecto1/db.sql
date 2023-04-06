@@ -341,7 +341,7 @@ GO
 CREATE TABLE User_(
     userId VARCHAR(32) PRIMARY KEY,
     userName VARCHAR(50) NOT NULL,
-    birthDate DATETIME NOT NULL,
+    birthDate DATE NOT NULL,
     email VARCHAR(50) NOT NULL,
     idCampus INT NOT NULL
 )
@@ -556,16 +556,28 @@ CREATE TABLE Career(
     facultyId INT NOT NULL
 )
 
-IF OBJECT_ID('StudentXEvaluation') IS NOT NULL
+IF OBJECT_ID('StudentXItem') IS NOT NULL
 BEGIN
-DROP TABLE StudentXEvaluation
+DROP TABLE StudentXItem
 END
 GO
-CREATE TABLE StudentXEvaluation(
-    StudentXEvaluationId INT IDENTITY(1,1) PRIMARY KEY,
+CREATE TABLE StudentXItem(
+    StudentXItem INT IDENTITY(1,1) PRIMARY KEY,
     userId VARCHAR(32) NOT NULL,
-    evaluationId INT NOT NULL,
+    itemId INT NOT NULL,
     grade FLOAT NOT NULL
+)
+
+IF OBJECT_ID('StudentXCourse') IS NOT NULL
+BEGIN
+DROP TABLE StudentXCourse
+END
+GO
+CREATE TABLE StudentXCourse(
+    userXCourseId INT IDENTITY(1,1) PRIMARY KEY,
+    userId VARCHAR(32) NOT NULL,
+    courseId INT NOT NULL,
+    status BIT NOT NULL -- 0 = Not Approved, 1 = Approved
 )
 
 -- =============================================
@@ -780,7 +792,14 @@ ALTER TABLE [StudentXEvaluation] WITH CHECK ADD FOREIGN KEY([userId])
 REFERENCES [Student] ([userId])
 GO
 
-ALTER TABLE [StudentXEvaluation] WITH CHECK ADD FOREIGN KEY([evaluationId])
-REFERENCES [Evaluation] ([evaluationId])
+ALTER TABLE [StudentXEvaluation] WITH CHECK ADD FOREIGN KEY([itemId])
+REFERENCES [Item] ([itemId])
 GO
 
+ALTER TABLE [StudentXCourse] WITH CHECK ADD FOREIGN KEY([userId])
+REFERENCES [Student] ([userId])
+GO
+
+ALTER TABLE [StudentXCourse] WITH CHECK ADD FOREIGN KEY([courseId])
+REFERENCES [Course] ([courseId])
+GO
