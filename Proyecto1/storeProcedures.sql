@@ -1,14 +1,69 @@
--- -- Ingresar empleados
--- CREATE OR ALTER PROCEDURE spIngresarEmpleados(@idSucursal int, @idCargo int, @idDistrito int, @descripcionDireccion varchar(100), @nombre varchar(50),
---                                               @telefono int, @fechaContratacion date) AS
--- BEGIN 
---     DECLARE @error int, @errormessage varchar(100)
---     SET @error = 0
+CREATE OR ALTER PROCEDURE spCreateUser_(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATE, @email varchar(50), @idCampus INT) AS
+BEGIN
+    IF @userId IS NULL OR @userName IS NULL OR @birthDate IS NULL OR @email IS NULL OR @idCampus IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM Campus WHERE campusId = @idCampus)
+    BEGIN
+        SELECT 'The campus does not exist' AS ExecMessage
+        RETURN
+    END
+    INSERT INTO User_ (userId, userName, birthDate, email, idCampus) VALUES (@userId, @userName, @birthDate, @email, @idCampus)
+    SELECT 'User created succesfully' AS ExecMessage
+END
+GO
 
---     EXEC CreateEmpleado @idSucursal, @idCargo, @idDistrito, @descripcionDireccion, @nombre, @telefono, @fechaContratacion, @error OUTPUT
+-- SP UPDATE USER
 
---     IF(@error != 0) SET @errormessage = 'No se pudo crear el empleado'
---     PRINT(@errormessage)
+CREATE OR ALTER PROCEDURE spUpdateUser_(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATE, @email varchar(50), @idCampus INT) AS
+BEGIN
+    IF @idCampus IS NOT NULL AND NOT EXISTS(SELECT * FROM Campus WHERE campusId = @idCampus)
+    BEGIN
+        SELECT 'The campus does not exist' AS ExecMessage
+        RETURN
+    END
+    IF @userId IS NOT NULL AND NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    UPDATE User_ SET userName = ISNULL(@userName, userName), birthDate = ISNULL(@birthDate, birthDate), email = ISNULL(@email, email), idCampus = ISNULL(@idCampus, idCampus) WHERE userId = @userId
+    SELECT 'User updated succesfully' AS ExecMessage
+END
 
--- END
--- GO
+-- SP READ USER
+
+CREATE OR ALTER PROCEDURE spReadUser_(@userId VARCHAR(32)) AS
+BEGIN
+    IF @userId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    SELECT * FROM User_ WHERE userId = @userId
+END
+
+-- SP DELETE USER
+
+CREATE OR ALTER PROCEDURE spDeleteUser_(@userId VARCHAR(32)) AS
+BEGIN
+    IF @userId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    DELETE FROM User_ WHERE userId = @userId
+    SELECT 'User deleted succesfully' AS ExecMessage
+END
