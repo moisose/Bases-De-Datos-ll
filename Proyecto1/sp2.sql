@@ -245,4 +245,30 @@ BEGIN
     SELECT 'User enrolled succesfully' AS ExecMessage
 END
 
+--SP UNREGISTER
+CREATE OR ALTER PROCEDURE spUnregister(@userId VARCHAR(32), @courseGroupId INT) AS
+BEGIN
+    IF @userId IS NULL OR @courseGroupId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM CourseGroup WHERE courseGroupId = @courseGroupId)
+    BEGIN
+        SELECT 'The course group does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM WeeklySchedule WHERE userId = @userId AND courseGroupId = @courseGroupId)
+    BEGIN
+        SELECT 'The user is not enrolled' AS ExecMessage
+        RETURN
+    END
 
+    DELETE FROM WeeklySchedule WHERE userId = @userId AND courseGroupId = @courseGroupId
+    SELECT 'User unregistered succesfully' AS ExecMessage
+END
