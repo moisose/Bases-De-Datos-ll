@@ -573,7 +573,7 @@ DROP TABLE StudentXCourse
 END
 GO
 CREATE TABLE StudentXCourse(
-    userXCourseId INT IDENTITY(1,1) PRIMARY KEY,
+    studentXCourseId INT IDENTITY(1,1) PRIMARY KEY,
     userId VARCHAR(32) NOT NULL,
     courseId INT NOT NULL,
     status BIT NOT NULL -- 0 = Not Approved, 1 = Approved
