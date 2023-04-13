@@ -84,7 +84,7 @@ GO
 
 CREATE TABLE [PeriodType](
     [periodTypeId] INT IDENTITY(1,1) PRIMARY KEY,
-    [description] VARCHAR(50) NOT NULL
+    [description] VARCHAR(15) NOT NULL
 )
 GO
 
@@ -148,7 +148,7 @@ GO
 CREATE TABLE EnrollmentXStudent(
     enrollmentXStudentId INT PRIMARY KEY IDENTITY,
     enrollmentTime DATETIME NOT NULL,
-    userId INT NOT NULL,
+    userId VARCHAR(32) NOT NULL,
     enrollmentId INT NOT NULL
 )
 
@@ -181,7 +181,7 @@ GO
 CREATE TABLE CareerXUser(
     careerXUserId INT PRIMARY KEY IDENTITY,
     careerId INT NOT NULL,
-    userId INT NOT NULL
+    userId VARCHAR(32) NOT NULL
 )
 
 /*
@@ -196,7 +196,7 @@ GO
 CREATE TABLE CampusXUser(
     campusXUserId INT PRIMARY KEY IDENTITY,
     campusId INT NOT NULL,
-    userId INT NOT NULL
+    userId VARCHAR(32) NOT NULL
 )
 
 /*
@@ -289,7 +289,7 @@ CREATE TABLE CourseGroup(
     courseGroupId INT IDENTITY(1,1) PRIMARY KEY,
     courseId INT NOT NULL,
     periodId INT NOT NULL,
-    professorId INT NOT NULL,
+    professorId VARCHAR(32) NOT NULL,
     maxStudents INT NOT NULL
 )
 GO
@@ -342,8 +342,7 @@ CREATE TABLE User_(
     userId VARCHAR(32) PRIMARY KEY,
     userName VARCHAR(50) NOT NULL,
     birthDate DATE NOT NULL,
-    email VARCHAR(50) NOT NULL,
-    idCampus INT NOT NULL
+    email VARCHAR(50) NOT NULL
 )
 GO
 
@@ -359,7 +358,7 @@ GO
 
 CREATE TABLE WeeklySchedule(
     weeklyScheduleId INT IDENTITY(1,1) PRIMARY KEY,
-    userId INT NOT NULL,
+    userId VARCHAR(32) NOT NULL,
     courseGroupId INT NOT NULL
 )
 GO
@@ -562,7 +561,7 @@ DROP TABLE StudentXItem
 END
 GO
 CREATE TABLE StudentXItem(
-    StudentXItem INT IDENTITY(1,1) PRIMARY KEY,
+    StudentXItemId INT IDENTITY(1,1) PRIMARY KEY,
     userId VARCHAR(32) NOT NULL,
     itemId INT NOT NULL,
     grade FLOAT NOT NULL
@@ -699,11 +698,11 @@ GO
 
 ALTER TABLE [CourseGroupXFile] WITH CHECK ADD FOREIGN KEY([fileId])
 REFERENCES [File_] ([fileId])
-GO
+-- GO
 
-ALTER TABLE [User_] WITH CHECK ADD FOREIGN KEY([idCampus])
-REFERENCES [Campus] ([campusId])
-GO
+-- ALTER TABLE [User_] WITH CHECK ADD FOREIGN KEY([idCampus])
+-- REFERENCES [Campus] ([campusId])
+-- GO
 
 ALTER TABLE [WeeklySchedule] WITH CHECK ADD FOREIGN KEY([userId])
 REFERENCES [Student] ([userId])
@@ -788,11 +787,11 @@ ALTER TABLE [CareerXFile] WITH CHECK ADD FOREIGN KEY([fileId])
 REFERENCES [File_] ([fileId])
 GO
 
-ALTER TABLE [StudentXEvaluation] WITH CHECK ADD FOREIGN KEY([userId])
+ALTER TABLE [StudentXItem] WITH CHECK ADD FOREIGN KEY([userId])
 REFERENCES [Student] ([userId])
 GO
 
-ALTER TABLE [StudentXEvaluation] WITH CHECK ADD FOREIGN KEY([itemId])
+ALTER TABLE [StudentXItem] WITH CHECK ADD FOREIGN KEY([itemId])
 REFERENCES [Item] ([itemId])
 GO
 
