@@ -183,12 +183,6 @@ VALUES ('json'),
 INSERT INTO Day_ (name)
 VALUES ('Monday'), ('Tuesday'), ('Wednesday'), ('Thursday'), ('Friday'), ('Saturday'), ('Sunday');
 
-
--- example data for the table PlanStatus
-INSERT INTO PlanStatus (description)
-VALUES ('creation'), ('active'), ('closed');
-
-
 -- example data for the table Course
 INSERT INTO Course (courseName, facultyId, credits, hoursPerWeek, description, periodTypeId)
 VALUES ('Calculus I', 12, 4, 4, 'Introductory calculus course', 2),
@@ -263,3 +257,91 @@ VALUES (1, 4, '009', 20),
        (7, 5, '009', 35),
        (8, 5, '010', 15),
        (9, 5, '011', 20);
+
+-- example data for the table PlanStatus
+INSERT INTO PlanStatus (description)
+VALUES ('creation'), ('active'), ('closed');
+
+-- example data for the table CareerPlan
+INSERT INTO CareerPlan (careerId, creationDate, activationDate, endingDate, statusId)
+VALUES
+	(1, '2022-01-01', '2022-02-01', '2025-05-01', 2),
+	(2, '2022-02-15', '2022-03-01', '2025-06-01', 2),
+	(3, '2022-03-10', '2022-04-01', '2025-07-01', 2),
+	(4, '2022-04-05', '2022-05-01', '2025-08-01', 2),
+	(5, '2022-05-01', '2022-06-01', '2025-09-01', 2),
+    (7, '2022-05-01', '2022-06-01', '2025-09-01', 2),
+    (9, '2022-05-01', '2022-06-01', '2025-09-01', 2),
+    (13, '2022-05-01', '2022-06-01', '2025-09-01', 2),
+    (14, '2022-05-01', '2022-06-01', '2025-09-01', 2);
+
+-- example data for the table CourseXPlan
+INSERT INTO CourseXPlan (planId, courseId)
+VALUES
+	(9, 1),
+	(9, 2),
+	(9, 3),
+	(1, 4),
+	(1, 5),
+	(1, 6),
+	(8, 7),
+	(6, 8),
+	(7, 9);
+
+-- example data for the table CourseRequirment
+INSERT INTO CourseRequirement (courseId, courseXPlanId)
+VALUES
+	(2, 1),
+	(3, 2),
+	(6, 5);
+
+-- example data for the table ScheduleXCourseGroup
+INSERT INTO ScheduleXCourseGroup (scheduleXDayId, courseGroupId)
+VALUES
+	(11, 1),
+    (21, 1),
+	(11, 2),
+    (22, 2),
+	(7, 3),
+    (17, 3),
+	(9, 4),
+    (19, 4),
+	(13, 5),
+    (23, 5),
+	(15, 6),
+    (25, 6),
+	(1, 7),
+    (2, 7),
+	(28, 8),
+    (4, 9),
+	(11, 10),
+    (22, 10),
+    (11, 11),
+    (21, 11),
+    (7, 12),
+    (17, 12),
+    (9, 13),
+    (19, 13),
+    (13, 14),
+    (23, 14),
+    (15, 15),
+    (25, 15),
+    (1, 16),
+    (2, 16),
+    (28, 17),
+    (4, 18);
+
+-- example data for the table CourseEvaluation
+INSERT INTO [CourseEvaluation] (description, courseGroupId, score)
+VALUES
+	('The course was well-organized and informative. I found it helpful in preparing for my career.', 1, 8.7),
+	('The course content was engaging and the instructor was knowledgeable. Overall, it was a great learning experience.', 1, 9.1),
+	('The course was informative, but the pace was a bit slow for my liking. I think it could have been more challenging.', 2, 6.9),
+	('The course content was relevant and useful. The instructor was approachable and willing to help.', 3, 7.8),
+	('The course was interesting, but I think it could have gone into more depth on some topics. Overall, it was a good learning experience.', 3, 7.2),
+	('The course was very useful and the instructor was knowledgeable. I learned a lot and would recommend it to others.', 4, 8.4),
+	('The course was challenging, but the instructor was helpful and provided good feedback. I feel like I learned a lot and improved my skills.', 5, 8.1),
+	('The course was engaging and the instructor was approachable. I enjoyed learning about the subject and found the content relevant.', 5, 8.3),
+	('The course was informative and the instructor was knowledgeable. Overall, it was a good learning experience.', 5, 7.6);
+
+-- 
