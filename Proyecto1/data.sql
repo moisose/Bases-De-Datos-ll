@@ -338,10 +338,20 @@ VALUES
 	('The course content was engaging and the instructor was knowledgeable. Overall, it was a great learning experience.', 1, 9.1),
 	('The course was informative, but the pace was a bit slow for my liking. I think it could have been more challenging.', 2, 6.9),
 	('The course content was relevant and useful. The instructor was approachable and willing to help.', 3, 7.8),
-	('The course was interesting, but I think it could have gone into more depth on some topics. Overall, it was a good learning experience.', 3, 7.2),
-	('The course was very useful and the instructor was knowledgeable. I learned a lot and would recommend it to others.', 4, 8.4),
-	('The course was challenging, but the instructor was helpful and provided good feedback. I feel like I learned a lot and improved my skills.', 5, 8.1),
-	('The course was engaging and the instructor was approachable. I enjoyed learning about the subject and found the content relevant.', 5, 8.3),
-	('The course was informative and the instructor was knowledgeable. Overall, it was a good learning experience.', 5, 7.6);
+	('The course was interesting, but I think it could have gone into more depth on some topics. Overall, it was a good learning experience.', 4, 7.2),
+	('The course was very useful and the instructor was knowledgeable. I learned a lot and would recommend it to others.', 5, 8.4),
+	('The course was challenging, but the instructor was helpful and provided good feedback. I feel like I learned a lot and improved my skills.', 6, 8.1),
+	('The course was engaging and the instructor was approachable. I enjoyed learning about the subject and found the content relevant.', 7, 8.3),
+	('The course was informative and the instructor was knowledgeable. Overall, it was a good learning experience.', 8, 7.6),
+    ('The course was very challenging, but the instructor was very helpful and provided good feedback. I learned a lot and improved my skills.', 9, 9.0),
+	('The course content was engaging and the instructor was knowledgeable. I enjoyed learning about the subject and found the assignments very helpful.', 10, 8.2),
+	('The course was well-structured and the instructor was approachable. I found it to be a great learning experience overall.', 11, 8.8),
+	('The course was informative, but the instructor was a bit disorganized at times. I think it could have been more efficient.', 12, 7.1),
+	('The course content was relevant and useful. The instructor was approachable and willing to help. Overall, it was a great learning experience.', 13, 9.4),
+	('The course was very interesting and the instructor was very knowledgeable. I learned a lot and would highly recommend it to others.', 14, 9.6),
+	('The course was well-designed and the instructor was very engaging. I found it to be a great learning experience overall.', 15, 8.9),
+	('The course was very challenging, but the instructor was very knowledgeable and supportive. I learned a lot and felt a great sense of accomplishment.', 16, 9.3),
+	('The course content was comprehensive and the instructor was very approachable. I found it to be a great learning experience overall.', 17, 8.5),
+    ('The course content was very relevant and the instructor was very knowledgeable. I learned a lot and felt very engaged throughout the course.', 18, 9.2);
 
 -- 
