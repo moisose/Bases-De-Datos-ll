@@ -200,20 +200,23 @@ BEGIN
 
 	-- Validates if the schedule of the course group doesnt collide with another group schedule
 	SET @horarioInicio = (SELECT startTime 
-						  FROM Schedule 
-						  INNER JOIN ScheduleXCourseGroup ON ScheduleXCourseGroup.scheduleId = Schedule.scheduleId
+						  FROM ScheduleXDay 
+						  INNER JOIN ScheduleXCourseGroup ON ScheduleXCourseGroup.scheduleXDayId = ScheduleXDay.scheduleXDayId
+                          INNER JOIN Schedule ON Schedule.scheduleId = ScheduleXDay.scheduleId
 						  INNER JOIN CourseGroup ON CourseGroup.courseGroupId = ScheduleXCourseGroup.courseGroupId
 						  WHERE CourseGroup.courseGroupId = @courseGroupId)
 	SET @horarioFinal = (SELECT finishTime 
 						  FROM Schedule 
-						  INNER JOIN ScheduleXCourseGroup ON ScheduleXCourseGroup.scheduleId = Schedule.scheduleId
+						  INNER JOIN ScheduleXCourseGroup ON ScheduleXCourseGroup.scheduleXDayId = ScheduleXDay.scheduleXDayId
+                          INNER JOIN Schedule ON Schedule.scheduleId = ScheduleXDay.scheduleId
 						  INNER JOIN CourseGroup ON CourseGroup.courseGroupId = ScheduleXCourseGroup.courseGroupId
 						  WHERE CourseGroup.courseGroupId = @courseGroupId)
 
 	IF EXISTS (SELECT * FROM WeeklySchedule
 				INNER JOIN CourseGroup ON WeeklySchedule.courseGroupId = CourseGroup.courseGroupId
 				INNER JOIN ScheduleXCourseGroup ON ScheduleXCourseGroup.courseGroupId = CourseGroup.courseGroupId
-				INNER JOIN Schedule ON Schedule.scheduleId = ScheduleXCourseGroup.scheduleId
+                INNER JOIN ScheduleXDay ON ScheduleXDay.scheduleXDayId = ScheduleXCourseGroup.scheduleXDayId
+				INNER JOIN Schedule ON Schedule.scheduleId = ScheduleXDay.scheduleId
 				WHERE @schoolPeriodId = periodId AND
 					  ( @horarioInicio BETWEEN startTime AND finishTime ) OR ( @horarioFinal BETWEEN startTime AND finishTime))
 	BEGIN
@@ -271,4 +274,196 @@ BEGIN
 
     DELETE FROM WeeklySchedule WHERE userId = @userId AND courseGroupId = @courseGroupId
     SELECT 'User unregistered succesfully' AS ExecMessage
+END
+
+
+-- CRUD User_
+
+-- CREATE
+CREATE OR ALTER PROCEDURE spCreateUser(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT) AS
+BEGIN
+    IF @userId IS NULL OR @userName IS NULL OR @birthDate IS NULL OR @email IS NULL OR @idCampus IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user already exists' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM Campus WHERE idCampus = @idCampus)
+    BEGIN
+        SELECT 'The campus does not exist' AS ExecMessage
+        RETURN
+    END
+
+    INSERT INTO User_ (userId, userName, birthDate, email, idCampus) VALUES (@userId, @userName, @birthDate, @email, @idCampus)
+END
+
+-- READ
+CREATE OR ALTER PROCEDURE spReadUser(@userId VARCHAR(32)) AS
+BEGIN
+    IF @userId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+
+    SELECT * FROM User_ WHERE userId = @userId
+END
+
+-- UPDATE
+CREATE OR ALTER PROCEDURE spUpdateUser(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT) AS
+BEGIN
+    IF @userId IS NULL OR @userName IS NULL OR @birthDate IS NULL OR @email IS NULL OR @idCampus IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM Campus WHERE idCampus = @idCampus)
+    BEGIN
+        SELECT 'The campus does not exist' AS ExecMessage
+        RETURN
+    END
+
+    UPDATE User_ SET userName = ISNULL(@userName, userName), birthDate = ISNULL(@birthDate, birthDate), email = ISNULL(@email, email), idCampus = ISNULL(@idCampus, idCampus) WHERE userId = @userId
+END
+
+-- DELETE 
+CREATE OR ALTER PROCEDURE spDeleteUser(@userId VARCHAR(32)) AS
+BEGIN
+    BEGIN TRY
+        IF @userId IS NULL
+        BEGIN
+            SELECT 'NULL parameters' AS ExecMessage
+            RETURN
+        END
+        IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+        BEGIN
+            SELECT 'The user does not exist' AS ExecMessage
+            RETURN
+        END
+
+        DELETE FROM User_ WHERE userId = @userId
+    END TRY
+    BEGIN CATCH
+        SELECT 'The user can not be deleted' AS ExecMessage
+    END CATCH
+END
+
+
+-- CRUD File_
+
+-- CREATE
+CREATE OR ALTER PROCEDURE spCreateFile(@userId VARCHAR(32), @fileTypeId int, @periodId int, @creationDate date, @modificationDate date, @name varchar(50), @description varchar(100), @ver int) AS
+BEGIN
+    IF @userId IS NULL OR @fileTypeId IS NULL OR @periodId IS NULL OR @creationDate IS NULL OR @modificationDate IS NULL OR @name IS NULL OR @description IS NULL OR @ver IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF EXISTS(SELECT * FROM File_ WHERE userId = @userId AND fileTypeId = @fileTypeId AND periodId = @periodId AND creationDate = @creationDate AND modificationDate = @modificationDate AND name = @name AND description = @description AND ver = @ver)
+    BEGIN
+        SELECT 'The file already exists' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM FileType WHERE fileTypeId = @fileTypeId)
+    BEGIN
+        SELECT 'The file type does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @periodId)
+    BEGIN
+        SELECT 'The school period does not exist' AS ExecMessage
+        RETURN
+    END
+
+    INSERT INTO File_ (userId, fileTypeId, periodId, creationDate, modificationDate, name, description, ver) VALUES (@userId, @fileTypeId, @periodId, @creationDate, @modificationDate, @name, @description, @ver)
+END
+
+-- READ
+CREATE OR ALTER PROCEDURE spReadFile(@fileId INT) AS
+BEGIN
+    IF @fileId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM File_ WHERE fileId = @fileId)
+    BEGIN
+        SELECT 'The file does not exist' AS ExecMessage
+        RETURN
+    END
+
+    SELECT * FROM File_ WHERE fileId = @fileId
+END
+
+-- UPDATE
+CREATE OR ALTER PROCEDURE spUpdateFile(@fileId INT, @newUserId VARCHAR(32), @newFileTypeId int, @newPeriodId int, @newCreationDate date, @newModificationDate date, @newName varchar(50), @newDescription varchar(100), @newVer int) AS
+BEGIN
+    IF @fileId IS NULL OR @newUserId IS NULL OR @newFileTypeId IS NULL OR @newPeriodId IS NULL OR @newCreationDate IS NULL OR @newModificationDate IS NULL OR @newName IS NULL OR @newDescription IS NULL OR @newVer IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM File_ WHERE fileId = @fileId)
+    BEGIN
+        SELECT 'The file does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @newUserId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM FileType WHERE fileTypeId = @newFileTypeId)
+    BEGIN
+        SELECT 'The file type does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @newPeriodId)
+    BEGIN
+        SELECT 'The school period does not exist' AS ExecMessage
+        RETURN
+    END
+
+    UPDATE File_ SET userId = ISNULL(@newUserId, userId), fileTypeId = ISNULL(@newFileTypeId, fileTypeId), periodId = ISNULL(@newPeriodId, periodId), creationDate = ISNULL(@newCreationDate, creationDate), modificationDate = ISNULL(@newModificationDate, modificationDate), name = ISNULL(@newName, name), description = ISNULL(@newDescription, description), ver = ISNULL(@newVer, ver) WHERE fileId = @fileId
+END
+
+-- DELETE
+CREATE OR ALTER PROCEDURE spDeleteFile(@fileId INT) AS
+BEGIN
+    BEGIN TRY
+        IF @fileId IS NULL
+        BEGIN
+            SELECT 'NULL parameters' AS ExecMessage
+            RETURN
+        END
+        IF NOT EXISTS(SELECT * FROM File_ WHERE fileId = @fileId)
+        BEGIN
+            SELECT 'The file does not exist' AS ExecMessage
+            RETURN
+        END
+
+        DELETE FROM File_ WHERE fileId = @fileId
+    END TRY
+    BEGIN CATCH
+        SELECT 'The file can not be deleted' AS ExecMessage
+    END CATCH
 END
