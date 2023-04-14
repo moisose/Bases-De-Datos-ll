@@ -99,8 +99,8 @@ BEGIN
     SET @average = (SELECT AVG(SUM(SUM(itemValue))) AS GradeAverage 
                     FROM SchoolPeriod INNER JOIN CourseGroup ON CourseGroup.periodId = SchoolPeriod.schoolPeriodId 
 
-                    INNER JOIN UserXCourse ON UserXCourse.courseId = CourseGroup.courseId
-                    INNER JOIN User_ ON User_.userId = UserXCourse.userId
+                    INNER JOIN StudentXCourse ON StudentXCourse.courseId = CourseGroup.courseId
+                    INNER JOIN User_ ON User_.userId = StudentXCourse.userId
                     INNER JOIN Professor ON CourseGroup.professorId = Professor.userId
                     INNER JOIN ProfessorXEvaluation ON ProfessorXEvaluation.userId = Professor.userId
                     INNER JOIN Evaluation ON Evaluation.evaluationId = ProfessorXEvaluation.evaluationId
