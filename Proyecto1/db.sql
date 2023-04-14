@@ -9,7 +9,7 @@ GO
 CREATE TABLE [CareerPlan](
     planId INT IDENTITY(1,1) PRIMARY KEY,
     careerId INT NOT NULL, 
-    creationDate DATETIME NOT NULL,
+    creationDate DATE NOT NULL,
     activationDate DATE NOT NULL,
 	endingDate DATE NOT NULL,
 	statusId INT NOT NULL
@@ -164,7 +164,6 @@ GO
 CREATE TABLE CourseEvaluation(
     courseEvaluationId INT PRIMARY KEY IDENTITY,
     description VARCHAR(100) NOT NULL,
-    courseId INT NOT NULL,
     courseGroupId INT NOT NULL,
     score FLOAT NOT NULL
 )
@@ -255,8 +254,8 @@ END
 GO
 CREATE TABLE Schedule(
     scheduleId INT IDENTITY(1,1) PRIMARY KEY,
-    starTime DATETIME NOT NULL, 
-    finishTime DATETIME NOT NULL 
+    starTime TIME NOT NULL, 
+    finishTime TIME NOT NULL 
 )
 
 
@@ -306,7 +305,7 @@ GO
 
 CREATE TABLE ScheduleXCourseGroup(
     scheduleXCourseGroupId INT IDENTITY(1,1) PRIMARY KEY,
-    scheduleId INT NOT NULL,
+    scheduleXDayId INT NOT NULL,
     courseGroupId INT NOT NULL
 )
 GO
@@ -637,8 +636,8 @@ ALTER TABLE [EnrollmentXStudent] WITH CHECK ADD FOREIGN KEY([enrollmentId])
 REFERENCES [Enrollment] ([enrollmentId])
 GO
 
-ALTER TABLE [CourseEvaluation] WITH CHECK ADD FOREIGN KEY([courseId])
-REFERENCES [Course] ([courseId])
+-- ALTER TABLE [CourseEvaluation] WITH CHECK ADD FOREIGN KEY([courseId])
+-- REFERENCES [Course] ([courseId])
 
 ALTER TABLE [CourseEvaluation] WITH CHECK ADD FOREIGN KEY([courseGroupId])
 REFERENCES [CourseGroup] ([courseGroupId])
@@ -684,8 +683,8 @@ ALTER TABLE [CourseGroup] WITH CHECK ADD FOREIGN KEY([professorId])
 REFERENCES [Professor] ([userId])
 GO
 
-ALTER TABLE [ScheduleXCourseGroup] WITH CHECK ADD FOREIGN KEY([ScheduleId])
-REFERENCES [Schedule] ([ScheduleId])
+ALTER TABLE [ScheduleXCourseGroup] WITH CHECK ADD FOREIGN KEY([ScheduleXDayId])
+REFERENCES [ScheduleXDay] ([ScheduleXDayId])
 GO
 
 ALTER TABLE [ScheduleXCourseGroup] WITH CHECK ADD FOREIGN KEY([courseGroupId])
