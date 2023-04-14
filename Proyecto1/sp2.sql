@@ -25,23 +25,23 @@ BEGIN
     IF @userId IS NULL OR @schoolPeriodId IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
-        RETURN 0
+        SELECT 0
     END
     IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
     BEGIN
         SELECT 'The user does not exist' AS ExecMessage
-        RETURN 0
+        SELECT 0
     END
     IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId)
     BEGIN
         IF @schoolPeriodId <= 0
         BEGIN
             SELECT 'It is the first school period' AS ExecMessage
-            RETURN 100
+            SELECT 100
         END
 
         SELECT 'The school period does not exist' AS ExecMessage
-        RETURN 0
+        SELECT 0
     END
 
     SET @average = (SELECT AVG(SUM((SUM(grade) * 0.15) / SUM(itemValue))) AS GradeAverage 
@@ -55,7 +55,7 @@ BEGIN
 
                     WHERE User_.userId = @userId AND SchoolPeriod.schoolPeriodId = @schoolPeriodId)
 
-    RETURN @average
+    SELECT @average
 END
 
 -- SP ENROLLMENT TIME SCHEDULE
@@ -105,7 +105,7 @@ BEGIN
         SELECT 'You can not enroll' AS ExecMessage
     END
 
-    RETURN @enrollmentTimeScheduleValue
+    SELECT @enrollmentTimeScheduleValue
 
 END
 
@@ -157,7 +157,7 @@ SET @meetsRequirements = 1
 
 END
 
-RETURN @meetsRequirements
+SELECT @meetsRequirements
 
 END
 
@@ -278,6 +278,32 @@ BEGIN
 END
 
 
+--SP GET CURSOS
+CREATE OR ALTER PROCEDURE spGetCursos(@userId VARCHAR(32)) AS
+BEGIN
+    IF @userId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+
+    SELECT courseId, courseName, credits, CourseEvaluation.description, CourseEvaluation.rating
+    FROM Course
+    INNER JOIN StudentXCourse ON StudentXCourse.courseId = Course.courseId
+    INNER JOIN Student ON Student.userId = StudentXCourse.userId
+    INNER JOIN CareerXUser ON CareerXUser.userId = Student.userId
+    INNER JOIN CareerPlan ON CareerPlan.careerId = CareerXUser.careerId
+    INNER JOIN CourseXPlan ON CourseXPlan.planId = CareerPlan.planId    
+    INNER JOIN CourseEvaluation WHERE CourseEvaluation.courseId = Course.courseId
+
+    WHERE Student.userId = @userId AND StudentXCourse.status = 0
+
+END
 -- CRUD User_
 
 -- CREATE
