@@ -43,16 +43,15 @@ BEGIN
         SELECT 'The school period does not exist' AS ExecMessage
         RETURN 0
     END
-    SET @average = (SELECT AVG(SUM(SUM(itemValue))) AS GradeAverage 
-                    FROM SchoolPeriod 
-                    INNER JOIN CourseGroup ON CourseGroup.periodId = SchoolPeriod.schoolPeriodId 
-                    INNER JOIN StudentXCourse ON StudentXCourse.courseId = CourseGroup.courseId
-                    INNER JOIN User_ ON User_.userId = StudentXCourse.userId
-                    INNER JOIN Professor ON CourseGroup.professorId = Professor.userId
-                    INNER JOIN ProfessorXEvaluation ON ProfessorXEvaluation.userId = Professor.userId
-                    INNER JOIN Evaluation ON Evaluation.evaluationId = ProfessorXEvaluation.evaluationId
-                    INNER JOIN StudentXItem ON StudentXItem.userId = User_.userId
-                    INNER JOIN Item ON Item.itemId = StudentXItem.itemId AND Item.evaluationId = Evaluation.evaluationId
+
+    SET @average = (SELECT AVG(SUM((SUM(grade) * 0.15) / SUM(itemValue))) AS GradeAverage 
+                    FROM Student
+                    INNER JOIN WeeklySchedule ON Student.userId = WeeklySchedule.userId
+                    INNER JOIN CourseGroup ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
+                    INNER JOIN SchoolPeriod ON SchoolPeriod.schoolPeriodId = CourseGroup.periodId
+                    INNER JOIN Evaluation ON Evaluation.courseGroupId = CourseGroup.courseGroupId
+                    INNER JOIN Item ON Item.evaluationId = Evaluation.evaluationId
+                    INNER JOIN StudentXItem ON StudentXItem.itemId = Item.itemId AND StudentXItem.userId = Student.userId
 
                     WHERE User_.userId = @userId AND SchoolPeriod.schoolPeriodId = @schoolPeriodId)
 
@@ -149,7 +148,9 @@ IF (SELECT COUNT(Student.userId)
 											FROM CourseRequirement 
 											INNER JOIN CourseXPlan ON CourseXPlan.courseXPlanId = CourseRequirement.courseXPlanId
 											INNER JOIN Course ON Course.courseId = CourseXPlan.courseId
-											WHERE @courseId = Course.courseId)
+                                            INNER JOIN StudentXCourse ON StudentXCourse.courseId = CourseRequirement.courseId
+											WHERE @courseId = Course.courseId AND
+                                            StudentXCourse.status = 1)
 BEGIN
 
 SET @meetsRequirements = 1
