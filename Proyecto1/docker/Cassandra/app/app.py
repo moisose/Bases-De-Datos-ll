@@ -12,10 +12,10 @@ from ssl import SSLContext, PROTOCOL_TLSv1_2, CERT_NONE
 
 
 # Define el string de conexión a Cosmos DB de Cassandra
-contact_points = ['tfex-cosmos-db-28370.cassandra.cosmos.azure.com']
+contact_points = ['tfex-cosmos-db-26555.cassandra.cosmos.azure.com']
 port = 10350
-usernameVar = 'tfex-cosmos-db-28370'
-passwordVar = 'dGLl4TrKU5tA3cg4VKHuz5lMvePtHgmp9fxB5x2GTKpdl6LReTyztzLjR3EkVwNHnAn3M4enzs0GACDbUhI7LQ=='
+usernameVar = 'tfex-cosmos-db-26555'
+passwordVar = 'wd5uWOiL7UGaYv9W4oyh9VQOEr0FN8JphA71qwM6rnchowByWmv5ldDSfTndVgv9IgsvKEebInagACDbQB5BSw=='
 keyspace = 'tfex-cosmos-cassandra-keyspace'
 
 auth_provider = PlainTextAuthProvider(username=usernameVar, password=passwordVar)
@@ -37,6 +37,10 @@ class CassandraConnector():
     def submit(self, user, log):
         session.execute("INSERT INTO userlogs (user_id, logline) VALUES ('"+user+"', '"+log+"')")
         return "Submited"
+
+    def deleteAll(self):
+        session.execute("TRUNCATE userlogs")
+        return "Deleted all"
 
     def fileLoaded(self, user):
         self.submit(user, "File loaded")

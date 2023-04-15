@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Api, Resource, reqparse
 import pyodbc
 
-#conn = pyodbc.connect('Driver={ODBC Driver 18 for SQL Server};Server=tcp:tiburoncines-sqlserver.database.windows.net,1433;Database=db01;Uid=el-adm1n;Pwd={your_password_here};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;')
+conn = pyodbc.connect('Driver={ODBC Driver 18 for SQL Server};Server=tcp:tiburoncines-sqlserver.database.windows.net,1433;Database=db01;Uid=el-adm1n;Pwd={your_password_here};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;')
 
 app = Flask(__name__)
 api = Api(app)
