@@ -58,6 +58,33 @@ BEGIN
     SELECT @average
 END
 
+-- SP INSERT ENROLLMENTXSTUDENT
+CREATE OR ALTER PROCEDURE spInsertEnrollmentXStudent(@enrollmentId INT, @userId VARCHAR(32), @time INT) AS
+BEGIN
+    IF @enrollmentId IS NULL OR @userId IS NULL OR @time IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM Enrollment WHERE enrollmentId = @enrollmentId)
+    BEGIN
+        SELECT 'The enrollment does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF @time <= 0
+    BEGIN
+        SELECT 'The time must be greater than 0' AS ExecMessage
+        RETURN
+    END
+
+    INSERT INTO EnrollmentXStudent VALUES(@schoolPeriodId, @userId, @time)
+END
+
 -- SP ENROLLMENT TIME SCHEDULE
 CREATE OR ALTER PROCEDURE spEnrollmentTimeSchedule(@userId VARCHAR(32), @schoolPeriodId INT) AS 
 BEGIN
@@ -69,6 +96,11 @@ BEGIN
     IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId)
     BEGIN
         SELECT 'The school period does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
         RETURN
     END
     
@@ -163,11 +195,16 @@ END
 
 
 -- SP ENROLLMENT
-CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT, @timeOfDay TIME) AS
+CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT, @dateOfToday DATETIME) AS
 BEGIN
-    DECLARE @enrollmentSchedule INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME
-    SET @enrollmentSchedule = 0, @meetsRequirements = 0
+    DECLARE @enrollmentSchedule INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME, @timeOfDay TIME
+    SET @enrollmentSchedule = 0, @meetsRequirements = 0, @timeOfDay = DATEPART(HOUR, @dateOfToday)
 
+    IF DATEDIFF(DAY, GETDATE(), @dateOfToday) != 0 OR (SELECT status FROM EnrollmentStatus INNER JOIN Enrollment ON Enrollment.statusId = EnrollmentStatus.statusId WHERE @schoolPeriodId = periodId) != 1
+    BEGIN
+        SELECT 'The date of enrollment period is not today or is closed' AS ExecMessage
+        RETURN
+    END
     IF @userId IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
@@ -246,6 +283,7 @@ BEGIN
     END
 
     INSERT INTO WeeklySchedule (userId, courseGroupId) VALUES (@userId, @courseGroupId)
+    EXEC spInsertEnrollmentXStudent @enrollmentId, @userId, GETDATE()
     SELECT 'User enrolled succesfully' AS ExecMessage
 END
 
@@ -279,7 +317,7 @@ END
 
 
 --SP GET CURSOS
-CREATE OR ALTER PROCEDURE spGetCursos(@userId VARCHAR(32)) AS
+CREATE OR ALTER PROCEDURE spGetCourses(@userId VARCHAR(32)) AS
 BEGIN
     IF @userId IS NULL
     BEGIN
