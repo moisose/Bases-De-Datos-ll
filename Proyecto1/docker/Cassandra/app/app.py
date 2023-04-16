@@ -45,20 +45,20 @@ class CassandraConnector():
     def fileLoaded(self, user):
         self.submit(user, "File loaded")
 
-    def userLogin(self, user_id):
-        self.submit(user_id, "User logged in")
+    def userLogin(self, user):
+        self.submit(user, "User logged in")
 
-    def userLogout(self, user_id):
-        self.submit(user_id, "User logged out")
+    def userLogout(self, user):
+        self.submit(user, "User logged out")
 
-    def enrollCourse(self, user_id):
-        self.submit(user_id, "Course enrolled")
+    def enrollCourse(self, user):
+        self.submit(user, "Course enrolled")
 
-    def availableCourses(self, user_id):
-        self.submit(user_id, "Viewed available courses")
+    def availableCourses(self, user):
+        self.submit(user, "Viewed available courses")
 
-    def cancelEnrollment(self, user_id):
-        self.submit(user_id, "Course enrollment cancelled")
+    def cancelEnrollment(self, user):
+        self.submit(user, "Course enrollment cancelled")
 
 def main():
     c1 = CassandraConnector()
