@@ -42,23 +42,50 @@ class CassandraConnector():
         session.execute("TRUNCATE userlogs")
         return "Deleted all"
 
-    def fileLoaded(self, user):
-        self.submit(user, "File loaded")
+    def loadFile(self, user):
+        self.submit(user, "Loaded File")
+
+    def modifyFile(self, user):
+        self.submit(user, "Modified File")
+
+    def deleteFile(self, user):
+        self.submit(user, "Deleted File")
+
+    def signUp(self, user):
+        self.submit(user, "Signed up")
 
     def userLogin(self, user):
-        self.submit(user, "User logged in")
+        self.submit(user, "Logged in")
 
     def userLogout(self, user):
-        self.submit(user, "User logged out")
+        self.submit(user, "Logged out")
 
     def enrollCourse(self, user):
-        self.submit(user, "Course enrolled")
+        self.submit(user, "Enrolled a Course")
+
+    def unregisterCourse(self, user):
+        self.submit(user, "Unregistered a Course")
 
     def availableCourses(self, user):
         self.submit(user, "Viewed available courses")
 
-    def cancelEnrollment(self, user):
-        self.submit(user, "Course enrollment cancelled")
+    def viewEnrollmentDates(self, user):
+        self.submit(user, "Viewed enrollment date")
+
+    def resetPassword(self, user):
+        self.submit(user, "Reset the Password")
+
+    def viewGradeAverage(self, user):
+        self.submit(user, "Viewed grade average")
+
+    def getEnrollmentReport(self, user):
+        self.submit(user, "Viewed enrollment report")
+
+    def viewEnrolledCourses(self, user):
+        self.submit(user, "Viewed enrolled courses")
+    
+
+    
 
 def main():
     c1 = CassandraConnector()
