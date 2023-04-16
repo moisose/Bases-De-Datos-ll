@@ -25,38 +25,64 @@ BEGIN
     IF @userId IS NULL OR @schoolPeriodId IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
-        RETURN 0
+        SELECT 0
     END
     IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
     BEGIN
         SELECT 'The user does not exist' AS ExecMessage
-        RETURN 0
+        SELECT 0
     END
     IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId)
     BEGIN
         IF @schoolPeriodId <= 0
         BEGIN
             SELECT 'It is the first school period' AS ExecMessage
-            RETURN 100
+            SELECT 100
         END
 
         SELECT 'The school period does not exist' AS ExecMessage
-        RETURN 0
+        SELECT 0
     END
-    SET @average = (SELECT AVG(SUM(SUM(itemValue))) AS GradeAverage 
-                    FROM SchoolPeriod 
-                    INNER JOIN CourseGroup ON CourseGroup.periodId = SchoolPeriod.schoolPeriodId 
-                    INNER JOIN StudentXCourse ON StudentXCourse.courseId = CourseGroup.courseId
-                    INNER JOIN User_ ON User_.userId = StudentXCourse.userId
-                    INNER JOIN Professor ON CourseGroup.professorId = Professor.userId
-                    INNER JOIN ProfessorXEvaluation ON ProfessorXEvaluation.userId = Professor.userId
-                    INNER JOIN Evaluation ON Evaluation.evaluationId = ProfessorXEvaluation.evaluationId
-                    INNER JOIN StudentXItem ON StudentXItem.userId = User_.userId
-                    INNER JOIN Item ON Item.itemId = StudentXItem.itemId AND Item.evaluationId = Evaluation.evaluationId
+
+    SET @average = (SELECT AVG(SUM((SUM(grade) * 0.15) / SUM(itemValue))) AS GradeAverage 
+                    FROM Student
+                    INNER JOIN WeeklySchedule ON Student.userId = WeeklySchedule.userId
+                    INNER JOIN CourseGroup ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
+                    INNER JOIN SchoolPeriod ON SchoolPeriod.schoolPeriodId = CourseGroup.periodId
+                    INNER JOIN Evaluation ON Evaluation.courseGroupId = CourseGroup.courseGroupId
+                    INNER JOIN Item ON Item.evaluationId = Evaluation.evaluationId
+                    INNER JOIN StudentXItem ON StudentXItem.itemId = Item.itemId AND StudentXItem.userId = Student.userId
 
                     WHERE User_.userId = @userId AND SchoolPeriod.schoolPeriodId = @schoolPeriodId)
 
-    RETURN @average
+    SELECT @average
+END
+
+-- SP INSERT ENROLLMENTXSTUDENT
+CREATE OR ALTER PROCEDURE spInsertEnrollmentXStudent(@enrollmentId INT, @userId VARCHAR(32), @time INT) AS
+BEGIN
+    IF @enrollmentId IS NULL OR @userId IS NULL OR @time IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM Enrollment WHERE enrollmentId = @enrollmentId)
+    BEGIN
+        SELECT 'The enrollment does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF @time <= 0
+    BEGIN
+        SELECT 'The time must be greater than 0' AS ExecMessage
+        RETURN
+    END
+
+    INSERT INTO EnrollmentXStudent VALUES(@schoolPeriodId, @userId, @time)
 END
 
 -- SP ENROLLMENT TIME SCHEDULE
@@ -70,6 +96,11 @@ BEGIN
     IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId)
     BEGIN
         SELECT 'The school period does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
         RETURN
     END
     
@@ -106,7 +137,7 @@ BEGIN
         SELECT 'You can not enroll' AS ExecMessage
     END
 
-    RETURN @enrollmentTimeScheduleValue
+    SELECT @enrollmentTimeScheduleValue
 
 END
 
@@ -149,24 +180,31 @@ IF (SELECT COUNT(Student.userId)
 											FROM CourseRequirement 
 											INNER JOIN CourseXPlan ON CourseXPlan.courseXPlanId = CourseRequirement.courseXPlanId
 											INNER JOIN Course ON Course.courseId = CourseXPlan.courseId
-											WHERE @courseId = Course.courseId)
+                                            INNER JOIN StudentXCourse ON StudentXCourse.courseId = CourseRequirement.courseId
+											WHERE @courseId = Course.courseId AND
+                                            StudentXCourse.status = 1)
 BEGIN
 
 SET @meetsRequirements = 1
 
 END
 
-RETURN @meetsRequirements
+SELECT @meetsRequirements
 
 END
 
 
 -- SP ENROLLMENT
-CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT, @timeOfDay TIME) AS
+CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT, @dateOfToday DATETIME) AS
 BEGIN
-    DECLARE @enrollmentSchedule INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME
-    SET @enrollmentSchedule = 0, @meetsRequirements = 0
+    DECLARE @enrollmentSchedule INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME, @timeOfDay TIME
+    SET @enrollmentSchedule = 0, @meetsRequirements = 0, @timeOfDay = DATEPART(HOUR, @dateOfToday)
 
+    IF DATEDIFF(DAY, GETDATE(), @dateOfToday) != 0 OR (SELECT status FROM EnrollmentStatus INNER JOIN Enrollment ON Enrollment.statusId = EnrollmentStatus.statusId WHERE @schoolPeriodId = periodId) != 1
+    BEGIN
+        SELECT 'The date of enrollment period is not today or is closed' AS ExecMessage
+        RETURN
+    END
     IF @userId IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
@@ -245,6 +283,7 @@ BEGIN
     END
 
     INSERT INTO WeeklySchedule (userId, courseGroupId) VALUES (@userId, @courseGroupId)
+    EXEC spInsertEnrollmentXStudent @enrollmentId, @userId, GETDATE()
     SELECT 'User enrolled succesfully' AS ExecMessage
 END
 
@@ -277,6 +316,32 @@ BEGIN
 END
 
 
+--SP GET CURSOS
+CREATE OR ALTER PROCEDURE spGetCourses(@userId VARCHAR(32)) AS
+BEGIN
+    IF @userId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+
+    SELECT courseId, courseName, credits, CourseEvaluation.description, CourseEvaluation.rating
+    FROM Course
+    INNER JOIN StudentXCourse ON StudentXCourse.courseId = Course.courseId
+    INNER JOIN Student ON Student.userId = StudentXCourse.userId
+    INNER JOIN CareerXUser ON CareerXUser.userId = Student.userId
+    INNER JOIN CareerPlan ON CareerPlan.careerId = CareerXUser.careerId
+    INNER JOIN CourseXPlan ON CourseXPlan.planId = CareerPlan.planId    
+    INNER JOIN CourseEvaluation WHERE CourseEvaluation.courseId = Course.courseId
+
+    WHERE Student.userId = @userId AND StudentXCourse.status = 0
+
+END
 -- CRUD User_
 
 -- CREATE

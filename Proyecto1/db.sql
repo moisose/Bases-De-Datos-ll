@@ -147,7 +147,7 @@ GO
 
 CREATE TABLE EnrollmentXStudent(
     enrollmentXStudentId INT PRIMARY KEY IDENTITY,
-    enrollmentTime DATETIME NOT NULL,
+    enrollmentTime TIME NOT NULL,
     userId VARCHAR(32) NOT NULL,
     enrollmentId INT NOT NULL
 )
@@ -163,7 +163,7 @@ GO
 
 CREATE TABLE CourseEvaluation(
     courseEvaluationId INT PRIMARY KEY IDENTITY,
-    description VARCHAR(100) NOT NULL,
+    description VARCHAR(200) NOT NULL,
     courseGroupId INT NOT NULL,
     score FLOAT NOT NULL
 )
@@ -225,9 +225,10 @@ GO
 CREATE TABLE Evaluation(
     evaluationId INT PRIMARY KEY IDENTITY,
     description VARCHAR(100) NOT NULL,
-    deadline DATETIME NOT NULL,
+    deadline DATE NOT NULL,
     totalValue FLOAT NOT NULL,
-    evaluationTypeId INT NOT NULL
+    evaluationTypeId INT NOT NULL,
+    courseGroupId INT NOT NULL
 )
 GO
 
@@ -376,17 +377,17 @@ GO
 
 -- --------------------------------------------------
 
-IF OBJECT_ID('professorXEvaluation') IS NOT NULL
-BEGIN
-DROP TABLE professorXEvaluation
-END
-GO
-CREATE TABLE professorXEvaluation(
-    professorXEvaluationId int IDENTITY(1,1) PRIMARY KEY,
-    userId VARCHAR(32) NOT NULL,
-    evaluationId int NOT NULL
-)
-GO
+-- IF OBJECT_ID('professorXEvaluation') IS NOT NULL
+-- BEGIN
+-- DROP TABLE professorXEvaluation
+-- END
+-- GO
+-- CREATE TABLE professorXEvaluation(
+--     professorXEvaluationId int IDENTITY(1,1) PRIMARY KEY,
+--     userId VARCHAR(32) NOT NULL,
+--     evaluationId int NOT NULL
+-- )
+-- GO
 
 -- --------------------------------------------------
 
@@ -663,6 +664,10 @@ ALTER TABLE [Evaluation] WITH CHECK ADD FOREIGN KEY([evaluationTypeId])
 REFERENCES [EvaluationType] ([evaluationTypeId])
 GO
 
+ALTER TABLE [Evaluation] WITH CHECK ADD FOREIGN KEY([courseGroupId])
+REFERENCES [CourseGroup] ([courseGroupId])
+GO
+
 ALTER TABLE [ScheduleXDay] WITH CHECK ADD FOREIGN KEY([ScheduleId])
 REFERENCES [Schedule] ([ScheduleId])
 GO
@@ -719,13 +724,13 @@ ALTER TABLE [StudentXPlan] WITH CHECK ADD FOREIGN KEY([planId])
 REFERENCES [CareerPlan] ([planId])
 GO
 
-ALTER TABLE [professorXEvaluation] WITH CHECK ADD FOREIGN KEY([userId])
-REFERENCES [Professor] ([userId])
-GO
+-- ALTER TABLE [professorXEvaluation] WITH CHECK ADD FOREIGN KEY([userId])
+-- REFERENCES [Professor] ([userId])
+-- GO
 
-ALTER TABLE [professorXEvaluation] WITH CHECK ADD FOREIGN KEY([evaluationId])
-REFERENCES [Evaluation] ([evaluationId])
-GO
+-- ALTER TABLE [professorXEvaluation] WITH CHECK ADD FOREIGN KEY([evaluationId])
+-- REFERENCES [Evaluation] ([evaluationId])
+-- GO
 
 ALTER TABLE [ProfessorXFaculty] WITH CHECK ADD FOREIGN KEY([userId])
 REFERENCES [Professor] ([userId])
