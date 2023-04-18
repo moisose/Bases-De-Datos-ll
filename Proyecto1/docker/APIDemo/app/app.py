@@ -19,11 +19,13 @@ parserUser.add_argument("idCampus", type=int)
 
 #args Campus
 parserCampus = reqparse.RequestParser()
+parserCampus.add_argument("userId", type=str, required=True)
 parserCampus.add_argument("campusId", type=int, required=True)
 parserCampus.add_argument("campusName", type=str)
 
 #args Course
 parserCourse = reqparse.RequestParser()
+parserCourse.add_argument("userId", type=str, required=True)
 parserCourse.add_argument("courseId", type=int, required=True)
 parserCourse.add_argument("courseName", type=str)
 parserCourse.add_argument("facultyId", type=int)
@@ -34,6 +36,7 @@ parserCourse.add_argument("description", type=str)
 
 #args SchoolPeriod
 parserSchoolPeriod = reqparse.RequestParser()
+parserSchoolPeriod.add_argument("userId", type=str, required=True)
 parserSchoolPeriod.add_argument("periodId", type=int, required=True)
 parserSchoolPeriod.add_argument("periodTypeId", type=int)
 parserSchoolPeriod.add_argument("startDate", type=str)
