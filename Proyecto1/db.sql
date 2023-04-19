@@ -255,7 +255,7 @@ END
 GO
 CREATE TABLE Schedule(
     scheduleId INT IDENTITY(1,1) PRIMARY KEY,
-    starTime TIME NOT NULL, 
+    startTime TIME NOT NULL, 
     finishTime TIME NOT NULL 
 )
 

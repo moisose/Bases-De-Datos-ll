@@ -1,4 +1,5 @@
-USE db01_prueba
+USE db01
+GO
 
 -- SP READ SCHOOL PERIOD
 CREATE OR ALTER PROCEDURE spReadSchoolPeriod(@schoolPeriodId INT) AS
@@ -15,12 +16,14 @@ BEGIN
     END
     SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId
 END
+GO
 
 -- SP GET GRADE AVERAGE
 CREATE OR ALTER PROCEDURE spGetGradeAverage(@userId VARCHAR(32), @schoolPeriodId INT) AS
 BEGIN
-    DECLARE @average FLOAT
-    SET @average = -1
+    DECLARE @sum FLOAT, @courseAmount INT
+    SET @sum = 0
+	SET @courseAmount = 0
 
     IF @userId IS NULL OR @schoolPeriodId IS NULL
     BEGIN
@@ -44,7 +47,14 @@ BEGIN
         SELECT 0
     END
 
-    SET @average = (SELECT AVG(SUM((SUM(grade) * 0.15) / SUM(itemValue))) AS GradeAverage 
+	SET @courseAmount = (SELECT COUNT(CourseGroup.courseGroupId) AS total 
+                    FROM Student
+                    INNER JOIN WeeklySchedule ON Student.userId = WeeklySchedule.userId
+                    INNER JOIN CourseGroup ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
+                    INNER JOIN SchoolPeriod ON SchoolPeriod.schoolPeriodId = CourseGroup.periodId
+                    WHERE Student.userId = @userId AND SchoolPeriod.schoolPeriodId = @schoolPeriodId)
+
+    SET @sum = (SELECT SUM(grade) AS totalSum 
                     FROM Student
                     INNER JOIN WeeklySchedule ON Student.userId = WeeklySchedule.userId
                     INNER JOIN CourseGroup ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
@@ -53,14 +63,17 @@ BEGIN
                     INNER JOIN Item ON Item.evaluationId = Evaluation.evaluationId
                     INNER JOIN StudentXItem ON StudentXItem.itemId = Item.itemId AND StudentXItem.userId = Student.userId
 
-                    WHERE User_.userId = @userId AND SchoolPeriod.schoolPeriodId = @schoolPeriodId)
+                    WHERE Student.userId = @userId AND SchoolPeriod.schoolPeriodId = @schoolPeriodId) 
 
-    SELECT @average
+    SELECT @sum / @courseAmount
 END
+GO
 
 -- SP INSERT ENROLLMENTXSTUDENT
-CREATE OR ALTER PROCEDURE spInsertEnrollmentXStudent(@enrollmentId INT, @userId VARCHAR(32), @time INT) AS
+CREATE OR ALTER PROCEDURE spInsertEnrollmentXStudent(@enrollmentId INT, @schoolPeriodId INT, @userId VARCHAR(32), @enrollmentTime TIME) AS
 BEGIN
+	DECLARE @time INT
+	SET @time = DATEPART(HOUR, @enrollmentTime)
     IF @enrollmentId IS NULL OR @userId IS NULL OR @time IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
@@ -82,8 +95,9 @@ BEGIN
         RETURN
     END
 
-    INSERT INTO EnrollmentXStudent VALUES(@schoolPeriodId, @userId, @time)
+    INSERT INTO EnrollmentXStudent(enrollmentTime, userId, enrollmentId) VALUES(@enrollmentTime, @userId, @enrollmentId)
 END
+GO
 
 -- SP ENROLLMENT TIME SCHEDULE
 CREATE OR ALTER PROCEDURE spEnrollmentTimeSchedule(@userId VARCHAR(32), @schoolPeriodId INT) AS 
@@ -105,7 +119,7 @@ BEGIN
     END
     
     DECLARE @gradeAverageValue FLOAT, @enrollmentTimeScheduleValue INT
-    SET @gradeAverageValue = spGetGradeAverage(@userId, @schoolPeriodId)
+    SET @gradeAverageValue = [dbo].spGetGradeAverage(@userId, @schoolPeriodId)
     SET @enrollmentTimeScheduleValue = 0
 
     IF @gradeAverageValue >= 95
@@ -140,6 +154,7 @@ BEGIN
     SELECT @enrollmentTimeScheduleValue
 
 END
+GO
 
 
 -- SP STUDENT MEETS ALL REQUIREMENTS TO ENROLL THE COURSE
@@ -192,15 +207,17 @@ END
 SELECT @meetsRequirements
 
 END
-
+GO
 
 -- SP ENROLLMENT
-CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT, @dateOfToday DATETIME) AS
+CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT, @enrollmentId INT, @dateOfToday DATETIME) AS
 BEGIN
-    DECLARE @enrollmentSchedule INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME, @timeOfDay TIME
-    SET @enrollmentSchedule = 0, @meetsRequirements = 0, @timeOfDay = DATEPART(HOUR, @dateOfToday)
+    DECLARE @enrollmentSchedule INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME, @timeOfDay INT
+    SET @enrollmentSchedule = 0
+	SET @meetsRequirements = 0
+	SET @timeOfDay = DATEPART(HOUR, @dateOfToday)
 
-    IF DATEDIFF(DAY, GETDATE(), @dateOfToday) != 0 OR (SELECT status FROM EnrollmentStatus INNER JOIN Enrollment ON Enrollment.statusId = EnrollmentStatus.statusId WHERE @schoolPeriodId = periodId) != 1
+    IF DATEDIFF(DAY, GETDATE(), @dateOfToday) != 0 OR (SELECT EnrollmentStatus.description FROM EnrollmentStatus INNER JOIN Enrollment ON Enrollment.statusId = EnrollmentStatus.statusId WHERE @schoolPeriodId = periodId) = 'Inactivo'
     BEGIN
         SELECT 'The date of enrollment period is not today or is closed' AS ExecMessage
         RETURN
@@ -228,7 +245,7 @@ BEGIN
 
 	-- Validates if student meets all requirements to enroll the course
 	SET @courseId =(SELECT courseId FROM CourseGroup WHERE courseGroupId = @courseGroupId)
-	SET @meetsRequirements = spMeetRequirements(@userId, @courseId)
+	SET @meetsRequirements = [dbo].spMeetRequirements(@userId, @courseId)
 
     IF @meetsRequirements = 0
     BEGIN
@@ -244,7 +261,7 @@ BEGIN
 						  INNER JOIN CourseGroup ON CourseGroup.courseGroupId = ScheduleXCourseGroup.courseGroupId
 						  WHERE CourseGroup.courseGroupId = @courseGroupId)
 	SET @horarioFinal = (SELECT finishTime 
-						  FROM Schedule 
+						  FROM ScheduleXDay
 						  INNER JOIN ScheduleXCourseGroup ON ScheduleXCourseGroup.scheduleXDayId = ScheduleXDay.scheduleXDayId
                           INNER JOIN Schedule ON Schedule.scheduleId = ScheduleXDay.scheduleId
 						  INNER JOIN CourseGroup ON CourseGroup.courseGroupId = ScheduleXCourseGroup.courseGroupId
@@ -275,7 +292,7 @@ BEGIN
 	END
 
 	-- Validates if the student can enroll in the current time (start time of enrollment to finish time of enrollment)
-    SET @enrollmentSchedule = spEnrollmentTimeSchedule(@userId, @schoolPeriodId)
+    SET @enrollmentSchedule = [dbo].spEnrollmentTimeSchedule(@userId, @schoolPeriodId)
     IF (DATEPART(HOUR, @timeOfDay) < @enrollmentSchedule OR DATEPART(HOUR, @timeOfDay) > @enrollmentSchedule) AND DATEPART(HOUR, @timeOfDay) < 12
     BEGIN
         SELECT 'You can not enroll' AS ExecMessage
@@ -283,9 +300,10 @@ BEGIN
     END
 
     INSERT INTO WeeklySchedule (userId, courseGroupId) VALUES (@userId, @courseGroupId)
-    EXEC spInsertEnrollmentXStudent @enrollmentId, @userId, GETDATE()
+    EXEC spInsertEnrollmentXStudent @enrollmentId, @userId, GETDATE
     SELECT 'User enrolled succesfully' AS ExecMessage
 END
+GO
 
 --SP UNREGISTER
 CREATE OR ALTER PROCEDURE spUnregister(@userId VARCHAR(32), @courseGroupId INT) AS
@@ -314,7 +332,7 @@ BEGIN
     DELETE FROM WeeklySchedule WHERE userId = @userId AND courseGroupId = @courseGroupId
     SELECT 'User unregistered succesfully' AS ExecMessage
 END
-
+GO
 
 --SP GET CURSOS
 CREATE OR ALTER PROCEDURE spGetCourses(@userId VARCHAR(32)) AS
@@ -330,18 +348,20 @@ BEGIN
         RETURN
     END
 
-    SELECT courseId, courseName, credits, CourseEvaluation.description, CourseEvaluation.rating
+    SELECT Course.courseId, courseName, credits, CourseEvaluation.description, CourseEvaluation.score
     FROM Course
     INNER JOIN StudentXCourse ON StudentXCourse.courseId = Course.courseId
     INNER JOIN Student ON Student.userId = StudentXCourse.userId
     INNER JOIN CareerXUser ON CareerXUser.userId = Student.userId
     INNER JOIN CareerPlan ON CareerPlan.careerId = CareerXUser.careerId
-    INNER JOIN CourseXPlan ON CourseXPlan.planId = CareerPlan.planId    
-    INNER JOIN CourseEvaluation WHERE CourseEvaluation.courseId = Course.courseId
-
+    INNER JOIN CourseXPlan ON CourseXPlan.planId = CareerPlan.planId
+	INNER JOIN CourseGroup ON CourseGroup.courseId = Course.courseId
+    INNER JOIN CourseEvaluation ON CourseEvaluation.courseGroupId = CourseGroup.courseGroupId
     WHERE Student.userId = @userId AND StudentXCourse.status = 0
 
 END
+GO
+
 -- CRUD User_
 
 -- CREATE
@@ -357,14 +377,15 @@ BEGIN
         SELECT 'The user already exists' AS ExecMessage
         RETURN
     END
-    IF NOT EXISTS(SELECT * FROM Campus WHERE idCampus = @idCampus)
+    IF NOT EXISTS(SELECT * FROM Campus WHERE campusId = @idCampus)
     BEGIN
         SELECT 'The campus does not exist' AS ExecMessage
         RETURN
     END
 
-    INSERT INTO User_ (userId, userName, birthDate, email, idCampus) VALUES (@userId, @userName, @birthDate, @email, @idCampus)
+    INSERT INTO User_ (userId, userName, birthDate, email) VALUES (@userId, @userName, @birthDate, @email)
 END
+GO
 
 -- READ
 CREATE OR ALTER PROCEDURE spReadUser(@userId VARCHAR(32)) AS
@@ -382,6 +403,7 @@ BEGIN
 
     SELECT * FROM User_ WHERE userId = @userId
 END
+GO
 
 -- UPDATE
 CREATE OR ALTER PROCEDURE spUpdateUser(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT) AS
@@ -396,14 +418,15 @@ BEGIN
         SELECT 'The user does not exist' AS ExecMessage
         RETURN
     END
-    IF NOT EXISTS(SELECT * FROM Campus WHERE idCampus = @idCampus)
+    IF NOT EXISTS(SELECT * FROM Campus WHERE campusId = @idCampus)
     BEGIN
         SELECT 'The campus does not exist' AS ExecMessage
         RETURN
     END
 
-    UPDATE User_ SET userName = ISNULL(@userName, userName), birthDate = ISNULL(@birthDate, birthDate), email = ISNULL(@email, email), idCampus = ISNULL(@idCampus, idCampus) WHERE userId = @userId
+    UPDATE User_ SET userName = ISNULL(@userName, userName), birthDate = ISNULL(@birthDate, birthDate), email = ISNULL(@email, email) WHERE userId = @userId
 END
+GO
 
 -- DELETE 
 CREATE OR ALTER PROCEDURE spDeleteUser(@userId VARCHAR(32)) AS
@@ -426,6 +449,7 @@ BEGIN
         SELECT 'The user can not be deleted' AS ExecMessage
     END CATCH
 END
+GO
 
 
 -- CRUD File_
@@ -461,6 +485,7 @@ BEGIN
 
     INSERT INTO File_ (userId, fileTypeId, periodId, creationDate, modificationDate, name, description, ver) VALUES (@userId, @fileTypeId, @periodId, @creationDate, @modificationDate, @name, @description, @ver)
 END
+GO
 
 -- READ
 CREATE OR ALTER PROCEDURE spReadFile(@fileId INT) AS
@@ -478,6 +503,7 @@ BEGIN
 
     SELECT * FROM File_ WHERE fileId = @fileId
 END
+GO
 
 -- UPDATE
 CREATE OR ALTER PROCEDURE spUpdateFile(@fileId INT, @newUserId VARCHAR(32), @newFileTypeId int, @newPeriodId int, @newCreationDate date, @newModificationDate date, @newName varchar(50), @newDescription varchar(100), @newVer int) AS
@@ -510,6 +536,7 @@ BEGIN
 
     UPDATE File_ SET userId = ISNULL(@newUserId, userId), fileTypeId = ISNULL(@newFileTypeId, fileTypeId), periodId = ISNULL(@newPeriodId, periodId), creationDate = ISNULL(@newCreationDate, creationDate), modificationDate = ISNULL(@newModificationDate, modificationDate), name = ISNULL(@newName, name), description = ISNULL(@newDescription, description), ver = ISNULL(@newVer, ver) WHERE fileId = @fileId
 END
+GO
 
 -- DELETE
 CREATE OR ALTER PROCEDURE spDeleteFile(@fileId INT) AS
@@ -532,3 +559,4 @@ BEGIN
         SELECT 'The file can not be deleted' AS ExecMessage
     END CATCH
 END
+GO
