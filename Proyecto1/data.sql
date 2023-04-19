@@ -1,3 +1,6 @@
+USE db01
+GO
+
 -- example data for the table Campus
 INSERT INTO Campus (campusName)
 VALUES 
@@ -196,7 +199,7 @@ VALUES ('Calculus I', 12, 4, 4, 'Introductory calculus course', 2),
        ('Spanish Language and Literature', 9, 3, 3, 'This course covers the literature and language of the Spanish-speaking world.', 2);
 
 -- example data for the table Schedule
-INSERT INTO Schedule (starTime, finishTime)
+INSERT INTO Schedule (startTime, finishTime)
 VALUES 
     ('07:30:00', '09:20:00'),
     ('9:30:00', '11:20:00'),
