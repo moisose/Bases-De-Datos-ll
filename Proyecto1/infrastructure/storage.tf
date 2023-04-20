@@ -1,3 +1,13 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:87daa03bc06cef738678b9beb1da33257619730b1b88184bfb1f4d323b374f7f
-size 501
+resource "azurerm_storage_account" "main" {
+  name                     = "filesmanager${var.group}"
+  resource_group_name      = azurerm_resource_group.main.name
+  location                 = azurerm_resource_group.main.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+resource "azurerm_storage_container" "main" {
+  name                  = "documents"
+  storage_account_name  = azurerm_storage_account.main.name
+  container_access_type = "private"
+}

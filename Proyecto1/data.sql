@@ -1,3 +1,6 @@
+USE db01
+GO
+
 -- example data for the table Campus
 INSERT INTO Campus (campusName)
 VALUES 
@@ -196,7 +199,7 @@ VALUES ('Calculus I', 12, 4, 4, 'Introductory calculus course', 2),
        ('Spanish Language and Literature', 9, 3, 3, 'This course covers the literature and language of the Spanish-speaking world.', 2);
 
 -- example data for the table Schedule
-INSERT INTO Schedule (starTime, finishTime)
+INSERT INTO Schedule (startTime, finishTime)
 VALUES 
     ('07:30:00', '09:20:00'),
     ('9:30:00', '11:20:00'),
@@ -854,3 +857,167 @@ VALUES
 --     ('09:30:00', 'mYvgqpG4lgWDzAmWEejxBDgvXYA2', 1);
 
 -- example data for the table WeeklySchedule
+INSERT INTO WeeklySchedule (userId, courseGroupId)
+VALUES 
+    ('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 1), -- calculus I
+    ('KhnwK1edmlS9l39IkLxPvNywkrC3', 2), -- calculus II
+    ('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 3), -- Linear Algebra
+    ('pSHGLHzYYqR8xdnIztuXP6toqo12', 4), -- Descrete Mathematics
+    ('LGCKPnHowQORw36GS5a1AV7iiNv2', 5), -- Programming Fundamentals
+    ('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 6), -- Data Structures and Algorithms
+    ('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 7), -- Marketing Management
+    ('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 8); -- Introduction to Psychology
+
+-- example data for the table StudentXItem
+INSERT INTO StudentXItem (userId, itemId, grade) VALUES
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 1, 3),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 2, 4),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 3, 5),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 4, 7),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 5, 5),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 6, 5),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 7, 5),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 8, 9),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 9, 4),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 10, 4),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 11, 3),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 12, 5),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 13, 2),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 14, 3),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 15, 4),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 16, 5),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 17, 5),
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 18, 3),
+
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 19, 3),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 20, 3),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 21, 4),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 22, 8),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 23, 5),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 24, 5),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 25, 5),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 26, 5),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 27, 1),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 28, 3),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 29, 2),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 30, 6),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 31, 3),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 32, 2),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 33, 3),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 34, 5),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 35, 3),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 36, 3),
+
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 37, 5),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 38, 5),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 39, 5),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 40, 10),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 41, 5),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 42, 5),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 43, 5),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 44, 10),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 45, 5),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 46, 5),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 47, 5),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 48, 10),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 49, 3),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 50, 3),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 51, 4),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 52, 5),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 53, 0),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 54, 5),
+
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 55, 1),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 56, 1),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 57, 1),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 58, 1),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 59, 3),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 60, 2),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 61, 4),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 62, 7),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 63, 2),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 64, 4),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 65, 5),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 66, 6),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 67, 1),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 68, 1),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 69, 1),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 70, 3),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 71, 2),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 72, 5),
+
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 73, 4),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 74, 3),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 75, 4),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 76, 8),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 77, 3),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 78, 5),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 79, 5),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 80, 9),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 81, 2),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 82, 4),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 83, 4),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 84, 8),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 85, 3),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 86, 3),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 87, 3),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 88, 4),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 89, 5),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 90, 5),
+
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 91, 5),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 92, 5),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 93, 5),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 94, 10),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 95, 5),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 96, 4),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 97, 2),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 98, 9),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 99, 9),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 100, 3),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 101, 4),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 102, 8),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 103, 3),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 104, 2),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 105, 3),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 106, 5),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 107, 5),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 108, 5),
+
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 109, 0),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 110, 1),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 111, 4),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 112, 6),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 113, 3),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 114, 2),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 115, 2),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 116, 5),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 117, 5),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 118, 4),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 119, 4),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 120, 8),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 121, 3),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 122, 0),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 123, 2),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 124, 2),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 125, 2),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 126, 4),
+
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 127, 5),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 128, 5),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 129, 5),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 130, 5),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 131, 2),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 132, 5),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 133, 3),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 134, 8),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 135, 4),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 136, 3),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 137, 5),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 138, 10),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 139, 3),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 140, 3),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 141, 2),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 142, 5),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 143, 2),
+('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 144, 5);

@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:076bf99d2e52baf52f8e9b23208f94a9338f703f8eada92361812d1837ad0e07
-size 284
+# Configure the Azure provider
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.47.0"
+    }
+  }
+  required_version = ">= 1.1.0"
+}
+
+provider "azurerm" {
+#  skip_provider_registration = "true"
+  features {}
+}
