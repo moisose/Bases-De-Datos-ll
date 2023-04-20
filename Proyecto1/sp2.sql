@@ -19,7 +19,7 @@ END
 GO
 
 -- SP GET GRADE AVERAGE
-CREATE OR ALTER PROCEDURE spGetGradeAverage(@userId VARCHAR(32), @schoolPeriodId INT) AS
+CREATE OR ALTER PROCEDURE spGetGradeAverage(@userId VARCHAR(32), @schoolPeriodId INT, @resultado INT OUTPUT) AS
 BEGIN
     DECLARE @sum FLOAT, @courseAmount INT
     SET @sum = 0
@@ -65,7 +65,9 @@ BEGIN
 
                     WHERE Student.userId = @userId AND SchoolPeriod.schoolPeriodId = @schoolPeriodId) 
 
-    SELECT @sum / @courseAmount
+    SET @resultado = @sum / @courseAmount
+	SELECT @sum / @courseAmount
+	
 END
 GO
 
@@ -100,7 +102,7 @@ END
 GO
 
 -- SP ENROLLMENT TIME SCHEDULE
-CREATE OR ALTER PROCEDURE spEnrollmentTimeSchedule(@userId VARCHAR(32), @schoolPeriodId INT) AS 
+CREATE OR ALTER PROCEDURE spEnrollmentTimeSchedule(@userId VARCHAR(32), @schoolPeriodId INT, @enrollmentTimeScheduleValue INT OUTPUT) AS 
 BEGIN
     IF @schoolPeriodId IS NULL
     BEGIN
@@ -118,8 +120,8 @@ BEGIN
         RETURN
     END
     
-    DECLARE @gradeAverageValue FLOAT, @enrollmentTimeScheduleValue INT
-    SET @gradeAverageValue = [dbo].spGetGradeAverage(@userId, @schoolPeriodId)
+    DECLARE @gradeAverageValue FLOAT
+    EXEC spGetGradeAverage @userId, @schoolPeriodId, @gradeAverageValue OUTPUT
     SET @enrollmentTimeScheduleValue = 0
 
     IF @gradeAverageValue >= 95
@@ -151,18 +153,15 @@ BEGIN
         SELECT 'You can not enroll' AS ExecMessage
     END
 
-    SELECT @enrollmentTimeScheduleValue
+	SELECT @enrollmentTimeScheduleValue
 
 END
 GO
 
 
 -- SP STUDENT MEETS ALL REQUIREMENTS TO ENROLL THE COURSE
-CREATE OR ALTER PROCEDURE spMeetRequirements(@userId INT, @courseId INT) AS
+CREATE OR ALTER PROCEDURE spMeetRequirements(@userId VARCHAR(32), @courseId INT, @meetsRequirements BIT OUTPUT) AS
 BEGIN
-
-DECLARE @meetsRequirements BIT 
-SET @meetsRequirements = 0
 
 IF @userId IS NULL OR @courseId IS NULL
 BEGIN
@@ -180,31 +179,39 @@ BEGIN
     RETURN
 END
 
+CREATE TABLE #TCourseRequirement (
+   courseRequirementId INT,
+   courseId INT,
+   courseXPlanId INT
+)
 
-IF (SELECT COUNT(Student.userId) 
-	FROM Student 
-	INNER JOIN WeeklySchedule ON WeeklySchedule.userId = Student.userId
-	INNER JOIN CourseGroup ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
-	INNER JOIN CourseRequirement ON CourseRequirement.courseId = CourseGroup.courseId 
 
-	INNER JOIN CourseXPlan ON CourseXPlan.courseXPlanId = CourseRequirement.courseXPlanId
-	INNER JOIN Course ON Course.courseId = CourseXPlan.courseId 
-							 
-			  
-	WHERE @courseId = Course.courseId) = (SELECT COUNT(CourseRequirement.courseId) 
-											FROM CourseRequirement 
-											INNER JOIN CourseXPlan ON CourseXPlan.courseXPlanId = CourseRequirement.courseXPlanId
-											INNER JOIN Course ON Course.courseId = CourseXPlan.courseId
-                                            INNER JOIN StudentXCourse ON StudentXCourse.courseId = CourseRequirement.courseId
-											WHERE @courseId = Course.courseId AND
-                                            StudentXCourse.status = 1)
+INSERT INTO #TCourseRequirement (courseRequirementId, courseId, courseXPlanId)
+SELECT courseRequirementId, courseId, courseXPlanId
+FROM CourseRequirement
+WHERE courseXPlanId = (SELECT courseXPlanId FROM CourseXPlan WHERE courseId = @courseId)
+
+SELECT * FROM #TCourseRequirement
+
+WHILE (SELECT COUNT(*) FROM #TCourseRequirement) != 0
 BEGIN
 
-SET @meetsRequirements = 1
+IF (SELECT TOP(1) StudentXCourse.status FROM StudentXCourse INNER JOIN CourseXPlan ON CourseXPlan.courseId = StudentXCourse.courseId INNER JOIN CourseRequirement ON CourseXPlan.courseXPlanId = CourseRequirement.courseXPlanId INNER JOIN Course ON Course.courseId = CourseXPlan.courseId WHERE Course.courseId = @courseId) = 0
+BEGIN
+	SET @meetsRequirements = 0
+	--SELECT @meetsRequirements
+	RETURN
+END
+
+DELETE TOP(1) FROM #TCourseRequirement
+
 
 END
 
-SELECT @meetsRequirements
+DROP TABLE #TCourseRequirement
+
+SET @meetsRequirements = 1
+--SELECT @meetsRequirements
 
 END
 GO
@@ -212,10 +219,11 @@ GO
 -- SP ENROLLMENT
 CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT, @enrollmentId INT, @dateOfToday DATETIME) AS
 BEGIN
-    DECLARE @enrollmentSchedule INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME, @timeOfDay INT
+    DECLARE @enrollmentSchedule INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME, @timeOfDay INT, @currentTime TIME
     SET @enrollmentSchedule = 0
 	SET @meetsRequirements = 0
 	SET @timeOfDay = DATEPART(HOUR, @dateOfToday)
+	SET @currentTime = (SELECT CONVERT(varchar, GETDATE(), 108))
 
     IF DATEDIFF(DAY, GETDATE(), @dateOfToday) != 0 OR (SELECT EnrollmentStatus.description FROM EnrollmentStatus INNER JOIN Enrollment ON Enrollment.statusId = EnrollmentStatus.statusId WHERE @schoolPeriodId = periodId) = 'Inactivo'
     BEGIN
@@ -245,7 +253,7 @@ BEGIN
 
 	-- Validates if student meets all requirements to enroll the course
 	SET @courseId =(SELECT courseId FROM CourseGroup WHERE courseGroupId = @courseGroupId)
-	SET @meetsRequirements = [dbo].spMeetRequirements(@userId, @courseId)
+	EXEC spMeetRequirements @userId, @courseId, @meetsRequirements OUTPUT
 
     IF @meetsRequirements = 0
     BEGIN
@@ -285,14 +293,14 @@ BEGIN
 				INNER JOIN WeeklySchedule ON WeeklySchedule.userId = Student.userId
 				INNER JOIN CourseGroup ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
 				INNER JOIN Course ON CourseGroup.courseId = Course.courseId
-				WHERE Course.courseId = @courseId)
+				WHERE Course.courseId = @courseId AND @userId = userId)
 	BEGIN
 		SELECT 'The selected couse has already been enrolled in another group' AS ExecMessage
         RETURN
 	END
 
 	-- Validates if the student can enroll in the current time (start time of enrollment to finish time of enrollment)
-    SET @enrollmentSchedule = [dbo].spEnrollmentTimeSchedule(@userId, @schoolPeriodId)
+    EXEC dbo.spEnrollmentTimeSchedule @userId, @schoolPeriodId, @enrollmentSchedule OUTPUT
     IF (DATEPART(HOUR, @timeOfDay) < @enrollmentSchedule OR DATEPART(HOUR, @timeOfDay) > @enrollmentSchedule) AND DATEPART(HOUR, @timeOfDay) < 12
     BEGIN
         SELECT 'You can not enroll' AS ExecMessage
@@ -300,7 +308,7 @@ BEGIN
     END
 
     INSERT INTO WeeklySchedule (userId, courseGroupId) VALUES (@userId, @courseGroupId)
-    EXEC spInsertEnrollmentXStudent @enrollmentId, @userId, GETDATE
+    EXEC spInsertEnrollmentXStudent @enrollmentId, @schoolPeriodId, @userId, @currentTime
     SELECT 'User enrolled succesfully' AS ExecMessage
 END
 GO
@@ -357,7 +365,7 @@ BEGIN
     INNER JOIN CourseXPlan ON CourseXPlan.planId = CareerPlan.planId
 	INNER JOIN CourseGroup ON CourseGroup.courseId = Course.courseId
     INNER JOIN CourseEvaluation ON CourseEvaluation.courseGroupId = CourseGroup.courseGroupId
-    WHERE Student.userId = @userId AND StudentXCourse.status = 0
+    WHERE Student.userId = @userId AND StudentXCourse.status = 1
 
 END
 GO

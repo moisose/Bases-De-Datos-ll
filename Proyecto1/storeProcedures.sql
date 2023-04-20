@@ -79,7 +79,7 @@ GO
 -- 3-> si está en el mismo día del enrollment, y la hora actual es mayor o igual a la hora del enrollment time del estudiante y menor que las 3 pm 
 -- entonces el estudiante puede matricular x
 
-CREATE OR ALTER PROCEDURE spUserInEnrollmentTime(@userId VARCHAR(32), @schoolPeriodId INT) AS
+CREATE OR ALTER PROCEDURE spUserInEnrollmentTime(@userId VARCHAR(32), @schoolPeriodId INT, @result BIT OUTPUT) AS
 BEGIN
     IF @userId IS NULL OR @schoolPeriodId IS NULL
     BEGIN
@@ -105,7 +105,7 @@ BEGIN
     IF @enrollmentTimeScheduleValue = -1
     BEGIN
         SELECT 'You can not enroll' AS ExecMessage
-        RETURN -1
+        SET @result = -1
     END
 
     -- obtain the enrollment day and the current day
@@ -116,7 +116,7 @@ BEGIN
     IF DATEPART(DAY, @enrollmentDay) != DATEPART(DAY, @currentDay)
     BEGIN
         SELECT 'You are not in the enrollment day' AS ExecMessage
-        RETURN -1
+        SET @result = -1
     END
 
     -- if the current hour is not in the enrollment time schedule, the user cant enroll
@@ -124,10 +124,10 @@ BEGIN
     IF DATEPART(HOUR, @currentDay) < @enrollmentTimeScheduleValue OR DATEPART(HOUR, @currentDay) >= 15
     BEGIN
         SELECT 'You are not in your enrollment time' AS ExecMessage
-        RETURN -1
+        SET @result = -1
     END
 
     SELECT 'You are in your enrollment time, you can enroll' AS ExecMessage
-    RETURN 1
+    SET @result = 1
 END
 GO

@@ -294,9 +294,9 @@ VALUES
 -- example data for the table CourseRequirment
 INSERT INTO CourseRequirement (courseId, courseXPlanId)
 VALUES
-	(2, 1),
-	(3, 2),
-	(6, 5);
+    (1, 2),
+    (2, 3),
+    (5, 6);
 
 -- example data for the table ScheduleXCourseGroup
 INSERT INTO ScheduleXCourseGroup (scheduleXDayId, courseGroupId)
@@ -1021,3 +1021,28 @@ INSERT INTO StudentXItem (userId, itemId, grade) VALUES
 ('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 142, 5),
 ('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 143, 2),
 ('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 144, 5);
+
+
+-- example data for the table StudentXCourse
+INSERT INTO StudentXCourse (userId, courseId, status)
+VALUES 
+    ('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 1, 1), --
+    ('KhnwK1edmlS9l39IkLxPvNywkrC3', 2, 0), --
+    ('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 3, 1), --
+    ('pSHGLHzYYqR8xdnIztuXP6toqo12', 4, 0), --
+    ('LGCKPnHowQORw36GS5a1AV7iiNv2', 5, 1), --
+    ('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 6, 1), --
+    ('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 7, 0), --
+    ('mYvgqpG4lgWDzAmWEejxBDgvXYA2', 8, 1); --
+
+
+
+INSERT INTO StudentXPlan (userId, planId)
+VALUES
+('VJ6npbzqvPX1Xk93EnXsWwWN9A22', 9),
+('KhnwK1edmlS9l39IkLxPvNywkrC3', 9),
+('u7lFJCTYm2dhnYunj7RTgxrHOTQ2', 9),
+('pSHGLHzYYqR8xdnIztuXP6toqo12', 1),
+('LGCKPnHowQORw36GS5a1AV7iiNv2', 1),
+('fFri4sRcE0P6oKHtdZ7INR2jwwl2', 1),
+('rYOJVmoEL6eQ1G7QTYQPPpRubvz1', 6);
