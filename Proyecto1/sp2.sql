@@ -160,7 +160,7 @@ GO
 
 
 -- SP STUDENT MEETS ALL REQUIREMENTS TO ENROLL THE COURSE
-CREATE OR ALTER PROCEDURE spMeetRequirements(@userId INT, @courseId INT, @meetsRequirements BIT OUTPUT) AS
+CREATE OR ALTER PROCEDURE spMeetRequirements(@userId VARCHAR(32), @courseId INT, @meetsRequirements BIT OUTPUT) AS
 BEGIN
 
 IF @userId IS NULL OR @courseId IS NULL
@@ -179,31 +179,39 @@ BEGIN
     RETURN
 END
 
+CREATE TABLE #TCourseRequirement (
+   courseRequirementId INT,
+   courseId INT,
+   courseXPlanId INT
+)
 
-IF (SELECT COUNT(Student.userId) 
-	FROM Student 
-	INNER JOIN WeeklySchedule ON WeeklySchedule.userId = Student.userId
-	INNER JOIN CourseGroup ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
-	INNER JOIN CourseRequirement ON CourseRequirement.courseId = CourseGroup.courseId 
 
-	INNER JOIN CourseXPlan ON CourseXPlan.courseXPlanId = CourseRequirement.courseXPlanId
-	INNER JOIN Course ON Course.courseId = CourseXPlan.courseId 
-							 
-			  
-	WHERE @courseId = Course.courseId) = (SELECT COUNT(CourseRequirement.courseId) 
-											FROM CourseRequirement 
-											INNER JOIN CourseXPlan ON CourseXPlan.courseXPlanId = CourseRequirement.courseXPlanId
-											INNER JOIN Course ON Course.courseId = CourseXPlan.courseId
-                                            INNER JOIN StudentXCourse ON StudentXCourse.courseId = CourseRequirement.courseId
-											WHERE @courseId = Course.courseId AND
-                                            StudentXCourse.status = 1)
-	BEGIN
+INSERT INTO #TCourseRequirement (courseRequirementId, courseId, courseXPlanId)
+SELECT courseRequirementId, courseId, courseXPlanId
+FROM CourseRequirement
+WHERE courseXPlanId = (SELECT courseXPlanId FROM CourseXPlan WHERE courseId = @courseId)
 
-	SET @meetsRequirements = 1
+SELECT * FROM #TCourseRequirement
 
-	END
+WHILE (SELECT COUNT(*) FROM #TCourseRequirement) != 0
+BEGIN
 
-SELECT @meetsRequirements
+IF (SELECT TOP(1) StudentXCourse.status FROM StudentXCourse INNER JOIN CourseXPlan ON CourseXPlan.courseId = StudentXCourse.courseId INNER JOIN CourseRequirement ON CourseXPlan.courseXPlanId = CourseRequirement.courseXPlanId INNER JOIN Course ON Course.courseId = CourseXPlan.courseId WHERE Course.courseId = @courseId) = 0
+BEGIN
+	SET @meetsRequirements = 0
+	--SELECT @meetsRequirements
+	RETURN
+END
+
+DELETE TOP(1) FROM #TCourseRequirement
+
+
+END
+
+DROP TABLE #TCourseRequirement
+
+SET @meetsRequirements = 1
+--SELECT @meetsRequirements
 
 END
 GO
@@ -285,7 +293,7 @@ BEGIN
 				INNER JOIN WeeklySchedule ON WeeklySchedule.userId = Student.userId
 				INNER JOIN CourseGroup ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
 				INNER JOIN Course ON CourseGroup.courseId = Course.courseId
-				WHERE Course.courseId = @courseId)
+				WHERE Course.courseId = @courseId AND @userId = userId)
 	BEGIN
 		SELECT 'The selected couse has already been enrolled in another group' AS ExecMessage
         RETURN
@@ -357,7 +365,7 @@ BEGIN
     INNER JOIN CourseXPlan ON CourseXPlan.planId = CareerPlan.planId
 	INNER JOIN CourseGroup ON CourseGroup.courseId = Course.courseId
     INNER JOIN CourseEvaluation ON CourseEvaluation.courseGroupId = CourseGroup.courseGroupId
-    WHERE Student.userId = @userId AND StudentXCourse.status = 0
+    WHERE Student.userId = @userId AND StudentXCourse.status = 1
 
 END
 GO
