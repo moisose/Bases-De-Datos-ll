@@ -32,7 +32,7 @@ template {
     min_replicas = 0
     container {
       name   = "api-demo"
-      image  = "docker.io/nereo08/api-demo:latest"
+      image  = "docker.io/isaac4918/tiburoncines-api:latest"
       cpu    = "0.25"
       memory = "0.5Gi"
       env {
@@ -79,4 +79,35 @@ resource "azurerm_role_assignment" "main" {
   scope                = data.azurerm_subscription.main.id
   role_definition_name = "Owner"
   principal_id         = azurerm_user_assigned_identity.main.principal_id
+}
+
+resource "azurerm_role_assignment" "storage_blob_data_contributor" {
+  scope                = data.azurerm_subscription.main.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azurerm_user_assigned_identity.main.principal_id
+}
+
+resource "azurerm_role_assignment" "storage_queue_data_contributor" {
+  scope                = data.azurerm_subscription.main.id
+  role_definition_name = "Storage Queue Data Contributor"
+  principal_id         = azurerm_user_assigned_identity.main.principal_id
+}
+
+data  "azurerm_client_config" "current" {
+}
+
+output "account_id" {
+  value = data.azurerm_client_config.current.object_id
+}
+
+resource "azurerm_role_assignment" "storage_blob_data_contributor_user" {
+  scope                = data.azurerm_subscription.main.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
+resource "azurerm_role_assignment" "storage_queue_data_contributor_user" {
+  scope                = data.azurerm_subscription.main.id
+  role_definition_name = "Storage Queue Data Contributor"
+  principal_id         = data.azurerm_client_config.current.object_id
 }
