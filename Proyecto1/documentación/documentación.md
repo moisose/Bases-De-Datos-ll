@@ -44,7 +44,7 @@
 
 Firebase se utiliza para la autenticación de los usuarios que se crean desde el proyecto Thunkable, se hace mediante correo electrónico y password.
 <center>
-    <img src="Resources/firebaseAut.png" alt="Diagrama Entidad Relación" />
+    <img src="Resources/firebaseAut.png" alt="Firebase" />
 </center>
 
 ## **NodeJS**
@@ -52,6 +52,40 @@ Firebase se utiliza para la autenticación de los usuarios que se crean desde el
 ## **Thunkable**
 
 ### **Log In Screen**
+
+En la pantalla  de inicio de sesión el usuario debe ingresar el email y el password que se encuentra reguistrado en firebase.
+
+<center>
+    <img src="Resources/LogInScreen.png" alt="Log In Screen" />
+</center>
+
+<center>
+    <img src="Resources/logInF.png" alt="Log In Screen" />
+</center>
+
+Se hace uso de la función **firebase sign in** de thunkable, haciendo uso del email y el password ingresado por el usuario mediante text inputs, firebase retorna error en caso de que alguno de los datos este incorrecto y se hace el despliegue de una alerta al usuario, donde se coloca el mesaje de error.
+
+Hce uso de variables stored para guardar el userid, email y password en caso de que necesiten usarse en otras partes de la applicación.
+
+Cuando la ventaja se va a cerrar para dirigirse al homeScreen, se "limpian" los campos y se abre la nueva ventana.
+
+<center>
+    <img src="Resources/alertSignIn.png" alt="Alert Sign In Screen" />
+</center>
+
+La función para llamar alertas recibe el mensaje y le muestra lo sigiente al usuario:
+
+<center>
+    <img src="Resources/errorSignIn.png" alt="Alert Sign In Screen" />
+</center>
+
+El mensaje va a variar de acuerdo al error.
+
+<center>
+    <img src="Resources/signInOtrasFunciones.png" alt="Alert Sign In Screen" />
+</center>
+
+También, el resto de botones tienen otros bloques de código para registrarse a la app o hacer la recupeción de la contraseña.
 
 ### **Sign In Screen**
 
