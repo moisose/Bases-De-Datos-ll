@@ -416,10 +416,8 @@ CREATE TABLE File_(
     fileTypeId int NOT NULL,
     periodId int NOT NULL,
     creationDate date NOT NULL,
-    modificationDate date NOT NULL,
     name varchar(50) NOT NULL,
-    description varchar(100) NOT NULL,
-    ver int NOT NULL
+    description varchar(100) NOT NULL
 )
 GO
 
@@ -577,6 +575,18 @@ CREATE TABLE StudentXCourse(
     userId VARCHAR(32) NOT NULL,
     courseId INT NOT NULL,
     status BIT NOT NULL -- 0 = Not Approved, 1 = Approved
+)
+
+IF OBJECT_ID('Version') IS NOT NULL
+BEGIN
+DROP TABLE Version
+END
+GO
+CREATE TABLE Version(
+    versionId INT IDENTITY(1,1) PRIMARY KEY,
+    fileId INT NOT NULL,
+    modificationDate DATE NOT NULL,
+    filename varchar(15) NOT NULL
 )
 
 -- =============================================
@@ -805,4 +815,8 @@ GO
 
 ALTER TABLE [StudentXCourse] WITH CHECK ADD FOREIGN KEY([courseId])
 REFERENCES [Course] ([courseId])
+GO
+
+ALTER TABLE [Version] WITH CHECK ADD FOREIGN KEY([fileId])
+REFERENCES [File_] ([fileId])
 GO

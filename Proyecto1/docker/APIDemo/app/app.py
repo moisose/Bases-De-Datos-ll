@@ -21,7 +21,7 @@ Here you can find the connection string to connect to the Azure database, cassan
 # ===========================================================================
 # Azure Database Connection
 
-driver = "{ODBC Driver 18 for SQL Server}"
+driver = "{ODBC Driver 17 for SQL Server}"
 server = "tcp:tiburoncines-sqlserver.database.windows.net,1433"
 database = "db01"
 username = "el-adm1n"
@@ -68,13 +68,15 @@ session = cluster.connect(keyspace)
 
 # ===========================================================================
 # Blob Storage Connection
-account_url = "https://filesmanagertiburoncines.blob.core.windows.net"
-default_credential = DefaultAzureCredential()
-blob_service_client = BlobServiceClient(account_url, credential=default_credential)
+#account_url = "https://filesmanagertiburoncines.blob.core.windows.net"
+#default_credential = DefaultAzureCredential()
+#blob_service_client = BlobServiceClient(account_url, credential=default_credential)
 
 # Definition of the API
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.config['AZURE_STORAGE_CONNECTION_STRING'] = 'DefaultEndpointsProtocol=https;AccountName=filesmanagertiburoncines;AccountKey=CkgCBqebOGWP5we26jpV1TIP49C+Wxp2Nf5qJFNEI4i26LUdEX4bSMYfP/yRAYY9RBbGi5tV0QoN+AStTBd8Ew==;EndpointSuffix=core.windows.net'
+app.config['AZURE_STORAGE_CONTAINER_NAME'] = 'documents'
 api = Api(app)
 
 
@@ -92,11 +94,13 @@ parserUser.add_argument("idCampus", type=int)
 
 # args Campus
 parserCampus = reqparse.RequestParser()
+parserCampus.add_argument("userId", type=str, required=True)
 parserCampus.add_argument("campusId", type=int, required=True)
 parserCampus.add_argument("campusName", type=str)
 
 # args Course
 parserCourse = reqparse.RequestParser()
+parserCourse.add_argument("userId", type=str, required=True)
 parserCourse.add_argument("courseId", type=int, required=True)
 parserCourse.add_argument("courseName", type=str)
 parserCourse.add_argument("facultyId", type=int)
@@ -107,6 +111,7 @@ parserCourse.add_argument("description", type=str)
 
 # args SchoolPeriod
 parserSchoolPeriod = reqparse.RequestParser()
+parserSchoolPeriod.add_argument("userId", type=str, required=True)
 parserSchoolPeriod.add_argument("periodId", type=int, required=True)
 parserSchoolPeriod.add_argument("periodTypeId", type=int)
 parserSchoolPeriod.add_argument("startDate", type=str)
@@ -140,9 +145,7 @@ parserFile.add_argument("ver", type=int)
 # args Blob
 
 parserBlob = reqparse.RequestParser()
-parserBlob.add_argument('userId', type=str, help='User ID', required=True)
-parserBlob.add_argument('name', type=str, help='User Name', required=False)
-parserBlob.add_argument('age', type=int, help='Age', required=False)
+parserBlob.add_argument('userId', type=str, help='User ID', required=False)
 parserBlob.add_argument('filename', type=str, help='Filename', required=False)
 
 
@@ -206,9 +209,10 @@ class CassandraConnector():
 
 class Main(Resource):
     def get(self):
-        return "<p>Api creado!</p>"
+        return {"message": "Welcome to the API!"}
 
 class BlobStorage(Resource):
+
     def post(self):
         if 'file' not in request.files:
             flash('No file part')
@@ -217,22 +221,41 @@ class BlobStorage(Resource):
         if file.filename == '':
             return  "<p>Upload No name!</p>"
         filename = secure_filename(file.filename)
-        blob_client = blob_service_client.get_blob_client(container='documents', blob=filename)
+        blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
+        container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
+        blob_client = container_client.get_blob_client(filename)
         blob_client.upload_blob(file)
         return   "<p>Upload!</p>"
     
     def get(self):
-        args = parserBlob.parse_args() # Args parsing
-        filename = args["filename"]
-        blob_client = blob_service_client.get_blob_client(container='documents', blob=filename)
-        stream = io.BytesIO()
-        blob_client.download_blob().download_to_stream(stream)
-        stream.seek(0)
-        return send_file(stream, attachment_filename=filename, as_attachment=True)
+        try:
+            args = parserBlob.parse_args()
+            filename = args["filename"]
+            blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
+            container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
+            blob_client = container_client.get_blob_client(filename)
+            stream = io.BytesIO()
+            blob_client.download_blob().download_to_stream(stream)
+            stream.seek(0)
+            response = send_file(stream, download_name=filename, as_attachment=True)
+            return response
+        except Exception as e:
+            print(e)
+            return {'status': str(e)}
     
-    def delete(self, filename):
-        blob_client = blob_service_client.get_blob_client(container='documents', blob=filename)
-        deleted = blob_client.delete_blob()
+    def delete(self):
+        args = parserBlob.parse_args()
+        filename = args["filename"]
+        blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
+        container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
+        blob_client = container_client.get_blob_client(filename)
+        deleted = False
+        try:
+            blob_client.delete_blob()
+            deleted = True
+        except:
+            deleted = False
+        
         if deleted:
             return f"File {filename} deleted."
         else:
@@ -495,3 +518,5 @@ api.add_resource(Main, '/')
 # Run the app
 if __name__ == '__main__': 
     app.run(debug=True)
+
+

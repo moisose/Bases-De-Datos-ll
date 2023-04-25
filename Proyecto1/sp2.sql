@@ -293,7 +293,7 @@ BEGIN
 				INNER JOIN WeeklySchedule ON WeeklySchedule.userId = Student.userId
 				INNER JOIN CourseGroup ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
 				INNER JOIN Course ON CourseGroup.courseId = Course.courseId
-				WHERE Course.courseId = @courseId AND @userId = userId)
+				WHERE Course.courseId = @courseId AND @userId = Student.userId)
 	BEGIN
 		SELECT 'The selected couse has already been enrolled in another group' AS ExecMessage
         RETURN
@@ -460,17 +460,136 @@ END
 GO
 
 
--- CRUD File_
-
--- CREATE
-CREATE OR ALTER PROCEDURE spCreateFile(@userId VARCHAR(32), @fileTypeId int, @periodId int, @creationDate date, @modificationDate date, @name varchar(50), @description varchar(100), @ver int) AS
+-- SP GET LATESTS FILE VERSION
+CREATE OR ALTER PROCEDURE spGetLatestFileVersion(@userId VARCHAR(32), @fileId INT) AS
 BEGIN
-    IF @userId IS NULL OR @fileTypeId IS NULL OR @periodId IS NULL OR @creationDate IS NULL OR @modificationDate IS NULL OR @name IS NULL OR @description IS NULL OR @ver IS NULL
+    IF @userId IS NULL OR @fileId IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
         RETURN
     END
-    IF EXISTS(SELECT * FROM File_ WHERE userId = @userId AND fileTypeId = @fileTypeId AND periodId = @periodId AND creationDate = @creationDate AND modificationDate = @modificationDate AND name = @name AND description = @description AND ver = @ver)
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM File_ WHERE fileId = @fileId)
+    BEGIN
+        SELECT 'The file does not exist' AS ExecMessage
+        RETURN
+    END
+
+    SELECT TOP 1 File_.fileId  FROM File_ INNER JOIN Version ON File_.fileId = Version.fileId WHERE userId = @userId AND File_.fileId = @fileId ORDER BY modificationDate DESC
+END
+GO
+
+-- SP GET ALL VERSIONS OF FILE
+CREATE OR ALTER PROCEDURE spGetAllVersionsOfFile(@userId VARCHAR(32), @fileId INT) AS
+BEGIN
+    IF @userId IS NULL OR @fileId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM File_ WHERE fileId = @fileId)
+    BEGIN
+        SELECT 'The file does not exist' AS ExecMessage
+        RETURN
+    END
+
+    SELECT Version.modificationDate FROM File_ INNER JOIN Version ON File_.fileId = Version.fileId WHERE userId = @userId AND File_.fileId = @fileId
+END
+
+-- GET VERSION OF FILE
+CREATE OR ALTER PROCEDURE spGetVersionOfFile(@userId VARCHAR(32), @fileId INT, @modificationDate DATE) AS
+BEGIN
+    IF @userId IS NULL OR @fileId IS NULL OR @modificationDate IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM File_ WHERE fileId = @fileId)
+    BEGIN
+        SELECT 'The file does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM Version WHERE fileId = @fileId AND modificationDate = @modificationDate)
+    BEGIN
+        SELECT 'The version does not exist' AS ExecMessage
+        RETURN
+    END
+
+    SELECT filename FROM Version WHERE fileId = @fileId AND modificationDate = @modificationDate
+END
+
+-- SP MODIFY FILE (NEW VERSION)
+CREATE OR ALTER PROCEDURE spModifyFile(@userId VARCHAR(32), @fileId INT, @modificationDate DATE, @name VARCHAR(50), @description VARCHAR(100), @error INT OUTPUT) AS
+BEGIN
+    IF @userId IS NULL OR @fileId IS NULL OR @modificationDate IS NULL OR @name IS NULL OR @description IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        SET @error = 1
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        SET @error = 1
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM File_ WHERE fileId = @fileId)
+    BEGIN
+        SELECT 'The file does not exist' AS ExecMessage
+        SET @error = 1
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM File_ WHERE fileId = @fileId AND userId = @userId)
+    BEGIN
+        SELECT 'The user does not own the file' AS ExecMessage
+        SET @error = 1
+        RETURN
+    END
+
+    DECLARE @updateError INT 
+    SET @updateError = 0
+
+    EXEC spUpdateFile @fileId, NULL, NULL, NULL, @name, @description, @updateError OUTPUT
+
+    IF @updateError = 1
+    BEGIN
+        SELECT 'The file could not be updated' AS ExecMessage
+        SET @error = 1
+        RETURN
+    END
+
+    INSERT INTO Version (fileId, modificationDate, filename) VALUES (@fileId, @modificationDate, @filename)
+    SET @error = 0
+
+END
+GO
+
+
+-- CRUD File_
+
+-- CREATE
+CREATE OR ALTER PROCEDURE spCreateFile(@userId VARCHAR(32), @filename VARCHAR(15), @fileTypeId INT, @periodId INT, @creationDate DATE, @name VARCHAR(50), @description VARCHAR(100)) AS
+BEGIN
+    IF @userId IS NULL OR @filename IS NULL OR @fileTypeId IS NULL OR @periodId IS NULL OR @creationDate IS NULL OR @name IS NULL OR @description IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF EXISTS(SELECT * FROM File_ WHERE userId = @userId AND fileTypeId = @fileTypeId AND periodId = @periodId AND creationDate = @creationDate AND name = @name AND description = @description)
     BEGIN
         SELECT 'The file already exists' AS ExecMessage
         RETURN
@@ -480,18 +599,20 @@ BEGIN
         SELECT 'The user does not exist' AS ExecMessage
         RETURN
     END
+    IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @periodId)
+    BEGIN
+        SELECT 'The period does not exist' AS ExecMessage
+        RETURN
+    END
     IF NOT EXISTS(SELECT * FROM FileType WHERE fileTypeId = @fileTypeId)
     BEGIN
         SELECT 'The file type does not exist' AS ExecMessage
         RETURN
     END
-    IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @periodId)
-    BEGIN
-        SELECT 'The school period does not exist' AS ExecMessage
-        RETURN
-    END
 
-    INSERT INTO File_ (userId, fileTypeId, periodId, creationDate, modificationDate, name, description, ver) VALUES (@userId, @fileTypeId, @periodId, @creationDate, @modificationDate, @name, @description, @ver)
+    INSERT INTO File_ (userId, fileTypeId, periodId, creationDate, name, description) VALUES (@userId, @fileTypeId, @periodId, @creationDate, @name, @description)
+    INSERT INTO Version (fileId, modificationDate, filename) VALUES (@fileId, @creationDate, @filename)
+
 END
 GO
 
@@ -514,9 +635,42 @@ END
 GO
 
 -- UPDATE
-CREATE OR ALTER PROCEDURE spUpdateFile(@fileId INT, @newUserId VARCHAR(32), @newFileTypeId int, @newPeriodId int, @newCreationDate date, @newModificationDate date, @newName varchar(50), @newDescription varchar(100), @newVer int) AS
+CREATE OR ALTER PROCEDURE spUpdateFile(@fileId INT, @fileTypeId INT, @periodId INT, @creationDate DATE, @name VARCHAR(50), @description VARCHAR(100), @error INT OUTPUT) AS
 BEGIN
-    IF @fileId IS NULL OR @newUserId IS NULL OR @newFileTypeId IS NULL OR @newPeriodId IS NULL OR @newCreationDate IS NULL OR @newModificationDate IS NULL OR @newName IS NULL OR @newDescription IS NULL OR @newVer IS NULL
+    IF @fileId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        SET @error = 1
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM File_ WHERE fileId = @fileId)
+    BEGIN
+        SELECT 'The file does not exist' AS ExecMessage
+        SET @error = 1
+        RETURN
+    END
+    IF @fileTypeId IS NOT NULL AND NOT EXISTS(SELECT * FROM FileType WHERE fileTypeId = @fileTypeId)
+    BEGIN
+        SELECT 'The file type does not exist' AS ExecMessage
+        SET @error = 1
+        RETURN
+    END
+    IF @periodId IS NOT NULL AND NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @periodId)
+    BEGIN
+        SELECT 'The period does not exist' AS ExecMessage
+        SET @error = 1
+        RETURN
+    END
+
+    UPDATE File_ SET fileTypeId = ISNULL(@fileTypeId, fileTypeId), periodId = ISNULL(@periodId, periodId), creationDate = ISNULL(@creationDate, creationDate), name = ISNULL(@name, name), description = ISNULL(@description, description) WHERE fileId = @fileId
+    SET @error = 0
+END
+GO
+
+-- DELETE
+CREATE OR ALTER PROCEDURE spDeleteFile(@fileId INT) AS
+BEGIN
+    IF @fileId IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
         RETURN
@@ -526,45 +680,7 @@ BEGIN
         SELECT 'The file does not exist' AS ExecMessage
         RETURN
     END
-    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @newUserId)
-    BEGIN
-        SELECT 'The user does not exist' AS ExecMessage
-        RETURN
-    END
-    IF NOT EXISTS(SELECT * FROM FileType WHERE fileTypeId = @newFileTypeId)
-    BEGIN
-        SELECT 'The file type does not exist' AS ExecMessage
-        RETURN
-    END
-    IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @newPeriodId)
-    BEGIN
-        SELECT 'The school period does not exist' AS ExecMessage
-        RETURN
-    END
 
-    UPDATE File_ SET userId = ISNULL(@newUserId, userId), fileTypeId = ISNULL(@newFileTypeId, fileTypeId), periodId = ISNULL(@newPeriodId, periodId), creationDate = ISNULL(@newCreationDate, creationDate), modificationDate = ISNULL(@newModificationDate, modificationDate), name = ISNULL(@newName, name), description = ISNULL(@newDescription, description), ver = ISNULL(@newVer, ver) WHERE fileId = @fileId
+    DELETE FROM File_ WHERE fileId = @fileId
 END
-GO
 
--- DELETE
-CREATE OR ALTER PROCEDURE spDeleteFile(@fileId INT) AS
-BEGIN
-    BEGIN TRY
-        IF @fileId IS NULL
-        BEGIN
-            SELECT 'NULL parameters' AS ExecMessage
-            RETURN
-        END
-        IF NOT EXISTS(SELECT * FROM File_ WHERE fileId = @fileId)
-        BEGIN
-            SELECT 'The file does not exist' AS ExecMessage
-            RETURN
-        END
-
-        DELETE FROM File_ WHERE fileId = @fileId
-    END TRY
-    BEGIN CATCH
-        SELECT 'The file can not be deleted' AS ExecMessage
-    END CATCH
-END
-GO
