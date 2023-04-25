@@ -89,8 +89,81 @@ También, el resto de botones tienen otros bloques de código para registrarse a
 
 ### **Sign In Screen**
 
+Aquí el usario puede registrase a la app para ingresar a hacer la matricula, debido a que solo se implementa la parte de matricula, se asume que todos los usarios son estudiantes
+
 <center>
     <img src="Resources/SignUpScreen.png" alt="Sign In Screen" />
+</center>
+
+Aquí se definen las variables de app actualDate donde se coloca  la fecha actual, este se usa para las validaciones de la fecha de cumpleaños. Tambien se define userData_json para almacenar los datos que ingresa el usuario y enviarlos al api.
+
+<center>
+    <img src="Resources/SignUpvar.png" alt="Sign In Screen" />
+</center>
+
+Cuando la ventana se abre se inicializan ciertos valores, el if verifica si es un nuevo usuario ingresando o solo cambio de ventana para cambiar el campus. Si solo cambio de ventana para lo del campus, no se cambia la fecha actual (la toma del date picker) y se cambia el texto de la label, si es un nuevo usuario, se hace el get date y se incializan otros valores.
+
+<center>
+    <img src="Resources/signUpOpens.png" alt="Sign In Screen" />
+</center>
+
+Cuando la ventana se abre se inicializan ciertos valores, el if verifica si es un nuevo usuario ingresando o solo cambio de ventana para cambiar el campus. Si solo cambio de ventana para lo del campus, no se cambia la fecha actual (la toma del date picker) y se cambia el texto de la label, si es un nuevo usuario, se hace el get date y se incializan otros valores.
+
+<center>
+    <img src="Resources/SignUpDatePicked.png" alt="Date Picked" />
+</center>
+
+Cuando se selecciona una fecha de nacimiento se usa la variable que se inicializa al abrir la ventana, la de la fecha actual, se hace la verificación de si esta es menor o igual a la seleccionada, si se cumple la condición se llama a la función para un mensaje de error, notificando que la fecha es inválida porque es después de la fecha actual, además, el texto se coloca de color rojo para hacerle saber al usuario que esta mal. En caso contrario, se pone la fecha en color negro.
+
+<center>
+    <img src="Resources/SignUpDateError.png" alt="Date Error" />
+</center>
+
+Por otro lado, cuando el usuario presiona el botón de  se hacen las distintas verificaciones de datos, entre ellas:
+
+* Los password son iguales
+* El campo del nombre esta lleno
+* La fecha esta bien
+* El campus ha sigo seleccionado
+
+<center>
+    <img src="Resources/SignUpBtn.png" alt="Sign Up Btn" />
+</center>
+
+Demás verificaciones se hacen al llamar sign up de firebase, debido a que esta nos da verifiaciones de email.
+
+<center>
+    <img src="Resources/SignUpErrorFirebase.png" alt="Sign Up error con firebase" />
+</center>
+
+La funcion que hace el sign Up también llama a la función **saveInfo**, que hace el firebase sign in con el input del email y el password, posteriormente llama a la función de generateJSON.
+
+<center>
+    <img src="Resources/SignUpSaveInfo.png" alt="Sign Up error con firebase" />
+</center>
+
+La función **generateJSON** se encarga de ponerle las propiedades al objeto que será 'parseado' a un JSON para enviárselo al API, es por esto que llama a la función connetAPI.
+
+<center>
+    <img src="Resources/signUpGenerateJSON.png" alt="Sign Up error con firebase" />
+</center>
+
+En connectAPI se hace el set el http al que nos vamos a conectar para mandar los datos del usuario y el queryParameter, que en este caso corresponde al JSON. Su usa la función callAPIAZURE y se hace un post, cuando se crea el usuario se le muestra un mensaje al usuario indicandole que su usuario se creo con éxito'.
+
+<center>
+    <img src="Resources/SignUpConnectApi.png" alt="Sign Up error con firebase" />
+</center>
+
+Tambien tiene otras opciones para cambiar entre ventanas
+
+<center>
+    <img src="Resources/SignUpOtherAct.png" alt="Sign Up error con firebase" />
+</center>
+
+Envarias secciones se llama a la función **resetScreen** para que los datos regresen a los datos iniciales.
+
+<center>
+    <img src="Resources/SignUpResetS.png" alt="Sign Up error con firebase" />
 </center>
 
 ### **Home Screen**
