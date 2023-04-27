@@ -400,14 +400,14 @@ GO
 -- CRUD User_
 
 -- CREATE
-CREATE OR ALTER PROCEDURE spCreateUser_(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT) AS
+CREATE OR ALTER PROCEDURE spCreateUser_(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT, @student BIT) AS
 BEGIN
     IF @userId IS NULL OR @userName IS NULL OR @birthDate IS NULL OR @email IS NULL OR @idCampus IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
         RETURN
     END
-    IF EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    IF EXISTS(SELECT * FROM User WHERE userId = @userId)
     BEGIN
         SELECT 'The user already exists' AS ExecMessage
         RETURN
@@ -419,6 +419,12 @@ BEGIN
     END
 
     INSERT INTO User_ (userId, userName, birthDate, email) VALUES (@userId, @userName, @birthDate, @email)
+    INSERT INTO CampusXUser (campusId, userId) VALUES (@idCampus, @userId)
+
+    IF @student = 1
+    BEGIN
+    INSERT INTO Student (userId, isAssistant) VALUES (@userId, 0)
+    END
 END
 GO
 
@@ -443,7 +449,7 @@ GO
 -- UPDATE
 CREATE OR ALTER PROCEDURE spUpdateUser_(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT) AS
 BEGIN
-    IF @userId IS NULL OR @userName IS NULL OR @birthDate IS NULL OR @email IS NULL OR @idCampus IS NULL
+    IF @userId IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
         RETURN
@@ -460,6 +466,8 @@ BEGIN
     END
 
     UPDATE User_ SET userName = ISNULL(@userName, userName), birthDate = ISNULL(@birthDate, birthDate), email = ISNULL(@email, email) WHERE userId = @userId
+    
+    UPDATE CampusXUser SET campusId = ISNULL(@idCampus, campusId) WHERE userId = @userId
 END
 GO
 
@@ -478,7 +486,27 @@ BEGIN
             RETURN
         END
 
+        -- verify if the user is a student/teacher/administrator and delete it
+        IF EXISTS(SELECT * FROM Student WHERE userId = @userId)
+        BEGIN
+            DELETE FROM Student WHERE userId = @userId
+        END
+        IF EXISTS(SELECT * FROM Teacher WHERE userId = @userId)
+        BEGIN
+            DELETE FROM Teacher WHERE userId = @userId
+        END
+        IF EXISTS(SELECT * FROM CampusXUser WHERE userId = @userId)
+        BEGIN
+            DELETE FROM CampusXUser WHERE userId = @userId
+        END
+        IF EXISTS(SELECT * FROM Administrator WHERE userId = @userId)
+        BEGIN
+            DELETE FROM Administrator WHERE userId = @userId
+        END
+
+        -- delete the user
         DELETE FROM User_ WHERE userId = @userId
+
     END TRY
     BEGIN CATCH
         SELECT 'The user can not be deleted' AS ExecMessage
@@ -767,3 +795,125 @@ GO
 --     SET @result = 1
 -- END
 -- GO
+
+
+
+-- Store procedure for check if ther user has an asigned career
+-- SP VERIFY CAREER
+CREATE OR ALTER PROCEDURE spVerifyCareer (@userId, @statusResult BIT OUTPUT) AS
+BEGIN
+
+    IF @userId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE User_.userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+
+    IF EXISTS(SELECT * FROM User_ INNER JOIN CareerXUser WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user has a career' AS ExecMessage
+        SET @statusResult = 1
+        RETURN
+    END
+END
+GO
+
+-- Store procedure for get the enrolled courses of a student
+-- SP GET ENROLLED COURSES
+CREATE OR ALTER PROCEDURE spGetEnrolledCourses(@userId VARCHAR(32), @schoolPeriodId INT) AS
+BEGIN
+    IF @userId IS NULL OR @schoolPeriodId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId)
+    BEGIN
+        SELECT 'The school period does not exist' AS ExecMessage
+        RETURN
+    END
+
+    SELECT Course.courseId, CourseGroup.courseGroupId, Course.courseName, Schedule.startTime, Schedule.finishTime, Day_.name
+    FROM Course
+    INNER JOIN CourseGroup ON Course.courseId = CourseGroup.courseId
+    INNER JOIN WeeklySchedule ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
+    INNER JOIN SchoolPeriod ON CourseGroup.periodId = SchoolPeriod.schoolPeriodId
+	INNER JOIN ScheduleXCourseGroup ON ScheduleXCourseGroup.courseGroupId = CourseGroup.courseGroupId
+	INNER JOIN ScheduleXDay ON ScheduleXDay.scheduleXDayId = ScheduleXCourseGroup.scheduleXDayId
+	INNER JOIN Schedule ON Schedule.scheduleId = ScheduleXDay.scheduleXDayId
+	INNER JOIN Day_ ON Day_.dayId = ScheduleXDay.dayId
+	
+	
+    WHERE WeeklySchedule.userId = @userId AND SchoolPeriod.schoolPeriodId = @schoolPeriodId 
+END
+GO
+
+-- Store procedure for get the last career plan
+--SP GET LAST PLAN 
+CREATE OR ALTER PROCEDURE spGetLastPlan(@userId VARCHAR(32), @careerId INT) AS
+BEGIN
+    IF @userId IS NULL OR @careerId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM Career WHERE careerId = @careerId)
+    BEGIN
+        SELECT 'The career does not exist' AS ExecMessage
+        RETURN
+    END
+    SELECT TOP 1 * FROM CareerPlan WHERE careerId = @careerId ORDER BY activationDate DESC
+END
+GO
+
+-- Store procedure for get the student grade of a specific course
+-- SP GET GRADE OF A COURSE
+CREATE OR ALTER PROCEDURE spGetGradeOfCourse(@userId VARCHAR(32), @courseId INT) AS
+BEGIN
+    DECLARE @sum FLOAT
+    SET @sum = 0
+    
+    IF @userId IS NULL OR @courseId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM Course WHERE courseId = @courseId)
+    BEGIN
+        SELECT 'The course does not exist' AS ExecMessage
+        RETURN
+    END
+
+    SET @sum = (SELECT SUM(grade) AS totalSum 
+                    FROM Student
+                    INNER JOIN WeeklySchedule ON Student.userId = WeeklySchedule.userId
+                    INNER JOIN CourseGroup ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
+                    INNER JOIN Evaluation ON Evaluation.courseGroupId = CourseGroup.courseGroupId
+                    INNER JOIN Item ON Item.evaluationId = Evaluation.evaluationId
+                    INNER JOIN StudentXItem ON StudentXItem.itemId = Item.itemId AND StudentXItem.userId = Student.userId
+
+                    WHERE Student.userId = @userId) 
+
+	SELECT @sum 
+END
+GO
