@@ -132,7 +132,7 @@ parserEnrollment.add_argument("timeOfDay", type=str)
 
 # args File
 parserFile = reqparse.RequestParser()
-parserFile.add_argument("fileId", type=int, required=True)
+parserFile.add_argument("fileId", type=int, required=False)
 parserFile.add_argument("userId", type=str, required=True)
 parserFile.add_argument("fileTypeId", type=int)
 parserFile.add_argument("periodId", type=int)
@@ -148,6 +148,11 @@ parserBlob = reqparse.RequestParser()
 parserBlob.add_argument('userId', type=str, help='User ID', required=False)
 parserBlob.add_argument('filename', type=str, help='Filename', required=False)
 
+# args Login
+parserAuthentication = reqparse.RequestParser()
+parserAuthentication.add_argument("userId", type=str, required=True)
+parserAuthentication.add_argument("password", type=str, required=False)
+
 
 # ===========================================================================
 # Cassandra class
@@ -162,47 +167,58 @@ class CassandraConnector():
         return "Deleted all"
 
     def loadFile(self, user):
-        self.submit(user, "Loaded File")
+        self.submit(user, "Loaded File.")
 
     def modifyFile(self, user):
-        self.submit(user, "Modified File")
+        self.submit(user, "Modified File.")
 
     def deleteFile(self, user):
-        self.submit(user, "Deleted File")
+        self.submit(user, "Deleted File.")
+
+    def userInfoRequested(self, user):
+        self.submit(user, "Requested his/her information.")
+
+    def userInfoUpdated(self, user):
+        self.submit(user, "Updated his/her information.")
+
+    def userDeleted(self, user):
+        self.submit(user, "Deleted his/her account.")
 
     def signUp(self, user):
-        self.submit(user, "Signed up")
+        self.submit(user, "Signed up.")
 
     def userLogin(self, user):
-        self.submit(user, "Logged in")
+        self.submit(user, "Logged in.")
 
     def userLogout(self, user):
-        self.submit(user, "Logged out")
+        self.submit(user, "Logged out.")
 
     def enrollCourse(self, user):
-        self.submit(user, "Enrolled a Course")
+        self.submit(user, "Enrolled a Course.")
 
     def unregisterCourse(self, user):
-        self.submit(user, "Unregistered a Course")
+        self.submit(user, "Unregistered a Course.")
 
     def availableCourses(self, user):
-        self.submit(user, "Viewed available courses")
+        self.submit(user, "Viewed available courses.")
 
     def viewEnrollmentDates(self, user):
-        self.submit(user, "Viewed enrollment date")
+        self.submit(user, "Viewed enrollment date.")
 
     def resetPassword(self, user):
-        self.submit(user, "Reset the Password")
+        self.submit(user, "Reset the Password.")
 
     def viewGradeAverage(self, user):
-        self.submit(user, "Viewed grade average")
+        self.submit(user, "Viewed grade average.")
 
     def getEnrollmentReport(self, user):
-        self.submit(user, "Viewed enrollment report")
+        self.submit(user, "Viewed enrollment report.")
 
     def viewEnrolledCourses(self, user):
-        self.submit(user, "Viewed enrolled courses")
+        self.submit(user, "Viewed enrolled courses.")
 
+
+logManager = CassandraConnector()
 
 # ===========================================================================
 # Resources
@@ -210,6 +226,22 @@ class CassandraConnector():
 class Main(Resource):
     def get(self):
         return {"message": "Welcome to the API!"}
+    
+class Authentication(Resource):
+    def post(self):
+        args = parserAuthentication.parse_args()
+        user = args["user"]
+        password = args["password"]
+        if user == "admin" and password == "admin":
+            return {"message": "Login successful!"}
+        else:
+            return {"message": "Login failed!"}
+    
+    def delete(self):
+        args = parserAuthentication.parse_args()
+        user = args["user"]
+        logManager.userLogout(user)
+        return {"message": "Logout successful!"}
 
 class BlobStorage(Resource):
 
@@ -261,7 +293,6 @@ class BlobStorage(Resource):
         else:
             return f"File {filename} not found."
 
-
 class User(Resource):
     # Read procedure that returns the information of the user
     def get(self):
@@ -273,6 +304,7 @@ class User(Resource):
             cur.execute("spReadUser", (userId,))
             rows = cur.fetchall()
             cur.close()
+            logManager.userInfoRequested(userId)
             return {'data': rows}
         except Exception as e:
             print(e)
@@ -289,13 +321,13 @@ class User(Resource):
             idCampus = args["idCampus"]
 
             cur = conn.cursor()
-
             cur.execute("USE db01;")
             cur.execute("spCreateUser", (userId, userName, userBirthDay, userEmail, idCampus))
 
             conn.commit()
             cur.close()
-            return {'status': 'success', 'data': args}
+            logManager.signUp(userId)
+            return {'status': 'User successfully created', 'data': args}
         except Exception as e:
             return {'status': str(e)}
 
@@ -314,7 +346,8 @@ class User(Resource):
             cur.execute('spUpdateUser', (userId, userName, userBirthDay, userEmail, idCampus))
             conn.commit()
             cur.close()
-            return {'status': 'success', 'idUpdated': id, "data":args}
+            logManager.userInfoUpdated(userId)
+            return {'status': 'success', 'idUpdated': userId, "data": args}
         except Exception as e:
             return {'status': str(e)}
 
@@ -327,10 +360,11 @@ class User(Resource):
 
             cur = conn.cursor()
             cur.execute("USE db01;")
-            cur.execute('spDeleteUser', (id,))
+            cur.execute('spDeleteUser', (userId,))
             conn.commit()
             cur.close()
-            return {'status': 'success', 'id': id}
+            logManager.userDeleted(userId)
+            return {'status': 'Deleted successfully!', 'userId': userId}
         except:
             return {'status': 'failed'}
 
@@ -363,7 +397,6 @@ class Course(Resource):
             print(e)
             return {'status': str(e)}
     
-
 class SchoolPeriod(Resource):
     # Read procedure that returns the information of a school period
     def get(self):
@@ -430,13 +463,12 @@ class Enrollment(Resource):
         except Exception as e:
             return {'status': str(e)}
         
-class File(Resource):
+class File():
     # Read procedure that returns the information of a file
-    def get(self):
+    def get(self, fileName):
         try:
             args = parserFile.parse_args()
-            fileName = args["fileName"]
-
+            userId = args["userId"]
             cur = conn.cursor()
             cur.execute("EXEC spReadFile", (fileName, ))
             rows = cur.fetchall()
@@ -490,16 +522,13 @@ class File(Resource):
             return {'status': str(e)}
     
     # Delete procedure that deletes a file
-    def delete(self):
+    def delete(self, fileId):
         try:
-            args = parserFile.parse_args()
-            fileId = args["fileId"]
-
             cur = conn.cursor()
             cur.execute("EXEC spDeleteFile", (fileId,))
             conn.commit()
             cur.close()
-            return {'status': 'success', 'data': args}
+            return {'status': 'Deleted successfully', 'fileId': fileId}
         except Exception as e:
             return {'status': str(e)}
 
@@ -510,9 +539,9 @@ api.add_resource(Course, '/course')
 api.add_resource(SchoolPeriod, '/schoolperiod')
 api.add_resource(Grade, '/grade')
 api.add_resource(Enrollment, '/enrollment')
-api.add_resource(File, '/file')
-api.add_resource(BlobStorage, '/blob')
+api.add_resource(BlobStorage, '/filemanager')
 api.add_resource(Main, '/')
+api.add_resource(Authentication, '/authentication')
 
 
 # Run the app
