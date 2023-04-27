@@ -148,10 +148,6 @@ BEGIN
     BEGIN
         SET @enrollmentTimeScheduleValue = 12
     END
-    ELSE
-    BEGIN
-        SELECT 'You can not enroll' AS ExecMessage
-    END
 
 	SELECT @enrollmentTimeScheduleValue
 
@@ -191,7 +187,7 @@ SELECT courseRequirementId, courseId, courseXPlanId
 FROM CourseRequirement
 WHERE courseXPlanId = (SELECT courseXPlanId FROM CourseXPlan WHERE courseId = @courseId)
 
-SELECT * FROM #TCourseRequirement
+-- SELECT * FROM #TCourseRequirement
 
 WHILE (SELECT COUNT(*) FROM #TCourseRequirement) != 0
 BEGIN
@@ -217,20 +213,23 @@ END
 GO
 
 -- SP ENROLLMENT
-CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT, @enrollmentId INT, @dateOfToday DATETIME) AS
+CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT, @enrollmentId INT) AS
 BEGIN
-    DECLARE @enrollmentSchedule INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME, @timeOfDay INT, @currentTime TIME
+    DECLARE @enrollmentSchedule INT, @previousSchoolPeriod INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME, @timeOfDay INT, @currentTime TIME, @dateOfToday DATETIME
+    SET @previousSchoolPeriod = 0
     SET @enrollmentSchedule = 0
 	SET @meetsRequirements = 0
+    SET @dateOfToday = GETDATE()
 	SET @timeOfDay = DATEPART(HOUR, @dateOfToday)
 	SET @currentTime = (SELECT CONVERT(varchar, GETDATE(), 108))
 
-    IF DATEDIFF(DAY, GETDATE(), @dateOfToday) != 0 OR (SELECT EnrollmentStatus.description FROM EnrollmentStatus INNER JOIN Enrollment ON Enrollment.statusId = EnrollmentStatus.statusId WHERE @schoolPeriodId = periodId) = 'Inactivo'
+    IF (SELECT EnrollmentStatus.description FROM EnrollmentStatus INNER JOIN Enrollment ON Enrollment.statusId = EnrollmentStatus.statusId WHERE @schoolPeriodId = periodId) = 'Inactivo'
+        OR @dateOfToday < (SELECT Enrollment.startDate FROM Enrollment WHERE @schoolPeriodId = periodId) OR @dateOfToday > (SELECT Enrollment.endingDate FROM Enrollment WHERE @schoolPeriodId = periodId)
     BEGIN
         SELECT 'The date of enrollment period is not today or is closed' AS ExecMessage
         RETURN
     END
-    IF @userId IS NULL
+    IF @userId IS NULL OR @schoolPeriodId IS NULL OR @courseGroupId IS NULL OR @enrollmentId IS NULL OR @dateOfToday IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
         RETURN
@@ -248,6 +247,16 @@ BEGIN
     IF EXISTS(SELECT * FROM WeeklySchedule WHERE userId = @userId AND courseGroupId = @courseGroupId)
     BEGIN
         SELECT 'The user is already enrolled' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM CourseGroup WHERE courseGroupId = @courseGroupId)
+    BEGIN
+        SELECT 'The course group does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM Enrollment WHERE enrollmentId = @enrollmentId)
+    BEGIN
+        SELECT 'The enrollment does not exist' AS ExecMessage
         RETURN
     END
 
@@ -299,11 +308,29 @@ BEGIN
         RETURN
 	END
 
-	-- Validates if the student can enroll in the current time (start time of enrollment to finish time of enrollment)
-    EXEC dbo.spEnrollmentTimeSchedule @userId, @schoolPeriodId, @enrollmentSchedule OUTPUT
-    IF (DATEPART(HOUR, @timeOfDay) < @enrollmentSchedule OR DATEPART(HOUR, @timeOfDay) > @enrollmentSchedule) AND DATEPART(HOUR, @timeOfDay) < 12
+    -- calculate the last school period of the student
+    SET @previousSchoolPeriod = (SELECT TOP(1) schoolPeriodId FROM SchoolPeriod
+        INNER JOIN CourseGroup ON SchoolPeriod.schoolPeriodId = CourseGroup.periodId
+        INNER JOIN Course ON CourseGroup.courseId = Course.courseId
+        INNER JOIN StudentXCourse ON Course.courseId = StudentXCourse.courseId
+		INNER JOIN WeeklySchedule ON CourseGroup.courseGroupId = weeklySchedule.courseGroupId
+        
+        WHERE studentXCourse.userId = @userId 
+		AND StudentXCourse.status = 1 ORDER BY schoolPeriodId DESC)
+
+    IF @previousSchoolPeriod IS NULL
     BEGIN
-        SELECT 'You can not enroll' AS ExecMessage
+        SET @enrollmentSchedule = 7
+    END
+    ELSE 
+    BEGIN
+        EXEC dbo.spEnrollmentTimeSchedule @userId, @previousSchoolPeriod, @enrollmentSchedule OUTPUT
+    END
+
+	-- Validates if the student can enroll in the current time (start time of enrollment to finish time of enrollment)
+    IF (@timeOfDay < @enrollmentSchedule) OR (@timeOfDay > 15)
+    BEGIN
+        SELECT 'You can not enroll.' AS ExecMessage
         RETURN
     END
 
@@ -373,7 +400,7 @@ GO
 -- CRUD User_
 
 -- CREATE
-CREATE OR ALTER PROCEDURE spCreateUser(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT) AS
+CREATE OR ALTER PROCEDURE spCreateUser_(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT) AS
 BEGIN
     IF @userId IS NULL OR @userName IS NULL OR @birthDate IS NULL OR @email IS NULL OR @idCampus IS NULL
     BEGIN
@@ -396,7 +423,7 @@ END
 GO
 
 -- READ
-CREATE OR ALTER PROCEDURE spReadUser(@userId VARCHAR(32)) AS
+CREATE OR ALTER PROCEDURE spReadUser_(@userId VARCHAR(32)) AS
 BEGIN
     IF @userId IS NULL
     BEGIN
@@ -414,7 +441,7 @@ END
 GO
 
 -- UPDATE
-CREATE OR ALTER PROCEDURE spUpdateUser(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT) AS
+CREATE OR ALTER PROCEDURE spUpdateUser_(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT) AS
 BEGIN
     IF @userId IS NULL OR @userName IS NULL OR @birthDate IS NULL OR @email IS NULL OR @idCampus IS NULL
     BEGIN
@@ -437,7 +464,7 @@ END
 GO
 
 -- DELETE 
-CREATE OR ALTER PROCEDURE spDeleteUser(@userId VARCHAR(32)) AS
+CREATE OR ALTER PROCEDURE spDeleteUser_(@userId VARCHAR(32)) AS
 BEGIN
     BEGIN TRY
         IF @userId IS NULL
@@ -504,6 +531,7 @@ BEGIN
 
     SELECT Version.modificationDate FROM File_ INNER JOIN Version ON File_.fileId = Version.fileId WHERE userId = @userId AND File_.fileId = @fileId
 END
+GO
 
 -- GET VERSION OF FILE
 CREATE OR ALTER PROCEDURE spGetVersionOfFile(@userId VARCHAR(32), @fileId INT, @modificationDate DATE) AS
@@ -531,6 +559,7 @@ BEGIN
 
     SELECT filename FROM Version WHERE fileId = @fileId AND modificationDate = @modificationDate
 END
+GO
 
 -- SP MODIFY FILE (NEW VERSION)
 CREATE OR ALTER PROCEDURE spModifyFile(@userId VARCHAR(32), @fileId INT, @modificationDate DATE, @name VARCHAR(50), @description VARCHAR(100), @error INT OUTPUT) AS
@@ -572,7 +601,7 @@ BEGIN
         RETURN
     END
 
-    INSERT INTO Version (fileId, modificationDate, filename) VALUES (@fileId, @modificationDate, @filename)
+    INSERT INTO Version (fileId, modificationDate, filename) VALUES (@fileId, @modificationDate, @name)
     SET @error = 0
 
 END
@@ -611,7 +640,7 @@ BEGIN
     END
 
     INSERT INTO File_ (userId, fileTypeId, periodId, creationDate, name, description) VALUES (@userId, @fileTypeId, @periodId, @creationDate, @name, @description)
-    INSERT INTO Version (fileId, modificationDate, filename) VALUES (@fileId, @creationDate, @filename)
+    INSERT INTO Version (fileId, modificationDate, filename) VALUES (@@IDENTITY, @creationDate, @filename)
 
 END
 GO
@@ -683,4 +712,58 @@ BEGIN
 
     DELETE FROM File_ WHERE fileId = @fileId
 END
+GO
 
+-- -- Store Procedure for check if the user id in his enrollment time
+-- CREATE OR ALTER PROCEDURE spUserInEnrollmentTime(@userId VARCHAR(32), @schoolPeriodId INT, @result BIT OUTPUT) AS
+-- BEGIN
+--     IF @userId IS NULL OR @schoolPeriodId IS NULL
+--     BEGIN
+--         SELECT 'NULL parameters' AS ExecMessage
+--         RETURN
+--     END
+--     IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+--     BEGIN
+--         SELECT 'The user does not exist' AS ExecMessage
+--         RETURN
+--     END
+--     IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId)
+--     BEGIN
+--         SELECT 'The school period does not exist' AS ExecMessage
+--         RETURN
+--     END
+
+--     DECLARE @enrollmentTimeScheduleValue INT, @enrollmentDay DATETIME, @currentDay DATETIME
+--     SET @enrollmentTimeScheduleValue = [dbo].spEnrollmentTimeSchedule(@userId, @schoolPeriodId)
+
+--     -- The user cant enroll and the errorcode is -1
+
+--     IF @enrollmentTimeScheduleValue = -1
+--     BEGIN
+--         SELECT 'You can not enroll' AS ExecMessage
+--         SET @result = -1
+--     END
+
+--     -- obtain the enrollment day and the current day
+--     SET @enrollmentDay = (SELECT Enrollment.startDate FROM Enrollment INNER JOIN SchoolPeriod ON SchoolPeriod.schoolPeriodId = Enrollment.PeriodId WHERE Enrollment.PeriodId = @schoolPeriodId)
+--     SET @currentDay = GETDATE()
+
+--     -- if the current day is not the enrollment day, the user cant enroll
+--     IF DATEPART(DAY, @enrollmentDay) != DATEPART(DAY, @currentDay)
+--     BEGIN
+--         SELECT 'You are not in the enrollment day' AS ExecMessage
+--         SET @result = -1
+--     END
+
+--     -- if the current hour is not in the enrollment time schedule, the user cant enroll
+--     -- the enrollment time schedule is from 7 am to 3 pm, but the start time of the student depends on his grade average
+--     IF DATEPART(HOUR, @currentDay) < @enrollmentTimeScheduleValue OR DATEPART(HOUR, @currentDay) >= 15
+--     BEGIN
+--         SELECT 'You are not in your enrollment time' AS ExecMessage
+--         SET @result = -1
+--     END
+
+--     SELECT 'You are in your enrollment time, you can enroll' AS ExecMessage
+--     SET @result = 1
+-- END
+-- GO
