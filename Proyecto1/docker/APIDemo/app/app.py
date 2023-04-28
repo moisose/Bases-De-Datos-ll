@@ -22,7 +22,7 @@ Here you can find the connection string to connect to the Azure database, cassan
 # ===========================================================================
 # Azure Database Connection
 
-driver = "{ODBC Driver 17 for SQL Server}"
+driver = "{ODBC Driver 18 for SQL Server}"
 server = "tcp:tiburoncines-sqlserver.database.windows.net,1433"
 database = "db01"
 username = "el-adm1n"
@@ -380,8 +380,8 @@ class User(Resource):
             cur.close()
             logManager.userDeleted(userId)
             return {'status': 'Deleted successfully!', 'userId': userId}
-        except:
-            return {'status': 'failed'}
+        except Exception as e:
+            return {'status': str(e)}
 
 class Campus(Resource):
     # Read procedure that returns the information of all the campuses
