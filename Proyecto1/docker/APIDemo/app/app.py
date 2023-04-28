@@ -10,7 +10,7 @@ from ssl import SSLContext, PROTOCOL_TLSv1_2, CERT_NONE
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 import io
-import json
+from flask_cors import CORS
 
 
 """
@@ -69,12 +69,10 @@ session = cluster.connect(keyspace)
 
 # ===========================================================================
 # Blob Storage Connection
-#account_url = "https://filesmanagertiburoncines.blob.core.windows.net"
-#default_credential = DefaultAzureCredential()
-#blob_service_client = BlobServiceClient(account_url, credential=default_credential)
 
 # Definition of the API
 app = Flask(__name__)
+CORS(app)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['AZURE_STORAGE_CONNECTION_STRING'] = 'DefaultEndpointsProtocol=https;AccountName=filesmanagertiburoncines;AccountKey=CkgCBqebOGWP5we26jpV1TIP49C+Wxp2Nf5qJFNEI4i26LUdEX4bSMYfP/yRAYY9RBbGi5tV0QoN+AStTBd8Ew==;EndpointSuffix=core.windows.net'
 app.config['AZURE_STORAGE_CONTAINER_NAME'] = 'documents'
@@ -294,10 +292,10 @@ class BlobStorage(Resource):
             return f"File {filename} deleted."
         else:
             return f"File {filename} not found."
-
-class User(Resource):
+        
+class GetUser(Resource):
     # Read procedure that returns the information of the user
-    def get(self):
+    def post(self):
         try:
             args = parserUser.parse_args() # Args parsing
             userId = args["userId"]
@@ -319,6 +317,8 @@ class User(Resource):
             print(e)
             return {'status': str(e)}
 
+class User(Resource):
+    
     # Create procedure that creates a new user
     def post(self):
         try:
@@ -399,7 +399,7 @@ class Campus(Resource):
         
 class Course(Resource):
     # Read procedure that returns the information of all the courses of a user
-    def get(self):
+    def post(self):
         try:
             args = parserCourse.parse_args()
             userId = args["userId"]
@@ -572,6 +572,7 @@ class File():
 
 # API endpoints      
 api.add_resource(User, '/user')
+api.add_resource(GetUser, '/user/get')
 api.add_resource(Campus, '/campus')
 api.add_resource(Course, '/course')
 api.add_resource(SchoolPeriod, '/schoolperiod')
