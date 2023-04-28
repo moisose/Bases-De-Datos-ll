@@ -1,24 +1,13 @@
 USE db01
 GO
 
--- SP READ SCHOOL PERIOD
-CREATE OR ALTER PROCEDURE spReadSchoolPeriod(@schoolPeriodId INT) AS
-BEGIN
-    IF @schoolPeriodId IS NULL
-    BEGIN
-        SELECT 'NULL parameters' AS ExecMessage
-        RETURN
-    END
-    IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId)
-    BEGIN
-        SELECT 'The school period does not exist' AS ExecMessage
-        RETURN
-    END
-    SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId
-END
-GO
+--------------------------------------------------------------------------------------------------------------
+----------------------------------------- ENROLLMENT SP ------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 
 -- SP GET GRADE AVERAGE
+-- ENTRIES: @userId VARCHAR(32), @schoolPeriodId INT
+-- Description: This procedure return the grade average of a student in a school period
 CREATE OR ALTER PROCEDURE spGetGradeAverage(@userId VARCHAR(32), @schoolPeriodId INT, @resultado INT OUTPUT) AS
 BEGIN
     DECLARE @sum FLOAT, @courseAmount INT
@@ -72,6 +61,8 @@ END
 GO
 
 -- SP INSERT ENROLLMENTXSTUDENT
+-- ENTRIES: @enrollmentId INT, @schoolPeriodId INT, @userId VARCHAR(32), @enrollmentTime TIME
+-- Description: This procedure insert a new enrollmentXstudent, is used in the procedure spEnrollStudent
 CREATE OR ALTER PROCEDURE spInsertEnrollmentXStudent(@enrollmentId INT, @schoolPeriodId INT, @userId VARCHAR(32), @enrollmentTime TIME) AS
 BEGIN
 	DECLARE @time INT
@@ -102,6 +93,9 @@ END
 GO
 
 -- SP ENROLLMENT TIME SCHEDULE
+-- ENTRIES: @userId VARCHAR(32), @schoolPeriodId INT, @enrollmentTimeScheduleValue INT OUTPUT
+-- Description: This procedure return the enrollment time schedule of a student in a school period
+-- The enrollment time change depending of the grade average of the student
 CREATE OR ALTER PROCEDURE spEnrollmentTimeSchedule(@userId VARCHAR(32), @schoolPeriodId INT, @enrollmentTimeScheduleValue INT OUTPUT) AS 
 BEGIN
     IF @schoolPeriodId IS NULL
@@ -156,63 +150,67 @@ GO
 
 
 -- SP STUDENT MEETS ALL REQUIREMENTS TO ENROLL THE COURSE
+-- ENTRIES: @userId VARCHAR(32), @courseId INT, @meetsRequirements BIT OUTPUT
+-- Description: This procedure return if a student meets all requirements to enroll a course
 CREATE OR ALTER PROCEDURE spMeetRequirements(@userId VARCHAR(32), @courseId INT, @meetsRequirements BIT OUTPUT) AS
 BEGIN
 
-IF @userId IS NULL OR @courseId IS NULL
-BEGIN
-    SELECT 'NULL parameters' AS ExecMessage
-    RETURN
-END
-IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
-BEGIN
-    SELECT 'The user does not exist' AS ExecMessage
-    RETURN
-END
-IF NOT EXISTS(SELECT * FROM Course WHERE courseId = @courseId)
-BEGIN
-    SELECT 'The course does not exist' AS ExecMessage
-    RETURN
-END
+    IF @userId IS NULL OR @courseId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM Course WHERE courseId = @courseId)
+    BEGIN
+        SELECT 'The course does not exist' AS ExecMessage
+        RETURN
+    END
 
-CREATE TABLE #TCourseRequirement (
-   courseRequirementId INT,
-   courseId INT,
-   courseXPlanId INT
-)
-
-
-INSERT INTO #TCourseRequirement (courseRequirementId, courseId, courseXPlanId)
-SELECT courseRequirementId, courseId, courseXPlanId
-FROM CourseRequirement
-WHERE courseXPlanId = (SELECT courseXPlanId FROM CourseXPlan WHERE courseId = @courseId)
-
--- SELECT * FROM #TCourseRequirement
-
-WHILE (SELECT COUNT(*) FROM #TCourseRequirement) != 0
-BEGIN
-
-IF (SELECT TOP(1) StudentXCourse.status FROM StudentXCourse INNER JOIN CourseXPlan ON CourseXPlan.courseId = StudentXCourse.courseId INNER JOIN CourseRequirement ON CourseXPlan.courseXPlanId = CourseRequirement.courseXPlanId INNER JOIN Course ON Course.courseId = CourseXPlan.courseId WHERE Course.courseId = @courseId) = 0
-BEGIN
-	SET @meetsRequirements = 0
-	--SELECT @meetsRequirements
-	RETURN
-END
-
-DELETE TOP(1) FROM #TCourseRequirement
+    CREATE TABLE #TCourseRequirement (
+    courseRequirementId INT,
+    courseId INT,
+    courseXPlanId INT
+    )
 
 
-END
+    INSERT INTO #TCourseRequirement (courseRequirementId, courseId, courseXPlanId)
+    SELECT courseRequirementId, courseId, courseXPlanId
+    FROM CourseRequirement
+    WHERE courseXPlanId = (SELECT courseXPlanId FROM CourseXPlan WHERE courseId = @courseId)
 
-DROP TABLE #TCourseRequirement
+    -- SELECT * FROM #TCourseRequirement
 
-SET @meetsRequirements = 1
---SELECT @meetsRequirements
+    WHILE (SELECT COUNT(*) FROM #TCourseRequirement) != 0
+    BEGIN
+
+    IF (SELECT TOP(1) StudentXCourse.status FROM StudentXCourse INNER JOIN CourseXPlan ON CourseXPlan.courseId = StudentXCourse.courseId INNER JOIN CourseRequirement ON CourseXPlan.courseXPlanId = CourseRequirement.courseXPlanId INNER JOIN Course ON Course.courseId = CourseXPlan.courseId WHERE Course.courseId = @courseId) = 0
+    BEGIN
+        SET @meetsRequirements = 0
+        --SELECT @meetsRequirements
+        RETURN
+    END
+
+    DELETE TOP(1) FROM #TCourseRequirement
+
+
+    END
+
+    DROP TABLE #TCourseRequirement
+
+    SET @meetsRequirements = 1
+    --SELECT @meetsRequirements
 
 END
 GO
 
 -- SP ENROLLMENT
+-- ENTRIES: @userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT, @enrollmentId INT OUTPUT
+-- Description: This procedure enroll a student in a course group
 CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT, @enrollmentId INT) AS
 BEGIN
     DECLARE @enrollmentSchedule INT, @previousSchoolPeriod INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME, @timeOfDay INT, @currentTime TIME, @dateOfToday DATETIME
@@ -340,7 +338,9 @@ BEGIN
 END
 GO
 
---SP UNREGISTER
+-- SP UNREGISTER
+-- Entries: userId, courseGroupId
+-- Description: Unregisters a student from a course group
 CREATE OR ALTER PROCEDURE spUnregister(@userId VARCHAR(32), @courseGroupId INT) AS
 BEGIN
     IF @userId IS NULL OR @courseGroupId IS NULL
@@ -369,7 +369,9 @@ BEGIN
 END
 GO
 
---SP GET CURSOS
+-- SP GET CURSOS
+-- Entries: userId
+-- Description: Gets all the courses that a student can enroll
 CREATE OR ALTER PROCEDURE spGetCourses(@userId VARCHAR(32)) AS
 BEGIN
     IF @userId IS NULL
@@ -391,14 +393,188 @@ BEGIN
     INNER JOIN CourseEvaluation ON CourseEvaluation.courseGroupId = CourseGroup.courseGroupId
 
    WHERE Course.courseId != (SELECT StudentXCourse.courseId FROM StudentXCourse WHERE @userId = StudentXCourse.userId) 
-   AND CareerPlan.planId = (SELECT CareerPlan.planId FROM Student INNER JOIN StudentXPlan ON StudentXPlan.userId = Student.userId INNER JOIN CareerPlan ON StudentXPlan.planId = CareerPlan.planId WHERE StudentXPlan.userId = @userId)
+   AND CareerPlan.planId = (SELECT CareerPlan.planId FROM Student INNER JOIN StudentXPlan ON StudentXPlan.userId = Student.userId 
+   INNER JOIN CareerPlan ON StudentXPlan.planId = CareerPlan.planId WHERE StudentXPlan.userId = @userId)
 
 END
 GO
 
--- CRUD User_
+--------------------------------------------------------------------------------------------------------------
+----------------------------------------- REQUIRED INFO SP ---------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 
--- CREATE
+-- SP READ SCHOOL PERIOD
+-- ENTRIES: @schoolPeriodId INT
+-- Description: This procedure return all the data of a school period
+CREATE OR ALTER PROCEDURE spReadSchoolPeriod(@schoolPeriodId INT) AS
+BEGIN
+    IF @schoolPeriodId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId)
+    BEGIN
+        SELECT 'The school period does not exist' AS ExecMessage
+        RETURN
+    END
+    SELECT schoolPeriodId, periodTypeId, startDate, endDate, statusId 
+    FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId
+END
+GO
+
+-- SP VERIFY CAREER
+-- ENTRIES: userId
+-- DESCRIPTION: Check if the user has a career
+CREATE OR ALTER PROCEDURE spVerifyCareer (@userId VARCHAR(32), @statusResult BIT OUTPUT) AS
+BEGIN
+
+    IF @userId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE User_.userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+
+    IF EXISTS(SELECT * FROM User_ INNER JOIN CareerXUser ON User_.userId = CareerXUser.userId WHERE User_.userId = @userId)
+    BEGIN
+        SELECT 'The user has a career' AS ExecMessage
+        SET @statusResult = 1
+        RETURN
+    END
+    ELSE
+    BEGIN
+        SET @statusResult = 0
+        SELECT 'The user does not have a career' AS ExecMessage
+        RETURN
+    END
+END
+GO
+
+-- SP GET ENROLLED COURSES
+-- ENTRIES: userId, schoolPeriodId
+-- DESCRIPTION: Get the enrolled courses of a student in a school period
+CREATE OR ALTER PROCEDURE spGetEnrolledCourses(@userId VARCHAR(32), @schoolPeriodId INT) AS
+BEGIN
+    IF @userId IS NULL OR @schoolPeriodId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId)
+    BEGIN
+        SELECT 'The school period does not exist' AS ExecMessage
+        RETURN
+    END
+
+    SELECT Course.courseId, CourseGroup.courseGroupId, Course.courseName--, Schedule.startTime, Schedule.finishTime, Day_.name
+    FROM Course
+    INNER JOIN CourseGroup ON Course.courseId = CourseGroup.courseId
+    INNER JOIN WeeklySchedule ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
+    INNER JOIN SchoolPeriod ON CourseGroup.periodId = SchoolPeriod.schoolPeriodId
+	--INNER JOIN ScheduleXCourseGroup ON ScheduleXCourseGroup.courseGroupId = CourseGroup.courseGroupId
+	--INNER JOIN ScheduleXDay ON ScheduleXDay.scheduleXDayId = ScheduleXCourseGroup.scheduleXDayId
+	--INNER JOIN Schedule ON Schedule.scheduleId = ScheduleXDay.scheduleXDayId
+	--INNER JOIN Day_ ON Day_.dayId = ScheduleXDay.dayId
+		
+    WHERE WeeklySchedule.userId = @userId AND SchoolPeriod.schoolPeriodId = @schoolPeriodId
+END
+GO
+
+-- SP GET LAST PLAN 
+-- ENTRIES: userId, careerId
+-- DESCRIPTION: Get the last career plan of a student
+CREATE OR ALTER PROCEDURE spGetLastPlan(@userId VARCHAR(32), @careerId INT) AS
+BEGIN
+    IF @userId IS NULL OR @careerId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM Career WHERE careerId = @careerId)
+    BEGIN
+        SELECT 'The career does not exist' AS ExecMessage
+        RETURN
+    END
+	IF NOT EXISTS(SELECT * FROM CareerXUser WHERE CareerXUser.careerId = @careerId AND CareerXUser.userId = @userId)
+	BEGIN
+		SELECT 'The student is not from this career' AS ExecMessage
+        RETURN
+	END
+    SELECT TOP 1 userId,planId, CareerPlan.careerId FROM CareerPlan INNER JOIN CareerXUser ON CareerPlan.careerId = CareerXUser.careerId
+        WHERE CareerPlan.careerId = @careerId AND userId = @userId ORDER BY activationDate DESC
+END
+GO
+
+-- SP GET GRADE OF A COURSE
+-- ENTRIES: userId, courseId
+-- DESCRIPTION: Get the grade of a student in a course
+CREATE OR ALTER PROCEDURE spGetGradeOfCourse(@userId VARCHAR(32), @courseId INT) AS
+BEGIN
+    DECLARE @sum FLOAT
+    SET @sum = 0
+    
+    IF @userId IS NULL OR @courseId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM Course WHERE courseId = @courseId)
+    BEGIN
+        SELECT 'The course does not exist' AS ExecMessage
+        RETURN
+    END
+	IF NOT EXISTS(SELECT * FROM User_ INNER JOIN WeeklySchedule ON User_.userId = WeeklySchedule.userId
+		INNER JOIN CourseGroup ON WeeklySchedule.courseGroupId = CourseGroup.courseGroupId
+		INNER JOIN Course ON CourseGroup.courseId = Course.courseId
+		WHERE User_.userId = @userId
+		AND CourseGroup.courseId = @courseId )
+    BEGIN
+        SELECT 'The student has not taken the course' AS ExecMessage
+        RETURN
+    END
+
+    SET @sum = (SELECT SUM(grade) AS totalSum 
+                    FROM Student
+                    INNER JOIN WeeklySchedule ON Student.userId = WeeklySchedule.userId
+                    INNER JOIN CourseGroup ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
+                    INNER JOIN Evaluation ON Evaluation.courseGroupId = CourseGroup.courseGroupId
+                    INNER JOIN Item ON Item.evaluationId = Evaluation.evaluationId
+                    INNER JOIN StudentXItem ON StudentXItem.itemId = Item.itemId AND StudentXItem.userId = Student.userId
+
+                    WHERE Student.userId = @userId
+					AND CourseGroup.courseId = @courseId) 
+
+	SELECT @sum 
+END
+GO
+
+--------------------------------------------------------------------------------------------------------------
+----------------------------------------- CRUD User_ ---------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+
+-- CREATE USER
+-- Entries: userId, userName, birthDate, email, idCampus, student
+-- Description: Creates a new user, if is a student, it also creates a new student
 CREATE OR ALTER PROCEDURE spCreateUser(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT, @student BIT) AS
 BEGIN
     IF @userId IS NULL OR @userName IS NULL OR @birthDate IS NULL OR @email IS NULL OR @idCampus IS NULL
@@ -428,6 +604,8 @@ END
 GO
 
 -- READ
+-- Entries: userId
+-- Description: Gets the information of a user
 CREATE OR ALTER PROCEDURE spReadUser_(@userId VARCHAR(32)) AS
 BEGIN
     IF @userId IS NULL
@@ -441,11 +619,13 @@ BEGIN
         RETURN
     END
 
-    SELECT * FROM User_ WHERE userId = @userId
+    SELECT userId, userName, birthDate, email FROM User_ WHERE userId = @userId
 END
 GO
 
 -- UPDATE
+-- Entries: userId, userName, birthDate, email, idCampus
+-- Description: Updates the information of a user
 CREATE OR ALTER PROCEDURE spUpdateUser_(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT) AS
 BEGIN
     IF @userId IS NULL
@@ -471,6 +651,8 @@ END
 GO
 
 -- DELETE 
+-- Entries: userId
+-- Description: Deletes a user
 CREATE OR ALTER PROCEDURE spDeleteUser_(@userId VARCHAR(32)) AS
 BEGIN
     BEGIN TRY
@@ -513,8 +695,13 @@ BEGIN
 END
 GO
 
+--------------------------------------------------------------------------------------------------------------
+----------------------------------------- FILES SP -----------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 
 -- SP GET LATESTS FILE VERSION
+-- ENTRIES: userId, fileId
+-- DESCRIPTION: Gets the latest version of a file
 CREATE OR ALTER PROCEDURE spGetLatestFileVersion(@userId VARCHAR(32), @fileId INT) AS
 BEGIN
     IF @userId IS NULL OR @fileId IS NULL
@@ -538,6 +725,8 @@ END
 GO
 
 -- SP GET ALL VERSIONS OF FILE
+-- ENTRIES: userId, fileId
+-- DESCRIPTION: Gets all the versions of a file
 CREATE OR ALTER PROCEDURE spGetAllVersionsOfFile(@userId VARCHAR(32), @fileId INT) AS
 BEGIN
     IF @userId IS NULL OR @fileId IS NULL
@@ -561,6 +750,8 @@ END
 GO
 
 -- GET VERSION OF FILE
+-- ENTRIES: userId, fileId, modificationDate
+-- DESCRIPTION: Gets the version of a file in a specific date
 CREATE OR ALTER PROCEDURE spGetVersionOfFile(@userId VARCHAR(32), @fileId INT, @modificationDate DATE) AS
 BEGIN
     IF @userId IS NULL OR @fileId IS NULL OR @modificationDate IS NULL
@@ -589,6 +780,8 @@ END
 GO
 
 -- SP MODIFY FILE (NEW VERSION)
+-- ENTRIES: userId, fileId, modificationDate, name, description
+-- DESCRIPTION: Modifies a file (creates a new version)
 CREATE OR ALTER PROCEDURE spModifyFile(@userId VARCHAR(32), @fileId INT, @modificationDate DATE, @name VARCHAR(50), @description VARCHAR(100), @error INT OUTPUT) AS
 BEGIN
     IF @userId IS NULL OR @fileId IS NULL OR @modificationDate IS NULL OR @name IS NULL OR @description IS NULL
@@ -638,6 +831,8 @@ GO
 -- CRUD File_
 
 -- CREATE
+-- ENTRIES: userId, filename, fileTypeId, periodId, creationDate, name, description
+-- DESCRIPTION: Creates a file
 CREATE OR ALTER PROCEDURE spCreateFile(@userId VARCHAR(32), @filename VARCHAR(15), @fileTypeId INT, @periodId INT, @creationDate DATE, @name VARCHAR(50), @description VARCHAR(100)) AS
 BEGIN
     IF @userId IS NULL OR @filename IS NULL OR @fileTypeId IS NULL OR @periodId IS NULL OR @creationDate IS NULL OR @name IS NULL OR @description IS NULL
@@ -673,6 +868,8 @@ END
 GO
 
 -- READ
+-- ENTRIES: fileId
+-- DESCRIPTION: Reads a file
 CREATE OR ALTER PROCEDURE spReadFile(@fileId INT) AS
 BEGIN
     IF @fileId IS NULL
@@ -686,11 +883,14 @@ BEGIN
         RETURN
     END
 
-    SELECT * FROM File_ WHERE fileId = @fileId
+    SELECT fileId, userId, fileTypeId, periodId, creationDate, name, description
+    FROM File_ WHERE fileId = @fileId
 END
 GO
 
 -- UPDATE
+-- ENTRIES: fileId, fileTypeId, periodId, creationDate, name, description
+-- DESCRIPTION: Updates a file
 CREATE OR ALTER PROCEDURE spUpdateFile(@fileId INT, @fileTypeId INT, @periodId INT, @creationDate DATE, @name VARCHAR(50), @description VARCHAR(100), @error INT OUTPUT) AS
 BEGIN
     IF @fileId IS NULL
@@ -724,6 +924,8 @@ END
 GO
 
 -- DELETE
+-- ENTRIES: fileId
+-- DESCRIPTION: Deletes a file
 CREATE OR ALTER PROCEDURE spDeleteFile(@fileId INT) AS
 BEGIN
     IF @fileId IS NULL
@@ -738,182 +940,5 @@ BEGIN
     END
 
     DELETE FROM File_ WHERE fileId = @fileId
-END
-GO
-
--- -- Store Procedure for check if the user id in his enrollment time
--- CREATE OR ALTER PROCEDURE spUserInEnrollmentTime(@userId VARCHAR(32), @schoolPeriodId INT, @result BIT OUTPUT) AS
--- BEGIN
---     IF @userId IS NULL OR @schoolPeriodId IS NULL
---     BEGIN
---         SELECT 'NULL parameters' AS ExecMessage
---         RETURN
---     END
---     IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
---     BEGIN
---         SELECT 'The user does not exist' AS ExecMessage
---         RETURN
---     END
---     IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId)
---     BEGIN
---         SELECT 'The school period does not exist' AS ExecMessage
---         RETURN
---     END
-
---     DECLARE @enrollmentTimeScheduleValue INT, @enrollmentDay DATETIME, @currentDay DATETIME
---     SET @enrollmentTimeScheduleValue = [dbo].spEnrollmentTimeSchedule(@userId, @schoolPeriodId)
-
---     -- The user cant enroll and the errorcode is -1
-
---     IF @enrollmentTimeScheduleValue = -1
---     BEGIN
---         SELECT 'You can not enroll' AS ExecMessage
---         SET @result = -1
---     END
-
---     -- obtain the enrollment day and the current day
---     SET @enrollmentDay = (SELECT Enrollment.startDate FROM Enrollment INNER JOIN SchoolPeriod ON SchoolPeriod.schoolPeriodId = Enrollment.PeriodId WHERE Enrollment.PeriodId = @schoolPeriodId)
---     SET @currentDay = GETDATE()
-
---     -- if the current day is not the enrollment day, the user cant enroll
---     IF DATEPART(DAY, @enrollmentDay) != DATEPART(DAY, @currentDay)
---     BEGIN
---         SELECT 'You are not in the enrollment day' AS ExecMessage
---         SET @result = -1
---     END
-
---     -- if the current hour is not in the enrollment time schedule, the user cant enroll
---     -- the enrollment time schedule is from 7 am to 3 pm, but the start time of the student depends on his grade average
---     IF DATEPART(HOUR, @currentDay) < @enrollmentTimeScheduleValue OR DATEPART(HOUR, @currentDay) >= 15
---     BEGIN
---         SELECT 'You are not in your enrollment time' AS ExecMessage
---         SET @result = -1
---     END
-
---     SELECT 'You are in your enrollment time, you can enroll' AS ExecMessage
---     SET @result = 1
--- END
--- GO
-
-
-
--- Store procedure for check if ther user has an asigned career
--- SP VERIFY CAREER
-CREATE OR ALTER PROCEDURE spVerifyCareer (@userId VARCHAR(32), @statusResult BIT OUTPUT) AS
-BEGIN
-
-    IF @userId IS NULL
-    BEGIN
-        SELECT 'NULL parameters' AS ExecMessage
-        RETURN
-    END
-    IF NOT EXISTS(SELECT * FROM User_ WHERE User_.userId = @userId)
-    BEGIN
-        SELECT 'The user does not exist' AS ExecMessage
-        RETURN
-    END
-
-    IF EXISTS(SELECT * FROM User_ INNER JOIN CareerXUser ON User_.userId = CareerXUser.userId WHERE User_.userId = @userId)
-    BEGIN
-        SELECT 'The user has a career' AS ExecMessage
-        SET @statusResult = 1
-        RETURN
-    END
-END
-GO
-
--- Store procedure for get the enrolled courses of a student
--- SP GET ENROLLED COURSES
-CREATE OR ALTER PROCEDURE spGetEnrolledCourses(@userId VARCHAR(32), @schoolPeriodId INT) AS
-BEGIN
-    IF @userId IS NULL OR @schoolPeriodId IS NULL
-    BEGIN
-        SELECT 'NULL parameters' AS ExecMessage
-        RETURN
-    END
-    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
-    BEGIN
-        SELECT 'The user does not exist' AS ExecMessage
-        RETURN
-    END
-    IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId)
-    BEGIN
-        SELECT 'The school period does not exist' AS ExecMessage
-        RETURN
-    END
-
-    SELECT Course.courseId, CourseGroup.courseGroupId, Course.courseName, Schedule.startTime, Schedule.finishTime, Day_.name
-    FROM Course
-    INNER JOIN CourseGroup ON Course.courseId = CourseGroup.courseId
-    INNER JOIN WeeklySchedule ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
-    INNER JOIN SchoolPeriod ON CourseGroup.periodId = SchoolPeriod.schoolPeriodId
-	INNER JOIN ScheduleXCourseGroup ON ScheduleXCourseGroup.courseGroupId = CourseGroup.courseGroupId
-	INNER JOIN ScheduleXDay ON ScheduleXDay.scheduleXDayId = ScheduleXCourseGroup.scheduleXDayId
-	INNER JOIN Schedule ON Schedule.scheduleId = ScheduleXDay.scheduleXDayId
-	INNER JOIN Day_ ON Day_.dayId = ScheduleXDay.dayId
-	
-	
-    WHERE WeeklySchedule.userId = @userId AND SchoolPeriod.schoolPeriodId = @schoolPeriodId 
-END
-GO
-
--- Store procedure for get the last career plan
---SP GET LAST PLAN 
-CREATE OR ALTER PROCEDURE spGetLastPlan(@userId VARCHAR(32), @careerId INT) AS
-BEGIN
-    IF @userId IS NULL OR @careerId IS NULL
-    BEGIN
-        SELECT 'NULL parameters' AS ExecMessage
-        RETURN
-    END
-    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
-    BEGIN
-        SELECT 'The user does not exist' AS ExecMessage
-        RETURN
-    END
-    IF NOT EXISTS(SELECT * FROM Career WHERE careerId = @careerId)
-    BEGIN
-        SELECT 'The career does not exist' AS ExecMessage
-        RETURN
-    END
-    SELECT TOP 1 * FROM CareerPlan INNER JOIN CareerXUser ON CareerPlan.careerPlanId = CareerXUser.careerPlanId
-        WHERE careerId = @careerId AND userId = @userId ORDER BY activationDate DESC
-END
-GO
-
--- Store procedure for get the student grade of a specific course
--- SP GET GRADE OF A COURSE
-CREATE OR ALTER PROCEDURE spGetGradeOfCourse(@userId VARCHAR(32), @courseId INT) AS
-BEGIN
-    DECLARE @sum FLOAT
-    SET @sum = 0
-    
-    IF @userId IS NULL OR @courseId IS NULL
-    BEGIN
-        SELECT 'NULL parameters' AS ExecMessage
-        RETURN
-    END
-    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
-    BEGIN
-        SELECT 'The user does not exist' AS ExecMessage
-        RETURN
-    END
-    IF NOT EXISTS(SELECT * FROM Course WHERE courseId = @courseId)
-    BEGIN
-        SELECT 'The course does not exist' AS ExecMessage
-        RETURN
-    END
-
-    SET @sum = (SELECT SUM(grade) AS totalSum 
-                    FROM Student
-                    INNER JOIN WeeklySchedule ON Student.userId = WeeklySchedule.userId
-                    INNER JOIN CourseGroup ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
-                    INNER JOIN Evaluation ON Evaluation.courseGroupId = CourseGroup.courseGroupId
-                    INNER JOIN Item ON Item.evaluationId = Evaluation.evaluationId
-                    INNER JOIN StudentXItem ON StudentXItem.itemId = Item.itemId AND StudentXItem.userId = Student.userId
-
-                    WHERE Student.userId = @userId) 
-
-	SELECT @sum 
 END
 GO
