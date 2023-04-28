@@ -76,82 +76,6 @@ CORS(app)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['AZURE_STORAGE_CONNECTION_STRING'] = 'DefaultEndpointsProtocol=https;AccountName=filesmanagertiburoncines;AccountKey=CkgCBqebOGWP5we26jpV1TIP49C+Wxp2Nf5qJFNEI4i26LUdEX4bSMYfP/yRAYY9RBbGi5tV0QoN+AStTBd8Ew==;EndpointSuffix=core.windows.net'
 app.config['AZURE_STORAGE_CONTAINER_NAME'] = 'documents'
-api = Api(app)
-
-
-
-# ===========================================================================
-# Arguments Parsing for each resource
-
-# args User_
-parserUser = reqparse.RequestParser()
-parserUser.add_argument("userId", type=str, required=True)
-parserUser.add_argument("userName", type=str)
-parserUser.add_argument("userBirthDay", type=str)
-parserUser.add_argument("userEmail", type=str)
-parserUser.add_argument("Campus", type=int)
-parserUser.add_argument("Student", type=bool)
-
-# args Campus
-parserCampus = reqparse.RequestParser()
-parserCampus.add_argument("userId", type=str, required=True)
-parserCampus.add_argument("campusId", type=int, required=False)
-parserCampus.add_argument("campusName", type=str)
-
-# args Course
-parserCourse = reqparse.RequestParser()
-parserCourse.add_argument("userId", type=str, required=True)
-parserCourse.add_argument("courseId", type=int, required=False)
-parserCourse.add_argument("courseName", type=str)
-parserCourse.add_argument("facultyId", type=int)
-parserCourse.add_argument("credits", type=int)
-parserCourse.add_argument("periodTypeId", type=int)
-parserCourse.add_argument("hoursPerWeek", type=int)
-parserCourse.add_argument("description", type=str)
-
-# args SchoolPeriod
-parserSchoolPeriod = reqparse.RequestParser()
-parserSchoolPeriod.add_argument("userId", type=str, required=True)
-parserSchoolPeriod.add_argument("periodId", type=int, required=False)
-parserSchoolPeriod.add_argument("periodTypeId", type=int)
-parserSchoolPeriod.add_argument("startDate", type=str)
-parserSchoolPeriod.add_argument("endDate", type=str)
-parserSchoolPeriod.add_argument("statusId", type=int)
-
-# args Grade
-parserGrade = reqparse.RequestParser()
-parserGrade.add_argument("userId", type=str, required=True)
-parserGrade.add_argument("schoolPeriodId", type=int)
-
-# args Enrollment
-parserEnrollment = reqparse.RequestParser()
-parserEnrollment.add_argument("userId", type=str, required=True)
-parserEnrollment.add_argument("courseGroupId", type=int)
-parserEnrollment.add_argument("schoolPeriodId", type=int)
-parserEnrollment.add_argument("timeOfDay", type=str)
-
-# args File
-parserFile = reqparse.RequestParser()
-parserFile.add_argument("fileId", type=int, required=False)
-parserFile.add_argument("userId", type=str, required=True)
-parserFile.add_argument("fileTypeId", type=int)
-parserFile.add_argument("periodId", type=int)
-parserFile.add_argument("creationDate", type=str)
-parserFile.add_argument("modificationDate", type=str)
-parserFile.add_argument("name", type=str)
-parserFile.add_argument("description", type=str)
-parserFile.add_argument("ver", type=int)
-
-# args Blob
-
-parserBlob = reqparse.RequestParser()
-parserBlob.add_argument('userId', type=str, help='User ID', required=False)
-parserBlob.add_argument('filename', type=str, help='Filename', required=False)
-
-# args Login
-parserAuthentication = reqparse.RequestParser()
-parserAuthentication.add_argument("userId", type=str, required=True)
-parserAuthentication.add_argument("password", type=str, required=False)
 
 
 # ===========================================================================
@@ -220,322 +144,311 @@ class CassandraConnector():
 
 logManager = CassandraConnector()
 
-# ===========================================================================
+# ***************************************************************************
 # Resources
+# ***************************************************************************
+# Main method of the API, just a welcome message
+@app.route('/', methods = ['GET'])
+def main():
+    return {"message": "Welcome to the API!"}
 
-class Main(Resource):
-    def get(self):
-        return {"message": "Welcome to the API!"}
-    
-class Authentication(Resource):
-    def post(self):
-        args = parserAuthentication.parse_args()
-        user = args["user"]
-        password = args["password"]
-        if user == "admin" and password == "admin":
-            return {"message": "Login successful!"}
-        else:
-            return {"message": "Login failed!"}
-    
-    def delete(self):
-        args = parserAuthentication.parse_args()
-        user = args["user"]
-        logManager.userLogout(user)
-        return {"message": "Logout successful!"}
+# ===========================================================================
+# Blob Storage
 
-class BlobStorage(Resource):
+# Uploads a file to the blob storage
+@app.route('/blobstorage/upload', methods = ['POST'])
+def blobUpload():
+    if 'file' not in request.files:
+        flash('No file part')
+        return "<p>Upload File!</p>"
+    file = request.files['file']
+    if file.filename == '':
+        return  "<p>Upload No name!</p>"
+    filename = secure_filename(file.filename)
+    blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
+    container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
+    blob_client = container_client.get_blob_client(filename)
+    blob_client.upload_blob(file)
+    return   "<p>Uploaded!</p>"
 
-    def post(self):
-        if 'file' not in request.files:
-            flash('No file part')
-            return "<p>Upload File!</p>"
-        file = request.files['file']
-        if file.filename == '':
-            return  "<p>Upload No name!</p>"
-        filename = secure_filename(file.filename)
+# Downloads a file from the blob storage
+@app.route('/blobstorage/download/<string:filename>', methods = ['GET'])
+def blobDownload(filename):
+    try:
         blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
         container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
         blob_client = container_client.get_blob_client(filename)
-        blob_client.upload_blob(file)
-        return   "<p>Upload!</p>"
-    
-    def get(self):
-        try:
-            args = parserBlob.parse_args()
-            filename = args["filename"]
-            blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
-            container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
-            blob_client = container_client.get_blob_client(filename)
-            stream = io.BytesIO()
-            blob_client.download_blob().download_to_stream(stream)
-            stream.seek(0)
-            response = send_file(stream, download_name=filename, as_attachment=True)
-            return response
-        except Exception as e:
-            print(e)
-            return {'status': str(e)}
-    
-    def delete(self):
-        args = parserBlob.parse_args()
-        filename = args["filename"]
-        blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
-        container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
-        blob_client = container_client.get_blob_client(filename)
+        stream = io.BytesIO()
+        blob_client.download_blob().download_to_stream(stream)
+        stream.seek(0)
+        response = send_file(stream, download_name=filename, as_attachment=True)
+        return response
+    except Exception as e:
+        return {'status': str(e)}
+
+# Deletes a file from the blob storage
+@app.route('/blobstorage/delete/<string:filename>', methods = ['DELETE'])
+def blobDelete(filename):
+    blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
+    container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
+    blob_client = container_client.get_blob_client(filename)
+    deleted = False
+    try:
+        blob_client.delete_blob()
+        deleted = True
+    except:
         deleted = False
-        try:
-            blob_client.delete_blob()
-            deleted = True
-        except:
-            deleted = False
-        
-        if deleted:
-            return f"File {filename} deleted."
-        else:
-            return f"File {filename} not found."
-        
-class GetUser(Resource):
-    # Read procedure that returns the information of the user
-    def post(self):
-        try:
-            args = parserUser.parse_args() # Args parsing
-            userId = args["userId"]
-
-            cur = conn.cursor()
-            cur.execute("USE db01;")
-            cur.execute("EXEC spReadUser_ @userId=?", (userId,))
-            rows = cur.fetchall()
-            cur.close()
-            logManager.userInfoRequested(userId)
-
-            data = []
-            for row in rows:
-                result = {"userId": row[0], "userName": row[1], "userBirthDay": str(row[2]), "userEmail": row[3]}
-                data.append(result)
-
-            return {'data': data}
-        except Exception as e:
-            print(e)
-            return {'status': str(e)}
-
-class User(Resource):
     
-    # Create procedure that creates a new user
-    def post(self):
-        try:
-            args = parserUser.parse_args()
-            userId = args["userId"]
-            userName = args["userName"]
-            userBirthDay = args["userBirthDay"]
-            userEmail = args["userEmail"]
-            idCampus = args["Campus"]
-            isStudent = args["Student"]
+    if deleted:
+        return f"File {filename} deleted."
+    else:
+        return f"File {filename} not found."
 
-            student = 0
+# ===========================================================================
+# User
 
-            if isStudent:
-                student = 1
+# Read procedure that returns the information of the user
+@app.route('/user/info/<string:userId>', methods = ['GET'])
+def getUser(userId):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spReadUser_ @userId=?", (userId,))
+        rows = cur.fetchall()
+        cur.close()
+        logManager.userInfoRequested(userId)
 
-            cur = conn.cursor()
-            cur.execute("USE db01;")
-            cur.execute("EXEC spCreateUser_ ?,?,?,?,?,?", (userId, userName, userBirthDay, userEmail, idCampus, student))
+        data = []
+        for row in rows:
+            result = {"userId": row[0], "userName": row[1], "userBirthDay": str(row[2]), "userEmail": row[3]}
+            data.append(result)
 
-            conn.commit()
-            cur.close()
-            logManager.signUp(userId)
-            return {'status': 'User successfully created', 'data': args}
-        except Exception as e:
-            return {'status': str(e)}
+        return {'data': data}
+    except Exception as e:
+        return {'status': str(e)}
 
-    # Update procedure that updates the information of a user
-    def put(self):
-        try:
-            args = parserUser.parse_args()
-            userId = args["userId"]
-            userName = args["userName"]
-            userBirthDay = args["userBirthDay"]
-            userEmail = args["userEmail"]
-            idCampus = args["Campus"]
+# Create procedure that creates a new user
+@app.route('/user/create/<string:userId>/<string:userName>/<string:userBirthDay>/<string:userEmail>/<int:idCampus>/<boolean:isStudent>', methods = ['POST'])
+def createUser(userId, userName, userBirthDay, userEmail, idCampus, isStudent):
+    try:
+        student = 0
+        if isStudent:
+            student = 1
 
-            cur = conn.cursor()
-            cur.execute("USE db01;")
-            cur.execute('EXEC spUpdateUser_ ?,?,?,?,?', (userId, userName, userBirthDay, userEmail, idCampus))
-            conn.commit()
-            cur.close()
-            logManager.userInfoUpdated(userId)
-            return {'status': 'success', 'idUpdated': userId, "data": args}
-        except Exception as e:
-            return {'status': str(e)}
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spCreateUser_ ?,?,?,?,?,?", (userId, userName, userBirthDay, userEmail, idCampus, student))
 
-    # Delete procedure that deletes a user
-    def delete(self):
-        try:
-        # Eliminar un registro de la tabla
-            args = parserUser.parse_args()
-            userId = args["userId"]
+        conn.commit()
+        cur.close()
+        logManager.signUp(userId)
+        return {'status': 'User successfully created'}
+    except Exception as e:
+        return {'status': str(e)}
 
-            cur = conn.cursor()
-            cur.execute("USE db01;")
-            cur.execute('EXEC spDeleteUser ?', (userId,))
-            conn.commit()
-            cur.close()
-            logManager.userDeleted(userId)
-            return {'status': 'Deleted successfully!', 'userId': userId}
-        except Exception as e:
-            return {'status': str(e)}
+# Update procedure that updates the information of the user
+@app.route('/user/update/<string:userId>/<string:userName>/<string:userBirthDay>/<string:userEmail>/<int:idCampus>', methods = ['PUT'])
+def updateUser(userId, userName, userBirthDay, userEmail, idCampus):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute('EXEC spUpdateUser_ ?,?,?,?,?', (userId, userName, userBirthDay, userEmail, idCampus))
+        conn.commit()
+        cur.close()
+        logManager.userInfoUpdated(userId)
+        return {'status': 'success', 'idUpdated': userId}
+    except Exception as e:
+        return {'status': str(e)}
 
-class Campus(Resource):
-    # Read procedure that returns the information of all the campuses
-    def get(self):
-        try:
-            cur = conn.cursor()
-            cur.execute("USE db01;")
-            cur.execute("SELECT * FROM Campus")
-            rows = cur.fetchall()
-            cur.close()
-            return {'data': rows}
-        except Exception as e:
-            print(e)
-            return {'status': str(e)}
-        
-class Course(Resource):
-    # Read procedure that returns the information of all the courses of a user
-    def post(self):
-        try:
-            args = parserCourse.parse_args()
-            userId = args["userId"]
+# Delete procedure that deletes a user
+@app.route('/user/delete/<string:userId>', methods = ['DELETE'])
+def deleteUser(userId):
+    try:
+    # Eliminar un registro de la tabla
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute('EXEC spDeleteUser ?', (userId,))
+        conn.commit()
+        cur.close()
+        logManager.userDeleted(userId)
+        return {'status': 'Deleted successfully!', 'userId': userId}
+    except Exception as e:
+        return {'status': str(e)}
 
-            cur = conn.cursor()
-            cur.execute("USE db01;")
-            cur.execute("EXEC spGetCourses @userId=?", (userId,))
-            rows = cur.fetchall()
-            cur.close()
+# ===========================================================================
+# Campus
 
-            data = []
-            for row in rows:
-                result = {}
-                result['groupId'] = row[0]
-                result['courseId'] = row[1]
-                result['courseName'] = row[2]
-                result['credits'] = row[3]
-                result['evaluationDescription'] = row[4]
-                result['score'] = row[5]
+# Read procedure that returns the information of all the campuses
+@app.route('/campus/list', methods = ['GET'])
+def getListOfCampus():
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("SELECT * FROM Campus")
+        rows = cur.fetchall()
+        cur.close()
+        return {'data': rows}
+    except Exception as e:
+        return {'status': str(e)}
 
-                data.append(result)
 
-            return {"data": data}
-        except Exception as e:
-            print(e)
-            return {'status': str(e)}
-    
-class SchoolPeriod(Resource):
-    # Read procedure that returns the information of a school period
-    def get(self):
-        try:
-            args = parserSchoolPeriod.parse_args()
-            SchoolPeriodId = args["periodId"]
+# ===========================================================================
+# Course    
 
-            cur = conn.cursor()
-            cur.execute("USE db01;")
-            cur.execute("EXEC spReadSchoolPeriod", (SchoolPeriodId,))
-            rows = cur.fetchall()
-            cur.close()
-            return {'data': rows}
-        except Exception as e:
-            print(e)
-            return {'status': str(e)}
-        
-class Grade(Resource):
-    # Read procedure that returns the average grade of a user
-    def get(self):
-        try:
-            args = parserGrade.parse_args()
-            userId = args["userId"]
-            schoolPeriodId = args["schoolPeriodId"]
+# Method to get the courses a student can enroll
+@app.route('/course/<string:userId>', methods = ['GET'])
+def getCourses(userId):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spGetCourses @userId=?", (userId,))
+        rows = cur.fetchall()
+        cur.close()
 
-            cur = conn.cursor()
-            cur.execute("USE db01;")
-            cur.execute("EXEC spGetGradeAverage", (userId,schoolPeriodId))
-            rows = cur.fetchall()
-            cur.close()
-            return {'data': rows}
-        except Exception as e:
-            print(e)
-            return {'status': str(e)}
+        data = []
+        for row in rows:
+            result = {}
+            result['groupId'] = row[0]
+            result['courseId'] = row[1]
+            result['courseName'] = row[2]
+            result['credits'] = row[3]
+            result['evaluationDescription'] = row[4]
+            result['score'] = row[5]
 
-class Enrollment(Resource):
-    # Post procedure that tries to enrolls a user in a course if possible
-    def post(self):
-        try:
-            args = parserEnrollment.parse_args()
-            userId = args["userId"]
-            courseGroupId = args["courseGroupId"]
-            schoolPeriodId = args["schoolPeriodId"]
-            timeOfDay = args["timeOfDay"]
+            data.append(result)
 
-            cur = conn.cursor()
-            cur.execute("USE db01;")
-            cur.execute("EXEC spEnrollment", (userId, schoolPeriodId, courseGroupId, timeOfDay))
-            conn.commit()
-            cur.close()
-            return {'status': 'success', 'data': args}
-        except Exception as e:
-            return {'status': str(e)}
-        
-    # Delete procedure that unregisters a user from a course
-    def delete(self):
-        try:
-            args = parserEnrollment.parse_args()
-            userId = args["userId"]
-            courseGroupId = args["courseGroupId"]
+        return {"data": data}
+    except Exception as e:
+        return {'status': str(e)}
 
-            cur = conn.cursor()
-            cur.execute("USE db01;")
-            cur.execute("EXEC spUnregister", (userId, courseGroupId))
-            conn.commit()
-            cur.close()
-            return {'status': 'success', 'data': args}
-        except Exception as e:
-            return {'status': str(e)}
-        
-class File():
-    # Read procedure that returns the information of a file
-    def get(self, fileName):
-        try:
-            args = parserFile.parse_args()
-            userId = args["userId"]
-            cur = conn.cursor()
-            cur.execute("USE db01;")
-            cur.execute("EXEC spReadFile", (fileName, ))
-            rows = cur.fetchall()
-            cur.close()
-            return {'data': rows}
-        except Exception as e:
-            print(e)
-            return {'status': str(e)}
-    
-    # Post procedure that creates a new file
-    def post(self):
-        try:
-            args = parserFile.parse_args()
-            userId = args["userId"]
-            fileTypeId = args["fileTypeId"]
-            periodId = args["periodId"]
-            creationDate = args["creationDate"]
-            modificationDate = args["modificationDate"]
-            name = args["name"]
-            description = args["description"]
-            ver = args["ver"]
+# ===========================================================================
+# SchoolPeriod
 
-            cur = conn.cursor()
-            cur.execute("USE db01;")
-            cur.execute("EXEC spCreateFile", (userId, fileTypeId, periodId, creationDate, modificationDate, name, description, ver))
-            conn.commit()
-            cur.close()
-            return {'status': 'success', 'data': args}
-        except Exception as e:
-            return {'status': str(e)}
-    
-    # Put procedure that updates the information of a file
+# Read procedure that returns the information of a school period
+@app.route('/schoolperiod/info/<int:SchoolPeriodId>', methods = ['GET'])
+def getSchoolPeriod(SchoolPeriodId):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spReadSchoolPeriod", (SchoolPeriodId,))
+        rows = cur.fetchall()
+        cur.close()
+        return {'data': rows}
+    except Exception as e:
+        return {'status': str(e)}
+
+# ===========================================================================
+# Grade
+
+# Read procedure that returns the average grade of a student
+@app.route('/grade/average/<string:userId>/<int:schoolPeriodId>', methods = ['GET'])
+def getAverageGrade(userId, schoolPeriodId):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spGetGradeAverage", (userId, schoolPeriodId))
+        rows = cur.fetchall()
+        cur.close()
+        return {'data': rows}
+    except Exception as e:
+        return {'status': str(e)}
+
+# ===========================================================================
+# Enrollment
+
+# Post procedure that enrolls a student in a course if possible
+@app.route('/enrollment/enroll/<string:userId>/<int:courseGroupId>/<int:schoolPeriodId>', methods = ['POST'])
+def enrollStudent(userId, courseGroupId, schoolPeriodId):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spEnrollment", (userId, schoolPeriodId, courseGroupId))
+        conn.commit()
+        cur.close()
+        return {'status': 'success'}
+    except Exception as e:
+        return {'status': str(e)}
+
+# Post procedure that unenrolls a student from a course if possible
+@app.route('/enrollment/unenroll/<string:userId>/<int:courseGroupId>', methods = ['POST'])
+def unenrollStudent(userId, courseGroupId):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spUnregister", (userId, courseGroupId))
+        conn.commit()
+        cur.close()
+        return {'status': 'success'}
+    except Exception as e:
+        return {'status': str(e)}
+
+# Read procedure that returns the enrollment time of a student
+@app.route('/enrollment/time/<string:userId>/<int:schoolPeriodId>', methods = ['GET'])
+def getEnrollmentTime(userId, schoolPeriodId):
+    try:
+        time = 0
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spEnrollmentTimeSchedule", (userId, schoolPeriodId, time))
+        cur.close()
+        return {'data': time}
+    except Exception as e:
+        return {'status': str(e)}
+
+# ===========================================================================
+# File
+
+# Read procedure that returns the information of a file
+@app.route('/file/info/<int:fileName>', methods = ['GET'])
+def getFileInfo(fileName):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spReadFile", (fileName, ))
+        rows = cur.fetchall()
+        cur.close()
+        return {'data': rows}
+    except Exception as e:
+        print(e)
+        return {'status': str(e)}
+
+# Post procedure that uploads a file to the database
+# userId
+# fileTypeId 
+# periodId
+# creationDate
+# modificationDate
+# name
+# description
+# version
+@app.route('/file/upload/<string:userId>/<int:fileTypeId>/<int:periodId>/<string:creationDate>/<string:modificationDate>/<string:name>/<string:description>', methods = ['POST'])
+def uploadFile(userId, fileTypeId, periodId, creationDate, modificationDate, name, description):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spCreateFile", (userId, fileTypeId, periodId, creationDate, modificationDate, name, description))
+        conn.commit()
+        cur.close()
+        return {'status': 'success'}
+    except Exception as e:
+        return {'status': str(e)}
+
+# Delete procedure that deletes a file
+@app.route('/file/delete/<int:fileId>', methods = ['DELETE'])
+def deleteFile(fileId):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spDeleteFile", (fileId,))
+        conn.commit()
+        cur.close()
+        return {'status': 'Deleted successfully', 'fileId': fileId}
+    except Exception as e:
+        return {'status': str(e)}
+
+
+"""
+# Put procedure that updates the information of a file
     def put(self):
         try:
             args = parserFile.parse_args()
@@ -557,30 +470,8 @@ class File():
             return {'status': 'success', 'data': args}
         except Exception as e:
             return {'status': str(e)}
-    
-    # Delete procedure that deletes a file
-    def delete(self, fileId):
-        try:
-            cur = conn.cursor()
-            cur.execute("USE db01;")
-            cur.execute("EXEC spDeleteFile", (fileId,))
-            conn.commit()
-            cur.close()
-            return {'status': 'Deleted successfully', 'fileId': fileId}
-        except Exception as e:
-            return {'status': str(e)}
 
-# API endpoints      
-api.add_resource(User, '/user')
-api.add_resource(GetUser, '/user/get')
-api.add_resource(Campus, '/campus')
-api.add_resource(Course, '/course')
-api.add_resource(SchoolPeriod, '/schoolperiod')
-api.add_resource(Grade, '/grade')
-api.add_resource(Enrollment, '/enrollment')
-api.add_resource(BlobStorage, '/filemanager')
-api.add_resource(Main, '/')
-api.add_resource(Authentication, '/authentication')
+"""
 
 
 # Run the app
