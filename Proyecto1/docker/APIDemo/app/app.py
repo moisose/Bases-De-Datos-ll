@@ -10,6 +10,7 @@ from ssl import SSLContext, PROTOCOL_TLSv1_2, CERT_NONE
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 import io
+from flask_cors import CORS
 
 
 """
@@ -21,7 +22,7 @@ Here you can find the connection string to connect to the Azure database, cassan
 # ===========================================================================
 # Azure Database Connection
 
-driver = "{ODBC Driver 17 for SQL Server}"
+driver = "{ODBC Driver 18 for SQL Server}"
 server = "tcp:tiburoncines-sqlserver.database.windows.net,1433"
 database = "db01"
 username = "el-adm1n"
@@ -68,12 +69,10 @@ session = cluster.connect(keyspace)
 
 # ===========================================================================
 # Blob Storage Connection
-#account_url = "https://filesmanagertiburoncines.blob.core.windows.net"
-#default_credential = DefaultAzureCredential()
-#blob_service_client = BlobServiceClient(account_url, credential=default_credential)
 
 # Definition of the API
 app = Flask(__name__)
+CORS(app)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['AZURE_STORAGE_CONNECTION_STRING'] = 'DefaultEndpointsProtocol=https;AccountName=filesmanagertiburoncines;AccountKey=CkgCBqebOGWP5we26jpV1TIP49C+Wxp2Nf5qJFNEI4i26LUdEX4bSMYfP/yRAYY9RBbGi5tV0QoN+AStTBd8Ew==;EndpointSuffix=core.windows.net'
 app.config['AZURE_STORAGE_CONTAINER_NAME'] = 'documents'
@@ -90,18 +89,19 @@ parserUser.add_argument("userId", type=str, required=True)
 parserUser.add_argument("userName", type=str)
 parserUser.add_argument("userBirthDay", type=str)
 parserUser.add_argument("userEmail", type=str)
-parserUser.add_argument("idCampus", type=int)
+parserUser.add_argument("Campus", type=int)
+parserUser.add_argument("Student", type=bool)
 
 # args Campus
 parserCampus = reqparse.RequestParser()
 parserCampus.add_argument("userId", type=str, required=True)
-parserCampus.add_argument("campusId", type=int, required=True)
+parserCampus.add_argument("campusId", type=int, required=False)
 parserCampus.add_argument("campusName", type=str)
 
 # args Course
 parserCourse = reqparse.RequestParser()
 parserCourse.add_argument("userId", type=str, required=True)
-parserCourse.add_argument("courseId", type=int, required=True)
+parserCourse.add_argument("courseId", type=int, required=False)
 parserCourse.add_argument("courseName", type=str)
 parserCourse.add_argument("facultyId", type=int)
 parserCourse.add_argument("credits", type=int)
@@ -112,7 +112,7 @@ parserCourse.add_argument("description", type=str)
 # args SchoolPeriod
 parserSchoolPeriod = reqparse.RequestParser()
 parserSchoolPeriod.add_argument("userId", type=str, required=True)
-parserSchoolPeriod.add_argument("periodId", type=int, required=True)
+parserSchoolPeriod.add_argument("periodId", type=int, required=False)
 parserSchoolPeriod.add_argument("periodTypeId", type=int)
 parserSchoolPeriod.add_argument("startDate", type=str)
 parserSchoolPeriod.add_argument("endDate", type=str)
@@ -292,24 +292,33 @@ class BlobStorage(Resource):
             return f"File {filename} deleted."
         else:
             return f"File {filename} not found."
-
-class User(Resource):
+        
+class GetUser(Resource):
     # Read procedure that returns the information of the user
-    def get(self):
+    def post(self):
         try:
             args = parserUser.parse_args() # Args parsing
             userId = args["userId"]
 
             cur = conn.cursor()
-            cur.execute("spReadUser", (userId,))
+            cur.execute("USE db01;")
+            cur.execute("EXEC spReadUser_ @userId=?", (userId,))
             rows = cur.fetchall()
             cur.close()
             logManager.userInfoRequested(userId)
-            return {'data': rows}
+
+            data = []
+            for row in rows:
+                result = {"userId": row[0], "userName": row[1], "userBirthDay": str(row[2]), "userEmail": row[3]}
+                data.append(result)
+
+            return {'data': data}
         except Exception as e:
             print(e)
             return {'status': str(e)}
 
+class User(Resource):
+    
     # Create procedure that creates a new user
     def post(self):
         try:
@@ -318,11 +327,17 @@ class User(Resource):
             userName = args["userName"]
             userBirthDay = args["userBirthDay"]
             userEmail = args["userEmail"]
-            idCampus = args["idCampus"]
+            idCampus = args["Campus"]
+            isStudent = args["Student"]
+
+            student = 0
+
+            if isStudent:
+                student = 1
 
             cur = conn.cursor()
             cur.execute("USE db01;")
-            cur.execute("spCreateUser", (userId, userName, userBirthDay, userEmail, idCampus))
+            cur.execute("EXEC spCreateUser_ ?,?,?,?,?,?", (userId, userName, userBirthDay, userEmail, idCampus, student))
 
             conn.commit()
             cur.close()
@@ -339,11 +354,11 @@ class User(Resource):
             userName = args["userName"]
             userBirthDay = args["userBirthDay"]
             userEmail = args["userEmail"]
-            idCampus = args["idCampus"]
+            idCampus = args["Campus"]
 
             cur = conn.cursor()
             cur.execute("USE db01;")
-            cur.execute('spUpdateUser', (userId, userName, userBirthDay, userEmail, idCampus))
+            cur.execute('EXEC spUpdateUser_ ?,?,?,?,?', (userId, userName, userBirthDay, userEmail, idCampus))
             conn.commit()
             cur.close()
             logManager.userInfoUpdated(userId)
@@ -360,19 +375,20 @@ class User(Resource):
 
             cur = conn.cursor()
             cur.execute("USE db01;")
-            cur.execute('spDeleteUser', (userId,))
+            cur.execute('EXEC spDeleteUser ?', (userId,))
             conn.commit()
             cur.close()
             logManager.userDeleted(userId)
             return {'status': 'Deleted successfully!', 'userId': userId}
-        except:
-            return {'status': 'failed'}
+        except Exception as e:
+            return {'status': str(e)}
 
 class Campus(Resource):
     # Read procedure that returns the information of all the campuses
     def get(self):
         try:
             cur = conn.cursor()
+            cur.execute("USE db01;")
             cur.execute("SELECT * FROM Campus")
             rows = cur.fetchall()
             cur.close()
@@ -383,16 +399,30 @@ class Campus(Resource):
         
 class Course(Resource):
     # Read procedure that returns the information of all the courses of a user
-    def get(self):
+    def post(self):
         try:
             args = parserCourse.parse_args()
             userId = args["userId"]
 
             cur = conn.cursor()
-            cur.execute("EXEC spGetCourses", (userId,))
+            cur.execute("USE db01;")
+            cur.execute("EXEC spGetCourses @userId=?", (userId,))
             rows = cur.fetchall()
             cur.close()
-            return {'data': rows}
+
+            data = []
+            for row in rows:
+                result = {}
+                result['groupId'] = row[0]
+                result['courseId'] = row[1]
+                result['courseName'] = row[2]
+                result['credits'] = row[3]
+                result['evaluationDescription'] = row[4]
+                result['score'] = row[5]
+
+                data.append(result)
+
+            return {"data": data}
         except Exception as e:
             print(e)
             return {'status': str(e)}
@@ -405,6 +435,7 @@ class SchoolPeriod(Resource):
             SchoolPeriodId = args["periodId"]
 
             cur = conn.cursor()
+            cur.execute("USE db01;")
             cur.execute("EXEC spReadSchoolPeriod", (SchoolPeriodId,))
             rows = cur.fetchall()
             cur.close()
@@ -422,6 +453,7 @@ class Grade(Resource):
             schoolPeriodId = args["schoolPeriodId"]
 
             cur = conn.cursor()
+            cur.execute("USE db01;")
             cur.execute("EXEC spGetGradeAverage", (userId,schoolPeriodId))
             rows = cur.fetchall()
             cur.close()
@@ -441,6 +473,7 @@ class Enrollment(Resource):
             timeOfDay = args["timeOfDay"]
 
             cur = conn.cursor()
+            cur.execute("USE db01;")
             cur.execute("EXEC spEnrollment", (userId, schoolPeriodId, courseGroupId, timeOfDay))
             conn.commit()
             cur.close()
@@ -456,6 +489,7 @@ class Enrollment(Resource):
             courseGroupId = args["courseGroupId"]
 
             cur = conn.cursor()
+            cur.execute("USE db01;")
             cur.execute("EXEC spUnregister", (userId, courseGroupId))
             conn.commit()
             cur.close()
@@ -470,6 +504,7 @@ class File():
             args = parserFile.parse_args()
             userId = args["userId"]
             cur = conn.cursor()
+            cur.execute("USE db01;")
             cur.execute("EXEC spReadFile", (fileName, ))
             rows = cur.fetchall()
             cur.close()
@@ -492,6 +527,7 @@ class File():
             ver = args["ver"]
 
             cur = conn.cursor()
+            cur.execute("USE db01;")
             cur.execute("EXEC spCreateFile", (userId, fileTypeId, periodId, creationDate, modificationDate, name, description, ver))
             conn.commit()
             cur.close()
@@ -514,6 +550,7 @@ class File():
             ver = args["ver"]
 
             cur = conn.cursor()
+            cur.execute("USE db01;")
             cur.execute("EXEC spUpdateFile", (fileId, fileTypeId, periodId, creationDate, modificationDate, fileName, description, ver))
             conn.commit()
             cur.close()
@@ -525,6 +562,7 @@ class File():
     def delete(self, fileId):
         try:
             cur = conn.cursor()
+            cur.execute("USE db01;")
             cur.execute("EXEC spDeleteFile", (fileId,))
             conn.commit()
             cur.close()
@@ -534,6 +572,7 @@ class File():
 
 # API endpoints      
 api.add_resource(User, '/user')
+api.add_resource(GetUser, '/user/get')
 api.add_resource(Campus, '/campus')
 api.add_resource(Course, '/course')
 api.add_resource(SchoolPeriod, '/schoolperiod')

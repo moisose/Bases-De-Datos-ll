@@ -383,16 +383,15 @@ BEGIN
         RETURN
     END
 
-    SELECT Course.courseId, courseName, credits, CourseEvaluation.description, CourseEvaluation.score
+    SELECT CourseGroup.courseGroupId, Course.courseId, courseName, credits, CourseEvaluation.description, score
     FROM Course
-    INNER JOIN StudentXCourse ON StudentXCourse.courseId = Course.courseId
-    INNER JOIN Student ON Student.userId = StudentXCourse.userId
-    INNER JOIN CareerXUser ON CareerXUser.userId = Student.userId
-    INNER JOIN CareerPlan ON CareerPlan.careerId = CareerXUser.careerId
-    INNER JOIN CourseXPlan ON CourseXPlan.planId = CareerPlan.planId
-	INNER JOIN CourseGroup ON CourseGroup.courseId = Course.courseId
+    INNER JOIN CourseXPlan ON CourseXPlan.courseId = Course.courseId
+    INNER JOIN CareerPlan ON CareerPlan.planId = CourseXPlan.planId
+    INNER JOIN CourseGroup ON CourseGroup.courseId = Course.courseId
     INNER JOIN CourseEvaluation ON CourseEvaluation.courseGroupId = CourseGroup.courseGroupId
-    WHERE Student.userId = @userId AND StudentXCourse.status = 1
+
+   WHERE Course.courseId != (SELECT StudentXCourse.courseId FROM StudentXCourse WHERE @userId = StudentXCourse.userId) 
+   AND CareerPlan.planId = (SELECT CareerPlan.planId FROM Student INNER JOIN StudentXPlan ON StudentXPlan.userId = Student.userId INNER JOIN CareerPlan ON StudentXPlan.planId = CareerPlan.planId WHERE StudentXPlan.userId = @userId)
 
 END
 GO
@@ -400,7 +399,7 @@ GO
 -- CRUD User_
 
 -- CREATE
-CREATE OR ALTER PROCEDURE spCreateUser_(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT, @student BIT) AS
+CREATE OR ALTER PROCEDURE spCreateUser(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT, @student BIT) AS
 BEGIN
     IF @userId IS NULL OR @userName IS NULL OR @birthDate IS NULL OR @email IS NULL OR @idCampus IS NULL
     BEGIN
@@ -800,7 +799,7 @@ GO
 
 -- Store procedure for check if ther user has an asigned career
 -- SP VERIFY CAREER
-CREATE OR ALTER PROCEDURE spVerifyCareer (@userId, @statusResult BIT OUTPUT) AS
+CREATE OR ALTER PROCEDURE spVerifyCareer (@userId VARCHAR(32), @statusResult BIT OUTPUT) AS
 BEGIN
 
     IF @userId IS NULL
@@ -814,7 +813,7 @@ BEGIN
         RETURN
     END
 
-    IF EXISTS(SELECT * FROM User_ INNER JOIN CareerXUser WHERE userId = @userId)
+    IF EXISTS(SELECT * FROM User_ INNER JOIN CareerXUser ON User_.userId = CareerXUser.userId WHERE User_.userId = @userId)
     BEGIN
         SELECT 'The user has a career' AS ExecMessage
         SET @statusResult = 1
