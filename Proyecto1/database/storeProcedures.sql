@@ -877,7 +877,8 @@ BEGIN
         SELECT 'The career does not exist' AS ExecMessage
         RETURN
     END
-    SELECT TOP 1 * FROM CareerPlan WHERE careerId = @careerId ORDER BY activationDate DESC
+    SELECT TOP 1 * FROM CareerPlan INNER JOIN CareerXUser ON CareerPlan.careerPlanId = CareerXUser.careerPlanId
+        WHERE careerId = @careerId AND userId = @userId ORDER BY activationDate DESC
 END
 GO
 
