@@ -207,6 +207,21 @@ def getFileInfo():
     except Exception as e:
         print(e)
         return {'status': str(e)}
+    
+# Procedure that returns the filename of an specific version of a file
+# spGetVersionOfFile
+def getVersionOfFile(userId, fileId, version):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spGetVersionOfFile ?,?,?", (userId, fileId, version))
+        rows = cur.fetchall()
+        cur.close()
+
+        return {'data': rows[0]}
+    except Exception as e:
+        return {'status': str(e)}
+
 
 # Post procedure that uploads a file to the database
 def uploadFileSQL(userId, filename, fileType, periodId, name):
