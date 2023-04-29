@@ -585,7 +585,7 @@ GO
 CREATE TABLE Version(
     versionId INT IDENTITY(1,1) PRIMARY KEY,
     fileId INT NOT NULL,
-    modificationDate DATE NOT NULL,
+    modificationDate DATETIME NOT NULL,
     filename varchar(15) NOT NULL
 )
 

@@ -757,6 +757,46 @@ GO
 ----------------------------------------- FILES SP -----------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 
+-- SP GET FILE VERSIONS 
+-- ENTRIES: name
+-- DESCRIPTION: Gets all the versions of a file bases on the name
+CREATE OR ALTER PROCEDURE spGetFileVersions(@name VARCHAR(50)) AS
+BEGIN
+    IF @name IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM File_ WHERE name = @name)
+    BEGIN
+        SELECT 'The file does not exist' AS ExecMessage
+        RETURN
+    END
+
+    SELECT Version.modificationDate FROM Version INNER JOIN File_ ON File_.fileId = Version.fileId WHERE File_name = @name AND File_.fileId = Version.fileId
+END
+
+-- SP GET FILE NAME FROM VERSION
+-- ENTRIES: name, modificationDate
+-- DESCRIPTION: Gets the filename of a file based on the name and the modification date
+CREATE OR ALTER PROCEDURE spGetFileNameFromVersion(@name VARCHAR(50), @modificationDate DATETIME) AS
+BEGIN
+    IF @name IS NULL OR @modificationDate IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM File_ WHERE name = @name)
+    BEGIN
+        SELECT 'The file does not exist' AS ExecMessage
+        RETURN
+    END
+
+    SELECT Version.filename FROM Version INNER JOIN File_ ON File_.fileId = Version.fileId WHERE File_name = @name AND File_.fileId = Version.fileId AND Version.modificationDate = @modificationDate
+END
+
+
+
 -- SP GET LATESTS FILE VERSION
 -- ENTRIES: userId, fileId
 -- DESCRIPTION: Gets the latest version of a file
