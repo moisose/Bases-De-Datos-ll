@@ -794,7 +794,7 @@ BEGIN
         RETURN
     END
 
-    SELECT Version.filename FROM Version INNER JOIN File_ ON File_.fileId = Version.fileId WHERE File_name = @name AND File_.fileId = Version.fileId AND Version.modificationDate = @modificationDate
+    SELECT Version.filename FROM Version INNER JOIN File_ ON File_.fileId = Version.fileId WHERE File_.name = @name AND File_.fileId = Version.fileId AND Version.modificationDate = @modificationDate
 END
 GO
 
@@ -897,7 +897,7 @@ BEGIN
     DECLARE @FileId INT
     SET @FileId = (SELECT fileId from File_ WHERE name = @name)
 
-    DECLARE @modificationDate DATE
+    DECLARE @modificationDate DATETIME
     SET @modificationDate = GETDATE()
 
     IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
@@ -1029,23 +1029,29 @@ GO
 -- DELETE
 -- ENTRIES: fileId
 -- DESCRIPTION: Deletes a file
-CREATE OR ALTER PROCEDURE spDeleteFile(@name VARCHAR(50)) AS
+CREATE OR ALTER PROCEDURE spDeleteFile(@name VARCHAR(15)) AS
 BEGIN
     IF @name IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
         RETURN
     END
-    IF NOT EXISTS(SELECT * FROM File_ WHERE name = @name)
-    BEGIN
-        SELECT 'The file does not exist' AS ExecMessage
-        RETURN
-    END
 
 	DECLARE @fileId INT
-	SET @fileId = (SELECT fileId FROM File_ WHERE name = @name)
+	SET @fileId = (SELECT fileId FROM Version WHERE Version.filename = @name)
 
-	DELETE FROM Version WHERE Version.fileId = @fileId
-    DELETE FROM File_ WHERE name = @name
+	DECLARE @amount INT
+	SET @amount = (SELECT COUNT(*) FROM Version WHERE Version.fileId = @fileId)
+
+	IF @amount > 1
+	BEGIN
+		DELETE FROM Version WHERE Version.filename = @name
+	END
+	ELSE
+	BEGIN
+		DELETE FROM Version WHERE Version.filename = @name
+		DELETE FROM File_ WHERE fileId = @fileId
+	END
+		
 END
 GO
