@@ -194,6 +194,12 @@ En varias secciones se llama a la función **resetScreen** para que los datos re
     <img src="Resources/SignUpResetS.png" alt="Sign Up error con firebase" />
 </center>
 
+### **Home Screen**
+
+### **Enroll Screen**
+
+### **Enrolled Courses Screen**
+
 ### **Select Campus Screen**
 
 En esta ventana el usuario tiene la opción de seleccionar el campus en el que se encuentra matriculado.
@@ -226,11 +232,15 @@ Cuando la ventana se abre se inicializa una varialble para guardar una lista con
 
 Cuando se selecciona un curso, se redirige a la ventana CourseInfo, para desplegar la información general del curso.
 
-### **Home Screen**
+### **Course Info Screen**
 
-### **Enroll Screen**
+En esta ventana se toma el object seleccionado en la ventana anterior y se despliega información como nombre del curso, grupo, evaluación de desempeño... Para hacerklo solo toma el objeto de la variable que se asigno en la ventana a cursos disponibles y se le hace un set a las labels disponibles en la ventana.
 
-### **Enrolled Courses Screen**
+<center>
+    <img src="Resources/courseInfo.png" alt="Reset Password Screen" />
+</center>
+
+Tambien se puede regresar a la ventana anterior y a la ventana home, segun el usuario prefiera.
 
 ### **Reset Password Screen**
 
