@@ -1,8 +1,6 @@
 # Imports
 from flask import Flask, flash, request, send_file
-from flask_restful import Api, Resource, reqparse
 from werkzeug.utils import secure_filename
-import os
 import pyodbc
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
@@ -11,7 +9,8 @@ from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 import io
 from flask_cors import CORS
-
+import random
+import string
 
 """
 Connections
@@ -90,8 +89,11 @@ class CassandraConnector():
         session.execute("TRUNCATE userlogs")
         return "Deleted all"
 
-    def loadFile(self, user):
-        self.submit(user, "Loaded File.")
+    def uploadFile(self, user):
+        self.submit(user, "Uploaded File.")
+
+    def downloadFile(self, user):
+        self.submit(user, "Downloaded File.")
 
     def modifyFile(self, user):
         self.submit(user, "Modified File.")
@@ -120,8 +122,8 @@ class CassandraConnector():
     def enrollCourse(self, user):
         self.submit(user, "Enrolled a Course.")
 
-    def unregisterCourse(self, user):
-        self.submit(user, "Unregistered a Course.")
+    def unenrollCourse(self, user):
+        self.submit(user, "Unenrolled a Course.")
 
     def availableCourses(self, user):
         self.submit(user, "Viewed available courses.")
@@ -144,6 +146,17 @@ class CassandraConnector():
 
 logManager = CassandraConnector()
 
+# ===========================================================================
+# Functions
+# Generates a random string of n characters (used for the file name)
+def random_string(n):
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(n))
+
+# Gets the extension of a filename
+def getExtension(word):
+    return word.split('.')[1]
+
 # ***************************************************************************
 # Resources
 # ***************************************************************************
@@ -153,27 +166,125 @@ def main():
     return {"message": "Welcome to the API!"}
 
 # ===========================================================================
+# File
+
+# Read procedure that returns the information of a file
+@app.route('/file/info', methods = ['GET'])
+def getFileInfo():
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spReadFile")
+        rows = cur.fetchall()
+        cur.close()
+
+        #fileId, userId, fileTypeId, periodId, creationDate, name, description
+        data = []
+        for row in rows:
+            result = {}
+            result['fileId'] = row[0]
+            result['userId'] = row[1]
+            result['fileTypeId'] = row[2]
+            result['periodId'] = row[3]
+            result['creationDate'] = row[4]
+            result['name'] = row[5]
+            result['description'] = row[6]
+
+            data.append(result)
+
+        return {'data': data}
+    except Exception as e:
+        print(e)
+        return {'status': str(e)}
+
+# Post procedure that uploads a file to the database
+def uploadFileSQL(userId, filename, fileType, periodId, name):
+    try:
+        description = "EduHub File."
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spCreateFile ?,?,?,?,?,?", (userId, filename, fileType, periodId, name, description))
+        conn.commit()
+        cur.close()
+        return {'status': 'success'}
+    except Exception as e:
+        return {'status': str(e)}
+
+# Delete procedure that deletes a file
+@app.route('/file/delete/<string:name>', methods = ['DELETE'])
+def deleteFile(name):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spDeleteFile ?", (name,))
+        conn.commit()
+        cur.close()
+        return {'status': 'Deleted successfully', 'fileId': name}
+    except Exception as e:
+        return {'status': str(e)}
+    
+# update procedure that updates the information of a file
+def updateFileSQL(userId, name, fileName):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spModifyFile ?,?,?", (userId, name, fileName))
+        conn.commit()
+        cur.close()
+        return {'status': 'Version Successfully Uploaded'}
+    except Exception as e:
+        return {'status': str(e)}
+
+# ===========================================================================
 # Blob Storage
 
 # Uploads a file to the blob storage
-@app.route('/blobstorage/upload', methods = ['POST'])
-def blobUpload():
-    if 'file' not in request.files:
-        flash('No file part')
-        return "<p>Upload File!</p>"
-    file = request.files['file']
-    if file.filename == '':
-        return  "<p>Upload No name!</p>"
-    filename = secure_filename(file.filename)
-    blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
-    container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
-    blob_client = container_client.get_blob_client(filename)
-    blob_client.upload_blob(file)
-    return   "<p>Uploaded!</p>"
+@app.route('/blobstorage/upload/<string:userId>', methods = ['POST'])
+def blobUpload(userId):
+    try:
+        if 'file' not in request.files:
+            flash('No file part')
+            return "<p>Upload File!</p>"
+        file = request.files['file']
+        if file.filename == '':
+            return  "<p>Upload No name!</p>"
+        
+        extension = getExtension(file.filename)
+        sqlFilename = secure_filename(file.filename)
+        blobFilename = random_string(8) + "." + extension
+
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spExistsFile ?", (sqlFilename,))
+        rows = cur.fetchall()
+        cur.close()
+        
+        filename = secure_filename(blobFilename)
+        blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
+        container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
+        blob_client = container_client.get_blob_client(filename)
+        blob_client.upload_blob(file)
+
+        exists = False
+        for row in rows:
+            if row[0] == "The file exists":
+                exists = True
+                break
+        
+        if not exists:
+            uploadFileSQL(userId, blobFilename, extension, 5, sqlFilename)
+        else:
+            updateFileSQL(userId, sqlFilename, blobFilename)
+
+        logManager.uploadFile(userId)
+        return   {"status":"Uploaded!", "Sql":sqlFilename, "Blob":blobFilename, "User":userId}
+    except Exception as e:
+        return {'status': str(e)}
+
 
 # Downloads a file from the blob storage
-@app.route('/blobstorage/download/<string:filename>', methods = ['GET'])
-def blobDownload(filename):
+@app.route('/blobstorage/download/<string:userId>/<string:filename>', methods = ['GET'])
+def blobDownload(userId, filename):
     try:
         blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
         container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
@@ -182,13 +293,14 @@ def blobDownload(filename):
         blob_client.download_blob().download_to_stream(stream)
         stream.seek(0)
         response = send_file(stream, download_name=filename, as_attachment=True)
+        logManager.downloadFile(userId)
         return response
     except Exception as e:
         return {'status': str(e)}
 
 # Deletes a file from the blob storage
-@app.route('/blobstorage/delete/<string:filename>', methods = ['DELETE'])
-def blobDelete(filename):
+@app.route('/blobstorage/delete/<string:userId>/<string:filename>', methods = ['DELETE'])
+def blobDelete(userId, filename):
     blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
     container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
     blob_client = container_client.get_blob_client(filename)
@@ -200,6 +312,7 @@ def blobDelete(filename):
         deleted = False
     
     if deleted:
+        logManager.deleteFile(userId)
         return f"File {filename} deleted."
     else:
         return f"File {filename} not found."
@@ -287,7 +400,16 @@ def getListOfCampus():
         cur.execute("SELECT * FROM Campus")
         rows = cur.fetchall()
         cur.close()
-        return {'data': rows}
+
+        data = []
+        for row in rows:
+            result = {}
+            result['campusId'] = row[0]
+            result['campusName'] = row[1]
+
+            data.append(result)
+
+        return {'data': data}
     except Exception as e:
         return {'status': str(e)}
 
@@ -314,7 +436,6 @@ def getCourses(userId):
             result['credits'] = row[3]
             result['evaluationDescription'] = row[4]
             result['score'] = row[5]
-
             data.append(result)
 
         return {"data": data}
@@ -365,7 +486,8 @@ def enrollStudent(userId, courseGroupId, schoolPeriodId):
         cur.execute("EXEC spEnrollment", (userId, schoolPeriodId, courseGroupId))
         conn.commit()
         cur.close()
-        return {'status': 'success'}
+        logManager.enrollCourse(userId)
+        return {'status': 'Course successfully enrolled'}
     except Exception as e:
         return {'status': str(e)}
 
@@ -378,100 +500,27 @@ def unenrollStudent(userId, courseGroupId):
         cur.execute("EXEC spUnregister", (userId, courseGroupId))
         conn.commit()
         cur.close()
+        logManager.unenrollCourse(userId)
         return {'status': 'success'}
     except Exception as e:
         return {'status': str(e)}
 
 # Read procedure that returns the enrollment time of a student
-@app.route('/enrollment/time/<string:userId>/<int:schoolPeriodId>', methods = ['GET'])
-def getEnrollmentTime(userId, schoolPeriodId):
-    try:
-        time = 0
-        cur = conn.cursor()
-        cur.execute("USE db01;")
-        cur.execute("EXEC spEnrollmentTimeSchedule", (userId, schoolPeriodId, time))
-        cur.close()
-        return {'data': time}
-    except Exception as e:
-        return {'status': str(e)}
-
-# ===========================================================================
-# File
-
-# Read procedure that returns the information of a file
-@app.route('/file/info/<int:fileName>', methods = ['GET'])
-def getFileInfo(fileName):
+@app.route('/enrollment/time/<string:userId>', methods = ['GET'])
+def getEnrollmentTime(userId):
     try:
         cur = conn.cursor()
         cur.execute("USE db01;")
-        cur.execute("EXEC spReadFile", (fileName, ))
+        cur.execute("EXEC spGetEnrollmentTime ?", (userId,))
         rows = cur.fetchall()
         cur.close()
-        return {'data': rows}
-    except Exception as e:
-        print(e)
-        return {'status': str(e)}
 
-# Post procedure that uploads a file to the database
-# userId
-# fileTypeId 
-# periodId
-# creationDate
-# modificationDate
-# name
-# description
-# version
-@app.route('/file/upload/<string:userId>/<int:fileTypeId>/<int:periodId>/<string:creationDate>/<string:modificationDate>/<string:name>/<string:description>', methods = ['POST'])
-def uploadFile(userId, fileTypeId, periodId, creationDate, modificationDate, name, description):
-    try:
-        cur = conn.cursor()
-        cur.execute("USE db01;")
-        cur.execute("EXEC spCreateFile", (userId, fileTypeId, periodId, creationDate, modificationDate, name, description))
-        conn.commit()
-        cur.close()
-        return {'status': 'success'}
+        row = rows[0]
+        result = {"date": row[0], "time": row[1]}
+        return {'data': result}
     except Exception as e:
         return {'status': str(e)}
 
-# Delete procedure that deletes a file
-@app.route('/file/delete/<int:fileId>', methods = ['DELETE'])
-def deleteFile(fileId):
-    try:
-        cur = conn.cursor()
-        cur.execute("USE db01;")
-        cur.execute("EXEC spDeleteFile", (fileId,))
-        conn.commit()
-        cur.close()
-        return {'status': 'Deleted successfully', 'fileId': fileId}
-    except Exception as e:
-        return {'status': str(e)}
-
-
-"""
-# Put procedure that updates the information of a file
-    def put(self):
-        try:
-            args = parserFile.parse_args()
-            fileId = args["fileId"]
-            fileName = args["fileName"]
-            fileTypeId = args["fileTypeId"]
-            periodId = args["periodId"]
-            creationDate = args["creationDate"]
-            modificationDate = args["modificationDate"]
-            name = args["name"]
-            description = args["description"]
-            ver = args["ver"]
-
-            cur = conn.cursor()
-            cur.execute("USE db01;")
-            cur.execute("EXEC spUpdateFile", (fileId, fileTypeId, periodId, creationDate, modificationDate, fileName, description, ver))
-            conn.commit()
-            cur.close()
-            return {'status': 'success', 'data': args}
-        except Exception as e:
-            return {'status': str(e)}
-
-"""
 
 
 # Run the app
