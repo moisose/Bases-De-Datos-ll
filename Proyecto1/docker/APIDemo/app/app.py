@@ -21,7 +21,7 @@ Here you can find the connection string to connect to the Azure database, cassan
 # ===========================================================================
 # Azure Database Connection
 
-driver = "{ODBC Driver 18 for SQL Server}"
+driver = "{ODBC Driver 17 for SQL Server}"
 server = "tcp:tiburoncines-sqlserver.database.windows.net,1433"
 database = "db01"
 username = "el-adm1n"
@@ -218,7 +218,7 @@ def getFileNameFromVersion(fileId, version):
         rows = cur.fetchall()
         cur.close()
 
-        return {'data': rows[0]}
+        return rows[0][0]
     except Exception as e:
         return {'status': str(e)}
 
@@ -311,24 +311,26 @@ def blobUpload(userId):
 @app.route('/blobstorage/download/<string:userId>/<string:filename>/<string:version>', methods = ['GET'])
 def blobDownload(userId, filename, version):
     try:
+        filenameAux = getFileNameFromVersion(filename, version)
         blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
         container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
-        blob_client = container_client.get_blob_client(filename)
+        blob_client = container_client.get_blob_client(filenameAux)
         stream = io.BytesIO()
         blob_client.download_blob().download_to_stream(stream)
         stream.seek(0)
-        response = send_file(stream, download_name=filename, as_attachment=True)
+        response = send_file(stream, download_name=filenameAux, as_attachment=True) 
         logManager.downloadFile(userId)
         return response
     except Exception as e:
-        return {'status': str(e)}
+        return {'error': str(e)}
 
 # Deletes a file from the blob storage
-@app.route('/blobstorage/delete/<string:userId>/<string:filename>', methods = ['DELETE'])
-def blobDelete(userId, filename):
+@app.route('/blobstorage/delete/<string:userId>/<string:filename>/<string:version>', methods = ['DELETE'])
+def blobDelete(userId, filename, version):
+    filenameAux = getFileNameFromVersion(filename, version)
     blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
     container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
-    blob_client = container_client.get_blob_client(filename)
+    blob_client = container_client.get_blob_client(filenameAux)
     deleted = False
     try:
         blob_client.delete_blob()
@@ -338,6 +340,7 @@ def blobDelete(userId, filename):
     
     if deleted:
         logManager.deleteFile(userId)
+        deleteFile(filenameAux)
         return f"File {filename} deleted."
     else:
         return f"File {filename} not found."
