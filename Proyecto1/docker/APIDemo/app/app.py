@@ -157,6 +157,17 @@ def random_string(n):
 def getExtension(word):
     return word.split('.')[1]
 
+# Parse the date to the format YYYY-MM-DD needed for Thunkable
+def parseDate(rawDate):
+    date = rawDate.split(", ")[1]
+    dateComponents = date.split(" ")
+
+    months = {"Jan": "01", "Feb": "02", "Mar": "03", "Apr": "04", "May": "05", "Jun": "06","Jul": "07", "Aug": "08", "Sep": "09", "Oct": "10", "Nov": "11", "Dec": "12"}
+
+    parsedDate = dateComponents[2] + "-" + months[dateComponents[1]] + "-" + dateComponents[0]
+    
+    return parsedDate
+
 # ***************************************************************************
 # Resources
 # ***************************************************************************
@@ -283,8 +294,8 @@ def blobUpload(userId):
 
 
 # Downloads a file from the blob storage
-@app.route('/blobstorage/download/<string:userId>/<string:filename>', methods = ['GET'])
-def blobDownload(userId, filename):
+@app.route('/blobstorage/download/<string:userId>/<string:filename>/<string:version>', methods = ['GET'])
+def blobDownload(userId, filename, version):
     try:
         blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
         container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
@@ -341,7 +352,7 @@ def getUser(userId):
         return {'status': str(e)}
 
 # Create procedure that creates a new user
-@app.route('/user/create/<string:userId>/<string:userName>/<string:userBirthDay>/<string:userEmail>/<int:idCampus>/<string:isStudent>', methods = ['POST'])
+@app.route('/user/create/<string:userId>/<string:userName>/<string:userBirthDay>/<string:userEmail>/<string:idCampus>/<string:isStudent>', methods = ['POST'])
 def createUser(userId, userName, userBirthDay, userEmail, idCampus, isStudent):
     try:
         student = 0
@@ -350,7 +361,7 @@ def createUser(userId, userName, userBirthDay, userEmail, idCampus, isStudent):
 
         cur = conn.cursor()
         cur.execute("USE db01;")
-        cur.execute("EXEC spCreateUser_ ?,?,?,?,?,?", (userId, userName, userBirthDay, userEmail, idCampus, student))
+        cur.execute("EXEC spCreateUser_ ?,?,?,?,?,?", (userId, userName, userBirthDay, userEmail, int(idCampus), student))
 
         conn.commit()
         cur.close()
@@ -360,12 +371,12 @@ def createUser(userId, userName, userBirthDay, userEmail, idCampus, isStudent):
         return {'status': str(e)}
 
 # Update procedure that updates the information of the user
-@app.route('/user/update/<string:userId>/<string:userName>/<string:userBirthDay>/<string:userEmail>/<int:idCampus>', methods = ['PUT'])
+@app.route('/user/update/<string:userId>/<string:userName>/<string:userBirthDay>/<string:userEmail>/<string:idCampus>', methods = ['PUT'])
 def updateUser(userId, userName, userBirthDay, userEmail, idCampus):
     try:
         cur = conn.cursor()
         cur.execute("USE db01;")
-        cur.execute('EXEC spUpdateUser_ ?,?,?,?,?', (userId, userName, userBirthDay, userEmail, idCampus))
+        cur.execute('EXEC spUpdateUser_ ?,?,?,?,?', (userId, userName, userBirthDay, userEmail, int(idCampus)))
         conn.commit()
         cur.close()
         logManager.userInfoUpdated(userId)
@@ -446,12 +457,12 @@ def getCourses(userId):
 # SchoolPeriod
 
 # Read procedure that returns the information of a school period
-@app.route('/schoolperiod/info/<int:SchoolPeriodId>', methods = ['GET'])
+@app.route('/schoolperiod/info/<string:SchoolPeriodId>', methods = ['GET'])
 def getSchoolPeriod(SchoolPeriodId):
     try:
         cur = conn.cursor()
         cur.execute("USE db01;")
-        cur.execute("EXEC spReadSchoolPeriod", (SchoolPeriodId,))
+        cur.execute("EXEC spReadSchoolPeriod", (int(SchoolPeriodId),))
         rows = cur.fetchall()
         cur.close()
         return {'data': rows}
@@ -462,12 +473,12 @@ def getSchoolPeriod(SchoolPeriodId):
 # Grade
 
 # Read procedure that returns the average grade of a student
-@app.route('/grade/average/<string:userId>/<int:schoolPeriodId>', methods = ['GET'])
+@app.route('/grade/average/<string:userId>/<string:schoolPeriodId>', methods = ['GET'])
 def getAverageGrade(userId, schoolPeriodId):
     try:
         cur = conn.cursor()
         cur.execute("USE db01;")
-        cur.execute("EXEC spGetGradeAverage", (userId, schoolPeriodId))
+        cur.execute("EXEC spGetGradeAverage", (userId, int(schoolPeriodId)))
         rows = cur.fetchall()
         cur.close()
         return {'data': rows}
@@ -478,12 +489,12 @@ def getAverageGrade(userId, schoolPeriodId):
 # Enrollment
 
 # Post procedure that enrolls a student in a course if possible
-@app.route('/enrollment/enroll/<string:userId>/<int:courseGroupId>/<int:schoolPeriodId>', methods = ['POST'])
+@app.route('/enrollment/enroll/<string:userId>/<string:courseGroupId>/<string:schoolPeriodId>', methods = ['POST'])
 def enrollStudent(userId, courseGroupId, schoolPeriodId):
     try:
         cur = conn.cursor()
         cur.execute("USE db01;")
-        cur.execute("EXEC spEnrollment", (userId, schoolPeriodId, courseGroupId))
+        cur.execute("EXEC spEnrollment", (userId, int(schoolPeriodId), int(courseGroupId)))
         conn.commit()
         cur.close()
         logManager.enrollCourse(userId)
@@ -492,12 +503,12 @@ def enrollStudent(userId, courseGroupId, schoolPeriodId):
         return {'status': str(e)}
 
 # Post procedure that unenrolls a student from a course if possible
-@app.route('/enrollment/unenroll/<string:userId>/<int:courseGroupId>', methods = ['POST'])
+@app.route('/enrollment/unenroll/<string:userId>/<string:courseGroupId>', methods = ['POST'])
 def unenrollStudent(userId, courseGroupId):
     try:
         cur = conn.cursor()
         cur.execute("USE db01;")
-        cur.execute("EXEC spUnregister", (userId, courseGroupId))
+        cur.execute("EXEC spUnregister", (userId, int(courseGroupId)))
         conn.commit()
         cur.close()
         logManager.unenrollCourse(userId)
@@ -516,12 +527,10 @@ def getEnrollmentTime(userId):
         cur.close()
 
         row = rows[0]
-        result = {"date": row[0], "time": row[1]}
+        result = {"date": parseDate(row[0]), "time": row[1]}
         return {'data': result}
     except Exception as e:
         return {'status': str(e)}
-
-
 
 # Run the app
 if __name__ == '__main__': 
