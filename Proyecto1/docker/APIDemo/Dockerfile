@@ -18,6 +18,9 @@ RUN ACCEPT_EULA=Y apt-get install -y mssql-tools18
 
 RUN echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
 
+RUN ls
+RUN python -u unittest.py
+
 WORKDIR /app
 
 COPY app/. .
