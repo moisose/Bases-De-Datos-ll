@@ -775,6 +775,7 @@ BEGIN
 
     SELECT Version.modificationDate FROM Version INNER JOIN File_ ON File_.fileId = Version.fileId WHERE File_name = @name AND File_.fileId = Version.fileId
 END
+GO
 
 -- SP GET FILE NAME FROM VERSION
 -- ENTRIES: name, modificationDate
@@ -794,7 +795,7 @@ BEGIN
 
     SELECT Version.filename FROM Version INNER JOIN File_ ON File_.fileId = Version.fileId WHERE File_name = @name AND File_.fileId = Version.fileId AND Version.modificationDate = @modificationDate
 END
-
+GO
 
 
 -- SP GET LATESTS FILE VERSION
