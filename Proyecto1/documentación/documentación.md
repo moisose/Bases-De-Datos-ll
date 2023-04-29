@@ -170,19 +170,13 @@ Demás verificaciones se hacen al llamar sign up de firebase, debido a que esta 
     <img src="Resources/SignUpErrorFirebase.png" alt="Sign Up error con firebase" />
 </center>
 
-La funcion que hace el sign Up también llama a la función **saveInfo**, que hace el firebase sign in con el input del email y el password, posteriormente llama a la función de generateJSON.
+La funcion que hace el sign Up también llama a la función **saveInfo**, que hace el firebase sign in con el input del email y el password, posteriormente llama a la función de connectApi con el url con el que se va a llamar al API.
 
 <center>
     <img src="Resources/SignUpSaveInfo.png" alt="Sign Up error con firebase" />
 </center>
 
-La función **generateJSON** se encarga de ponerle las propiedades al objeto que será 'parseado' a un JSON para enviárselo al API, es por esto que llama a la función connetAPI.
-
-<center>
-    <img src="Resources/signUpGenerateJSON.png" alt="Sign Up error con firebase" />
-</center>
-
-En connectAPI se hace el set el http al que nos vamos a conectar para mandar los datos del usuario y el queryParameter, que en este caso corresponde al JSON. Su usa la función callAPIAZURE y se hace un post, cuando se crea el usuario se le muestra un mensaje al usuario indicandole que su usuario se creo con éxito'.
+En connectAPI se hace el set el http al que nos vamos a conectar para mandar los datos del usuario. Su usa la función **call API azure** y se hace un post, cuando se crea el usuario se le muestra un mensaje al usuario indicandole que su usuario se creo con éxito'.
 
 <center>
     <img src="Resources/SignUpConnectApi.png" alt="Sign Up error con firebase" />
@@ -199,6 +193,38 @@ En varias secciones se llama a la función **resetScreen** para que los datos re
 <center>
     <img src="Resources/SignUpResetS.png" alt="Sign Up error con firebase" />
 </center>
+
+### **Select Campus Screen**
+
+En esta ventana el usuario tiene la opción de seleccionar el campus en el que se encuentra matriculado.
+
+<center>
+    <img src="Resources/selectCampusOpens.png" alt="Reset Password Screen" />
+</center>
+
+Se conecta al API para obtener los campus que se encuentran en la base de datos, se parsea el JSON que retorna el API, los agrega a una lista donde se pone el nombre, esto permite que el usuario seleccione la opción de preferencia.
+
+<center>
+    <img src="Resources/selectedCampus.png" alt="Reset Password Screen" />
+</center>
+
+Cuando se hace la selección del campus, se le asigna el nombre del campus a una variable para que se vea en la ventana SignIn y el index del campus seleccionado.
+
+### **Avalilable Courses Screen**
+
+En esta ventana el usuario puede visualizar los cursos que pueden matricular.
+
+<center>
+    <img src="Resources/availableCoursesScreen.png" alt="Reset Password Screen" />
+</center>
+
+Cuando la ventana se abre se inicializa una varialble para guardar una lista con los nombres de los cursos, otra para guardar toda la información de cada curso en objetos y la última, para guardar la información del curso que seleccionó el usuario y desplegarla en otra ventaja. Llama a la función **GetDispCourses**, esta se conecta al API y llama a la función para parsear el json que responde el API y se despliega la info y se despliega la lista de cursos en la list View.
+
+<center>
+    <img src="Resources/selectACourseInfo.png" alt="Reset Password Screen" />
+</center>
+
+Cuando se selecciona un curso, se redirige a la ventana CourseInfo, para desplegar la información general del curso.
 
 ### **Home Screen**
 
