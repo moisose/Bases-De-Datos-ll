@@ -148,6 +148,65 @@ BEGIN
 END
 GO
 
+-- SP GET ENROLLMENT TIME
+-- ENTRIES: @userId VARCHAR(32), @schoolPeriodId INT, @enrollmentTime TIME OUTPUT
+-- Description: This procedure return the enrollment time of a student
+CREATE OR ALTER PROCEDURE spGetEnrollmentTime(@userId VARCHAR(32)) AS
+BEGIN
+
+    -- VERIFY NULL PARAMETERS
+    IF @userId IS NULL
+    BEGIN
+        SELECT 'NULL parameters' AS ExecMessage
+        RETURN
+    END
+    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
+    BEGIN
+        SELECT 'The user does not exist' AS ExecMessage
+        RETURN
+    END
+
+
+
+    DECLARE @enrollmentId INT, @enrollmentTimeSchedule INT, @previousSchoolPeriod INT 
+
+    SET @enrollmentId = (SELECT TOP 1 Enrollment.enrollmentId FROM Enrollment ORDER BY Enrollment.enrollmentId DESC)
+
+    IF @enrollmentId IS NULL
+    BEGIN
+        SELECT 'There is not enrollment available' AS ExecMessage
+        RETURN
+    END
+    IF (SELECT Enrollment.startDate FROM Enrollment WHERE Enrollment.enrollmentId = @enrollmentId) < GETDATE()
+    BEGIN
+        SELECT 'The las enrollment has end' AS ExecMessage
+        RETURN
+    END
+    
+    SET @previousSchoolPeriod = (SELECT TOP(1) schoolPeriodId FROM SchoolPeriod
+        INNER JOIN CourseGroup ON SchoolPeriod.schoolPeriodId = CourseGroup.periodId
+        INNER JOIN Course ON CourseGroup.courseId = Course.courseId
+        INNER JOIN StudentXCourse ON Course.courseId = StudentXCourse.courseId
+		INNER JOIN WeeklySchedule ON CourseGroup.courseGroupId = weeklySchedule.courseGroupId
+        
+        WHERE studentXCourse.userId = @userId 
+		AND StudentXCourse.status = 1 ORDER BY schoolPeriodId DESC)
+    
+    IF @previousSchoolPeriod IS NULL
+    BEGIN
+        SET @enrollmentTimeSchedule = 7
+    END
+    ELSE
+    BEGIN
+        EXEC spEnrollmentTimeSchedule @userId, @previousSchoolPeriod, @enrollmentTimeSchedule OUTPUT
+    END
+
+    
+    
+    SELECT (SELECT Enrollment.startDate FROM Enrollment WHERE Enrollment.enrollmentId = @enrollmentId), @enrollmentTimeSchedule
+END
+GO
+
 
 -- SP STUDENT MEETS ALL REQUIREMENTS TO ENROLL THE COURSE
 -- ENTRIES: @userId VARCHAR(32), @courseId INT, @meetsRequirements BIT OUTPUT
@@ -211,15 +270,16 @@ GO
 -- SP ENROLLMENT
 -- ENTRIES: @userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT, @enrollmentId INT OUTPUT
 -- Description: This procedure enroll a student in a course group
-CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT, @enrollmentId INT) AS
+CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT) AS
 BEGIN
-    DECLARE @enrollmentSchedule INT, @previousSchoolPeriod INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME, @timeOfDay INT, @currentTime TIME, @dateOfToday DATETIME
+    DECLARE @enrollmentSchedule INT, @previousSchoolPeriod INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME, @timeOfDay INT, @currentTime TIME, @dateOfToday DATETIME, @enrollmentId INT
     SET @previousSchoolPeriod = 0
     SET @enrollmentSchedule = 0
 	SET @meetsRequirements = 0
     SET @dateOfToday = GETDATE()
 	SET @timeOfDay = DATEPART(HOUR, @dateOfToday)
 	SET @currentTime = (SELECT CONVERT(varchar, GETDATE(), 108))
+    SET @enrollmentId = (SELECT TOP 1 Enrollment.enrollmentId FROM Enrollment ORDER BY Enrollment.enrollmentId DESC)
 
     IF (SELECT EnrollmentStatus.description FROM EnrollmentStatus INNER JOIN Enrollment ON Enrollment.statusId = EnrollmentStatus.statusId WHERE @schoolPeriodId = periodId) = 'Inactivo'
         OR @dateOfToday < (SELECT Enrollment.startDate FROM Enrollment WHERE @schoolPeriodId = periodId) OR @dateOfToday > (SELECT Enrollment.endingDate FROM Enrollment WHERE @schoolPeriodId = periodId)
@@ -575,14 +635,14 @@ GO
 -- CREATE USER
 -- Entries: userId, userName, birthDate, email, idCampus, student
 -- Description: Creates a new user, if is a student, it also creates a new student
-CREATE OR ALTER PROCEDURE spCreateUser(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT, @student BIT) AS
+CREATE OR ALTER PROCEDURE spCreateUser_(@userId VARCHAR(32), @userName VARCHAR(50), @birthDate DATETIME, @email VARCHAR(50), @idCampus INT, @student BIT) AS
 BEGIN
     IF @userId IS NULL OR @userName IS NULL OR @birthDate IS NULL OR @email IS NULL OR @idCampus IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
         RETURN
     END
-    IF EXISTS(SELECT * FROM User WHERE userId = @userId)
+    IF EXISTS(SELECT * FROM User_ WHERE userId = @userId)
     BEGIN
         SELECT 'The user already exists' AS ExecMessage
         RETURN
