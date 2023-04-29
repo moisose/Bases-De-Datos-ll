@@ -160,7 +160,7 @@ Tambien tiene otras opciones para cambiar entre ventanas
     <img src="Resources/SignUpOtherAct.png" alt="Sign Up error con firebase" />
 </center>
 
-Envarias secciones se llama a la función **resetScreen** para que los datos regresen a los datos iniciales.
+En varias secciones se llama a la función **resetScreen** para que los datos regresen a los datos iniciales.
 
 <center>
     <img src="Resources/SignUpResetS.png" alt="Sign Up error con firebase" />
@@ -170,14 +170,26 @@ Envarias secciones se llama a la función **resetScreen** para que los datos reg
 
 ### **Enroll Screen**
 
-### **Check Enrollment Date Screen**
-
 ### **Enrolled Courses Screen**
 
 ### **Reset Password Screen**
 
 <center>
     <img src="Resources/resetPasswordScreen.png" alt="Reset Password Screen" />
+</center>
+
+En la ventana reset password un usuario podrá solicitar que se le envíe un email al correo registrado, esto se envía desde firebase para se que cambie el password mediante un link que se envía.
+
+En la ventana se puede presionar go back, al realizar esta acción va a dirigir nuevamente a la ventana log in sin haber realizado el cambio.
+
+<center>
+    <img src="Resources/rPaskConfirmation.png" alt="ask confirmation" />
+</center>
+
+Al presionar el botón para enviar el email se le pregunta al usuario si esta seguro sobre el cambio de contraseña, si lo están se procede a usar la función de reset password con el email del usuario.
+
+<center>
+    <img src="Resources/resetPasswordBtn.png" alt="Reset Password bottom" />
 </center>
 
 # **Conclusiones**
@@ -195,6 +207,12 @@ Envarias secciones se llama a la función **resetScreen** para que los datos reg
 **6-** Mantener la estructura definida del proyecto es esencial para evitar el desorden.
 
 **7-** Se debe desarollar un código legible y entendible.
+
+**8-** Se debe organizar el equipo de trabajo desde el día 1.
+
+**9-** Se dene tener una estruuctura clara y ordenada del proyecto y lo que requiere.
+
+**10-** Es importante implementar el uso de 'cajas negras' para mantener el proyecto avanzando, aún si hay partes no funcionales.
 
 # **Recomendaciones**
 
