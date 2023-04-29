@@ -180,7 +180,7 @@ def main():
 # File
 
 # Read procedure that returns the information of a file
-@app.route('/file/info', methods = ['GET'])
+@app.route('/file/list', methods = ['GET'])
 def getFileInfo():
     try:
         cur = conn.cursor()
@@ -210,11 +210,11 @@ def getFileInfo():
     
 # Procedure that returns the filename of an specific version of a file
 # spGetVersionOfFile
-def getVersionOfFile(userId, fileId, version):
+def getFileNameFromVersion(fileId, version):
     try:
         cur = conn.cursor()
         cur.execute("USE db01;")
-        cur.execute("EXEC spGetVersionOfFile ?,?,?", (userId, fileId, version))
+        cur.execute("EXEC spGetFileNameFromVersion ?,?", (fileId, version))
         rows = cur.fetchall()
         cur.close()
 
@@ -237,7 +237,6 @@ def uploadFileSQL(userId, filename, fileType, periodId, name):
         return {'status': str(e)}
 
 # Delete procedure that deletes a file
-@app.route('/file/delete/<string:name>', methods = ['DELETE'])
 def deleteFile(name):
     try:
         cur = conn.cursor()
