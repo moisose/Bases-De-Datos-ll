@@ -157,16 +157,6 @@ def random_string(n):
 def getExtension(word):
     return word.split('.')[1]
 
-# Parse the date to the format YYYY-MM-DD needed for Thunkable
-def parseDate(rawDate):
-    date = rawDate.split(", ")[1]
-    dateComponents = date.split(" ")
-
-    months = {"Jan": "01", "Feb": "02", "Mar": "03", "Apr": "04", "May": "05", "Jun": "06","Jul": "07", "Aug": "08", "Sep": "09", "Oct": "10", "Nov": "11", "Dec": "12"}
-
-    parsedDate = dateComponents[2] + "-" + months[dateComponents[1]] + "-" + dateComponents[0]
-    
-    return parsedDate
 
 # ***************************************************************************
 # Resources
@@ -528,7 +518,7 @@ def getEnrollmentTime(userId):
         cur.close()
 
         row = rows[0]
-        result = {"date": parseDate(row[0]), "time": row[1]}
+        result = {"date": str(row[0]), "time": row[1]}
         return {'data': result}
     except Exception as e:
         return {'status': str(e)}
