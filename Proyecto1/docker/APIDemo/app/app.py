@@ -228,11 +228,11 @@ def getUser(userId):
         return {'status': str(e)}
 
 # Create procedure that creates a new user
-@app.route('/user/create/<string:userId>/<string:userName>/<string:userBirthDay>/<string:userEmail>/<int:idCampus>/<boolean:isStudent>', methods = ['POST'])
+@app.route('/user/create/<string:userId>/<string:userName>/<string:userBirthDay>/<string:userEmail>/<int:idCampus>/<string:isStudent>', methods = ['POST'])
 def createUser(userId, userName, userBirthDay, userEmail, idCampus, isStudent):
     try:
         student = 0
-        if isStudent:
+        if isStudent == "true":
             student = 1
 
         cur = conn.cursor()
