@@ -207,6 +207,21 @@ def getFileInfo():
     except Exception as e:
         print(e)
         return {'status': str(e)}
+    
+# Procedure that returns the filename of an specific version of a file
+# spGetVersionOfFile
+def getVersionOfFile(userId, fileId, version):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spGetVersionOfFile ?,?,?", (userId, fileId, version))
+        rows = cur.fetchall()
+        cur.close()
+
+        return {'data': rows[0]}
+    except Exception as e:
+        return {'status': str(e)}
+
 
 # Post procedure that uploads a file to the database
 def uploadFileSQL(userId, filename, fileType, periodId, name):
@@ -470,31 +485,15 @@ def getSchoolPeriod(SchoolPeriodId):
         return {'status': str(e)}
 
 # ===========================================================================
-# Grade
-
-# Read procedure that returns the average grade of a student
-@app.route('/grade/average/<string:userId>/<string:schoolPeriodId>', methods = ['GET'])
-def getAverageGrade(userId, schoolPeriodId):
-    try:
-        cur = conn.cursor()
-        cur.execute("USE db01;")
-        cur.execute("EXEC spGetGradeAverage", (userId, int(schoolPeriodId)))
-        rows = cur.fetchall()
-        cur.close()
-        return {'data': rows}
-    except Exception as e:
-        return {'status': str(e)}
-
-# ===========================================================================
 # Enrollment
 
 # Post procedure that enrolls a student in a course if possible
-@app.route('/enrollment/enroll/<string:userId>/<string:courseGroupId>/<string:schoolPeriodId>', methods = ['POST'])
-def enrollStudent(userId, courseGroupId, schoolPeriodId):
+@app.route('/enrollment/enroll/<string:userId>/<string:courseGroupId>', methods = ['POST'])
+def enrollStudent(userId, courseGroupId):
     try:
         cur = conn.cursor()
         cur.execute("USE db01;")
-        cur.execute("EXEC spEnrollment", (userId, int(schoolPeriodId), int(courseGroupId)))
+        cur.execute("EXEC spEnrollment ?,?", (userId, int(courseGroupId)))
         conn.commit()
         cur.close()
         logManager.enrollCourse(userId)
@@ -508,11 +507,11 @@ def unenrollStudent(userId, courseGroupId):
     try:
         cur = conn.cursor()
         cur.execute("USE db01;")
-        cur.execute("EXEC spUnregister", (userId, int(courseGroupId)))
+        cur.execute("EXEC spUnregister ?,?", (userId, int(courseGroupId)))
         conn.commit()
         cur.close()
         logManager.unenrollCourse(userId)
-        return {'status': 'success'}
+        return {'status': 'Course successfully unenrolled'}
     except Exception as e:
         return {'status': str(e)}
 
@@ -529,6 +528,32 @@ def getEnrollmentTime(userId):
         row = rows[0]
         result = {"date": parseDate(row[0]), "time": row[1]}
         return {'data': result}
+    except Exception as e:
+        return {'status': str(e)}
+    
+
+# Method to get the courses already enrolled in this period of a student
+@app.route('/enrollment/enrolledCourses/<string:userId>', methods = ['GET'])
+def getEnrolledCourses(userId):
+    try:
+        cur = conn.cursor()
+        cur.execute("USE db01;")
+        cur.execute("EXEC spGetEnrolledCourses @userId=?", (userId,))
+        rows = cur.fetchall()
+        cur.close()
+
+        data = []
+        for row in rows:
+            result = {}
+            result['groupId'] = row[0]
+            result['courseId'] = row[1]
+            result['courseName'] = row[2]
+            result['credits'] = row[3]
+            result['evaluationDescription'] = row[4]
+            result['score'] = row[5]
+            data.append(result)
+
+        return {"data": data}
     except Exception as e:
         return {'status': str(e)}
 

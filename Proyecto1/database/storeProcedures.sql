@@ -268,7 +268,7 @@ GO
 -- SP ENROLLMENT
 -- ENTRIES: @userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT, @enrollmentId INT OUTPUT
 -- Description: This procedure enroll a student in a course group
-CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @schoolPeriodId INT, @courseGroupId INT) AS
+CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @courseGroupId INT) AS
 BEGIN
     DECLARE @enrollmentSchedule INT, @previousSchoolPeriod INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME, @timeOfDay INT, @currentTime TIME, @dateOfToday DATETIME, @enrollmentId INT
     SET @previousSchoolPeriod = 0
@@ -278,6 +278,9 @@ BEGIN
 	SET @timeOfDay = DATEPART(HOUR, @dateOfToday)
 	SET @currentTime = (SELECT CONVERT(varchar, GETDATE(), 108))
     SET @enrollmentId = (SELECT TOP 1 Enrollment.enrollmentId FROM Enrollment ORDER BY Enrollment.enrollmentId DESC)
+
+	DECLARE @schoolPeriodId INT
+	SET @schoolPeriodId = (SELECT TOP 1 schoolPeriodId FROM SchoolPeriod ORDER BY schoolPeriodId DESC)
 
     IF (SELECT EnrollmentStatus.description FROM EnrollmentStatus INNER JOIN Enrollment ON Enrollment.statusId = EnrollmentStatus.statusId WHERE @schoolPeriodId = periodId) = 'Inactivo'
         OR @dateOfToday < (SELECT Enrollment.startDate FROM Enrollment WHERE @schoolPeriodId = periodId) OR @dateOfToday > (SELECT Enrollment.endingDate FROM Enrollment WHERE @schoolPeriodId = periodId)
@@ -516,9 +519,12 @@ GO
 -- SP GET ENROLLED COURSES
 -- ENTRIES: userId, schoolPeriodId
 -- DESCRIPTION: Get the enrolled courses of a student in a school period
-CREATE OR ALTER PROCEDURE spGetEnrolledCourses(@userId VARCHAR(32), @schoolPeriodId INT) AS
+CREATE OR ALTER PROCEDURE spGetEnrolledCourses(@userId VARCHAR(32)) AS
 BEGIN
-    IF @userId IS NULL OR @schoolPeriodId IS NULL
+	DECLARE @schoolPeriodId INT
+	SET @schoolPeriodId = (SELECT TOP 1 schoolPeriodId FROM SchoolPeriod ORDER BY schoolPeriodId DESC)
+
+    IF @userId IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
         RETURN
@@ -526,11 +532,6 @@ BEGIN
     IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
     BEGIN
         SELECT 'The user does not exist' AS ExecMessage
-        RETURN
-    END
-    IF NOT EXISTS(SELECT * FROM SchoolPeriod WHERE schoolPeriodId = @schoolPeriodId)
-    BEGIN
-        SELECT 'The school period does not exist' AS ExecMessage
         RETURN
     END
 
@@ -775,6 +776,7 @@ BEGIN
 
     SELECT Version.modificationDate FROM Version INNER JOIN File_ ON File_.fileId = Version.fileId WHERE File_name = @name AND File_.fileId = Version.fileId
 END
+GO
 
 -- SP GET FILE NAME FROM VERSION
 -- ENTRIES: name, modificationDate
@@ -794,7 +796,7 @@ BEGIN
 
     SELECT Version.filename FROM Version INNER JOIN File_ ON File_.fileId = Version.fileId WHERE File_name = @name AND File_.fileId = Version.fileId AND Version.modificationDate = @modificationDate
 END
-
+GO
 
 
 -- SP GET LATESTS FILE VERSION
