@@ -1,5 +1,6 @@
 import unittest
 import requests
+import os
 
 filename = 'example_file.txt'
 baseurl = 'https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/'
@@ -28,12 +29,12 @@ class test_blobstorage(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_blobDownload(self):
-        url = baseurl+'blobstorage/download/'+userId+'/'+'Graph_Databases_for_Beginners2493.pdf/2023-04-30 00:13:47.743000'
+        url = baseurl+'blobstorage/download/'+userId+'/'+'example_file.txt/2023-04-30 07:31'
         response = requests.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_blobDelete(self):
-        url = baseurl+'blobstorage/delete/'+userId+'/Graph_Databases_for_Beginners2493.pdf/2023-04-30 00:13:47.743000'
+        url = baseurl+'blobstorage/delete/'+userId+'/example_file.txt/2023-04-30 07:31'
         response = requests.delete(url)
         self.assertEqual(response.status_code, 200)
 
