@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/Bases-De-Datos-ll/Proyecto1/nodejs/static/css/main.c94769a2.css",
-    "main.js": "/Bases-De-Datos-ll/Proyecto1/nodejs/static/js/main.58fe89e7.js",
-    "static/media/fa-solid-900.ttf": "/Bases-De-Datos-ll/Proyecto1/nodejs/static/media/fa-solid-900.4a2cd718d7031b732e76.ttf",
-    "static/media/fa-brands-400.ttf": "/Bases-De-Datos-ll/Proyecto1/nodejs/static/media/fa-brands-400.150de8eaa454d669c405.ttf",
-    "static/media/fa-solid-900.woff2": "/Bases-De-Datos-ll/Proyecto1/nodejs/static/media/fa-solid-900.bb975c966c37455a1bc3.woff2",
-    "static/media/fa-brands-400.woff2": "/Bases-De-Datos-ll/Proyecto1/nodejs/static/media/fa-brands-400.e033a13ee751afc1860c.woff2",
-    "static/media/fa-regular-400.ttf": "/Bases-De-Datos-ll/Proyecto1/nodejs/static/media/fa-regular-400.d87474231f4192884802.ttf",
-    "static/media/fa-regular-400.woff2": "/Bases-De-Datos-ll/Proyecto1/nodejs/static/media/fa-regular-400.3223dc79c1adee56370b.woff2",
-    "static/media/fa-v4compatibility.ttf": "/Bases-De-Datos-ll/Proyecto1/nodejs/static/media/fa-v4compatibility.0e3a648be390bd8cb094.ttf",
-    "static/media/fa-v4compatibility.woff2": "/Bases-De-Datos-ll/Proyecto1/nodejs/static/media/fa-v4compatibility.68577e40f3e70067b5da.woff2",
-    "index.html": "/Bases-De-Datos-ll/Proyecto1/nodejs/index.html",
-    "main.c94769a2.css.map": "/Bases-De-Datos-ll/Proyecto1/nodejs/static/css/main.c94769a2.css.map",
-    "main.58fe89e7.js.map": "/Bases-De-Datos-ll/Proyecto1/nodejs/static/js/main.58fe89e7.js.map"
+    "main.css": "/Bases-De-Datos-ll/static/css/main.9023f6da.css",
+    "main.js": "/Bases-De-Datos-ll/static/js/main.5115339c.js",
+    "static/media/fa-solid-900.ttf": "/Bases-De-Datos-ll/static/media/fa-solid-900.4a2cd718d7031b732e76.ttf",
+    "static/media/fa-brands-400.ttf": "/Bases-De-Datos-ll/static/media/fa-brands-400.150de8eaa454d669c405.ttf",
+    "static/media/fa-solid-900.woff2": "/Bases-De-Datos-ll/static/media/fa-solid-900.bb975c966c37455a1bc3.woff2",
+    "static/media/fa-brands-400.woff2": "/Bases-De-Datos-ll/static/media/fa-brands-400.e033a13ee751afc1860c.woff2",
+    "static/media/fa-regular-400.ttf": "/Bases-De-Datos-ll/static/media/fa-regular-400.d87474231f4192884802.ttf",
+    "static/media/fa-regular-400.woff2": "/Bases-De-Datos-ll/static/media/fa-regular-400.3223dc79c1adee56370b.woff2",
+    "static/media/fa-v4compatibility.ttf": "/Bases-De-Datos-ll/static/media/fa-v4compatibility.0e3a648be390bd8cb094.ttf",
+    "static/media/fa-v4compatibility.woff2": "/Bases-De-Datos-ll/static/media/fa-v4compatibility.68577e40f3e70067b5da.woff2",
+    "index.html": "/Bases-De-Datos-ll/index.html",
+    "main.9023f6da.css.map": "/Bases-De-Datos-ll/static/css/main.9023f6da.css.map",
+    "main.5115339c.js.map": "/Bases-De-Datos-ll/static/js/main.5115339c.js.map"
   },
   "entrypoints": [
-    "static/css/main.c94769a2.css",
-    "static/js/main.58fe89e7.js"
+    "static/css/main.9023f6da.css",
+    "static/js/main.5115339c.js"
   ]
 }
