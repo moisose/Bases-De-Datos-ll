@@ -54,6 +54,135 @@ Se tiene la tabla Evaluation. Esta entidad tiene relación con Item, ya que las 
 
 La tabla Item tiene relación con Student ya que los items tienen la calificación de los estudiantes de dicho rubro. Esta relación es N:N, por lo que existe la tabla StudentXItem.
 
+## **Procedures**
+
+- **spCreateFile** <br>
+Crea un archivo nuevo y lo inserta en la tabla File y Version. <br>
+*Parámetros*: id del usuario, nombre del archivo, id del tipo de archivo, id del periodo lectivo, nombre unico del archivo (generado) y descripción del archivo. <br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario no retorna nada. <br>
+
+- **spCreateUser_** <br>
+Crea un usuario nuevo y lo inserta en la tabla User_. <br>
+*Parámetros*: id del usuario, nombre de usuario, fecha de cumpleaños, correo, id del campus, es estudiente o no (1 o 0). <br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario no retorna nada. <br>
+
+- **spDeleteFile** <br>
+Elimina un archivo de la tabla File y Version. Si el archivo tiene más de una versión, solo elimina la versión actual, de lo contrario elimina el archivo y todas sus versiones. <br>
+*Parámetros*: nombre único del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario no retorna nada.<br>
+
+- **spDeleteUser_**<br>
+Elimina un usuario de la tabla User_.<br>
+*Parámetros*: id del usuario.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario no retorna nada.<br>
+
+- **spEnrollment**<br>
+Crea una matrícula nueva y la inserta en la tabla EnrollmentXStudent y WeeklySchedule. Realiza todas las validaciones que permitan o no la creación de la matrícula.<br>
+*Parámetros*: id del usuario, id del grupo del curso a matricular.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario no retorna nada.<br>
+*Validaciones*: parámetros null y existencia de todas las llaves foráneas, que el estudiante cumpla con todos los réquisitos del curso para matricular __<br>
+(spMeetRequirements)__, que el usuario no tenga un choque de horarios con los cursos que ya está matriculado y que no haya matriculado el curso en otro grupo. <br>
+
+- **spEnrollmentTimeSchedule**<br>
+Calcula el horario de la matrícula (hora) de un estudiante con base en el período del último período lectivo cursado.<br>
+*Parámetros*: id del usuario, id del período lectivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, retorna el horario de la matrícula.<br>
+
+- **spExistsFile**<br>
+Verifica si un archivo existe en la tabla File.<br>
+*Parámetros*: nombre del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de un mensaje de que el archivo existe.<br>
+
+- **spGetAllVersionsOfFile**<br>
+Obtiene todas las versiones de un archivo.<br>
+*Parámetros*: id del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de todas las versiones del archivo.<br>
+
+- **spGetCourses**<br>
+Obtiene todos los cursos de un estudiante que puede matricular en este periodo lectivo con base en los que ya ha llevado y aprobado.v
+*Parámetros*: id del usuario.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de todos los cursos que puede matricular el estudiante.<br>
+
+- **spGetEnrolledCourses**<br>
+Obtiene todos los cursos matriculados de un estudiante del último periodo lectivo.<br>
+*Parámetros*: id del usuario.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de todos los cursos matriculados del estudiante.<br>
+
+- **spGetEnrollmentTime**<br>
+Obtiene el horario de matrícula (hora y fecha) de un estudiante con base en el período del último período lectivo cursado.<br>
+*Parámetros*: id del usuario.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select del horario de la matrícula.<br>
+
+- **spGetFileNameFromVersion**<br>
+Obtiene el nombre único del archivo de una versión con base en el nombre original del archivo y la versión.<br>
+*Parámetros*: nombre original del archivo, versión del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select del nombre único del archivo.<br>
+
+- **spGetFileVersions**<br>
+Obtiene todas las versiones de un archivo.<br>
+*Parámetros*: nombre único del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de todas las versiones del archivo.<br>
+
+- **spGetGradeAverage**<br>
+Obtiene el promedio de notas de un estudiante de un curso.<br>
+*Parámetros*: id del usuario, id del curso.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select del promedio de notas del estudiante.<br>
+
+- **spGetGradeOfCourse**<br>
+Obtiene la nota de un estudiante de un curso.<br>
+*Parámetros*: id del usuario, id del curso.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de la nota del estudiante.<br>
+
+- **spGetLastPlan**<br>
+Obtiene el último plan de un estudiante.<br>
+*Parámetros*: id del usuario, id de la carrera.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select del último plan del estudiante.<br>
+
+- **spGetLatestFileVersion**<br>
+Obtiene la última versión de un archivo.<br>
+*Parámetros*: id del usuario, nombre del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de la última versión del archivo.<br>
+
+- **spGetVersionOfFile**<br>
+Obtiene el nombre único de un archivo con base en la version.<br>
+*Parámetros*: id del usuario, id del archivo, versión del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select del nombre único del archivo.<br>
+
+- **spInsertEnrollmentXStudent**<br>
+Inserta una matrícula nueva en la tabla EnrollmentXStudent.<br>
+*Parámetros*: id de la matricula abierta, id del período lectivo de la matrícula, id del usuario, hora en la que se realizó la matrícula.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario no retorna nada.<br>
+
+- **spMeetRequirements**<br>
+Verifica si un estudiante cumple con todos los réquisitos de un curso para matricular.<br>
+*Parámetros*: id del usuario, id del curso a matricular.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, retorna si el estudiante cumple con todos los réquisitos del curso (1 o 0).<br>
+
+- **spModifyFile**<br>
+Agrega una nueva version del archivo a la tabla Version.<br>
+*Parámetros*: id del usuario, nombre original del archivo, nombre único del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario no retorna nada.<br>
+
+- **spReadFile**<br>
+Obtiene todos los archivos de la tabla File.<br>
+*Parámetros*: ninguno.<br>
+*Retorna*: hace un select de todos los archivos en la tabla File.<br>
+
+- **spReadSchoolPeriod**<br>
+Obtiene la info del período lectivo.<br>
+*Parámetros*: id del período lectivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de la info del período lectivo.<br>
+
+- **spReadUser_**<br>
+Obtiene la info del usuario.<br>
+*Parámetros*: id del usuario.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de la info del usuario.<br>
+
+- **spUnregister**<br>
+Elimina una matrícula de la tabla WeeklySchedule, y si el usuario desmatricula todos los cursos, elimina la matrícula del usuario en la tabla EnrollmentXStudent.<br>
+*Parámetros*: id del usuario, id del grupo del curso.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo hace un select del mensaje que indica que se matriculó el estudiante.<br>
+
 # **Enlace a proyecto Thunkable**
 
 [Proyecto Thunkable](https://x.thunkable.com/copy/41a90159e95f29d6a3fa2bd8f1334243)
@@ -94,11 +223,217 @@ La tabla Item tiene relación con Student ya que los items tienen la calificaci�
 
 [Prueba 2 Thunkable](https://youtu.be/AZp8zoKrgHg)
 
-# **Resultados de pruebas unitarias**
-
 # **Componentes**
 
-## **APIS**
+## **API**
+El API es utilizado para habilitar los distintos endpoints http para las distintas funcionalidades de las aplicaciones tanto de Thunkable como NodeJS. Existen 18 endpoints distintos, cada uno con su respectiva funcionalidad. A continuación, se listan cada uno de los endpoints y se explica su utilidad:
+
+### **Main Endpoint**
+Método HTTP: GET
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/
+
+
+Este endpoint simplemente da un mensaje de bienvenida al API y confirma la conexión con el mismo. 
+
+### **Login Endpoint**
+Método HTTP: POST
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/login/<string:userId>
+
+
+Este endpoint se encarga de enviar a Cassandra el registro de que un usuario ha iniciado sesión en la aplicación.
+
+### **Logout Endpoint**
+Método HTTP: POST
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/logout/<string:userId>
+
+
+Este endpoint se encarga de enviar a Cassandra el registro de que un usuario ha cerrado sesión en la aplicación.
+
+### **File Information Endpoint**
+Método HTTP: GET
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/file/list
+
+
+Este endpoint se encarga de devolver la información de los archivos almacenados en la base junto con cada una de las versiones. Se utiliza para mostrar el listado de archivos en la aplicación de NodeJs.
+
+### **Blob Upload Endpoint**
+Método HTTP: POST
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/blobstorage/upload/<string:userId>
+
+
+Este endpoint se encarga de subir un archivo al Blob Storage y la información del mismo a la base de datos. Para poder utilizarlo, aparte de hacer una consulta de tipo post al endpoint con el respectivo usuario, se debe de agregar el archivo a subir en el "body" de la consulta, especificamente en el "formdata" con el nombre "file". 
+
+### **Blob Download Endpoint**
+Método HTTP: GET
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/blobstorage/download/<string:userId>/<string:filename>/<string:version>
+
+
+Este endpoint se encarga de permitir la descarga de los archivos almacenados en el Blob Storage. Para realizar la descarga se debe de incluir el usuario, el nombre del archivo y la versión del mismo que se desea descargar.
+
+### **Blob Delete Endpoint**
+Método HTTP: DELETE
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/blobstorage/delete/<string:userId>/<string:filename>/<string:version>
+
+
+Este endpoint se encarga de eliminar los archivos almacenados en el Blob Storage y su información de la base. Para poder eliminar un archivo se debe de incluir el usuario, el nombre del archivo y la versión del mismo que se desea eliminar.
+
+### **User Information Endpoint**
+Método HTTP: GET
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/user/info/<string:userId>
+
+
+Este endpoint se encarga de obtener la información de un respectivo usuario en la base de datos.
+
+
+### **User Creation Endpoint**
+Método HTTP: POST
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/user/create/<string:userId>/<string:userName>/<string:userBirthDay>/<string:userEmail>/<string:idCampus>/<string:isStudent>
+
+
+Este endpoint se encarga de crear un usuario en la base de datos y agregar toda su información.
+
+### **User Update Endpoint**
+Método HTTP: PUT
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/user/update/<string:userId>/<string:userName>/<string:userBirthDay>/<string:userEmail>/<string:idCampus>
+
+
+Este endpoint se encarga de actualizar un usuario en la base de datos y toda su información.
+
+### **User Delete Endpoint**
+Método HTTP: DELETE
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/user/delete/<string:userId>
+
+
+Este endpoint se encarga de eliminar un usuario en la base de datos y toda su información.
+
+### **Campus List Endpoint**
+Método HTTP: GET
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/campus/list
+
+
+Este endpoint se encarga de obtener la lista de campus de la base de datos y toda su 
+información. 
+
+### **Courses to Enroll Endpoint**
+Método HTTP: GET
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/course/<string:userId>
+
+
+Este endpoint se encarga de obtener la lista de cursos que un usuario tiene disponible para matricular y la información de los mismos. 
+
+### **School Period Information Endpoint**
+Método HTTP: GET
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/schoolperiod/info/<string:SchoolPeriodId>
+
+
+Este endpoint se encarga de obtener la información de un periodo. 
+
+### **Enrollment Endpoint**
+Método HTTP: POST
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/enrollment/enroll/<string:userId>/<string:courseGroupId>
+
+
+Este endpoint se encarga matricular a un usuario en un curso.
+
+### **Unenrollment Endpoint**
+Método HTTP: POST
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/enrollment/enroll/<string:userId>/<string:courseGroupId>
+
+
+Este endpoint se encarga de desmatricular a un usuario de un curso.
+
+### **Enrollment Time Endpoint**
+Método HTTP: GET
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/enrollment/time/<string:userId>
+
+
+Este endpoint se encarga de obtener la hora de matricula de un usuario. 
+
+### **Enrolled Courses Endpoint**
+Método HTTP: GET
+
+https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/enrollment/enrolledCourses/<string:userId>
+
+
+Este endpoint se encarga de obtener la lista de cursos que tiene matriculado un usuario en este periodo. 
+
+---
+
+Por otro lado, además de los endpoints, el API necesitó una serie de funciones para implementar sus funcionalidades. Entre ellas están:
+- **random_string(n):** recibe el largo de una cantidad de caracteres y genera un string del tamaño solicitado con caracteres aleatorios para ser utilizados para almacenar las distintas versiones del archivo. 
+
+- **getExtension(word):** esta función recibe un nombre de un archivo y extrae su extensión.
+
+- **getFileNameFromVersion(fileId, version):** Este método recibe un nombre de archivo y una version y devuelve el nombre del archivo en caracteres aleatorios para ser descargado desde el blob storage.
+
+- **uploadFileSQL(userId, filename, fileType, periodId, name):** Esta función se conecta a la base de datos SQL y sube la información del archivo que recibe por parámetros. 
+
+- **deleteFile(name):** Esta función se encarga de borrar la información de un archivo de la base de datos sql a partir del nombre.
+
+- **updateFileSQL(userId, name, fileName):** Esta función se encarga de subir las distintas versiones del un archivo.
+
+---
+
+Finalmente, se creó una clase llamada CassandraConnector que tiene distintos métodos. A continuación se listan sus métodos y se explica su funcionalidad:
+
+- **submit(self, user, log):** Este método toma el ID del usuario y un registro de actividad y los inserta en la tabla "userlogs" en la base de datos Cassandra. Devuelve un mensaje de confirmación.
+
+- **deleteAll(self):** Este método vacía la tabla "userlogs" en la base de datos Cassandra. Devuelve un mensaje de confirmación.
+
+- **uploadFile(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha cargado un archivo.
+
+- **downloadFile(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha descargado un archivo.
+
+- **modifyFile(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha modificado un archivo.
+
+- **deleteFile(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha eliminado un archivo.
+
+- **userInfoRequested(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha solicitado su información.
+
+- **userInfoUpdated(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha actualizado su información.
+
+- **userDeleted(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha eliminado su cuenta.
+
+- **signUp(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario se ha registrado.
+
+- **userLogin(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha iniciado sesión.
+
+- **userLogout(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha cerrado sesión.
+
+- **enrollCourse(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario se ha matriculado en un curso.
+
+- **unenrollCourse(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario se ha desmatriculado de un curso.
+
+- **availableCourses(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha visto los cursos disponibles.
+
+- **viewEnrollmentDates(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha visto las fechas de matrícula.
+
+- **resetPassword(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha restablecido su contraseña.
+
+- **viewGradeAverage(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha visto su promedio de calificaciones.
+
+- **getEnrollmentReport(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha visto el informe de matriculación.
+
+- **viewEnrolledCourses(self, user):** Este método utiliza el método submit() para registrar en la base de datos que el usuario ha visto los cursos en los que está matriculado.
+
+
 
 ## **Firebase**
 
@@ -108,9 +443,60 @@ Firebase se utiliza para la autenticación de los usuarios que se crean desde el
     <img src="Resources/firebaseAut.png" alt="Firebase" />
 </center>
 
+### **Configuración de firebase**
+
+Para su cinfiguración, se creó un nuevo proyecto de firebase.
+
+<center>
+    <img src="Resources/creandoProyecto.png" alt="Firebase y thunkable" />
+</center>
+
+Para conectarse a Firebase se debe crear una app web en el siguiente botón:
+
+<center>
+    <img src="Resources/creandoApp.png" alt="Firebase y thunkable" />
+</center>
+
+En el proceso de registro de la app se debe colocar un nombre y así se obtendra lo siguiente:
+
+<center>
+    <img src="Resources/registrandoApp.png" alt="Firebase y thunkable" />
+</center>
+
+Posteriormente, ya se podrán agregar las demás funcionalidades de Firebase, como autenticación
+
+<center>
+    <img src="Resources/ConfigurandoAuth.png" alt="Firebase y thunkable" />
+</center>
+
+Para configuran autenticación de puede ingresar a la parte de Authentication y seleccionar el botón comenzar y aquí se podra seleccionar un método de autenticación y al selecciona, se debe habilidad correo y contraseña y guardar la configuración.
+
+<center>
+    <img src="Resources/agregandoMetodoAuth.png" alt="Firebase y thunkable" />
+</center>
+
+Es así como se configuró firebase para nuestro proyecto. Sin embargo, firebase tiene otras funcionalidades que pueden ser agregadas facilmente, como **Real Time Database**.
+
+<center>
+    <img src="Resources/masFuncionalidades.png" alt="Firebase y thunkable" />
+</center>
+
 ## **NodeJS**
 
 ## **Thunkable**
+### ***Conexión de Thunkable y firebase**
+
+En la sección de settings en Thunkable se colocó el url del API Key de Firebase y el URL de la base de datos en tiepo real, tambien de firebase, sin embargo, firebase no se usa para almacenamiento de datos, solo se usa para la autenticación.
+
+<center>
+    <img src="Resources/firebaseXthunkable.png" alt="Firebase y thunkable" />
+</center>
+
+Cuando se crea un nuevo usuario se agrega su correo y password a firebase y se le crea un userID.
+
+<center>
+    <img src="Resources/authFirebase.png" alt="Firebase y thunkable" />
+</center>
 
 ### **Log In Screen**
 
@@ -379,6 +765,15 @@ Al presionar el botón para enviar el email se le pregunta al usuario si esta se
 <center>
     <img src="Resources/resetPasswordBtn.png" alt="Reset Password bottom" />
 </center>
+
+# **Resultados de pruebas unitarias**
+## **API**
+Este API fue sometido a pruebas unitarias de cada uno de los endpoints, dando como resultado un éxito en las 18 pruebas. 
+<center>
+    <img src="Resources/UnittestAPI.png" alt="UnittestAPI" />
+</center>
+
+Cada una de las 18 pruebas es una conexión a cada uno de los distintos endpoints. 
 
 # **Conclusiones**
 

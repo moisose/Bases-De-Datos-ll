@@ -14,8 +14,24 @@ class test_api(unittest.TestCase):
         response = requests.get(baseurl)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"message":"Welcome to the API!"})
+    
+    def test_Login(self):
+        url = baseurl+'login/' + userId
+        response = requests.post(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_Logout(self):
+        url = baseurl+'logout/' + userId
+        response = requests.post(url)
+        self.assertEqual(response.status_code, 200)
+
 
 class test_blobstorage(unittest.TestCase):
+
+    def test_getFileInfo(self):
+        url = baseurl+'file/list'
+        response = requests.get(url)
+        self.assertEqual(response.status_code, 200)
 
     def test_blobUpload(self):
         url = baseurl+'blobstorage/upload/'+userId
@@ -29,20 +45,12 @@ class test_blobstorage(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_blobDownload(self):
-<<<<<<< HEAD:Proyecto1/docker/APIDemo/app/unittests.py
-        url = baseurl+'blobstorage/download/'+userId+'/'+'example_file.txt/2023-04-30 07:31'
-=======
         url = baseurl+'blobstorage/download/'+userId+'/'+'Graph_Databases_for_Beginners2493.pdf/2023-04-30 00:13:47.743'
->>>>>>> 6d82aaadf099f539da0918c1d848cd6d362bd851:Proyecto1/docker/APIDemo/app/unittest.py
         response = requests.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_blobDelete(self):
-<<<<<<< HEAD:Proyecto1/docker/APIDemo/app/unittests.py
-        url = baseurl+'blobstorage/delete/'+userId+'/example_file.txt/2023-04-30 07:31'
-=======
         url = baseurl+'blobstorage/delete/'+userId+'/Graph_Databases_for_Beginners2493.pdf/2023-04-30 00:13:47.743'
->>>>>>> 6d82aaadf099f539da0918c1d848cd6d362bd851:Proyecto1/docker/APIDemo/app/unittest.py
         response = requests.delete(url)
         self.assertEqual(response.status_code, 200)
 
@@ -107,6 +115,10 @@ class test_enrollment(unittest.TestCase):
         response = requests.get(url)
         self.assertEqual(response.status_code, 200)
 
+    def test_getEnrolledCourses(self):
+        url = baseurl+'enrollment/enrolledCourses/'+userId
+        response = requests.get(url)
+        self.assertEqual(response.status_code, 200)
 
 
 if __name__=="__main__":
