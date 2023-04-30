@@ -830,25 +830,21 @@ GO
 -- SP GET ALL VERSIONS OF FILE
 -- ENTRIES: userId, fileId
 -- DESCRIPTION: Gets all the versions of a file
-CREATE OR ALTER PROCEDURE spGetAllVersionsOfFile(@userId VARCHAR(32), @fileId INT) AS
+CREATE OR ALTER PROCEDURE spGetAllVersionsOfFile(@fileId INT) AS
 BEGIN
-    IF @userId IS NULL OR @fileId IS NULL
+    IF @fileId IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
         RETURN
     END
-    IF NOT EXISTS(SELECT * FROM User_ WHERE userId = @userId)
-    BEGIN
-        SELECT 'The user does not exist' AS ExecMessage
-        RETURN
-    END
+    
     IF NOT EXISTS(SELECT * FROM File_ WHERE fileId = @fileId)
     BEGIN
         SELECT 'The file does not exist' AS ExecMessage
         RETURN
     END
 
-    SELECT Version.modificationDate FROM File_ INNER JOIN Version ON File_.fileId = Version.fileId WHERE userId = @userId AND File_.fileId = @fileId
+    SELECT Version.modificationDate FROM File_ INNER JOIN Version ON File_.fileId = Version.fileId WHERE File_.fileId = @fileId
 END
 GO
 
