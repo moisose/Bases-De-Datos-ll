@@ -17,7 +17,7 @@
 # **Diagrama entidad-relación**
 
 <center>
-    <img src="Resources/name.png" alt="Diagrama Entidad Relación" />
+    <img src="Resources/ER-diagram.png" alt="Diagrama Entidad Relación" />
 </center>
 
 La tabla Student, Professor y User heredan de la tabla User.
