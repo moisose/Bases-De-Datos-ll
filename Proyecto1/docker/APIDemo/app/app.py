@@ -193,22 +193,31 @@ def getFileInfo():
         cur.execute("USE db01;")
         cur.execute("EXEC spReadFile")
         rows = cur.fetchall()
-        cur.close()
+        
 
         #fileId, userId, fileTypeId, periodId, creationDate, name, description
         data = []
         for row in rows:
+
+            cur.execute("USE db01;")
+            cur.execute("EXEC spGetAllVersionsOfFile ?", row[0])
+            versionRows = cur.fetchall()
+
             result = {}
-            result['fileId'] = row[0]
-            result['userId'] = row[1]
-            result['fileTypeId'] = row[2]
-            result['periodId'] = row[3]
-            result['creationDate'] = row[4]
-            result['name'] = row[5]
-            result['description'] = row[6]
-
-            data.append(result)
-
+            
+            for version in versionRows:
+                result['fileId'] = row[0]
+                result['userId'] = row[1]
+                result['fileTypeId'] = row[2]
+                result['periodId'] = row[3]
+                result['creationDate'] = row[4]
+                result['name'] = row[5]
+                result['description'] = row[6]
+                result['modificationDate'] = str(version[0])
+                
+                data.append(result)
+            
+        cur.close()
         return {'data': data}
     except Exception as e:
         print(e)
