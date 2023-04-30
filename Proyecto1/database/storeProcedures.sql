@@ -172,16 +172,16 @@ BEGIN
 
     SET @enrollmentId = (SELECT TOP 1 Enrollment.enrollmentId FROM Enrollment ORDER BY Enrollment.enrollmentId DESC)
 
-    IF @enrollmentId IS NULL
-    BEGIN
-        SELECT 'There is not enrollment available' AS ExecMessage
-        RETURN
-    END
-    IF (SELECT Enrollment.startDate FROM Enrollment WHERE Enrollment.enrollmentId = @enrollmentId) < GETDATE()
-    BEGIN
-        SELECT 'The las enrollment has end' AS ExecMessage
-        RETURN
-    END
+    --IF @enrollmentId IS NULL
+    --BEGIN
+    --    SELECT 'There is not enrollment available' AS ExecMessage
+    --    RETURN
+    --END
+    --IF (SELECT Enrollment.startDate FROM Enrollment WHERE Enrollment.enrollmentId = @enrollmentId) < GETDATE() 
+    --BEGIN
+    --    SELECT 'The las enrollment has end' AS ExecMessage
+    --    RETURN
+    --END
     
     SET @previousSchoolPeriod = (SELECT TOP(1) schoolPeriodId FROM SchoolPeriod
         INNER JOIN CourseGroup ON SchoolPeriod.schoolPeriodId = CourseGroup.periodId
@@ -761,7 +761,7 @@ GO
 -- SP GET FILE VERSIONS 
 -- ENTRIES: name
 -- DESCRIPTION: Gets all the versions of a file bases on the name
-CREATE OR ALTER PROCEDURE spGetFileVersions(@name VARCHAR(50)) AS
+CREATE OR ALTER PROCEDURE spGetFileVersions(@name VARCHAR(70)) AS
 BEGIN
     IF @name IS NULL
     BEGIN
@@ -781,7 +781,7 @@ GO
 -- SP GET FILE NAME FROM VERSION
 -- ENTRIES: name, modificationDate
 -- DESCRIPTION: Gets the filename of a file based on the name and the modification date
-CREATE OR ALTER PROCEDURE spGetFileNameFromVersion(@name VARCHAR(50), @modificationDate DATETIME) AS
+CREATE OR ALTER PROCEDURE spGetFileNameFromVersion(@name VARCHAR(70), @modificationDate DATETIME) AS
 BEGIN
     IF @name IS NULL OR @modificationDate IS NULL
     BEGIN
@@ -802,7 +802,7 @@ GO
 -- SP GET LATESTS FILE VERSION
 -- ENTRIES: userId, fileId
 -- DESCRIPTION: Gets the latest version of a file
-CREATE OR ALTER PROCEDURE spGetLatestFileVersion(@userId VARCHAR(32), @fileName INT) AS
+CREATE OR ALTER PROCEDURE spGetLatestFileVersion(@userId VARCHAR(32), @fileName VARCHAR(70)) AS
 BEGIN
     IF @userId IS NULL OR @fileName IS NULL
     BEGIN
@@ -881,7 +881,7 @@ GO
 -- SP MODIFY FILE (NEW VERSION)
 -- ENTRIES: userId, fileId, modificationDate, name, description
 -- DESCRIPTION: Modifies a file (creates a new version)
-CREATE OR ALTER PROCEDURE spModifyFile(@userId VARCHAR(32), @name VARCHAR(50), @filename VARCHAR(15)) AS
+CREATE OR ALTER PROCEDURE spModifyFile(@userId VARCHAR(32), @name VARCHAR(70), @filename VARCHAR(15)) AS
 BEGIN
 
     IF @userId IS NULL OR @name IS NULL OR @filename IS NULL
@@ -923,7 +923,7 @@ GO
 -- CREATE
 -- ENTRIES: userId, filename, fileTypeId, periodId, name, description
 -- DESCRIPTION: Creates a file
-CREATE OR ALTER PROCEDURE spCreateFile(@userId VARCHAR(32), @filename VARCHAR(15), @fileType VARCHAR(8), @periodId INT, @name VARCHAR(50), @description VARCHAR(100)) AS
+CREATE OR ALTER PROCEDURE spCreateFile(@userId VARCHAR(32), @filename VARCHAR(15), @fileType VARCHAR(8), @periodId INT, @name VARCHAR(70), @description VARCHAR(100)) AS
 BEGIN
     IF @userId IS NULL OR @filename IS NULL OR @fileType IS NULL OR @periodId IS NULL OR @name IS NULL OR @description IS NULL
     BEGIN
@@ -968,7 +968,7 @@ GO
 -- EXISTS
 -- ENTRIES: fileId
 -- DESCRIPTION: Returns if a file exits or not
-CREATE OR ALTER PROCEDURE spExistsFile(@name VARCHAR(50)) AS
+CREATE OR ALTER PROCEDURE spExistsFile(@name VARCHAR(70)) AS
 BEGIN
 
     IF @name IS NULL
@@ -990,7 +990,7 @@ GO
 -- UPDATE
 -- ENTRIES: fileId, fileTypeId, periodId, creationDate, name, description
 -- DESCRIPTION: Updates a file
-CREATE OR ALTER PROCEDURE spUpdateFile(@fileId INT, @fileTypeId INT, @periodId INT, @creationDate DATE, @name VARCHAR(50), @description VARCHAR(100), @error INT OUTPUT) AS
+CREATE OR ALTER PROCEDURE spUpdateFile(@fileId INT, @fileTypeId INT, @periodId INT, @creationDate DATE, @name VARCHAR(70), @description VARCHAR(100), @error INT OUTPUT) AS
 BEGIN
     IF @fileId IS NULL
     BEGIN
