@@ -167,6 +167,22 @@ def main():
     return {"message": "Welcome to the API!"}
 
 # ===========================================================================
+# Authentication
+
+# Login procedure
+@app.route('/login/<string:userId>', methods = ['POST'])
+def login(userId):
+    logManager.userLogin(userId)
+    return {"message": "Logged in"}
+
+# Logout procedure
+@app.route('/logout/<string:userId>', methods = ['POST'])
+def logout(userId):
+    logManager.userLogout(userId)
+    return {"message": "Logged out"}
+
+
+# ===========================================================================
 # File
 
 # Read procedure that returns the information of a file
