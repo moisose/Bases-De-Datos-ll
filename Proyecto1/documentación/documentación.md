@@ -56,7 +56,7 @@ La tabla Item tiene relación con Student ya que los items tienen la calificaci�
 
 # **Enlace a proyecto Thunkable**
 
-[Proyecto Thunkable](https://x.thunkable.com/copy/89e0768b7d57e9aedc6183c58bf2d7b4)
+[Proyecto Thunkable](https://x.thunkable.com/copy/41a90159e95f29d6a3fa2bd8f1334243)
 
 # **Instrucciones de ejecución**
 
@@ -66,11 +66,33 @@ La tabla Item tiene relación con Student ya que los items tienen la calificaci�
 
 3-
 
+## Intrucciones de proyecto de thunkable
+
+1- Abrir el navegador de preferencia.
+
+2- Buscar [Thukable](https://thunkable.com/#/)
+
+3- Iniciar sesión o crearse una cuenta
+
+4- Abrir el link [Proyecto Thunkable](https://x.thunkable.com/copy/41a90159e95f29d6a3fa2bd8f1334243)
+
+5- Ejecutar desde web preview, desde la ventana **logInScreen**
+
+<center>
+    <img src="Resources/webP.png" alt="Firebase" />
+</center>
+
+6- Utilizar la app
+
+**Nota:** Se recomienda ingresar con el usuario **sarah.lee@example.com**, password sarah.lee@example.com, debido a que es el que más datos para pruebas tiene. Si crea un nuevo usuario no podrá matricular porque no tiene asigados periodos de matricula, carrera...
+
 # **Pruebas realizadas**
 
 ## Pruebas de Thunkable
 
 [Prueba 1 Thunkable](https://youtu.be/Z0nLTqFeTK4)
+
+[Prueba 2 Thunkable](https://youtu.be/AZp8zoKrgHg)
 
 # **Resultados de pruebas unitarias**
 
@@ -81,6 +103,7 @@ La tabla Item tiene relación con Student ya que los items tienen la calificaci�
 ## **Firebase**
 
 Firebase se utiliza para la autenticación de los usuarios que se crean desde el proyecto Thunkable, se hace mediante correo electrónico y password.
+
 <center>
     <img src="Resources/firebaseAut.png" alt="Firebase" />
 </center>
