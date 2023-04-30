@@ -1,16 +1,14 @@
 import unittest
 import requests
 
-return
 
 filename = 'example_file.txt'
-baseurl = 'https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/
+baseurl = 'https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/'
 userId = 'fFri4sRcE0P6oKHtdZ7INR2jwwl2'
 schoolPeriodId = '5'
 courseGroupId = '6'
 
 class test_api(unittest.TestCase):
-
     def testApi(self):   
         response = requests.get(baseurl)
         self.assertEqual(response.status_code, 200)
@@ -30,7 +28,7 @@ class test_blobstorage(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_blobDownload(self):
-        url = baseurl+'blobstorage/download/'+userIdd+'/'+filename
+        url = baseurl+'blobstorage/download/'+userId+'/'+filename
         response = requests.get(url)
         self.assertEqual(response.status_code, 200)
 

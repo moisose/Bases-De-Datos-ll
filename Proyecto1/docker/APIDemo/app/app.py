@@ -21,7 +21,7 @@ Here you can find the connection string to connect to the Azure database, cassan
 # ===========================================================================
 # Azure Database Connection
 
-driver = "{ODBC Driver 17 for SQL Server}"
+driver = "{ODBC Driver 18 for SQL Server}"
 server = "tcp:tiburoncines-sqlserver.database.windows.net,1433"
 database = "db01"
 username = "el-adm1n"
@@ -203,18 +203,16 @@ def getFileInfo():
             cur.execute("EXEC spGetAllVersionsOfFile ?", row[0])
             versionRows = cur.fetchall()
 
-            result = {}
-            
             for version in versionRows:
+                result = {}
                 result['fileId'] = row[0]
                 result['userId'] = row[1]
                 result['fileTypeId'] = row[2]
                 result['periodId'] = row[3]
-                result['creationDate'] = row[4]
+                result['creationDate'] = str(row[4])
                 result['name'] = row[5]
                 result['description'] = row[6]
                 result['modificationDate'] = str(version[0])
-                
                 data.append(result)
             
         cur.close()
