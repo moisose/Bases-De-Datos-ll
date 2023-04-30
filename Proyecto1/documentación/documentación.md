@@ -68,6 +68,10 @@ La tabla Item tiene relación con Student ya que los items tienen la calificaci�
 
 # **Pruebas realizadas**
 
+## Pruebas de Thunkable
+
+[Prueba 1 Thunkable](https://youtu.be/Z0nLTqFeTK4)
+
 # **Resultados de pruebas unitarias**
 
 # **Componentes**
@@ -196,9 +200,100 @@ En varias secciones se llama a la función **resetScreen** para que los datos re
 
 ### **Home Screen**
 
+<center>
+    <img src="Resources/homeScreen.png" alt="HomeScreen" />
+</center>
+
+Esta es la ventana principal y la que hace que el estudiante vea las distintas funcionalidades para la matricula. Cuando se abre, toma la hora de matricula más reciente del estudiante, esta será usada después.
+
+<center>
+    <img src="Resources/homeScreenOp.png" alt="HomeScreen" />
+</center>
+
+Esto se hace con un llamado al api y parseando el JSON de la respuesta.
+
+<center>
+    <img src="Resources/homeScreenGetDates.png" alt="HomeScreen" />
+</center>
+
+Al presionar log out, primero se preguntará por confirmación por parte del usuario y posteriormente, si confirma que quiere salirse, se procede a llamar a la función sign out de firebase y regresa a la ventana principal.
+
+<center>
+    <img src="Resources/homeScreenLogOut.png" alt="HomeScreen" />
+</center>
+
+
 ### **Enroll Screen**
 
+En esta ventana el estudiante puede matricular los cursos de interés, en esta, los cursos "matriculados" se verán en la list viewer de color verde, los cursos tentativamente matriculados (si se hubieran implementado) se verían de color verde.
+
+<center>
+    <img src="Resources/enrollScreen.png" alt="HomeScreen" />
+</center>
+
+Cuando la ventana se abre se ejecutarán varias funciones para incializar la ventana.
+
+<center>
+    <img src="Resources/enrollScreenOpens.png" alt="HomeScreen" />
+</center>
+
+Para obtener los cursos se llama a la función **getDispCourses**, que se conecta al API. Llama a la función para parsear el JSON de lo que responde el API.
+
+<center>
+    <img src="Resources/getDispCourses.png" alt="getDispCourses" />
+</center>
+
+La función que hace el parse del JSON hace uso de dos listas, una de objetos y otra de que solo tiene el nombre y el grupo (esta es la que se despliega en el list viewer), la de objetos se usa para hacer verificación y/o obtención de algunos valores. Cuando termina el parseo del JSON, se colocan los text items a los cursos disponibles.
+
+<center>
+    <img src="Resources/parseJsonDispCourses.png" alt="getDispCourses" />
+</center>
+
+Para el parseo de los cursos disponibles se hace igual, tambien hace uso de dos listas, en este caso, una solo tiene el nombre y el grupo y otra tiene el nombre  de los cursos matriculados, para hacer verificaciones.
+
+Cuando se hace click en uno de los cursos se toma como si lo estuviera matriculando, por esto, se hace la verificación de si el nombre ya existe en la lista de nombres, si no existe, se agregan a las listas cursos matriculados, si ya estaba en la lista de nombres, se le notifica al usuario.
+
+<center>
+    <img src="Resources/coursesListView_Click.png" alt="getDispCourses" />
+</center>
+
+Al seleccionar se llama a la función Enroll, esta se conecta al API para enviar el id del curso matriculado.
+
+<center>
+    <img src="Resources/enrollF.png" alt="getDispCourses" />
+</center>
+
+Por otro lado, si se hace click en una de las materias que ya se encuentran matriculadas, el sistema lo va a tomar como si lo estuviera desmatriculando, por esto, se le pregunta al usuario si esta seguro de que quiere desmatricular.
+
+<center>
+    <img src="Resources/enrolledListv.png" alt="getDispCourses" />
+</center>
+
+Por último,para la verificación de la fecha se toma la fecha actual y se verifica si es mayor o menor, igual con la hora.
+
+<center>
+    <img src="Resources/verifiesDate.png" alt="getDispCourses" />
+</center>
+
 ### **Enrolled Courses Screen**
+
+Cuando la ventana se abre se inicializan ciertos valores y se llama a la función para llamar al API y optener los cursos en los que el estudiante está matriculado.
+
+<center>
+    <img src="Resources/seeEnrrolledCourses.png" alt="getDispCourses" />
+</center>
+
+Funciona de forma similar al de los cursos matriculados en la ventana matricula.
+
+### **My Info Screen**
+
+<center>
+    <img src="Resources/myInfoScreen.png" alt="My Info screen" />
+</center>
+
+En esta ventana se podrá ver la información del usuario, como nombre, fecha de nacimiento y correo electrónico.
+
+Para obtener la información se conecta al api y envía el userID, el api regresa un JSON que es parseado y se hace el set en las labels de la ventana.
 
 ### **Select Campus Screen**
 
