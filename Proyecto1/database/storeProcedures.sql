@@ -87,6 +87,11 @@ BEGIN
         SELECT 'The time must be greater than 0' AS ExecMessage
         RETURN
     END
+    IF EXISTS(SELECT * FROM EnrollmentXStudent WHERE userId = @userId AND enrollmentId = @enrollmentId)
+    BEGIN
+        SELECT 'The student is already enrolled in this enrollment' AS ExecMessage
+        RETURN
+    END
 
     INSERT INTO EnrollmentXStudent(enrollmentTime, userId, enrollmentId) VALUES(@enrollmentTime, @userId, @enrollmentId)
 END
@@ -270,7 +275,7 @@ GO
 -- Description: This procedure enroll a student in a course group
 CREATE OR ALTER PROCEDURE spEnrollment(@userId VARCHAR(32), @courseGroupId INT) AS
 BEGIN
-    DECLARE @enrollmentSchedule INT, @previousSchoolPeriod INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME, @timeOfDay INT, @currentTime TIME, @dateOfToday DATETIME, @enrollmentId INT
+    DECLARE @enrollmentSchedule INT, @previousSchoolPeriod INT, @meetsRequirements BIT, @courseId INT, @horarioInicio TIME, @horarioFinal TIME, @timeOfDay INT, @currentTime TIME, @dateOfToday DATETIME, @enrollmentId INT, @periodId INT
     SET @previousSchoolPeriod = 0
     SET @enrollmentSchedule = 0
 	SET @meetsRequirements = 0
@@ -278,9 +283,16 @@ BEGIN
 	SET @timeOfDay = DATEPART(HOUR, @dateOfToday)
 	SET @currentTime = (SELECT CONVERT(varchar, GETDATE(), 108))
     SET @enrollmentId = (SELECT TOP 1 Enrollment.enrollmentId FROM Enrollment ORDER BY Enrollment.enrollmentId DESC)
+    SET @periodId = (SELECT periodId FROM CourseGroup WHERE courseGroupId = @courseGroupId)
 
 	DECLARE @schoolPeriodId INT
 	SET @schoolPeriodId = (SELECT TOP 1 schoolPeriodId FROM SchoolPeriod ORDER BY schoolPeriodId DESC)
+
+    IF (SELECT periodId FROM Enrollment WHERE @enrollmentId = enrollmentId) != @periodId
+    BEGIN
+        SELECT 'The enrollment period is not the same as the course group' AS ExecMessage
+        RETURN
+    END
 
     IF (SELECT EnrollmentStatus.description FROM EnrollmentStatus INNER JOIN Enrollment ON Enrollment.statusId = EnrollmentStatus.statusId WHERE @schoolPeriodId = periodId) = 'Inactivo'
         OR @dateOfToday < (SELECT Enrollment.startDate FROM Enrollment WHERE @schoolPeriodId = periodId) OR @dateOfToday > (SELECT Enrollment.endingDate FROM Enrollment WHERE @schoolPeriodId = periodId)
@@ -404,6 +416,12 @@ GO
 -- Description: Unregisters a student from a course group
 CREATE OR ALTER PROCEDURE spUnregister(@userId VARCHAR(32), @courseGroupId INT) AS
 BEGIN
+	DECLARE @courseGroupPeriodId INT, @enrollmentId INT
+
+	SET @courseGroupPeriodId = (SELECT periodId FROM CourseGroup WHERE courseGroupId = @courseGroupId)
+
+	SET @enrollmentId = (SELECT TOP(1) enrollmentId FROM Enrollment ORDER BY enrollmentId DESC)
+
     IF @userId IS NULL OR @courseGroupId IS NULL
     BEGIN
         SELECT 'NULL parameters' AS ExecMessage
@@ -426,6 +444,12 @@ BEGIN
     END
 
     DELETE FROM WeeklySchedule WHERE userId = @userId AND courseGroupId = @courseGroupId
+
+	IF NOT EXISTS(SELECT * FROM WeeklySchedule INNER JOIN CourseGroup ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId WHERE userId = @userId and periodId = @courseGroupPeriodId)
+	BEGIN
+		DELETE FROM EnrollmentXStudent WHERE userId = @userId AND enrollmentId = @enrollmentId
+	END
+	
     SELECT 'User unregistered succesfully' AS ExecMessage
 END
 GO
@@ -535,17 +559,14 @@ BEGIN
         RETURN
     END
 
-    SELECT Course.courseId, CourseGroup.courseGroupId, Course.courseName--, Schedule.startTime, Schedule.finishTime, Day_.name
+    SELECT CourseGroup.courseGroupId, Course.courseId, Course.courseName, credits, CourseEvaluation.description, CourseEvaluation.score --, Schedule.startTime, Schedule.finishTime, Day_.name
     FROM Course
     INNER JOIN CourseGroup ON Course.courseId = CourseGroup.courseId
     INNER JOIN WeeklySchedule ON CourseGroup.courseGroupId = WeeklySchedule.courseGroupId
     INNER JOIN SchoolPeriod ON CourseGroup.periodId = SchoolPeriod.schoolPeriodId
-	--INNER JOIN ScheduleXCourseGroup ON ScheduleXCourseGroup.courseGroupId = CourseGroup.courseGroupId
-	--INNER JOIN ScheduleXDay ON ScheduleXDay.scheduleXDayId = ScheduleXCourseGroup.scheduleXDayId
-	--INNER JOIN Schedule ON Schedule.scheduleId = ScheduleXDay.scheduleXDayId
-	--INNER JOIN Day_ ON Day_.dayId = ScheduleXDay.dayId
+	INNER JOIN CourseEvaluation ON CourseEvaluation.courseGroupId = CourseGroup.courseGroupId
 		
-    WHERE WeeklySchedule.userId = @userId AND SchoolPeriod.schoolPeriodId = @schoolPeriodId
+    WHERE WeeklySchedule.userId = @userId AND SchoolPeriod.schoolPeriodId = @schoolPeriodId AND CourseEvaluation.courseGroupId = CourseGroup.courseGroupId
 END
 GO
 
@@ -774,7 +795,7 @@ BEGIN
         RETURN
     END
 
-    SELECT Version.modificationDate FROM Version INNER JOIN File_ ON File_.fileId = Version.fileId WHERE File_name = @name AND File_.fileId = Version.fileId
+    SELECT Version.modificationDate FROM Version INNER JOIN File_ ON File_.fileId = Version.fileId WHERE File_.name = @name
 END
 GO
 
