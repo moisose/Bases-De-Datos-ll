@@ -54,6 +54,135 @@ Se tiene la tabla Evaluation. Esta entidad tiene relación con Item, ya que las 
 
 La tabla Item tiene relación con Student ya que los items tienen la calificación de los estudiantes de dicho rubro. Esta relación es N:N, por lo que existe la tabla StudentXItem.
 
+## **Procedures**
+
+- **spCreateFile** <br>
+Crea un archivo nuevo y lo inserta en la tabla File y Version. <br>
+*Parámetros*: id del usuario, nombre del archivo, id del tipo de archivo, id del periodo lectivo, nombre unico del archivo (generado) y descripción del archivo. <br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario no retorna nada. <br>
+
+- **spCreateUser_** <br>
+Crea un usuario nuevo y lo inserta en la tabla User_. <br>
+*Parámetros*: id del usuario, nombre de usuario, fecha de cumpleaños, correo, id del campus, es estudiente o no (1 o 0). <br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario no retorna nada. <br>
+
+- **spDeleteFile** <br>
+Elimina un archivo de la tabla File y Version. Si el archivo tiene más de una versión, solo elimina la versión actual, de lo contrario elimina el archivo y todas sus versiones. <br>
+*Parámetros*: nombre único del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario no retorna nada.<br>
+
+- **spDeleteUser_**<br>
+Elimina un usuario de la tabla User_.<br>
+*Parámetros*: id del usuario.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario no retorna nada.<br>
+
+- **spEnrollment**<br>
+Crea una matrícula nueva y la inserta en la tabla EnrollmentXStudent y WeeklySchedule. Realiza todas las validaciones que permitan o no la creación de la matrícula.<br>
+*Parámetros*: id del usuario, id del grupo del curso a matricular.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario no retorna nada.<br>
+*Validaciones*: parámetros null y existencia de todas las llaves foráneas, que el estudiante cumpla con todos los réquisitos del curso para matricular __<br>
+(spMeetRequirements)__, que el usuario no tenga un choque de horarios con los cursos que ya está matriculado y que no haya matriculado el curso en otro grupo. <br>
+
+- **spEnrollmentTimeSchedule**<br>
+Calcula el horario de la matrícula (hora) de un estudiante con base en el período del último período lectivo cursado.<br>
+*Parámetros*: id del usuario, id del período lectivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, retorna el horario de la matrícula.<br>
+
+- **spExistsFile**<br>
+Verifica si un archivo existe en la tabla File.<br>
+*Parámetros*: nombre del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de un mensaje de que el archivo existe.<br>
+
+- **spGetAllVersionsOfFile**<br>
+Obtiene todas las versiones de un archivo.<br>
+*Parámetros*: id del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de todas las versiones del archivo.<br>
+
+- **spGetCourses**<br>
+Obtiene todos los cursos de un estudiante que puede matricular en este periodo lectivo con base en los que ya ha llevado y aprobado.v
+*Parámetros*: id del usuario.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de todos los cursos que puede matricular el estudiante.<br>
+
+- **spGetEnrolledCourses**<br>
+Obtiene todos los cursos matriculados de un estudiante del último periodo lectivo.<br>
+*Parámetros*: id del usuario.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de todos los cursos matriculados del estudiante.<br>
+
+- **spGetEnrollmentTime**<br>
+Obtiene el horario de matrícula (hora y fecha) de un estudiante con base en el período del último período lectivo cursado.<br>
+*Parámetros*: id del usuario.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select del horario de la matrícula.<br>
+
+- **spGetFileNameFromVersion**<br>
+Obtiene el nombre único del archivo de una versión con base en el nombre original del archivo y la versión.<br>
+*Parámetros*: nombre original del archivo, versión del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select del nombre único del archivo.<br>
+
+- **spGetFileVersions**<br>
+Obtiene todas las versiones de un archivo.<br>
+*Parámetros*: nombre único del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de todas las versiones del archivo.<br>
+
+- **spGetGradeAverage**<br>
+Obtiene el promedio de notas de un estudiante de un curso.<br>
+*Parámetros*: id del usuario, id del curso.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select del promedio de notas del estudiante.<br>
+
+- **spGetGradeOfCourse**<br>
+Obtiene la nota de un estudiante de un curso.<br>
+*Parámetros*: id del usuario, id del curso.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de la nota del estudiante.<br>
+
+- **spGetLastPlan**<br>
+Obtiene el último plan de un estudiante.<br>
+*Parámetros*: id del usuario, id de la carrera.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select del último plan del estudiante.<br>
+
+- **spGetLatestFileVersion**<br>
+Obtiene la última versión de un archivo.<br>
+*Parámetros*: id del usuario, nombre del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de la última versión del archivo.<br>
+
+- **spGetVersionOfFile**<br>
+Obtiene el nombre único de un archivo con base en la version.<br>
+*Parámetros*: id del usuario, id del archivo, versión del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select del nombre único del archivo.<br>
+
+- **spInsertEnrollmentXStudent**<br>
+Inserta una matrícula nueva en la tabla EnrollmentXStudent.<br>
+*Parámetros*: id de la matricula abierta, id del período lectivo de la matrícula, id del usuario, hora en la que se realizó la matrícula.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario no retorna nada.<br>
+
+- **spMeetRequirements**<br>
+Verifica si un estudiante cumple con todos los réquisitos de un curso para matricular.<br>
+*Parámetros*: id del usuario, id del curso a matricular.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, retorna si el estudiante cumple con todos los réquisitos del curso (1 o 0).<br>
+
+- **spModifyFile**<br>
+Agrega una nueva version del archivo a la tabla Version.<br>
+*Parámetros*: id del usuario, nombre original del archivo, nombre único del archivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario no retorna nada.<br>
+
+- **spReadFile**<br>
+Obtiene todos los archivos de la tabla File.<br>
+*Parámetros*: ninguno.<br>
+*Retorna*: hace un select de todos los archivos en la tabla File.<br>
+
+- **spReadSchoolPeriod**<br>
+Obtiene la info del período lectivo.<br>
+*Parámetros*: id del período lectivo.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de la info del período lectivo.<br>
+
+- **spReadUser_**<br>
+Obtiene la info del usuario.<br>
+*Parámetros*: id del usuario.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo contrario, hace un select de la info del usuario.<br>
+
+- **spUnregister**<br>
+Elimina una matrícula de la tabla WeeklySchedule, y si el usuario desmatricula todos los cursos, elimina la matrícula del usuario en la tabla EnrollmentXStudent.<br>
+*Parámetros*: id del usuario, id del grupo del curso.<br>
+*Retorna*: hace un select de un mensaje de error si es que hay alguno, de lo hace un select del mensaje que indica que se matriculó el estudiante.<br>
+
 # **Enlace a proyecto Thunkable**
 
 [Proyecto Thunkable](https://x.thunkable.com/copy/41a90159e95f29d6a3fa2bd8f1334243)
