@@ -288,11 +288,11 @@ BEGIN
 	DECLARE @schoolPeriodId INT
 	SET @schoolPeriodId = (SELECT TOP 1 schoolPeriodId FROM SchoolPeriod ORDER BY schoolPeriodId DESC)
 
-    IF (SELECT periodId FROM Enrollment WHERE @enrollmentId = enrollmentId) != @periodId
-    BEGIN
-        SELECT 'The enrollment period is not the same as the course group' AS ExecMessage
-        RETURN
-    END
+    --IF (SELECT periodId FROM Enrollment WHERE @enrollmentId = enrollmentId) != @periodId
+    --BEGIN
+    --    SELECT 'The enrollment period is not the same as the course group' AS ExecMessage
+    --    RETURN
+    --END
 
     IF (SELECT EnrollmentStatus.description FROM EnrollmentStatus INNER JOIN Enrollment ON Enrollment.statusId = EnrollmentStatus.statusId WHERE @schoolPeriodId = periodId) = 'Inactivo'
         OR @dateOfToday < (SELECT Enrollment.startDate FROM Enrollment WHERE @schoolPeriodId = periodId) OR @dateOfToday > (SELECT Enrollment.endingDate FROM Enrollment WHERE @schoolPeriodId = periodId)
