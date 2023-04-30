@@ -189,11 +189,77 @@ Elimina una matrícula de la tabla WeeklySchedule, y si el usuario desmatricula 
 
 # **Instrucciones de ejecución**
 
-1-
+## **Aplicacion en ReactJs**
 
-2-
+Primeramente, debemos de abrir una terminal y asegurarnos de que nos encontramos en el directorio con nombre “eduhub-filemanager”, en caso de no ser así debemos de dirigirnos a este.
 
-3-
+Una vez hecho lo anterior, debemos de ejecutar el comando “npm install”, el cual básicamente lo que hace es instalar todas las dependencias y módulos que se encuentran en el archivo "package.json" del proyecto y  creará una carpeta llamada "node_modules" en la raíz del proyecto, donde se almacenarán los archivos de los módulos instalados. (Esto es necesario para ejecutar el proyecto)
+
+Posterior a esto, lo que debemos de hacer es ejecutar o iniciar el servicio, por lo que utilizamos el comando “npm run start”, con el cual ya empieza a correr el servicio y podemos entrar a la app con la dirección que se nos brinda en consola, la cual por defecto es “localhost:3000” en caso de que no se esté utilizando ese puerto.
+
+
+**Nota:** Es importante recalcar que el “npm” puede ser sustituido por “Yarn”, esto dependerá de cual administrador de paquetes de Node js tengamos instalado en nuestra computadora.
+
+---
+1- Abrir el link en el navegador de preferencia.
+
+<center>
+    <img src="Resources/react/reactLogin.png" alt="Firebase" />
+</center>
+
+2- Ingresar los credenciales del usuario.
+
+<center>
+    <img src="Resources/react/reactLoginCredentials.png" alt="Firebase" />
+</center>
+
+3- Dar al boton de Login.
+<center>
+    <img src="Resources/react/reactLoginRedirect.png" alt="Firebase" />
+</center>
+
+4- Dar al botón de "Go to home page", se redireccionará a la pantalla de home.
+<center>
+    <img src="Resources/react/reactHome.png" alt="Firebase" />
+</center>
+
+5- Aquí se selecciona el botón con la opción que se desee.
+
+6- Si se quiere subir un archivo, se presio el botón de Seleccionar archivo, se selecciona el archivo y se presiona el botón de subir archivo.
+
+<center>
+    <img src="Resources/react/uploadButton.png" alt="Firebase" />
+</center>
+
+7- Si se desea descargar un archivo, se presiona el botón de download y se acepta el mensaje. Luego se tiene que seleccionar el lugar de la computadora donde se desea descargar el archivo.
+
+<center>
+    <img src="Resources/react/specificRow.png" alt="Firebase" />
+</center>
+
+<center>
+    <img src="Resources/react/reactDownload.png" alt="Firebase" />
+</center>
+
+8- Si se desea eliminar un archivo, se presiona el botón de delete y se acepta el mensaje. Con esto ya estará eliminado del Blob Storage.
+
+<center>
+    <img src="Resources/react/specificRow.png" alt="Firebase" />
+</center>
+
+<center>
+    <img src="Resources/react/reactDelete.png" alt="Firebase" />
+</center>
+
+9- Para finalizar, cuando el usuario ya no desee estar en la aplicación, se presiona el botón de logout y se redireccionará a la pantalla de login.
+
+<center>
+    <img src="Resources/react/reactLogout.png" alt="Firebase" />
+</center>
+
+<center>
+    <img src="Resources/react/reactLogin.png" alt="Firebase" />
+</center>
 
 ## Intrucciones de proyecto de thunkable
 
@@ -222,6 +288,15 @@ Elimina una matrícula de la tabla WeeklySchedule, y si el usuario desmatricula 
 [Prueba 1 Thunkable](https://youtu.be/Z0nLTqFeTK4)
 
 [Prueba 2 Thunkable](https://youtu.be/AZp8zoKrgHg)
+
+# **Resultados de pruebas unitarias**
+## **API**
+Este API fue sometido a pruebas unitarias de cada uno de los endpoints, dando como resultado un éxito en las 18 pruebas. 
+<center>
+    <img src="Resources/UnittestAPI.png" alt="UnittestAPI" />
+</center>
+
+Cada una de las 18 pruebas es una conexión a cada uno de los distintos endpoints. 
 
 # **Componentes**
 
@@ -481,7 +556,53 @@ Es así como se configuró firebase para nuestro proyecto. Sin embargo, firebase
     <img src="Resources/masFuncionalidades.png" alt="Firebase y thunkable" />
 </center>
 
-## **NodeJS**
+## **NodeJS React**
+
+Antes de empezar a describir y explicar cada una de las partes del proyecto realizado, nos parece relevante mencionar que para el apartado de la App en Node Js que utilizamos el framework de React para hacer todo lo que sería el frontend de la aplicación. 
+
+Además, también podemos mencionar que las principales dependencias que se utilizan en el proyecto son: axios (la cual la utilizamos para realizar las diferentes solicitudes HTTP al API como GET, POST, PUT, DELETE), firebase (la cual es utilizada principalmente para autenticar a los usuarios en la app) y react-router-dom (utilizada para definir rutas y el enrutamiento de la aplicación).
+
+Con respecto al código, podemos notar lo siguiente:
+* **Login.jsx:**
+En este documento lo que se hace es básicamente el método para la autenticación de los datos ingresados por el usuario con el fin de verificar que estos sean válidos, en relación con los datos que se encuentran almacenados en Firebase. Además, también devolvemos el contenido HTML de este apartado para mostrarlos.
+
+* **Login.css** (Todos los .css o .scss tienen un comportamiento similar): 
+Este lo utilizamos para definir estilos y diseños personalizados para los elementos HTML retornados en el return del método del Login.jsx que se mencionó anteriormente. Permitiéndonos, personalizar el aspecto y la presentación de la página en este apartado. 
+
+* **Firebase.js:**
+Utilizado para recuperar y definir la información necesaria para la autenticación del usuario en la aplicación (Recupera la información directamente de la base que utilizamos de Firebase).
+
+* **App.js:**  
+Este define la estructura de la aplicación y los componentes que se van a mostrar en la página web. Se podría decir, que es el primer punto de contacto para la construcción de cualquier nuestra aplicación.
+
+* **Index.js:**
+Este se utiliza como punto de entrada principal de la aplicación. Básicamente, se encarga de renderizar el componente principal de la aplicación en el navegador web.
+
+* **Functions.js:** 
+Esta se utiliza como complemento del documento llamado “ShowFiles.js”, básicamente se utiliza para mostrar alertas en caso de que ocurra el evento especificado en el código.
+
+* **ShowFiles.js:**
+Este básicamente se utiliza como el “file manager” en sí, pues es donde implementamos todas las herramientas relacionadas a este (upload, download, deleted). En este se utiliza la autenticación de Firebase para obtener el UID del usuario que se encuentra en la sesión actualmente. Se utiliza una función diferente para cada funcionalidad del “file manager” en la que se utiliza la librería “axios” para manejar los diferentes request que se le realizan al API de Azure. Con respecto, al html o view, en la parte superior se maneja un botón para hacer logout y uno para enviar un archivo al API. En la parte de la tabla, se crea un row para cada file del Blob Storage con su versión respectiva y a la derecha de estos se encuentran los botones de “Descarga” y “Eliminar” que afectan al archivo que se encuentra en ese mismo row.
+
+##  **Referencias de React:**
+
+Bezkoder (2021). Vue File Upload example using Axios. https://www.bezkoder.com/vue-axios-file-upload/
+
+Borja95. (2023). Crudapirestsencillo. GitHub. https://github.com/Borja95/crudapirestsencillo
+
+Coding Shiksha (2023). How to Download Files and Images From Inernet Using Axios in Javascript. Youtube. https://www.youtube.com/watch?v=-qWzSl_h8kI
+
+DannCruise (2023). Products-react-pro. GitHub. https://github.com/DannCruise/products-react-pro
+
+Ijaz, U (2023). How to upload files in React app using Axios?. https://rapidapi.com/guides/upload-files-react-axios
+
+Programando con Dan Cruise (2023). CRUD en React consumiendo una API. Youtube. https://www.youtube.com/watch?v=fgQHjMotDPk&t=840s
+
+Programming With Prem (2023). File Upload with progress bar in React JS and axios. Youtube. https://www.youtube.com/watch?v=Ti8QNiRRzOA
+
+satansdeer (2023). React-firebase-auth. GitHub. https://github.com/satansdeer/react-firebase-auth
+
+WebDev Pills (2023). [ REACT JS ] File Upload. Youtube. https://www.youtube.com/watch?v=3pQY--GR2sI&t=642s
 
 ## **Thunkable**
 ### ***Conexión de Thunkable y firebase**
@@ -765,15 +886,6 @@ Al presionar el botón para enviar el email se le pregunta al usuario si esta se
 <center>
     <img src="Resources/resetPasswordBtn.png" alt="Reset Password bottom" />
 </center>
-
-# **Resultados de pruebas unitarias**
-## **API**
-Este API fue sometido a pruebas unitarias de cada uno de los endpoints, dando como resultado un éxito en las 18 pruebas. 
-<center>
-    <img src="Resources/UnittestAPI.png" alt="UnittestAPI" />
-</center>
-
-Cada una de las 18 pruebas es una conexión a cada uno de los distintos endpoints. 
 
 # **Conclusiones**
 
