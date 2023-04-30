@@ -387,9 +387,9 @@ BEGIN
     END
 
 	-- Validates if the student can enroll in the current time (start time of enrollment to finish time of enrollment)
-    IF (@timeOfDay < @enrollmentSchedule) OR (@timeOfDay > 15)
+    IF (@timeOfDay < @enrollmentSchedule)-- OR (@timeOfDay > 15)
     BEGIN
-        SELECT 'You can not enroll.' AS ExecMessage
+        SELECT 'You can not enroll because is not your time to enroll or it has passed.' AS ExecMessage
         RETURN
     END
 

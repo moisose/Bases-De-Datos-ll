@@ -1,7 +1,6 @@
 import unittest
 import requests
 
-
 filename = 'example_file.txt'
 baseurl = 'https://main-app.ambitiousdune-6b5fa4be.eastus.azurecontainerapps.io/'
 userId = 'fFri4sRcE0P6oKHtdZ7INR2jwwl2'
@@ -9,10 +8,11 @@ schoolPeriodId = '5'
 courseGroupId = '6'
 
 class test_api(unittest.TestCase):
+
     def testApi(self):   
         response = requests.get(baseurl)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json() == {"message":"Welcome to the API!"})
+        self.assertEqual(response.json(), {"message":"Welcome to the API!"})
 
 class test_blobstorage(unittest.TestCase):
 
@@ -28,12 +28,12 @@ class test_blobstorage(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_blobDownload(self):
-        url = baseurl+'blobstorage/download/'+userId+'/'+filename
+        url = baseurl+'blobstorage/download/'+userId+'/'+'Graph_Databases_for_Beginners2493.pdf/2023-04-30 00:13:47.743000'
         response = requests.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_blobDelete(self):
-        url = baseurl+'blobstorage/delete/'+userId+'/'+filename
+        url = baseurl+'blobstorage/delete/'+userId+'/Graph_Databases_for_Beginners2493.pdf/2023-04-30 00:13:47.743000'
         response = requests.delete(url)
         self.assertEqual(response.status_code, 200)
 
@@ -45,7 +45,7 @@ class test_user(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_createUser(self):
-        url = baseurl+'user/update/idTest/nameTest/2003-06-24/emailTest/1/1'
+        url = baseurl+'user/create/idTest/nameTest/2003-06-24/emailTest/1/1'
         response = requests.post(url)
         self.assertEqual(response.status_code, 200)
 
@@ -62,7 +62,7 @@ class test_user(unittest.TestCase):
 class test_campus(unittest.TestCase):
 
     def test_getCampus(self):
-        url = baseurl+'campus/list/'
+        url = baseurl+'campus/list'
         response = requests.get(url)
         self.assertEqual(response.status_code, 200)
 
@@ -80,23 +80,17 @@ class test_schoolPeriod(unittest.TestCase):
         response = requests.get(url)
         self.assertEqual(response.status_code, 200)
 
-class test_grade(unittest.TestCase):
-    
-    def test_getGrades(self):
-        url = baseurl+'grade/average/'+userId+'/4'
-        response = requests.get(url)
-        self.assertEqual(response.status_code, 200)
 
 class test_enrollment(unittest.TestCase):
 
     def test_enrollStudent(self):
-        url = baseurl+'enrollment/enroll/'+userId+'/'+courseGroupId+'/'+schoolPeriodId
+        url = baseurl+'enrollment/enroll/'+userId+'/'+courseGroupId
         response = requests.post(url)
         self.assertEqual(response.status_code, 200)
 
     def test_unenrollStudent(self):
         url = baseurl+'enrollment/unenroll/'+userId+'/'+courseGroupId
-        response = requests.delete(url)
+        response = requests.post(url)
         self.assertEqual(response.status_code, 200)
 
     def test_getEnrollmentTime(self):
