@@ -774,7 +774,7 @@ BEGIN
         RETURN
     END
 
-    SELECT Version.modificationDate FROM Version INNER JOIN File_ ON File_.fileId = Version.fileId WHERE File_name = @name AND File_.fileId = Version.fileId
+    SELECT Version.modificationDate FROM Version INNER JOIN File_ ON File_.fileId = Version.fileId WHERE File_.name = @name
 END
 GO
 
