@@ -21,7 +21,7 @@ Here you can find the connection string to connect to the Azure database, cassan
 # ===========================================================================
 # Azure Database Connection
 
-driver = "{ODBC Driver 17 for SQL Server}"
+driver = "{ODBC Driver 18 for SQL Server}"
 server = "tcp:tiburoncines-sqlserver.database.windows.net,1433"
 database = "db01"
 username = "el-adm1n"
@@ -212,7 +212,8 @@ def getFileInfo():
                 result['creationDate'] = str(row[4])
                 result['name'] = row[5]
                 result['description'] = row[6]
-                result['modificationDate'] = str(version[0])
+                modificationDate = str(version[0])
+                result['modificationDate'] = modificationDate[:-3]
                 data.append(result)
             
         cur.close()
@@ -340,23 +341,26 @@ def blobDownload(userId, filename, version):
 # Deletes a file from the blob storage
 @app.route('/blobstorage/delete/<string:userId>/<string:filename>/<string:version>', methods = ['DELETE'])
 def blobDelete(userId, filename, version):
-    filenameAux = getFileNameFromVersion(filename, version)
-    blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
-    container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
-    blob_client = container_client.get_blob_client(filenameAux)
-    deleted = False
     try:
-        blob_client.delete_blob()
-        deleted = True
-    except:
+        filenameAux = getFileNameFromVersion(filename, version)
+        blob_service_client = BlobServiceClient.from_connection_string(app.config['AZURE_STORAGE_CONNECTION_STRING'])
+        container_client = blob_service_client.get_container_client(app.config['AZURE_STORAGE_CONTAINER_NAME'])
+        blob_client = container_client.get_blob_client(filenameAux)
         deleted = False
-    
-    if deleted:
-        logManager.deleteFile(userId)
-        deleteFile(filenameAux)
-        return f"File {filename} deleted."
-    else:
-        return f"File {filename} not found."
+        try:
+            blob_client.delete_blob()
+            deleted = True
+        except:
+            deleted = False
+        
+        if deleted:
+            logManager.deleteFile(userId)
+            deleteFile(filenameAux)
+            return f"File {filename} deleted."
+        else:
+            return f"File {filename} not found."
+    except Exception as e:
+        return {'error': str(e)}
 
 # ===========================================================================
 # User
