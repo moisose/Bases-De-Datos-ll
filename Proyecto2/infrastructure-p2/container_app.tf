@@ -32,7 +32,7 @@ template {
     min_replicas = 0
     container {
       name   = "api-demo"
-      image  = "docker.io/nereo08/api-demo:latest"
+      image  = "docker.io/isaac4918/mangos-api:latest"
       cpu    = "0.25"
       memory = "0.5Gi"
       env {
