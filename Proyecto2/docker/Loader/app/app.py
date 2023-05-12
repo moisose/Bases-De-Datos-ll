@@ -1,13 +1,20 @@
 # Este archivo tendrá la aplicacion loader que se encarga de subir los archivos a mongoDB
 
-#Imports
+#------------------------------------------------Imports-------------------------------------------------
 from azure.storage.blob import BlobServiceClient
 import io
-from azure.storage.blob import BlobServiceClient
 from pathlib import Path
 import os
+import sys
+
+#Mongo db libraries--------------------------------------------------------------------------------------
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 
 #Variables
+uri = "mongodb+srv://MelSaFer:3trZoWOalvOKN7tQ@mangos.ybmshbl.mongodb.net/OpenLyricsSearch"
+client = MongoClient(uri)  #Cliente Mongo
+
 connectionString = "DefaultEndpointsProtocol=https;AccountName=filesmanagermangos;AccountKey=KzcNb8ePMdcwCm5gO8/DJc9nY6fngiXFETmDtcdgBfoUPSo+/BowwJxxSdjVx8n0Trh72v9k/yrb+AStjPineQ==;EndpointSuffix=core.windows.net" 
 containerName = "documents"
 pathLyrics = '\\downloadedFiles'
@@ -39,6 +46,11 @@ def downloadFiles(filename, filePath):
 def main():
     print(downloadFiles(fileName, pathLyrics + "\\" + fileName))
     print(fileDownloaded.read())
+    try:
+        client.admin.command('ping')
+        print("Pinged your deployment. You successfully connected to MongoDB!")
+    except Exception as e:
+        print(e)
 
 if __name__ == '__main__': 
     main()
