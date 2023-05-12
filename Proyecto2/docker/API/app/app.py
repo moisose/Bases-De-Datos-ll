@@ -1,6 +1,5 @@
 from azure.storage.blob import BlobServiceClient
 from flask import Flask, flash, request, send_file
-from azure.storage.blob import BlobServiceClient
 from flask_cors import CORS
 
 # Definition of the API
