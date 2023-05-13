@@ -5,11 +5,21 @@ WORKDIR /app
 #COPY ./downloadedFiles .
 COPY app/ .
 RUN pip install --no-cache-dir -r requirements.txt
-
-ARG ENV_FILE
-ENV ENV_FILE ${ENV_FILE}
-RUN test -n "$ENV_FILE" && echo "Cargando variables de entorno desde $ENV_FILE" && source "$ENV_FILE" || echo "No se ha especificado un archivo .env"
-#test -n "$USERNAME"
+#-------------------------------------
+ARG USERNAME
+ENV USERNAME ${USERNAME}
+#-------------------------------------
+ARG PASSWORD
+ENV PASSWORD ${PASSWORD}
+#-------------------------------------
+ARG DATABASE
+ENV DATABASE ${DATABASE}
+#-------------------------------------
+ARG ARTISTS_COLLECTION
+ENV ARTISTS_COLLECTION ${ARTISTS_COLLECTION}
+#-------------------------------------
+ARG LYRICS_COLLECTION
+ENV LYRICS_COLLECTION ${LYRICS_COLLECTION}
 
 #RUN ls
 #RUN python -u unittests.py
