@@ -55,10 +55,10 @@ def downloadFile(filename, filePath):
             download_stream = blob_client.download_blob()
             my_blob.write(download_stream.readall())
 
-        cirrentFile = open(filePath, 'r')
+        currentFile = open(filePath, 'r')
         client.close()
         print(f"File {filename} downloaded to {filePath}")
-        return cirrentFile
+        return currentFile
     except Exception as e:
         print(e)
 
