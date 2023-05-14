@@ -22,6 +22,8 @@ Lyrics_File="lyrics-data.csv"
 #fileName = "artists-data.csv"
 artistDownloaded = None
 lyricsDownloaded = None
+ArtistsCollection = "artistsCollection"
+DatabaseName = "OpenLyricsSearch"
 
 
 
@@ -33,8 +35,8 @@ def parseArtists(artistDownloaded_var):
         client.admin.command('ping')
         print("Pinged your deployment. You successfully connected to MongoDB!") 
 
-        db = client['mydatabase']
-        collection = db['Artist']
+        db = client[DatabaseName]
+        collection = db[ArtistsCollection]
 
         #csv_reader = csv.reader(artistDownloaded_var)
         csv_reader = csv.reader(artistDownloaded_var, delimiter=',')
@@ -58,9 +60,9 @@ def parseArtists(artistDownloaded_var):
             doc = {}
             c += 1
 
-        #result = collection.insert_many(documents)
-        #print("Insertados los IDs de los documentos:", result.inserted_ids)
-
+        result = collection.insert_many(documents)
+        print("Insertados los IDs de los documentos:", result.inserted_ids)
+        client.close()
     except Exception as e:
         print("Unexpected error:", e)
 
