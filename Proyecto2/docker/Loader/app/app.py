@@ -18,24 +18,116 @@ Password= os.getenv('PASSWORD')
 DatabaseName= os.getenv('DATABASENAME')
 ArtistsCollection= os.getenv('ARTISTS_COLLECTION')
 LyricsCollection= os.getenv('LYRICS_COLLECTION')
-
-uri = "mongodb+srv://" + str(UserName) + ":" + str(Password) + "@mangos.ybmshbl.mongodb.net/" + str(DatabaseName)
-connectionString = "DefaultEndpointsProtocol=https;AccountName=filesmanagermangos;AccountKey=KzcNb8ePMdcwCm5gO8/DJc9nY6fngiXFETmDtcdgBfoUPSo+/BowwJxxSdjVx8n0Trh72v9k/yrb+AStjPineQ==;EndpointSuffix=core.windows.net" 
-
-
-
 containerName = "documents"
 path_File = '\\downloadedFiles'
+
+# connectionString to mongo database
+uri = "mongodb+srv://" + str(UserName) + ":" + str(Password) + "@mangos.ybmshbl.mongodb.net/" + str(DatabaseName)
+# connectionString to the bolb storage
+connectionString = "DefaultEndpointsProtocol=https;AccountName=filesmanagermangos;AccountKey=KzcNb8ePMdcwCm5gO8/DJc9nY6fngiXFETmDtcdgBfoUPSo+/BowwJxxSdjVx8n0Trh72v9k/yrb+AStjPineQ==;EndpointSuffix=core.windows.net" 
+
 Artist_File="artists-data.csv"
 Lyrics_File="lyrics-data.csv"
-#fileName = "artists-data.csv"
 artistDownloaded = None
 lyricsDownloaded = None
 
 # ===========================================================================
 # Blob Storage
 
-# Downloads a file from the blob storage
+"""
+-----------------------------------------------------------------------------------------------
+Parse all the artists of the csv file and insert them into the database
+ENTRIES: artist downloaded file
+OUTPUT: 1 if the process was successful (if mongo db conection was successful
+        0 if the process was unsuccessful  
+-----------------------------------------------------------------------------------------------
+"""
+def parseArtists(artistDownloaded_var):
+    try:
+        client = MongoClient(uri)  #Mongo Client
+        client = MongoClient(uri, server_api=ServerApi('1'))
+        #Prueba conexión con Mongo DB
+        client.admin.command('ping')
+        print("Pinged your deployment. You successfully connected to MongoDB!") 
+
+        db = client[str(DatabaseName)]
+        collection = db[str(ArtistsCollection)]
+
+        #csv_reader = csv.reader(artistDownloaded_var)
+        csv_reader = csv.reader(artistDownloaded_var, delimiter=',')
+        header = next(csv_reader)
+
+        documents  = []
+        doc = {}
+ 
+        artistsNames = collection.distinct("artist")
+
+        for row in csv_reader:
+            if not row[0] in artistsNames:
+                doc['artist'] = row[0]
+                #parsing genres
+                doc['genres'] = row[1].split(';')
+                doc['songs'] = row[2]
+                doc['popularity'] = row[3]
+                doc['link'] = row[4]
+                documents.append(doc)
+                doc = {}
+            else:
+                print(row[0] + " is already on the collection")
+        collection.insert_many(documents)
+        #print("Insertados los IDs de los documentos:", result.inserted_ids)
+        client.close()
+    except Exception as e:
+        print("Unexpected error:", e)
+        return 0
+    return 1    
+"""
+-----------------------------------------------------------------------------------------------
+""" 
+
+"""
+-----------------------------------------------------------------------------------------------
+Parse all the artists of the csv file and insert them into the database
+ENTRIES: artist downloaded file
+OUTPUT: 1 if the process was successful (if mongo db conection was successful
+        0 if the process was unsuccessful  
+-----------------------------------------------------------------------------------------------
+"""
+def parseLyrics(lyricsDownloaded_var):
+    try:
+        client = MongoClient(uri)  #Mongo Client
+        client = MongoClient(uri, server_api=ServerApi('1'))
+        #Prueba conexión con Mongo DB
+        client.admin.command('ping')
+        print("Pinged your deployment. You successfully connected to MongoDB!") 
+
+        db = client[str(DatabaseName)]
+        collection = db[str(LyricsCollection)]
+
+        #csv_reader = csv.reader(artistDownloaded_var)
+        csv_reader = csv.reader(lyricsDownloaded_var, delimiter=',')
+        header = next(csv_reader)
+
+        documents  = []
+        doc = {}
+ 
+        client.close()
+    except Exception as e:
+        print("Unexpected error:", e)
+        return 0
+    return 1    
+"""
+-----------------------------------------------------------------------------------------------
+"""
+
+
+"""
+-----------------------------------------------------------------------------------------------
+Download the file from the blob storage
+ENTRIES: The filename and the path
+OUTPUT: The file downloaded
+-----------------------------------------------------------------------------------------------
+"""
 def downloadFile(filename, filePath):
     try:        
         # Connection with blob storage
@@ -48,36 +140,16 @@ def downloadFile(filename, filePath):
             download_stream = blob_client.download_blob()
             my_blob.write(download_stream.readall())
 
-        currentFile = open(filePath, 'r')
+        currentFile = open(filePath, 'r', encoding='utf-8')
+        #parseArtistsFile(currentFile)
         print(f"File {filename} downloaded to {filePath}")
         return currentFile
     except Exception as e:
         print(e)
-
-def parseArtists(artistDownloaded_var):
-    # Conection with Mongo DB
-    try:
-        client = MongoClient(uri)  #Mongo Client
-        client = MongoClient(uri, server_api=ServerApi('1'))
-        #Prueba conexión con Mongo DB
-        client.admin.command('ping')
-        print("Pinged your deployment. You successfully connected to MongoDB!") 
-        csv_reader = csv.reader(artistDownloaded_var)
-        for row in csv_reader:
-            Artist = row[0]
-            Genres = row[1]
-            print(Artist + " - " + Genres)
-        return 1
-    except Exception as e:
-        print(e)   
-
- 
  
     
 def main():
     artistDownloaded = downloadFile(Artist_File, path_File + "\\" + Artist_File)
-    #lyricsDownloaded = downloadFile(Lyrics_File, path_File + "\\" + Lyrics_File)
-    #print(artistDownloaded.read())
     parseArtists(artistDownloaded)
 
 if __name__ == '__main__': 
