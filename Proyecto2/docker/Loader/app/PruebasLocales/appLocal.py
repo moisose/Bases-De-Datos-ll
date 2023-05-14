@@ -44,24 +44,25 @@ def parseArtists(artistDownloaded_var):
 
         documents  = []
         doc = {}
+        
+        artistsNames = collection.distinct("artist")
 
-        c = 0
         for row in csv_reader:
-            if c == 20:
-                break
-            doc['artist'] = row[0]
-            #parsing genres
-            doc['genres'] = row[1].split(';')
-            doc['songs'] = row[2]
-            doc['popularity'] = row[3]
-            doc['link'] = row[4]
-            documents.append(doc)
-            print(doc)
-            doc = {}
-            c += 1
+            if not row[0] in artistsNames:
+                doc['artist'] = row[0]
+                #parsing genres
+                doc['genres'] = row[1].split(';')
+                doc['songs'] = row[2]
+                doc['popularity'] = row[3]
+                doc['link'] = row[4]
+                documents.append(doc)
+                print(doc)
+                doc = {}
+            else:
+                print(row[0] + " is already on the collection")
 
         result = collection.insert_many(documents)
-        print("Insertados los IDs de los documentos:", result.inserted_ids)
+        #print("Insertados los IDs de los documentos:", result.inserted_ids)
         client.close()
     except Exception as e:
         print("Unexpected error:", e)
@@ -117,7 +118,7 @@ def main():
     downloadFile = open("artists-data.csv", 'r', encoding='utf-8')	
     parseArtists(downloadFile)
     
-    downloadFile = open("lyrics-data.csv", 'r', encoding='utf-8')
+    #downloadFile = open("lyrics-data.csv", 'r', encoding='utf-8')
     #parseLyrics(downloadFile)
 
 if __name__ == '__main__': 
