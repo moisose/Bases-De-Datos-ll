@@ -37,14 +37,7 @@ lyricsDownloaded = None
 
 # Downloads a file from the blob storage
 def downloadFile(filename, filePath):
-    try:
-        # Conection with Mongo DB
-        client = MongoClient(uri)  #Mongo Client
-        client = MongoClient(uri, server_api=ServerApi('1'))
-        #Prueba conexión con Mongo DB
-        client.admin.command('ping')
-        print("Pinged your deployment. You successfully connected to MongoDB!") 
-        
+    try:        
         # Connection with blob storage
         blob_service_client = BlobServiceClient.from_connection_string(connectionString)
         container_client = blob_service_client.get_container_client(containerName)
@@ -56,19 +49,36 @@ def downloadFile(filename, filePath):
             my_blob.write(download_stream.readall())
 
         currentFile = open(filePath, 'r')
-        client.close()
         print(f"File {filename} downloaded to {filePath}")
         return currentFile
     except Exception as e:
         print(e)
 
+def parseArtists(artistDownloaded_var):
+    # Conection with Mongo DB
+    try:
+        client = MongoClient(uri)  #Mongo Client
+        client = MongoClient(uri, server_api=ServerApi('1'))
+        #Prueba conexión con Mongo DB
+        client.admin.command('ping')
+        print("Pinged your deployment. You successfully connected to MongoDB!") 
+        csv_reader = csv.reader(artistDownloaded_var)
+        for row in csv_reader:
+            Artist = row[0]
+            Genres = row[1]
+            print(Artist + " - " + Genres)
+        return 1
+    except Exception as e:
+        print(e)   
 
  
  
     
 def main():
     artistDownloaded = downloadFile(Artist_File, path_File + "\\" + Artist_File)
-    lyricsDownloaded = downloadFile(Lyrics_File, path_File + "\\" + Lyrics_File)
+    #lyricsDownloaded = downloadFile(Lyrics_File, path_File + "\\" + Lyrics_File)
+    #print(artistDownloaded.read())
+    parseArtists(artistDownloaded)
 
 if __name__ == '__main__': 
     main()
