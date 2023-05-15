@@ -7,7 +7,7 @@ function LoginBackground() {
   return (
     <>
       <div className={classes.body}>
-        <img className={classes.image} src="/public/logoLogin.png" alt="logo" />
+        <img className={classes.image} src="/logoLogin.png" alt="logo" />
       </div>
       <Outlet />
     </>
