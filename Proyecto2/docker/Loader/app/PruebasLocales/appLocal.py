@@ -1,7 +1,7 @@
 # Este archivo tendrá la aplicacion loader que se encarga de subir los archivos a mongoDB
 
 #------------------------------------------------Imports-------------------------------------------------
-from azure.storage.blob import BlobServiceClient
+#from azure.storage.blob import BlobServiceClient
 import io
 from pathlib import Path
 import os
@@ -95,6 +95,7 @@ OUTPUT: 1 if the process was successful (if mongo db conection was successful
 -----------------------------------------------------------------------------------------------
 """
 def parseLyrics(lyricsDownloaded_var):
+    i = 0
     try:
         client = MongoClient(uri)  #Mongo Client
         client = MongoClient(uri, server_api=ServerApi('1'))
@@ -105,38 +106,42 @@ def parseLyrics(lyricsDownloaded_var):
         db = client[str('OpenLyricsSearch')]
         collection = db[str('lyricsCollection')]
         artistCollection = db[str('artistsCollection')]
-        print(2)
         #csv_reader = csv.reader(artistDownloaded_var)
         csv_reader = csv.reader(lyricsDownloaded_var, delimiter=',')
         header = next(csv_reader)
 
-        print(3)
         documents  = []
         doc = {}
         artistDocuments = list(artistCollection.find())
-
-        i=0
+        songNames = collection.distinct("songName")
+        artistColl = collection.distinct("artist")
+        #lyricsNameArtist = collection.distinct("artist")
+        
         for row in csv_reader:
-            if i == 20:
-                break
-            #get artist document       
+            """ if i == 55:
+                print(i)
+                break """
+            #get artist document  
             matching_dict = list((d for d in artistDocuments if row[0] == d['link']))
-            doc['artist'] = matching_dict[0]
-
-            doc['songName'] = row[1]
-            doc['songLink'] = row[2]
-            doc['lyric'] = row[3]
-            doc['language'] = row[4]
-            documents.append(doc)
-            print(doc)
-            doc = {}
-            i+=1
-
-        #collection.insert_many(documents)
-
-        return documents
+            #print( row[0] + " " + row[1])
+            if (matching_dict.__len__() == 0):
+                print("The artist " + row[0] + " is not in the database")
+            elif( matching_dict[0] not in artistColl and row[1] not in songNames):
+                doc['artist'] = matching_dict[0]
+                doc['songName'] = row[1]
+                doc['songLink'] = row[2]
+                doc['lyric'] = row[3]
+                doc['language'] = row[4]
+                #documents.append(doc)
+                collection.insert_one(doc)
+                doc = {}
+                i = i + 1
+            else:
+                print("The song " + row[1] + " by " + matching_dict[0]["artist"] + " is already on the collection")
+        #return documents
     except Exception as e:
         print("Unexpected error:", e)
+        print(i)
         return 0
     return 1    
 """
@@ -144,33 +149,6 @@ def parseLyrics(lyricsDownloaded_var):
 """
 
 
-"""
------------------------------------------------------------------------------------------------
-Download the file from the blob storage
-ENTRIES: The filename and the path
-OUTPUT: The file downloaded
------------------------------------------------------------------------------------------------
-"""
-def downloadFile(filename, filePath):
-    try:        
-        # Connection with blob storage
-        blob_service_client = BlobServiceClient.from_connection_string(connectionString)
-        container_client = blob_service_client.get_container_client('documents')
-        blob_client = container_client.get_blob_client(filename)
-        print(1)
-        # Opens and reads the archive
-        with open(filePath, "wb") as my_blob:
-            download_stream = blob_client.download_blob()
-            my_blob.write(download_stream.readall())
-
-        currentFile = open(filePath, 'r', encoding='utf-8')
-        #parseArtistsFile(currentFile)
-        print(f"File {filename} downloaded to {filePath}")
-        return currentFile
-    except Exception as e:
-        print(e)
- 
-    
 def main():
     lyricsDownloaded = open('lyrics-data.csv', 'r', encoding='utf-8')
     parseLyrics(lyricsDownloaded)
