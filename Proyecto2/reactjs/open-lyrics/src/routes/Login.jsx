@@ -10,6 +10,7 @@ import Home from "./Home";
 function Login() {
   const navigate = useNavigate();
   const [usuario, setUsuario] = React.useState(null);
+
   useEffect(() => {
     firebaseProperties.auth().onAuthStateChanged((usuarioFirebase) => {
       console.log("ya tienes sesión iniciada con:", usuarioFirebase);
@@ -17,9 +18,14 @@ function Login() {
     });
   }, []);
 
+  const cerrarSesion = () => {
+    firebaseProperties.auth().signOut();
+  };
+
   return (
     <>
       <Outlet />
+      {cerrarSesion()}
       {usuario ? navigate("/home") : <Logueo setUsuario={setUsuario} />}
     </>
   );
