@@ -72,8 +72,8 @@ def parseArtists(artistDownloaded_var):
                 doc['link'] = row[4]
                 documents.append(doc)
                 doc = {}
-            else:
-                print(row[0] + " is already on the collection")
+            #else:
+                #print(row[0] + " is already on the collection")
         collection.insert_many(documents)
         #print("Insertados los IDs de los documentos:", result.inserted_ids)
         client.close()
@@ -85,6 +85,7 @@ def parseArtists(artistDownloaded_var):
 -----------------------------------------------------------------------------------------------
 """ 
 
+
 """
 -----------------------------------------------------------------------------------------------
 Parse all the artists of the csv file and insert them into the database
@@ -94,6 +95,7 @@ OUTPUT: 1 if the process was successful (if mongo db conection was successful
 -----------------------------------------------------------------------------------------------
 """
 def parseLyrics(lyricsDownloaded_var):
+    i = 0
     try:
         client = MongoClient(uri)  #Mongo Client
         client = MongoClient(uri, server_api=ServerApi('1'))
@@ -101,19 +103,46 @@ def parseLyrics(lyricsDownloaded_var):
         client.admin.command('ping')
         print("Pinged your deployment. You successfully connected to MongoDB!") 
 
-        db = client[str(DatabaseName)]
-        collection = db[str(LyricsCollection)]
-
+        db = client[str('OpenLyricsSearch')]
+        collection = db[str('lyricsCollection')]
+        artistCollection = db[str('artistsCollection')]
         #csv_reader = csv.reader(artistDownloaded_var)
         csv_reader = csv.reader(lyricsDownloaded_var, delimiter=',')
         header = next(csv_reader)
 
         documents  = []
         doc = {}
- 
-        client.close()
+        artistDocuments = list(artistCollection.find())
+        songNames = collection.distinct("songName")
+        artistColl = collection.distinct("artist")
+        #lyricsNameArtist = collection.distinct("artist")
+        
+        for row in csv_reader:
+            """ if i == 55:
+                print(i)
+                break """
+            #get artist document  
+            matching_dict = list((d for d in artistDocuments if row[0] == d['link']))
+            #print( row[0] + " " + row[1])
+            if (matching_dict.__len__() == 0):
+                print("The artist " + row[0] + " is not in the database")
+            elif( matching_dict[0] not in artistColl and row[1] not in songNames):
+                doc['artist'] = matching_dict[0]
+                doc['songName'] = row[1]
+                doc['songLink'] = row[2]
+                doc['lyric'] = row[3]
+                doc['language'] = row[4]
+                #documents.append(doc)
+                collection.insert_one(doc)
+                doc = {}
+                i = i + 1
+            else:
+                print("The song " + row[1] + " by " + matching_dict[0]["artist"] + " is already on the collection")
+        #collection.insert_many(documents)
+        #return documents
     except Exception as e:
         print("Unexpected error:", e)
+        print(i)
         return 0
     return 1    
 """
@@ -151,6 +180,8 @@ def downloadFile(filename, filePath):
 def main():
     artistDownloaded = downloadFile(Artist_File, path_File + "\\" + Artist_File)
     parseArtists(artistDownloaded)
+    lyricsDownloaded = downloadFile(Lyrics_File, path_File + "\\" + Lyrics_File)
+    parseLyrics(lyricsDownloaded)
 
 if __name__ == '__main__': 
     main()
