@@ -4,18 +4,33 @@ import { firebaseProperties } from "../fb";
 
 import classes from "./Home.module.css";
 
+// we are going to do 
+// logo header
+// nav content
+// footer
+
 const Home = () => {
   // const cerrarSesion = () => {
   //   firebaseProperties.auth().signOut();
   // };
   return (
-    <div>
-      <h1>BUSCADOR MIEO.</h1>
-      <Link to="/" className={classes.logout}>
+    <div className={classes.container}>
+
+      <div className={classes.logo}>
+        Logo
+        <Link to="/" className={classes.logout}>
         Log out
       </Link>
-      {/* <button onClick={cerrarSesion}>Cerrar Sesión</button> */}
+        </div>
+      <div className={classes.header}>header</div>
+      <div className={classes.nav}>nav</div>
+      <div className={classes.content}>content</div>
+      <div className={classes.footer}>footer</div>
+      <h1>BUSCADOR MIEO.</h1>
+
+
     </div>
+
   );
 };
 

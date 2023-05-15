@@ -2,6 +2,28 @@
   /* display: inline-flex; */
   text-decoration: none;
   font-family: "Source Sans Bold";
+  float: right;
+  margin-right: 15px;
+  margin-top: 35px;
   color: #eea10a;
   font-size: larger;
+}
+
+.container {
+  background-color: rgb(193, 188, 188);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr 0.5fr 8fr;
+  grid-template-columns: 1fr 4fr;
+}
+
+.logo{
+  background-color: #134444;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  grid-column-start: 1;
+  grid-column-end: 2;
+
 }
