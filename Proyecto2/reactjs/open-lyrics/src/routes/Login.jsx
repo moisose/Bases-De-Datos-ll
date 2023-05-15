@@ -1,15 +1,28 @@
-// import "./App.css";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { firebaseProperties } from "../fb";
+import Logueo from "./Logueo";
+import { useNavigate } from "react-router-dom";
+import Home from "./Home";
 
-import classes from "./Login.module.css";
+// import classes from "./Login.module.css";
 
-function App() {
+function Login() {
+  const navigate = useNavigate();
+  const [usuario, setUsuario] = React.useState(null);
+  useEffect(() => {
+    firebaseProperties.auth().onAuthStateChanged((usuarioFirebase) => {
+      console.log("ya tienes sesión iniciada con:", usuarioFirebase);
+      setUsuario(usuarioFirebase);
+    });
+  }, []);
+
   return (
     <>
       <Outlet />
-      <h1>Holaaaaaaaaaaaaaaaaaa</h1>
+      {usuario ? navigate("/home") : <Logueo setUsuario={setUsuario} />}
     </>
   );
 }
 
-export default App;
+export default Login;

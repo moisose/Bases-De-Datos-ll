@@ -1,0 +1,83 @@
+.loginForm {
+  background-color: white;
+
+  padding: 2rem;
+  width: 25rem;
+  height: 30rem;
+
+  /* text-align: center; */
+  display: flex;
+  margin: 6% auto;
+  align-items: center;
+  /* justify-content: center; */
+
+  flex-direction: column;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+
+  border-radius: 10px;
+}
+
+.title {
+  font-family: "Source Sans Bold";
+  font-size: 40px;
+  margin: 0;
+  margin-top: 10px;
+}
+
+.box {
+  /* background-color: red; */
+  padding: 0%;
+  width: 80%;
+  display: grid;
+}
+
+.subTitle {
+  /* align-items: left; */
+  font-family: "Source Sans Bold";
+  margin-bottom: 10px;
+}
+
+input {
+  /* margin: 0.5rem 0; */
+  margin-bottom: 1rem;
+  padding: 0.7rem;
+  /* border: none; */
+  border-style: solid;
+  border-radius: 5px;
+  background-color: white;
+  border-color: #c9c9c9;
+}
+
+input:focus {
+  outline: none;
+}
+
+img {
+  height: 35px;
+}
+
+.button {
+  /* display: inline-flex; */
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  padding: 0.5rem 6rem;
+  background-color: #eea10a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.link {
+  font-family: "Source Sans Bold";
+  color: #eea10a;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  padding: 0rem 0rem;
+
+  /* text-decoration: none; */
+}
