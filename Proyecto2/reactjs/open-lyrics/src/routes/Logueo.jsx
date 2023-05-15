@@ -53,7 +53,12 @@ const Logueo = (props) => {
           {" "}
           {isRegistrando ? "Create account" : "Sign in"}
         </h1>
-        <p>Sign in to your account</p>
+        {isRegistrando ? (
+          <p>Personal information</p>
+        ) : (
+          <p>Sign in to your account</p>
+        )}
+
         <div className={classes.box}>
           <label className={classes.subTitle} htmlFor="email">
             Email

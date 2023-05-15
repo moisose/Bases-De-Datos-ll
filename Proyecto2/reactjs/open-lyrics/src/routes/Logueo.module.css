@@ -54,6 +54,7 @@ input:focus {
 
 img {
   height: 35px;
+  margin-bottom: 5px;
 }
 
 .button {
