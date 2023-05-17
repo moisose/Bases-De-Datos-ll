@@ -48,35 +48,42 @@ def parseArtists(artistDownloaded_var):
         client = MongoClient(uri, server_api=ServerApi('1'))
         #Prueba conexión con Mongo DB
         client.admin.command('ping')
-        print("Pinged your deployment. You successfully connected to MongoDB!") 
+        print("Successfully connected to MongoDB") 
 
-        db = client[str(DatabaseName)]
-        collection = db[str(ArtistsCollection)]
+        db = client[str(DatabaseName)]  #Database to be use
+        collection = db[str(ArtistsCollection)] #Database to be use
 
-        #csv_reader = csv.reader(artistDownloaded_var)
+        #csv_reader to parse the csv file
         csv_reader = csv.reader(artistDownloaded_var, delimiter=',')
-        header = next(csv_reader)
+        header = next(csv_reader)  #skip the header
 
-        documents  = []
-        doc = {}
+        documents  = []   #list of documents to be inserted
+        doc = {}          #document to be inserted in the list of documents
  
-        artistsNames = collection.distinct("artist")
-
+        artistsNames = collection.distinct("artist")  #To verify if the artist is already in the database by name
+        max = 0
         for row in csv_reader:
+            if max == 100:
+                break
             if not row[0] in artistsNames:
+                #Parse of the csv file
                 doc['artist'] = row[0]
                 #parsing genres
                 doc['genres'] = row[1].split(';')
                 doc['songs'] = row[2]
                 doc['popularity'] = row[3]
                 doc['link'] = row[4]
-                documents.append(doc)
-                doc = {}
-            #else:
-                #print(row[0] + " is already on the collection")
+                #Add the document to the list of documents
+                documents.append(doc)  
+                #Add the artist name to the list of artists names in the database
+                artistsNames.append(row[0]) 
+                doc = {}  #reset the document
+            else:
+                print(row[0] + " is already on the collection")
+            max = max + 1
+        #Insert the list of documents into the database
         collection.insert_many(documents)
-        #print("Insertados los IDs de los documentos:", result.inserted_ids)
-        client.close()
+        client.close() #close the connection
     except Exception as e:
         print("Unexpected error:", e)
         return 0
@@ -88,61 +95,64 @@ def parseArtists(artistDownloaded_var):
 
 """
 -----------------------------------------------------------------------------------------------
-Parse all the artists of the csv file and insert them into the database
-ENTRIES: artist downloaded file
+Parse all the lyrics of the csv file and insert them into the database
+ENTRIES: lyrics downloaded file
 OUTPUT: 1 if the process was successful (if mongo db conection was successful
         0 if the process was unsuccessful  
 -----------------------------------------------------------------------------------------------
 """
 def parseLyrics(lyricsDownloaded_var):
-    i = 0
     try:
         client = MongoClient(uri)  #Mongo Client
         client = MongoClient(uri, server_api=ServerApi('1'))
         #Prueba conexión con Mongo DB
         client.admin.command('ping')
-        print("Pinged your deployment. You successfully connected to MongoDB!") 
+        print("Successfully connected to MongoDB") 
 
-        db = client[str('OpenLyricsSearch')]
-        collection = db[str('lyricsCollection')]
-        artistCollection = db[str('artistsCollection')]
-        #csv_reader = csv.reader(artistDownloaded_var)
-        csv_reader = csv.reader(lyricsDownloaded_var, delimiter=',')
-        header = next(csv_reader)
-
-        documents  = []
-        doc = {}
-        artistDocuments = list(artistCollection.find())
-        songNames = collection.distinct("songName")
-        artistColl = collection.distinct("artist")
-        #lyricsNameArtist = collection.distinct("artist")
+        db = client[str('OpenLyricsSearch')]  #Database to be use
+        collection = db[str('lyricsCollection')] #Collection to be use
+        artistCollection = db[str('artistsCollection')] #Collection of artists
         
-        for row in csv_reader:
-            """ if i == 55:
-                print(i)
-                break """
-            #get artist document  
+        #Csv reader to parse the csv file
+        csv_reader = csv.reader(lyricsDownloaded_var, delimiter=',')
+        header = next(csv_reader) #skip the header
+
+        doc = {} #document to be inserted in the database
+        artistDocuments = list(artistCollection.find()) #list of artists documents
+        songNames = collection.distinct("songName") #list of song names in the database
+        artistColl = collection.distinct("artist")  #list of artists in the database
+        
+        max = 0
+        for row in csv_reader: 
+            if max == 100:
+                break
+            #Obtain the artist document from the list of artists documents
             matching_dict = list((d for d in artistDocuments if row[0] == d['link']))
-            #print( row[0] + " " + row[1])
+            #Case 1: The artist is not in the database
             if (matching_dict.__len__() == 0):
                 print("The artist " + row[0] + " is not in the database")
+            #Case 2: The artist is in the database, so we insert the song
             elif( matching_dict[0] not in artistColl and row[1] not in songNames):
+                #Parse of the csv file
                 doc['artist'] = matching_dict[0]
                 doc['songName'] = row[1]
                 doc['songLink'] = row[2]
                 doc['lyric'] = row[3]
                 doc['language'] = row[4]
-                #documents.append(doc)
+                #Add the song name and the artist name to the list of song names in the database
+                songNames.append(row[1]) 
+                artistColl.append(matching_dict[0])
+                #Insert the document into the database
                 collection.insert_one(doc)
-                doc = {}
-                i = i + 1
+                doc = {} #reset the document	
             else:
                 print("The song " + row[1] + " by " + matching_dict[0]["artist"] + " is already on the collection")
-        #collection.insert_many(documents)
-        #return documents
+            max = max + 1
+        #Close the connection	
+        client.close()
+        return 1
     except Exception as e:
         print("Unexpected error:", e)
-        print(i)
         return 0
     return 1    
 """
