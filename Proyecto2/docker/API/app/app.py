@@ -129,14 +129,27 @@ def test():
         # Ejecutar una consulta utilizando un índice específico
         pipeline = [
             {"$search": {
-                "index": "LyricsIndexF",
+                "index": "LyricsIndex",
                 "text": {
-                    "query": "Iron Maiden",
-                    "path": "artist.artist"
+                    "query": "Quando",
+                    "path": "lyric"
                     }
                 }
             }
         ]
+
+        """
+        {
+                "$search": {
+                    "index": "default",
+                    "text": {
+                        "query": "rock",
+                        "path": {
+                            "wildcard": "*"
+                            }
+                    }
+                }}
+        """
 
         # Ejecutar la consulta y obtener los resultados
         result = collection.aggregate(pipeline)

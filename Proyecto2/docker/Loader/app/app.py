@@ -122,9 +122,8 @@ def parseLyrics(lyricsDownloaded_var):
         doc = {} #document to be inserted in the database
         
         artistDocuments = list(artistCollection.find()) #list of artists documents
-        songNames = collection.distinct("songName") #list of song names in the database
-        artistColl = collection.distinct("artist")  #list of artists in the database
-        print(songNames)
+        songLinks = collection.distinct("songLink") #list of song names in the database
+        #print(songLinks)
         
         max = 0
         for row in csv_reader: 
@@ -135,8 +134,10 @@ def parseLyrics(lyricsDownloaded_var):
             #Case 1: The artist is not in the database
             if (matching_dict.__len__() == 0):
                 print("The artist " + row[0] + " is not in the database")
-            #Case 2: The artist is in the database, so we insert the song
-            elif( matching_dict[0] not in artistColl and row[1] not in songNames):
+                continue
+
+            #Case 2: The song is not in the database
+            elif(row[2] not in songLinks):
                 #Parse of the csv file
                 doc['artist'] = matching_dict[0]
                 doc['songName'] = row[1]
@@ -144,8 +145,7 @@ def parseLyrics(lyricsDownloaded_var):
                 doc['lyric'] = row[3]
                 doc['language'] = row[4]
                 #Add the song name and the artist name to the list of song names in the database
-                songNames.append(row[1]) 
-                artistColl.append(matching_dict[0])
+                songLinks.append(row[2]) 
                 #Add the document to the list of documents
                 documents.append(doc)
                 doc = {} #reset the document
