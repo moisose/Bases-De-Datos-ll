@@ -78,9 +78,10 @@ def parseArtists(artistDownloaded_var):
                 #Add the artist name to the list of artists names in the database
                 artistsNames.append(row[0]) 
                 doc = {}  #reset the document
+                max = max + 1
             else:
                 print(row[0] + " is already on the collection")
-            max = max + 1
+            #max = max + 1
         #Insert the list of documents into the database
         collection.insert_many(documents)
         client.close() #close the connection
@@ -117,10 +118,13 @@ def parseLyrics(lyricsDownloaded_var):
         csv_reader = csv.reader(lyricsDownloaded_var, delimiter=',')
         header = next(csv_reader) #skip the header
 
+        documents  = []   #list of documents to be inserted
         doc = {} #document to be inserted in the database
+        
         artistDocuments = list(artistCollection.find()) #list of artists documents
         songNames = collection.distinct("songName") #list of song names in the database
         artistColl = collection.distinct("artist")  #list of artists in the database
+        print(songNames)
         
         max = 0
         for row in csv_reader: 
@@ -142,12 +146,15 @@ def parseLyrics(lyricsDownloaded_var):
                 #Add the song name and the artist name to the list of song names in the database
                 songNames.append(row[1]) 
                 artistColl.append(matching_dict[0])
-                #Insert the document into the database
-                collection.insert_one(doc)
-                doc = {} #reset the document	
+                #Add the document to the list of documents
+                documents.append(doc)
+                doc = {} #reset the document
+                max = max + 1	
             else:
                 print("The song " + row[1] + " by " + matching_dict[0]["artist"] + " is already on the collection")
-            max = max + 1
+            #max = max + 1
+        #Insert the list of documents into the database
+        collection.insert_many(documents)
         #Close the connection	
         client.close()
         return 1
