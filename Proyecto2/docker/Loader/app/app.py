@@ -139,7 +139,11 @@ def parseLyrics(lyricsDownloaded_var):
             #Case 2: The song is not in the database
             elif(row[2] not in songLinks):
                 #Parse of the csv file
-                doc['artist'] = matching_dict[0]
+                doc['artist'] = matching_dict[0]["artist"]
+                doc['genres'] = matching_dict[0]["genres"]
+                doc['popularity'] = matching_dict[0]["popularity"]
+                doc['songs'] = matching_dict[0]["songs"]
+                doc['artistLink'] = matching_dict[0]["link"]
                 doc['songName'] = row[1]
                 doc['songLink'] = row[2]
                 doc['lyric'] = row[3]
