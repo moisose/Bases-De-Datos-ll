@@ -3,7 +3,7 @@
 
   padding: 2rem;
   width: 25rem;
-  height: 30rem;
+  height: 32rem;
 
   /* text-align: center; */
   display: flex;
@@ -37,9 +37,15 @@
   margin-bottom: 10px;
 }
 
-input {
+.input-container {
+  position: relative;
+}
+
+.input {
   /* margin: 0.5rem 0; */
-  margin-bottom: 1rem;
+  width: 100%;
+  font-size: 1em;
+  /* margin-bottom: 1rem; */
   padding: 0.7rem;
   /* border: none; */
   border-style: solid;
@@ -48,9 +54,55 @@ input {
   border-color: #c9c9c9;
 }
 
-input:focus {
-  outline: none;
+.input:hover {
+  background-color: #f2f2f2;
 }
+
+.input:focus {
+  outline: none;
+  background-color: #fff;
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+}
+
+.input::placeholder {
+  color: #999;
+}
+
+.highlight {
+  /* position: absolute; */
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #eea10a;
+  transition: width 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.input:focus + .highlight {
+  width: 100%;
+}
+
+/* Optional: Animation on focus */
+/* @keyframes input-focus {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+  }
+
+  to {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.input:focus {
+  animation: input-focus 0.3s ease;
+} */
+
+/* input:focus {
+  outline: none;
+} */
 
 img {
   height: 35px;
@@ -63,6 +115,7 @@ img {
   gap: 0.5rem;
   margin-top: 10px;
   margin-bottom: 30px;
+  height: 35px;
   padding: 0.5rem 6rem;
   background-color: #eea10a;
   color: white;
@@ -70,6 +123,38 @@ img {
   border-radius: 4px;
   cursor: pointer;
   text-decoration: none;
+  font-size: medium;
+}
+
+.button:hover {
+  /* background-color: #e29b0c; */
+  color: #ffffff;
+  /* border: 1px solid #eea10a; */
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: "»";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -15px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 15px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
 }
 
 .link {
@@ -81,4 +166,8 @@ img {
   padding: 0rem 0rem;
 
   /* text-decoration: none; */
+}
+
+.link:hover {
+  text-decoration: underline;
 }

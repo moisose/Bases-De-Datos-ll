@@ -1,0 +1,35 @@
+.wrapper {
+  background-color: #ffffff;
+  width: 95%;
+  border-radius: 25px;
+  margin-top: 25px;
+  height: 3rem;
+  display: flex;
+  padding: 0 15px;
+  border: 1px solid #999999;
+  /* box-shadow: 0px 0px 8px gray; */
+  align-items: center;
+}
+
+.searchInput {
+  background-color: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  font-size: 1.25rem;
+  font-family: "Source Sans";
+  /* margin-top: 10px; */
+  margin-left: 5px;
+}
+
+input:focus {
+  outline: none;
+}
+
+.icon {
+  color: #eea10a;
+  width: 2rem;
+  height: 2rem;
+}

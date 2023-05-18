@@ -38,14 +38,19 @@ strong {
 h2 {
   font-family: "Source Sans Bold";
   text-align: center;
+  font-size: 30px;
 }
 
 .lyric {
   margin: 0;
   text-align: left;
+  /* this is for the <br> tag */
+  white-space: pre-line;
+  font-size: 20px;
 }
 
 .column {
   width: 300px;
   margin: 0 auto;
+  margin-bottom: 100px;
 }
