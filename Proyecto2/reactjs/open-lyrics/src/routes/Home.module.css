@@ -1,29 +1,252 @@
-.logout {
-  /* display: inline-flex; */
-  text-decoration: none;
-  font-family: "Source Sans Bold";
-  float: right;
-  margin-right: 15px;
-  margin-top: 35px;
-  color: #eea10a;
-  font-size: larger;
-}
-
+/* Principal container */
+/* ------------------- */
 .container {
-  background-color: rgb(193, 188, 188);
+  background-color: white;
   margin: 0;
   padding: 0;
   min-height: 100vh;
   display: grid;
-  grid-template-rows: 1fr 0.5fr 8fr;
+  grid-template-rows: 1fr 0.5fr 15fr;
+  /* grid-template-rows: 1fr 0.5fr 8fr; */
   grid-template-columns: 1fr 4fr;
 }
 
-.logo{
-  background-color: #134444;
-  grid-row-start: 1;
-  grid-row-end: 2;
-  grid-column-start: 1;
-  grid-column-end: 2;
+/* Logo and logout container */
+/* ------------------------- */
 
+.logo {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  align-items: center;
+  background-color: white;
+  margin-left: 8%;
+  margin-right: 8%;
+  border: none;
+  border-bottom: 1px solid #eaeaea;
+
+  /* border-style: solid;
+  border-color: black; */
+}
+
+/* Logo image */
+/* ---------- */
+.image {
+  height: auto;
+  max-width: 80%;
+  margin-left: 0%;
+  margin-top: 6%;
+}
+
+/* Logout link */
+/* ----------- */
+.logout {
+  /* display: inline-flex; */
+
+  text-decoration: none;
+  font-family: "Source Sans Bold";
+  float: right;
+  /* margin-right: 0; */
+  margin-top: 10%;
+  margin-left: auto;
+  margin-right: 0;
+  color: #eea10a;
+  font-size: larger;
+}
+
+.logout:hover {
+  color: #c9890a;
+}
+
+/* Filter by and Reset Filters container */
+/* ------------------------------------- */
+.nav {
+  display: grid;
+  grid-template-columns: 3fr 3fr;
+  background-color: white;
+  align-items: center;
+  margin-left: 8%;
+  margin-right: 8%;
+  margin-bottom: 4%;
+
+  border: none;
+  border-bottom: 1px solid #eaeaea;
+}
+
+/* Filter by title */
+/* --------------- */
+.filterBy {
+  font-family: "Source Sans Bold";
+  font-size: larger;
+}
+
+/* Reset filters button */
+/* -------------------- */
+.reset {
+  padding: 0 0;
+  margin-left: auto;
+  margin-right: 0;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  font-family: "Source Sans Bold";
+  color: #89a707;
+  font-size: larger;
+}
+
+.reset:hover {
+  color: #6d8506;
+}
+
+/* Facets containers */
+/* ----------------- */
+.footer {
+  display: grid;
+  margin-left: 8%;
+  margin-right: 8%;
+  grid-template-rows: 0.1fr 1fr 0.1fr 1fr 0.1fr 1fr 0.1fr 0.6fr 0.1fr 0.6fr 3fr;
+  /* grid-template-rows: 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr; */
+}
+
+/* Each subtitle of the facets */
+/* -------------------------- */
+.subTitle {
+  color: #9b9b9b;
+  font-family: "Source Sans Bold";
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+/* Each checkbox block of the facets */
+/* --------------------------------- */
+.checkbox {
+  /* border: black solid; */
+  overflow-y: scroll;
+  /* height: 120px; */
+  height: 200px;
+  padding-left: 3%;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  /* border: #f7f7f7 solid 1px; */
+  /* box-shadow: 0 1px 4px rgba(18, 22, 33, 0.12); */
+}
+
+/* this is on block of checkbox an the text */
+.individualCheck {
+  padding-bottom: 5px;
+}
+
+.checkbox span {
+  padding-left: 10px;
+}
+
+/* this is the button of the check */
+.checkbutton {
+  accent-color: rgb(122, 148, 9);
+  width: 15px;
+  height: 15px;
+}
+
+/* scrollbar management */
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  /* background: #f1f1f1; */
+  border-radius: 10px;
+  border: #6d8506 solid 1px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #6d8506;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Range sliders section */
+/* ---------------------- */
+.slider {
+  /* color: red; */
+  width: 100%;
+  padding-left: 3%;
+}
+
+.value {
+  margin: 0;
+  font-weight: 500;
+  color: #89a707;
+}
+
+.slider small {
+  font-size: 14px;
+  /* margin-top: 18px; */
+  display: block;
+  color: #9b9b9b;
+}
+
+.sliderBar {
+  width: 100%;
+  height: 5px;
+  background-color: #89a707;
+  margin-top: 20px;
+  border-radius: 15px;
+}
+
+.sliderBar .thumb {
+  width: 23px;
+  height: 23px;
+  cursor: grab;
+  background: #fff;
+  border-radius: 50%;
+  border: 2px solid #89a707;
+  top: -9px;
+}
+
+/* .track {
+  background-color: red;
+} */
+
+/* Number of results container */
+/* ---------------------------- */
+.content {
+  background-color: #f7f7f7;
+}
+
+.content p {
+  /* font-family: "Source Sans Bold"; */
+  padding-left: 2%;
+  /* padding-top: 0.5%; */
+  font-size: 20px;
+  color: #9b9b9b;
+}
+
+/* results container */
+/* ----------------- */
+.results {
+  display: grid;
+  grid-template-rows: 5fr 0.5fr;
+  background-color: #f7f7f7;
+  /* max-height: 1500px; */
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+.searchContainer {
+  background-color: rgb(255, 255, 255);
+  width: 100%;
+  height: 100%;
+
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 200px;
 }

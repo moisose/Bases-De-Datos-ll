@@ -1,0 +1,14 @@
+.searchResult {
+  padding: 10px 20px;
+  /* border: 2px solid rgb(183, 167, 165); */
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  background-color: white;
+  border-radius: 15px;
+  font-family: "Source Sans Bold";
+  height: 160px;
+  margin-bottom: 20px;
+}
+
+.searchResult:hover {
+  background-color: #efefef;
+}

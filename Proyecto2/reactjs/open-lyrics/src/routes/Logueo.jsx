@@ -63,18 +63,34 @@ const Logueo = (props) => {
           <label className={classes.subTitle} htmlFor="email">
             Email
           </label>
-          <input type="email" placeholder="Enter your email" id="emailField" />
+          <div className={classes.inputContainer}>
+            <input
+              className={classes.input}
+              type="email"
+              required="true"
+              placeholder="Enter your email"
+              id="emailField"
+            />
+            <div className={classes.highlight}></div>
+          </div>
+
           <label className={classes.subTitle} htmlFor="passwordField">
             Password
           </label>
-          <input
-            type="password"
-            placeholder="Enter your password"
-            id="passwordField"
-          />
+          <div className={classes.inputContainer}>
+            <input
+              className={classes.input}
+              type="password"
+              required="true"
+              placeholder="Enter your password"
+              id="passwordField"
+            />
+            <div className={classes.highlight}></div>
+          </div>
+
           <button className={classes.button} type="submit">
             {" "}
-            {isRegistrando ? "Create" : "Sign in"}
+            {isRegistrando ? <span>Create</span> : <span>Sign in</span>}
           </button>
         </div>
         <button
