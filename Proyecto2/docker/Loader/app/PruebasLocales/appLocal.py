@@ -95,7 +95,6 @@ OUTPUT: 1 if the process was successful (if mongo db conection was successful
 -----------------------------------------------------------------------------------------------
 """
 def parseLyrics(lyricsDownloaded_var):
-    i = 0
     try:
         client = MongoClient(uri)  #Mongo Client
         client = MongoClient(uri, server_api=ServerApi('1'))
