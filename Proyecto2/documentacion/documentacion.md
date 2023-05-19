@@ -121,7 +121,13 @@ Este link se inserta a "songLinks" (localmente), lo que permite llevar el regist
 Luego de esto, se vacia el documento actual.
 
 <center>
-    <img src="Resources/parseArtistsP7.png" alt="Parse Artists" />
+    <img src="Resources/parseArtistsP6.png" alt="Parse Lyrics" />
+</center>
+
+Se usa la función insert_many para insertar todos los documentos a Mongo y se cierra el cliente.
+
+<center>
+    <img src="Resources/parseArtistsP7.png" alt="Parse Lyrics" />
 </center>
 
 Finalmente, si hay un error se despliega el error en la consola.
@@ -176,17 +182,7 @@ Se definen la base de datos OpenLyricsSearch con las collections artist y Lyrics
 </center>
 
 
-<center>
-    <img src="Resources/parseArtistsP6.png" alt="Parse Lyrics" />
-</center>
 
-Se usa la función insert_many para insertar todos los documentos a Mongo y se cierra el cliente.
-
-<center>
-    <img src="Resources/parseArtistsP7.png" alt="Parse Lyrics" />
-</center>
-
-Finalmente, si hay un error se despliega el error en la consola.
 
 ## **API**
 
