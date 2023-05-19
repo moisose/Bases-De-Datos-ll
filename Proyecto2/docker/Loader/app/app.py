@@ -112,7 +112,6 @@ def parseLyrics(lyricsDownloaded_var):
 
         db = client[str('OpenLyricsSearch')]  #Database to be use
         collection = db[str('lyricsCollection')] #Collection to be use
-        artistCollection = db[str('artistsCollection')] #Collection of artists
         
         #Csv reader to parse the csv file
         csv_reader = csv.reader(lyricsDownloaded_var, delimiter=',')
@@ -121,9 +120,9 @@ def parseLyrics(lyricsDownloaded_var):
         documents  = []   #list of documents to be inserted
         doc = {} #document to be inserted in the database
         
+        artistCollection = db[str('artistsCollection')] #Collection of artists
         artistDocuments = list(artistCollection.find()) #list of artists documents
         songLinks = collection.distinct("songLink") #list of song names in the database
-        #print(songLinks)
         
         max = 0
         for row in csv_reader: 
@@ -148,17 +147,21 @@ def parseLyrics(lyricsDownloaded_var):
                 doc['songLink'] = row[2]
                 doc['lyric'] = row[3]
                 doc['language'] = row[4]
+
                 #Add the song name and the artist name to the list of song names in the database
                 songLinks.append(row[2]) 
+
                 #Add the document to the list of documents
                 documents.append(doc)
                 doc = {} #reset the document
+
                 max = max + 1	
             else:
                 print("The song " + row[1] + " by " + matching_dict[0]["artist"] + " is already on the collection")
-            #max = max + 1
+
         #Insert the list of documents into the database
         collection.insert_many(documents)
+        
         #Close the connection	
         client.close()
         return 1

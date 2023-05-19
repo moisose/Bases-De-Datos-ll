@@ -68,6 +68,67 @@ Finalmente, si hay un error se despliega el error en la consola.
 
 ### **Parse Lyrics.csv**
 
+Se define la función parseLyrics para hacer la lectura y el parseo de las canciones de los archivos de letras de canciones.
+
+<center>
+    <img src="Resources/parseLyricsP2.png" alt="Parse Lyrics" />
+</center>
+
+ Lo primero que se hace en la  función es abrir la conexión de Mongo DB, se envía un ping para comprobar que la conexión es correcta.
+
+<center>
+    <img src="Resources/parseLyricsP1.png" alt="Parse Lyrics" />
+</center>
+
+Después, definimos la base de datos y la collection que se va a usar para cargar/bajar datos a Mongo Atlas.
+
+<center>
+    <img src="Resources/parseArtistsP3.png" alt="Parse Lyrics" />
+</center>
+
+También, se define un csv reader para hacer la lectura y parseo del csv de artistas. 
+
+Por otro lado, se definen:
+
+-  "artistCollection": colección de artistas en la base de datos.
+- "artistDocuments": todos los documentos de la colección de artistas.
+- "songLinks": lista de todos los nombres de canciones en la base de datos. 
+- "documents": lista para los documentos que van a ser insertados en la base de datos.
+
+- "doc": documento que se creará y almacenará la información del documentos "actual" dentro del for para insertarlo en documents.
+<center>
+    <img src="Resources/parseLyricsP3.png" alt="Parse Lyrics" />
+</center>
+
+Se define un max en caso de que se desee limitar la cantidad de artistas que se van a subir a la collection.
+
+<center>
+    <img src="Resources/parseLyricsP4.png" alt="Parse Lyrics" />
+</center>
+
+El el ciclo para recorrer las filas del csv se verifica lo siguiente:
+
+1. La existencia del artista que se obtuvo mediante el link de la canción. En este caso, se imprime el mensaje en consola y se continua con la siguiente fila.
+2. Verifica que la canción que se va a insertar no exista para evitar datos duplicados. Si la canción no existe, entonces se almacenan los datos en "doc" y luego se inserta en "documents". 
+2.1. Si la canción ya existe, se imprime el mensaje en consola.
+
+Ademas, se utiliza el link de la canción para verificar la unicidad del documento a insertar.
+
+Este link se inserta a "songLinks" (localmente), lo que permite llevar el registro de las canciones que ya existen y las que estamos agregando para verificar que no se inserten datos duplicados en las siguientes iteraciones.
+
+
+<center>
+    <img src="Resources/parseArtistsP6.png" alt="Parse Lyrics" />
+</center>
+
+Se usa la función insert_many para insertar todos los documentos a Mongo y se cierra el cliente.
+
+<center>
+    <img src="Resources/parseArtistsP7.png" alt="Parse Lyrics" />
+</center>
+
+Finalmente, si hay un error se despliega el error en la consola.
+
 ## **API**
 
 ## **App de React**
