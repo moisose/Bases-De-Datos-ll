@@ -3,6 +3,8 @@ import classes from "./Pagination.module.css";
 
 import "./Pagination.module.css";
 
+// is responsible for managing the pagination of
+// the results dividing them into separate pages
 const Pagination = ({
   totalPosts,
   postsPerPage,

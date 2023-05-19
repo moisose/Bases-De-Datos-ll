@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import classes from "./SearchBar.module.css";
 
+import * as Constants from "../constants";
+
+// search bar in which the call to the api
+// to request the lyrics of songs is handled
 export const SearchBar = ({
   artists,
   languages,
@@ -12,11 +16,14 @@ export const SearchBar = ({
 }) => {
   const [input, setInput] = useState("");
 
+  // this useEffect is responsible for calling the api to request
+  // the results every time something is written in the search bar
+  // or when an element of the facets is marked or modified
   useEffect(() => {
     console.log("use effect");
     console.log(valuesSongs);
     console.log(valuesPopularity);
-    fetch("https://jsonplaceholder.typicode.com/users")
+    fetch(Constants.searchBarLink)
       .then((response) => response.json())
       .then((json) => {
         const results = json.filter((user) => {
@@ -62,6 +69,7 @@ export const SearchBar = ({
 
   // console.log("facets en search: ", facets);
 
+  // handle character typing
   const handleChange = (value) => {
     setInput(value);
     // fetchData(value);

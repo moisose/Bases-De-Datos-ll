@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import classes from "../routes/Home.module.css";
+import classes from "./Checkbox.module.css";
 import * as Constants from "../constants";
 
-const MyComponent = ({
+// receives the list of the facet, the list of selected
+// elements of the facet, its set and the prefix to differentiate the ids
+const Checkbox = ({
   apiLink,
   list,
   setList,
@@ -61,4 +63,4 @@ const MyComponent = ({
   );
 };
 
-export default MyComponent;
+export default Checkbox;

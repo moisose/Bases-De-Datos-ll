@@ -67,8 +67,9 @@ const Home = () => {
     setValuesPopularity([0, 100]);
   };
 
+  // load all the data from the api to the facets
   useEffect(() => {
-    fetch("https://mocki.io/v1/d096f9d9-8dc3-40ac-b4dc-ce098d2e3ece")
+    fetch(Constants.facetsApiLink)
       .then((response) => response.json())
       .then((data) => {
         if (
@@ -86,6 +87,7 @@ const Home = () => {
       });
   }, []);
 
+  //update song slider range
   useEffect(() => {
     setMaxSongs(results.length);
     setValuesSongs(maxSongs);
@@ -114,7 +116,7 @@ const Home = () => {
       {/* container for the logo and the logout link */}
       <div className={classes.logo}>
         <img className={classes.image} src={Constants.homeLogo} alt="logo" />
-        <Link to="/" className={classes.logout}>
+        <Link to={Constants.loginRoute} className={classes.logout}>
           Log out
         </Link>
       </div>
@@ -201,6 +203,9 @@ const Home = () => {
             value={valuesPopularity}
             min={minPopularity}
             max={maxPopularity}
+            renderThumb={(props, state) => (
+              <div {...props}>{state.valueNow}</div>
+            )}
           />
         </div>
         <p className={classes.subTitle}>NUMBER OF SONGS</p>
@@ -222,6 +227,9 @@ const Home = () => {
             className={classes.sliderBar}
             thumbClassName={classes.thumb}
             trackClassName={classes.track}
+            renderThumb={(props, state) => (
+              <div {...props}>{state.valueNow}</div>
+            )}
           />
         </div>
       </div>

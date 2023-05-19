@@ -2,6 +2,7 @@ import React from "react";
 import classes from "./SearchResultsList.module.css";
 import { SearchResult } from "./SearchResult";
 
+// list of all results, for each one a SearchResult is created
 export const SearchResultsList = ({ results }) => {
   return (
     <div className={classes.resultsList}>
