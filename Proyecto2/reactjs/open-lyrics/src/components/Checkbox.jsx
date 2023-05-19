@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import classes from "../routes/Home.module.css";
+import * as Constants from "../constants";
 
 const MyComponent = ({
   apiLink,
@@ -22,12 +23,12 @@ const MyComponent = ({
   //       });
   //   }, []);
 
-  useEffect(() => {
-    fetch("https://api.openbrewerydb.org/v1/breweries") // Reemplaza la URL con tu endpoint de API
-      .then((response) => response.json())
-      .then((data) => setList(data))
-      .catch((error) => console.log("Error getting the data:", error));
-  }, []);
+  // useEffect(() => {
+  //   fetch("https://api.openbrewerydb.org/v1/breweries") // Reemplaza la URL con tu endpoint de API
+  //     .then((response) => response.json())
+  //     .then((data) => setList(data))
+  //     .catch((error) => console.log("Error getting the data:", error));
+  // }, []);
 
   const handleChange = (e, index) => {
     const activeData = document.getElementById(index).checked;
@@ -39,7 +40,7 @@ const MyComponent = ({
     }
   };
 
-  console.log("Selected: " + selected);
+  // console.log("Selected: " + selected);
 
   return (
     <div className={classes.checkbox}>
