@@ -1,0 +1,29 @@
+/* Each checkbox block of the facets */
+/* --------------------------------- */
+.checkbox {
+  /* border: black solid; */
+  overflow-y: scroll;
+  /* height: 120px; */
+  height: 200px;
+  padding-left: 3%;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  /* border: #f7f7f7 solid 1px; */
+  /* box-shadow: 0 1px 4px rgba(18, 22, 33, 0.12); */
+}
+
+/* this is on block of checkbox an the text */
+.individualCheck {
+  padding-bottom: 5px;
+}
+
+.checkbox span {
+  padding-left: 10px;
+}
+
+/* this is the button of the check */
+.checkbutton {
+  accent-color: rgb(122, 148, 9);
+  width: 15px;
+  height: 15px;
+}

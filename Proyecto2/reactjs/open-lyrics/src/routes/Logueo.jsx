@@ -2,58 +2,65 @@ import React from "react";
 import { firebaseProperties } from "../fb";
 import classes from "./Logueo.module.css";
 
-const Logueo = (props) => {
-  const [isRegistrando, setIsRegistrando] = React.useState(false);
+import * as Constants from "../constants";
 
+const Logueo = (props) => {
+  //It is used to know if the user is registering or not
+  const [isRegistering, setisRegistering] = React.useState(false);
+
+  // handles user creation
   const crearUsuario = (correo, password) => {
     firebaseProperties
       .auth()
       .createUserWithEmailAndPassword(correo, password)
       .then((usuarioFirebase) => {
-        console.log("usuario creado:", usuarioFirebase);
+        console.log("created user:", usuarioFirebase);
         props.setUsuario(usuarioFirebase);
       });
   };
 
+  // handles user login
   const iniciarSesion = (correo, password) => {
     firebaseProperties
       .auth()
       .signInWithEmailAndPassword(correo, password)
       .then((usuarioFirebase) => {
-        console.log("sesión iniciada con:", usuarioFirebase.user);
+        console.log("session started with:", usuarioFirebase.user);
         props.setUsuario(usuarioFirebase);
       });
   };
 
+  // It is executed with the submit of the form,
+  // depending on the state of isRegistering, it executes create user or start session
   const submitHandler = (e) => {
     e.preventDefault(); /// Evita actualizar la pagina
     const correo = e.target.emailField.value;
     const password = e.target.passwordField.value;
 
-    if (isRegistrando) {
+    if (isRegistering) {
       crearUsuario(correo, password);
     }
 
-    if (!isRegistrando) {
+    if (!isRegistering) {
       iniciarSesion(correo, password);
     }
   };
 
   return (
     <div>
-      {/* <h1> {isRegistrando ? "Regístrate" : "Inicia sesión"}</h1> */}
+      {/* <h1> {isRegistering ? "Regístrate" : "Inicia sesión"}</h1> */}
       <form onSubmit={submitHandler} className={classes.loginForm}>
-        {isRegistrando ? (
-          <img src="/user.png" alt="login icon" />
+        {isRegistering ? (
+          <img src={Constants.userImg} alt="user icon" />
         ) : (
-          <img src="/login.png" alt="login icon" />
+          <img src={Constants.loginImg} alt="login icon" />
         )}
 
         <h1 className={classes.title}>
           {" "}
-          {isRegistrando ? "Create account" : "Sign in"}
+          {isRegistering ? "Create account" : "Sign in"}
         </h1>
-        {isRegistrando ? (
+        {isRegistering ? (
           <p>Personal information</p>
         ) : (
           <p>Sign in to your account</p>
@@ -90,14 +97,14 @@ const Logueo = (props) => {
 
           <button className={classes.button} type="submit">
             {" "}
-            {isRegistrando ? <span>Create</span> : <span>Sign in</span>}
+            {isRegistering ? <span>Create</span> : <span>Sign in</span>}
           </button>
         </div>
         <button
           className={classes.link}
-          onClick={() => setIsRegistrando(!isRegistrando)}
+          onClick={() => setisRegistering(!isRegistering)}
         >
-          {isRegistrando
+          {isRegistering
             ? "Already have an account? Sign in"
             : "Don't have an account? Join now"}
         </button>
