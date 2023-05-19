@@ -25,7 +25,8 @@ DatabaseName = 'OpenLyricsSearch'
 ArtistsCollection = 'artistsCollection'
 LyricsCollection = 'lyricsCollection'
 
-uri = "mongodb+srv://" + str(UserName) + ":" + str(Password) + "@mangos.ybmshbl.mongodb.net/" + str(DatabaseName)
+uri = "mongodb+srv://" + str(UserName) + ":" + str(Password) + \
+    "@mangos.ybmshbl.mongodb.net/" + str(DatabaseName)
 
 # Definition of the API
 app = Flask(__name__)
@@ -127,29 +128,115 @@ def test():
         collection = db.get_collection(LyricsCollection)
 
         # Ejecutar una consulta utilizando un índice específico
+
+        # Query que agrupa los documentos por artista y por género y la cantidad de documentos que coinciden con la búsqueda
+        # pipeline = [
+        #         {
+        #         '$search': {
+        #             'index': 'default',
+        #             'text': {
+        #                 'query': 'Quando',
+        #                 'path': 'lyric'
+        #             }
+        #         }
+        #     },
+        #     {
+        #         '$facet': {
+        #             'artistFacet': [
+        #                 {
+        #                     '$bucketAuto': {
+        #                         'groupBy': '$artist',
+        #                         'buckets': 10,
+        #                         'output': {
+        #                             'count': { '$sum': 1 }
+        #                         }
+        #                     }
+        #                 }
+        #             ],
+        #             'genresFacet': [
+        #                 {
+        #                     '$bucketAuto': {
+        #                         'groupBy': '$genres',
+        #                         'buckets': 10,
+        #                         'output': {
+        #                             'count': { '$sum': 1 }
+        #                         }
+        #                     }
+        #                 }
+        #             ]
+        #         }
+        #     }
+        # ]
+
+        # Query que agrupa los documentos por artista y por género y devuelve los documentos que coinciden con la búsqueda
+        # pipeline = [
+        #     {
+        #         '$search': {
+        #             'index': 'default',
+        #             'text': {
+        #                 'query': 'Quando',
+        #                 'path': 'lyric'
+        #             }
+        #         }
+        #     },
+        #     {
+        #         '$facet': {
+        #             'artistFacet': [
+        #                 {
+        #                     '$group': {
+        #                         '_id': '$artist',
+        #                         'documents': {'$push': '$$ROOT'}
+        #                     }
+        #                 }
+        #             ],
+        #             'genresFacet': [
+        #                 {
+        #                     '$group': {
+        #                         '_id': '$genres',
+        #                         'documents': {'$push': '$$ROOT'}
+        #                     }
+        #                 }
+        #             ]
+        #         }
+        #     }
+        # ]
+
         pipeline = [
-            {"$search": {
-                "index": "LyricsIndex",
-                "text": {
-                    "query": "Quando",
-                    "path": "lyric"
+            {
+                '$search': {
+                    'index': 'default',
+                    'text': {
+                        'query': 'Quando',
+                        'path': 'lyric'
                     }
+                }
+            },
+            {
+                '$match': {
+                    'artist': 'Ivete Sangalo'
+                }
+            },
+            {
+                '$facet': {
+                    'artistFacet': [
+                        {
+                            '$group': {
+                                '_id': '$artist',
+                                'documents': {'$push': '$$ROOT'}
+                            }
+                        }
+                    ],
+                    'genresFacet': [
+                        {
+                            '$group': {
+                                '_id': '$genres',
+                                'documents': {'$push': '$$ROOT'}
+                            }
+                        }
+                    ]
                 }
             }
         ]
-
-        """
-        {
-                "$search": {
-                    "index": "default",
-                    "text": {
-                        "query": "rock",
-                        "path": {
-                            "wildcard": "*"
-                            }
-                    }
-                }}
-        """
 
         # Ejecutar la consulta y obtener los resultados
         result = collection.aggregate(pipeline)
