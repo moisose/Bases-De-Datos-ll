@@ -66,6 +66,19 @@ Se usa la función insert_many para insertar todos los documentos a Mongo y se c
 
 Finalmente, si hay un error se despliega el error en la consola.
 
+
+## **MongoDB**
+
+<center>
+    <img src="Resources/MongoDB.png" alt="Parse Artists" />
+</center>
+
+Se definen la base de datos OpenLyricsSearch con las collections artist y Lyrics, además, se define un índice con los facets para hacer consultas sobre la información de lyrics.
+
+<center>
+    <img src="Resources/indiceMongo.png" alt="Parse Artists" />
+</center>
+
 ### **Parse Lyrics.csv**
 
 Se define la función parseLyrics para hacer la lectura y el parseo de las canciones de los archivos de letras de canciones.
@@ -90,12 +103,12 @@ También, se define un csv reader para hacer la lectura y parseo del csv de arti
 
 Por otro lado, se definen:
 
--  "artistCollection": colección de artistas en la base de datos.
+-  "artistCollection": colección de artistas existentes en la base de datos.
 - "artistDocuments": todos los documentos de la colección de artistas.
-- "songLinks": lista de todos los nombres de canciones en la base de datos. 
+- "songLinks": lista de todos los nombres de canciones en la base de datos. Se define el delimitador por el cual se separan los campos.
 - "documents": lista para los documentos que van a ser insertados en la base de datos.
-
 - "doc": documento que se creará y almacenará la información del documentos "actual" dentro del for para insertarlo en documents.
+
 <center>
     <img src="Resources/parseLyricsP3.png" alt="Parse Lyrics" />
 </center>
@@ -106,15 +119,19 @@ Se define un max en caso de que se desee limitar la cantidad de artistas que se 
     <img src="Resources/parseLyricsP4.png" alt="Parse Lyrics" />
 </center>
 
-El el ciclo para recorrer las filas del csv se verifica lo siguiente:
+Se define un ciclo para ir por cada fila del csv. Primeramente, se obtiene el documento del artista que hace match con el link del autor del lyric que estamos recorriendo actualmente.
 
-1. La existencia del artista que se obtuvo mediante el link de la canción. En este caso, se imprime el mensaje en consola y se continua con la siguiente fila.
+Para insertar datos se verifica lo siguiente:
+
+1. La existencia del artista que se obtuvo mediante el link de la canción, comprobando que "matchingDict" tenga un len superior a 0.. En este caso, se imprime el mensaje en consola y se continua con la siguiente fila.
 2. Verifica que la canción que se va a insertar no exista para evitar datos duplicados. Si la canción no existe, entonces se almacenan los datos en "doc" y luego se inserta en "documents". 
 2.1. Si la canción ya existe, se imprime el mensaje en consola.
 
 Ademas, se utiliza el link de la canción para verificar la unicidad del documento a insertar.
 
 Este link se inserta a "songLinks" (localmente), lo que permite llevar el registro de las canciones que ya existen y las que estamos agregando para verificar que no se inserten datos duplicados en las siguientes iteraciones.
+
+Por último, se vacia el documento actual.
 
 
 <center>
