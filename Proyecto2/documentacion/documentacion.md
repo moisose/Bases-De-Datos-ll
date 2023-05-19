@@ -112,6 +112,18 @@ Para verificar que la canción no exista en la base de datos se verifica el song
 
 Se usa la función insert_many para insertar todos los documentos a Mongo y se cierra el cliente. Finalmente, si hay un error se despliega el error en la consola.
 
+## **MongoDB**
+
+<center>
+    <img src="Resources/MongoDB.png" alt="Parse Artists" />
+</center>
+
+Se definen la base de datos OpenLyricsSearch con las collections artist y Lyrics, además, se define un índice con los facets para hacer consultas sobre la información de lyrics.
+
+<center>
+    <img src="Resources/indiceMongo.png" alt="Parse Artists" />
+</center>
+
 ## **API**
 
 ## **App de React**
