@@ -68,6 +68,50 @@ Finalmente, si hay un error se despliega el error en la consola.
 
 ### **Parse Lyrics.csv**
 
+Se define la función parseArtists para hacer la lectura y el parseo de los artistas de los archivos de artistas.
+
+<center>
+    <img src="Resources/parseLyricsP1.png" alt="Parse Artists" />
+</center>
+
+ Lo primero que se hace en la  función es abrir la conexión de Mongo DB, se envía un ping para comprobar que la conexión es correcta.
+
+<center>
+    <img src="Resources/parseLyricsP2.png" alt="Parse Artists" />
+</center>
+
+Después, definimos la base de datos y la collection que se va a usar para cargar/bajar datos a Mongo Atlas. Adicionalmente, se define la artistsCollection para obtener los artistas existentes en Mongo.
+
+<center>
+    <img src="Resources/parseArtistsP3.png" alt="Parse Artists" />
+</center>
+
+También, se define un csv reader para hacer la lectura y parseo del csv de artistas, además, se deffine el delimitador por el cual se separan los campos y se hace un skip de la fila del header.
+
+<center>
+    <img src="Resources/parseLyricsP4.png" alt="Parse Artists" />
+</center>
+
+Posteriormente se define una lista para almacenar los documentos que serán insertados en la collection de Mongo y un documento que almacena la información del lyric que se está leyendo actualmente. También existe la variable **artistsDocuments** para obtener los que están en artistas en Mongo, esto se usa para agregar la información del artista a cada lyric. También, se define una lista con los songLink que hay en la base de datos, para evitar agregar duplicados.Adicionalmente, se define un max en caso de que se desee limitar la cantidad de artistas que se van a subir a la collection.
+
+<center>
+    <img src="Resources/parseLyricsP5.png" alt="Parse Artists" />
+</center>
+
+Se define un ciclo paa ir por cada fila del csv. En este se verifica el max y también se obtiene el documento del artista que hace match con el link del autor del lyric, se verifica que este exista en la base de datos comprobando que matchingDict tenga un len superior a 0.
+
+<center>
+    <img src="Resources/parseLyricsP6.png" alt="Parse Artists" />
+</center>
+
+Para verificar que la canción no exista en la base de datos se verifica el songLink, en caso de que no exista se forma el documento y luego se agrega a la lista de documentos, tambien se agrega el songLink a la lsita de links y se vacia el documento actual.
+
+<center>
+    <img src="Resources/parseLyricsP7.png" alt="Parse Artists" />
+</center>
+
+Se usa la función insert_many para insertar todos los documentos a Mongo y se cierra el cliente. Finalmente, si hay un error se despliega el error en la consola.
+
 ## **API**
 
 ## **App de React**

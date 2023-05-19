@@ -123,7 +123,6 @@ def parseLyrics(lyricsDownloaded_var):
         
         artistDocuments = list(artistCollection.find()) #list of artists documents
         songLinks = collection.distinct("songLink") #list of song names in the database
-        #print(songLinks)
         
         max = 0
         for row in csv_reader: 
