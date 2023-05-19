@@ -41,14 +41,12 @@ def main():
 
 
 """
-artistas
-lenguajes
-generos
+Este endpoint devuelve la lista de artistas, lenguajes y generos de las canciones que contienen la letra especifica
 """
 
 
-@app.route('/facets/list', methods=['GET'])
-def facets():
+@app.route('/facets/list/<string:phrase>', methods=['GET'])
+def facets(phrase):
     artists = [{"name": "Foster The People"}, {
         "name": "Tame Impala"}, {"name": "Mac Demarco"}]
     languages = [{"name": "Spanish"}, {
@@ -60,14 +58,15 @@ def facets():
 
 
 """
-Search
+Endpoint Search
 
-frase buscada
-artista
-lenguaje
-genero
-popularidad
-numero de canciones
+Recibe:
+frase buscada (obligatorio)
+artista (opcional)
+lenguaje (opcional)
+genero (opcional)
+popularidad (opcional)
+numero de canciones (opcional)
 
 El endpoint devuelve: 
 Nombre de la canción, artista, pequeño fragmento donde esté la palabra que se busca
@@ -92,6 +91,8 @@ def search(phrase, artist, language, gender, popularity, amountOfSongs):
 Endpoint de detalles:
 Recibe: Nombre y artista de la canción
 Devuelve:
+Full Documento especifico que se pide
+
 Nombre del artista
 generos
 cantidad de canciones
@@ -99,12 +100,6 @@ popularidad
 link
 titulo de la cancion
 letra completa
-
-doc['artist'] = row[0]
-doc['genres'] = row[1].split(';')
-doc['songs'] = row[2]
-doc['popularity'] = row[3]
-doc['link'] = row[4]
 
 """
 
@@ -201,6 +196,8 @@ def test():
         #     }
         # ]
 
+        # Query que agrupa los documentos por artista y por género y devuelve los documentos que coinciden con la búsqueda y se hace el
+        # match con el artista
         pipeline = [
             {
                 '$search': {
@@ -257,94 +254,3 @@ def test():
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-"""
-from pymongo import MongoClient
-
-# Conexión a la base de datos de MongoDB Atlas
-client = MongoClient("mongodb+srv://<username>:<password>@<cluster-url>/test?retryWrites=true&w=majority")
-db = client["mydatabase"]  # Nombre de tu base de datos
-collection = db["mycollection"]  # Nombre de tu colección
-
-# Definir los campos de facetas que deseas incluir
-facets = {
-    "campo_faceta_1": [
-        {"$sortByCount": "$campo_faceta_1"},
-        {"$limit": 5}
-    ],
-    "campo_faceta_2": [
-        {"$sortByCount": "$campo_faceta_2"},
-        {"$limit": 5}
-    ]
-}
-
-# Definir la consulta de búsqueda
-query = {
-    "campo_busqueda": "valor_búsqueda"
-}
-
-# Definir los campos que deseas recuperar en los resultados
-projection = {
-    "campo1": 1,
-    "campo2": 1
-}
-
-# Realizar la búsqueda con facetas
-result = collection.aggregate([
-    {"$match": query},
-    {"$facet": facets},
-    {"$project": projection}
-])
-
-# Iterar sobre los resultados
-for doc in result:
-    print(doc)
-
-
-===================================
-from pymongo import MongoClient
-
-# Conectar a la base de datos de MongoDB Atlas
-client = MongoClient("mongodb+srv://<username>:<password>@<cluster-url>/<database>?retryWrites=true&w=majority")
-
-# Obtener una referencia a la colección
-db = client.get_database("<database>")
-collection = db.get_collection("<collection>")
-
-# Obtener la lista de índices
-indexes = collection.list_indexes()
-
-# Recorrer los índices y obtener las facetas
-facets = []
-for index in indexes:
-    if "facets" in index.get("options", {}):
-        facets.append(index["options"]["facets"])
-
-# Imprimir las facetas
-print(facets)
-
-
-===================================
-
-from pymongo import MongoClient
-
-# Conectar a la base de datos de MongoDB Atlas
-client = MongoClient("mongodb+srv://<username>:<password>@<cluster-url>/<database>?retryWrites=true&w=majority")
-
-# Obtener una referencia a la base de datos
-db = client.get_database("<database>")
-
-# Obtener una referencia a la colección
-collection = db.get_collection("<collection>")
-
-# Ejecutar una consulta utilizando un índice específico
-result = collection.find({"<campo>": "<valor>"}).hint("<nombre_indice>")
-
-# Procesar los resultados
-for document in result:
-    # Hacer algo con el documento
-    print(document)
-
-
-"""
