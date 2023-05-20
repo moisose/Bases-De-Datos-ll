@@ -23,6 +23,24 @@ WORKDIR /app
 COPY app/. .
 RUN pip install --no-cache-dir -r requirements.txt
 
+#env variables
+#-------------------------------------
+ARG USERNAME
+ENV USERNAME ${USERNAME}
+#-------------------------------------
+ARG PASSWORD
+ENV PASSWORD ${PASSWORD}
+#-------------------------------------
+ARG DATABASENAME
+ENV DATABASENAME ${DATABASENAME}
+#-------------------------------------
+ARG ARTISTS_COLLECTION
+ENV ARTISTS_COLLECTION ${ARTISTS_COLLECTION}
+#-------------------------------------
+ARG LYRICS_COLLECTION
+ENV LYRICS_COLLECTION ${LYRICS_COLLECTION}
+
+
 #RUN ls
 #RUN python -u unittests.py
 

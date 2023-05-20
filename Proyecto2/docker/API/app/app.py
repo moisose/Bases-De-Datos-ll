@@ -1,4 +1,5 @@
 # Imports
+import os
 from azure.storage.blob import BlobServiceClient
 from flask import Flask, flash, request, send_file
 from flask_cors import CORS
@@ -18,12 +19,21 @@ ARTISTS_FILE='artists-data.csv'
 LYRICS_FILE='lyrics-data.csv'
 
 """
+#"""
+#Env Variables------------------------------------------------------------------------------------		
+UserName= os.getenv('USERNAME')
+Password= os.getenv('PASSWORD')
+DatabaseName= os.getenv('DATABASENAME')
+ArtistsCollection= os.getenv('ARTISTS_COLLECTION')
+LyricsCollection= os.getenv('LYRICS_COLLECTION')
 
+"""	
 UserName = 'MelSaFer'
 Password = '3trZoWOalvOKN7tQ'
 DatabaseName = 'OpenLyricsSearch'
 ArtistsCollection = 'artistsCollection'
 LyricsCollection = 'lyricsCollection'
+"""
 
 uri = "mongodb+srv://" + str(UserName) + ":" + str(Password) + \
     "@mangos.ybmshbl.mongodb.net/" + str(DatabaseName)
