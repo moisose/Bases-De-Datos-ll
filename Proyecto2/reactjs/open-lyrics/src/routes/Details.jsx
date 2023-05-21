@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 // import { jsonData } from "../components/SearchResult";
 
+import * as Constants from "../constants";
+
 function Details() {
   const [artist, setArtist] = useState("");
   //   const [genres, setGenres] = useState("");
@@ -42,11 +44,16 @@ function Details() {
     <>
       {/* <h1>Details</h1> */}
       <div className={classes.container}>
-        <Link to="/home">
-          <img className={classes.arrow} src="/back.png" alt="back arrow" />
+        <Link to={Constants.homeRoute}>
+          <img
+            className={classes.arrow}
+            src={Constants.backImg}
+            alt="back arrow"
+          />
         </Link>
-        <img className={classes.logo} src="/whitelogo.png" alt="logo" />
-        <h1 className={classes.artist}>{data.artist}</h1>
+        <img className={classes.logo} src={Constants.detailsLogo} alt="logo" />
+
+        <h1 className={classes.artist}>Amy Winehouse</h1>
         <p className={classes.details}>
           <strong>{data.genres.join(' - ')}</strong>
         </p>

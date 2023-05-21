@@ -1,31 +1,78 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import classes from "./SearchBar.module.css";
 
-export const SearchBar = ({ setResults }) => {
+import * as Constants from "../constants";
+
+// search bar in which the call to the api
+// to request the lyrics of songs is handled
+export const SearchBar = ({
+  artists,
+  languages,
+  genres,
+  setResults,
+  valuesPopularity,
+  valuesSongs,
+}) => {
   const [input, setInput] = useState("");
 
-  //TO SEND THE WORDS IN THE SEARCHBAR TO THE API (RIGHT NOW WDK IF WE SHOULD SEND IT AS A INDIVIDUAL WORDS OR LIKE AN COMPLETE STRING)
-  const fetchData = (value) => {
-    fetch("https://mocki.io/v1/58e3dd38-709c-4ec4-8165-c959ecb1e587")
+  // this useEffect is responsible for calling the api to request
+  // the results every time something is written in the search bar
+  // or when an element of the facets is marked or modified
+  useEffect(() => {
+    console.log("use effect");
+    console.log(valuesSongs);
+    console.log(valuesPopularity);
+    fetch(Constants.searchBarLink)
       .then((response) => response.json())
       .then((json) => {
         const results = json.filter((user) => {
-          // Esta parte de filtrar deberia de ir en el backend (Nosotros deberiamos solo de pasar los datos y recibir lo necesario)
           return (
-            value &&
+            input &&
             user &&
             user.name &&
-            user.name.toLowerCase().includes(value)
-          ); // El primero de value se utiliza para que no se muestre nada con la barra vacia
-        }); //Filter goes to each element of the json file and take the propert we use in the function
+            user.name.toLowerCase().includes(input)
+          );
+          // Esta parte de filtrar deberia de ir en el backend (Nosotros deberiamos solo de pasar los datos y recibir lo necesario)
+        });
         setResults(results);
       });
-  };
+  }, [
+    artists,
+    languages,
+    genres,
+    setResults,
+    valuesPopularity,
+    valuesSongs,
+    input,
+  ]);
 
+  // //TO SEND THE WORDS IN THE SEARCHBAR TO THE API (RIGHT NOW WDK IF WE SHOULD SEND IT AS A INDIVIDUAL WORDS OR LIKE AN COMPLETE STRING)
+  // const fetchData = (value) => {
+  //   console.log(facets);
+  //   fetch("https://jsonplaceholder.typicode.com/users")
+  //     .then((response) => response.json())
+  //     .then((json) => {
+  //       const results = json.filter((user) => {
+  //         // Esta parte de filtrar deberia de ir en el backend (Nosotros deberiamos solo de pasar los datos y recibir lo necesario)
+  //         return (
+  //           value &&
+  //           user &&
+  //           user.name &&
+  //           user.name.toLowerCase().includes(value)
+  //         ); // El primero de value se utiliza para que no se muestre nada con la barra vacia
+  //       }); //Filter goes to each element of the json file and take the propert we use in the function
+  //       setResults(results);
+  //       console.log("facets en search: ", facets);
+  //     });
+  // };
+
+  // console.log("facets en search: ", facets);
+
+  // handle character typing
   const handleChange = (value) => {
     setInput(value);
-    fetchData(value);
+    // fetchData(value);
   };
 
   return (

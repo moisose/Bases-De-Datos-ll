@@ -2,58 +2,95 @@ import React from "react";
 import { firebaseProperties } from "../fb";
 import classes from "./Logueo.module.css";
 
+import * as Constants from "../constants";
+
 const Logueo = (props) => {
-  const [isRegistrando, setIsRegistrando] = React.useState(false);
+  //It is used to know if the user is registering or not
+  const [isRegistering, setisRegistering] = React.useState(false);
+  const [emailText, setEmailText] = React.useState("");
+  const [passwordText, setPasswordText] = React.useState("");
 
-  const crearUsuario = (correo, password) => {
+  // handles user creation
+  const createUser = (email, password) => {
+    if (email === "" && password === "") {
+      return;
+    }
     firebaseProperties
       .auth()
-      .createUserWithEmailAndPassword(correo, password)
+      .createUserWithEmailAndPassword(email, password)
       .then((usuarioFirebase) => {
-        console.log("usuario creado:", usuarioFirebase);
+        console.log("created user:", usuarioFirebase);
         props.setUsuario(usuarioFirebase);
+      })
+      .catch((error) => {
+        console.log("Create user Failed!", error);
+        window.alert("Create user Failed!", error);
       });
   };
 
-  const iniciarSesion = (correo, password) => {
+  // handles user login
+  const logIn = (email, password) => {
+    if (email === "" && password === "") {
+      return;
+    }
     firebaseProperties
       .auth()
-      .signInWithEmailAndPassword(correo, password)
+      .signInWithEmailAndPassword(email, password)
       .then((usuarioFirebase) => {
-        console.log("sesión iniciada con:", usuarioFirebase.user);
+        console.log("session started with:", usuarioFirebase.user);
         props.setUsuario(usuarioFirebase);
+      })
+      .catch((error) => {
+        console.log("Login Failed!", error);
+        window.alert("Login Failed!", error);
       });
   };
 
+  const erase = () => {
+    setEmailText("");
+    setPasswordText("");
+  };
+
+  // It is executed with the submit of the form,
+  // depending on the state of isRegistering, it executes create user or start session
   const submitHandler = (e) => {
     e.preventDefault(); /// Evita actualizar la pagina
-    const correo = e.target.emailField.value;
+
+    const email = e.target.emailField.value;
     const password = e.target.passwordField.value;
 
-    if (isRegistrando) {
-      crearUsuario(correo, password);
+    console.log(emailText);
+    if (isRegistering) {
+      createUser(email, password);
     }
 
-    if (!isRegistrando) {
-      iniciarSesion(correo, password);
+    if (!isRegistering) {
+      logIn(email, password);
     }
   };
 
+  const handleChangeEmail = (e) => {
+    setEmailText(e.target.value);
+  };
+
+  const handleChangePassword = (e) => {
+    setPasswordText(e.target.value);
+  };
   return (
     <div>
-      {/* <h1> {isRegistrando ? "Regístrate" : "Inicia sesión"}</h1> */}
+      {/* <h1> {isRegistering ? "Regístrate" : "Inicia sesión"}</h1> */}
       <form onSubmit={submitHandler} className={classes.loginForm}>
-        {isRegistrando ? (
-          <img src="/user.png" alt="login icon" />
+        {isRegistering ? (
+          <img src={Constants.userImg} alt="user icon" />
         ) : (
-          <img src="/login.png" alt="login icon" />
+          <img src={Constants.loginImg} alt="login icon" />
         )}
 
         <h1 className={classes.title}>
           {" "}
-          {isRegistrando ? "Create account" : "Sign in"}
+          {isRegistering ? "Create account" : "Sign in"}
         </h1>
-        {isRegistrando ? (
+        {isRegistering ? (
           <p>Personal information</p>
         ) : (
           <p>Sign in to your account</p>
@@ -67,7 +104,9 @@ const Logueo = (props) => {
             <input
               className={classes.input}
               type="email"
-              required="true"
+              value={emailText}
+              onChange={handleChangeEmail}
+              required={true}
               placeholder="Enter your email"
               id="emailField"
             />
@@ -81,7 +120,9 @@ const Logueo = (props) => {
             <input
               className={classes.input}
               type="password"
-              required="true"
+              required={true}
+              value={passwordText}
+              onChange={handleChangePassword}
               placeholder="Enter your password"
               id="passwordField"
             />
@@ -90,14 +131,17 @@ const Logueo = (props) => {
 
           <button className={classes.button} type="submit">
             {" "}
-            {isRegistrando ? <span>Create</span> : <span>Sign in</span>}
+            {isRegistering ? <span>Create</span> : <span>Sign in</span>}
           </button>
         </div>
         <button
           className={classes.link}
-          onClick={() => setIsRegistrando(!isRegistrando)}
+          onClick={() => {
+            setisRegistering(!isRegistering);
+            erase();
+          }}
         >
-          {isRegistrando
+          {isRegistering
             ? "Already have an account? Sign in"
             : "Don't have an account? Join now"}
         </button>

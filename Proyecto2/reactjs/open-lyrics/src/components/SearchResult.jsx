@@ -5,6 +5,8 @@ import { json, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 
+// each of the results is handled within a
+// box with the information of the letter found
 export const SearchResult = ({ result }) => {
   const [lyric, setLyric] = useState("");
   const navigate = useNavigate();

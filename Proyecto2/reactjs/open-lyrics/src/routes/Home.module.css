@@ -6,7 +6,7 @@
   padding: 0;
   min-height: 100vh;
   display: grid;
-  grid-template-rows: 1fr 0.5fr 15fr;
+  grid-template-rows: 0.9fr 0.5fr 15fr;
   /* grid-template-rows: 1fr 0.5fr 8fr; */
   grid-template-columns: 1fr 4fr;
 }
@@ -117,36 +117,6 @@
   margin-bottom: 10px;
 }
 
-/* Each checkbox block of the facets */
-/* --------------------------------- */
-.checkbox {
-  /* border: black solid; */
-  overflow-y: scroll;
-  /* height: 120px; */
-  height: 200px;
-  padding-left: 3%;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  /* border: #f7f7f7 solid 1px; */
-  /* box-shadow: 0 1px 4px rgba(18, 22, 33, 0.12); */
-}
-
-/* this is on block of checkbox an the text */
-.individualCheck {
-  padding-bottom: 5px;
-}
-
-.checkbox span {
-  padding-left: 10px;
-}
-
-/* this is the button of the check */
-.checkbutton {
-  accent-color: rgb(122, 148, 9);
-  width: 15px;
-  height: 15px;
-}
-
 /* scrollbar management */
 /* width */
 ::-webkit-scrollbar {
@@ -198,6 +168,8 @@
   background-color: #89a707;
   margin-top: 20px;
   border-radius: 15px;
+  color: #6d8506;
+  font-size: 15px;
 }
 
 .sliderBar .thumb {
