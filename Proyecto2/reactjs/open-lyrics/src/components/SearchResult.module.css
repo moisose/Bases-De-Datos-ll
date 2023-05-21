@@ -6,9 +6,99 @@
   border-radius: 15px;
   font-family: "Source Sans Bold";
   height: 160px;
+  padding: 1.5% 2.5%;
   margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: 1fr 30% 30%;
+  grid-template-rows: 1fr 1fr;
+  align-items: stretch;
 }
+
+.name{
+  font-size: 25px;
+  font-family: "Source Sans";
+  color:#89a707;
+  margin-bottom: 15px;
+  display:inline-block;
+  grid-column: 1/1;
+  height: 100%;
+  max-width: 1fr;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.artist{
+  color:#c1c1c1;
+  margin-left: 30px;
+  font-family: Helvetica;
+  font-style: italic;
+  font-size: 20px;
+  justify-items: center;
+  text-align: center;
+}
+
+.songFragment{
+  color: #4c4c4c;
+  white-space: pre-line;
+  height: 80px;
+  width: 60%;
+  scrollbar-width: thin; /* Ancho de la barra de desplazamiento (puede ser "thin", "auto" o "none") */
+  grid-column: 1/2;
+  overflow-y: scroll;
+  justify-content: center;
+}
+
+.songFragment::-webkit-scrollbar-corner {
+  background-color: #efefef;
+}
+
+.songFragment::-webkit-scrollbar-track-piece:start {
+  background-color: #efefef;
+}
+
+.songFragment::-webkit-scrollbar-track-piece:end {
+  background-color: #efefef;
+}
+
+.button{
+  text-align: center;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  background-color: #eea10a;
+  font-family: 'Source Sans';
+  font-size: 20px;
+  grid-column: 3;
+  height: 60%;
+  width: 32%;
+  padding: 12px;
+  margin-top: 30px;
+  border-radius: 10px;
+  border: none;
+  color: #ffff; 
+  justify-self: end;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  justify-items: center;
+  text-decoration: none;
+}
+
+.button {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+}
+
+.button:hover{
+  background-color: #df9707;
+  opacity: 1;
+  right: 0;
+}
+
 
 .searchResult:hover {
   background-color: #efefef;
 }
+
+/*#eea10a*/

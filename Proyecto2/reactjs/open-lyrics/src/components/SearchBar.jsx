@@ -7,7 +7,7 @@ export const SearchBar = ({ setResults }) => {
 
   //TO SEND THE WORDS IN THE SEARCHBAR TO THE API (RIGHT NOW WDK IF WE SHOULD SEND IT AS A INDIVIDUAL WORDS OR LIKE AN COMPLETE STRING)
   const fetchData = (value) => {
-    fetch("https://jsonplaceholder.typicode.com/users")
+    fetch("https://mocki.io/v1/58e3dd38-709c-4ec4-8165-c959ecb1e587")
       .then((response) => response.json())
       .then((json) => {
         const results = json.filter((user) => {
