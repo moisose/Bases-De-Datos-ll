@@ -28,7 +28,7 @@ export const facetsApiLink =
 export const homeLogo = "/logo.png";
 
 // searchBar
-export const searchBarLink = "https://jsonplaceholder.typicode.com/users";
+export const searchBarLink = "https://mocki.io/v1/58e3dd38-709c-4ec4-8165-c959ecb1e587";
 
 // details route
 export const backImg = "/back.png";

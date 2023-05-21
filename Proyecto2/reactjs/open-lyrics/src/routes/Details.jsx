@@ -55,7 +55,7 @@ function Details() {
 
         <h1 className={classes.artist}>Amy Winehouse</h1>
         <p className={classes.details}>
-          <strong>{data.genres.join(' - ')}</strong>
+          <strong>{Array.isArray(data.genres) && data.genres.join(' - ')}</strong>
         </p>
         <p className={classes.details}>
           <strong>{data.songs} Songs</strong>
