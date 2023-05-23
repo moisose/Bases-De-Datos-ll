@@ -53,23 +53,31 @@ const Pagination = ({
 
   return (
     <div className={classes.pagination}>
-      {pages.map((page, index) => {
-        return (
-          <button
-            key={index}
-            onClick={() => {
-              setCurrentPage(page);
-              window.scrollTo({
-                top: 0,
-                behavior: "smooth",
-              });
-            }}
-            className={page == currentPage ? classes.active : ""}
-          >
-            {page}
-          </button>
-        );
-      })}
+      {pages.map((page, index) => (
+        <button
+          key={index}
+          onClick={
+            page === '...'
+              ? () => {
+                  // setCurrentPage(currentPage + 1);
+                  // window.scrollTo({
+                  //   top: 0,
+                  //   behavior: 'smooth',
+                  // });
+                }
+              : () => {
+                  setCurrentPage(page);
+                  window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                  });
+                }
+          }
+          className={page === currentPage ? classes.active : ''}
+        >
+          {page}
+        </button>
+      ))}
     </div>
   );
 };
