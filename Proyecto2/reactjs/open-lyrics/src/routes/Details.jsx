@@ -26,7 +26,7 @@ function Details() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://mocki.io/v1/bf59beb2-cf62-4adb-98a2-d7eeccd29621'); // + link.slice(-1)
+        const response = await fetch('https://mocki.io/v1/bf59beb2-cf62-4adb-98a2-d7eeccd29621'); // + link.slice(1)
         const jsonData = await response.json();
         setData(jsonData);
       } catch (error) {
