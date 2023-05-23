@@ -57,35 +57,50 @@ const Home = () => {
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = results.slice(firstPostIndex, lastPostIndex);
   // --------------------------------------------------------------------
+  const [input, setInput] = useState("");
+  console.log(results);
 
   // this handle the reset filters button
   // clear the selected lists
-  const handleCheckAllChange = (e) => {
+  const handleCheckAllChange = () => {
     setSelectedArtists([]);
     setSelectedLanguages([]);
     setSelectedGenres([]);
     setValuesPopularity([0, 100]);
   };
 
+  const eraseFacets = () => {
+    setArtistsFacet([]);
+    setLanguagesFacet([]);
+    setGenresFacet([]);
+  };
+
   // load all the data from the api to the facets
   useEffect(() => {
-    fetch(Constants.facetsApiLink)
-      .then((response) => response.json())
-      .then((data) => {
-        if (
-          Array.isArray(data.artists) &&
-          Array.isArray(data.languages) &&
-          Array.isArray(data.genres)
-        ) {
-          setArtistsFacet(data.artists);
-          setLanguagesFacet(data.languages);
-          setGenresFacet(data.genres);
-        }
-      })
-      .catch((error) => {
-        console.log("Error getting the data:", error);
-      });
-  }, []);
+    console.log("input:" + Constants.facetsApiLink + input);
+    if (input === "") {
+      handleCheckAllChange();
+      eraseFacets();
+    }
+    if (input != "") {
+      fetch(Constants.facetsApiLink + input)
+        .then((response) => response.json())
+        .then((data) => {
+          if (
+            Array.isArray(data.artists) &&
+            Array.isArray(data.languages) &&
+            Array.isArray(data.genres)
+          ) {
+            setArtistsFacet(data.artists);
+            setLanguagesFacet(data.languages);
+            setGenresFacet(data.genres);
+          }
+        })
+        .catch((error) => {
+          console.log("Error getting the data:", error);
+        });
+    }
+  }, [input, setInput]);
 
   //update song slider range
   useEffect(() => {
@@ -125,6 +140,7 @@ const Home = () => {
       <div className={classes.header}>
         <div className={classes.searchContainer}>
           <SearchBar
+            setInput={setInput}
             artists={selectedArtists}
             languages={selectedLanguages}
             genres={selectedGenres}
@@ -140,7 +156,7 @@ const Home = () => {
         <p className={classes.filterBy}>Filter by</p>
         <button
           className={classes.reset}
-          onClick={(e) => handleCheckAllChange(e)}
+          onClick={(e) => handleCheckAllChange()}
         >
           Reset Filters
         </button>

@@ -4,7 +4,7 @@
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
   background-color: white;
   border-radius: 15px;
-  font-family: "Source Sans Bold";
+  font-family: "Source Sans";
   height: 160px;
   padding: 1.5% 2.5%;
   margin-bottom: 20px;
@@ -14,12 +14,12 @@
   align-items: stretch;
 }
 
-.name{
+.name {
   font-size: 25px;
   font-family: "Source Sans";
-  color:#89a707;
+  color: #89a707;
   margin-bottom: 15px;
-  display:inline-block;
+  display: inline-block;
   grid-column: 1/1;
   height: 100%;
   max-width: 1fr;
@@ -28,8 +28,8 @@
   text-overflow: ellipsis;
 }
 
-.artist{
-  color:#c1c1c1;
+.artist {
+  color: #c1c1c1;
   margin-left: 30px;
   font-family: Helvetica;
   font-style: italic;
@@ -38,7 +38,7 @@
   text-align: center;
 }
 
-.songFragment{
+.songFragment {
   color: #4c4c4c;
   white-space: pre-line;
   height: 80px;
@@ -61,22 +61,22 @@
   background-color: #efefef;
 }
 
-.button{
+.button {
   text-align: center;
   align-content: center;
   justify-content: center;
   align-items: center;
   background-color: #eea10a;
-  font-family: 'Source Sans';
+  font-family: "Source Sans";
   font-size: 20px;
   grid-column: 3;
   height: 60%;
-  width: 32%;
+  width: 150px;
   padding: 12px;
   margin-top: 30px;
   border-radius: 10px;
   border: none;
-  color: #ffff; 
+  color: #ffff;
   justify-self: end;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -90,12 +90,11 @@
   position: relative;
 }
 
-.button:hover{
+.button:hover {
   background-color: #df9707;
   opacity: 1;
   right: 0;
 }
-
 
 .searchResult:hover {
   background-color: #efefef;

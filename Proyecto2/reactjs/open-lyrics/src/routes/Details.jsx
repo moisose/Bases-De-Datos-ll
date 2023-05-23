@@ -20,57 +20,77 @@ function Details() {
   // Get data passed by Link-State in SearchResult and converting the data object to string
   useEffect(() => {
     setLink(JSON.parse(location.state.info));
-  }, []);
+  }, [location]);
 
-  //Fetch to get the data need it to use in this .jsx 
+  //Fetch to get the data need it to use in this .jsx
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://mocki.io/v1/bf59beb2-cf62-4adb-98a2-d7eeccd29621'); // + link.slice(1)
-        const jsonData = await response.json();
-        setData(jsonData);
+        if (link != "") {
+          fetch(Constants.detailsLink + link.slice(1))
+            .then((response) => response.json())
+            .then((data) => {
+              setData(data.data[0]);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, []);
-  
+  }, [link]);
+
   // useEffect(() => {
   //   setLyric(data.fragment);
   // }, [data]);
-  
+
   return (
     <>
       {/* <h1>Details</h1> */}
-      <div className={classes.container}>
-        <Link to={Constants.homeRoute}>
-          <img
-            className={classes.arrow}
-            src={Constants.backImg}
-            alt="back arrow"
-          />
-        </Link>
-        <img className={classes.logo} src={Constants.detailsLogo} alt="logo" />
 
-        <h1 className={classes.artist}>Amy Winehouse</h1>
-        <p className={classes.details}>
-          <strong>{Array.isArray(data.genres) && data.genres.join(' - ')}</strong>
-        </p>
-        <p className={classes.details}>
-          <strong>{data.songs} Songs</strong>
-        </p>
-        <p className={classes.details}>
-          <strong>Popularity:</strong> {data.popularity}
-        </p>
-        <p className={classes.details}>
-          <strong>Link:</strong> {link}
-        </p>
-      </div>
-      <h2>{data.title}</h2>
-      <div className={classes.column}>
-        <span className={classes.lyric}>{data.lyrics}</span>
-      </div>
+      {data ? (
+        <>
+          <div className={classes.container}>
+            <Link to={Constants.homeRoute}>
+              <img
+                className={classes.arrow}
+                src={Constants.backImg}
+                alt="back arrow"
+              />
+            </Link>
+            <img
+              className={classes.logo}
+              src={Constants.detailsLogo}
+              alt="logo"
+            />
+
+            <h1 className={classes.artist}>{data.artist}</h1>
+            <p className={classes.details}>
+              <strong>
+                {Array.isArray(data.genres) && data.genres.join(" - ")}
+              </strong>
+            </p>
+            <p className={classes.details}>
+              <strong>{data.songs} Songs</strong>
+            </p>
+            <p className={classes.details}>
+              <strong>Popularity:</strong> {data.popularity}
+            </p>
+            <p className={classes.details}>
+              <strong>Link:</strong> {link}
+            </p>
+          </div>
+          <h2>{data.songName}</h2>
+          <div className={classes.column}>
+            <span className={classes.lyric}>{data.lyric}</span>
+          </div>
+        </>
+      ) : (
+        <p>Loading...</p>
+      )}
     </>
   );
 }

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import classes from "./SearchBar.module.css";
+import { debounce } from "lodash";
+
+import { useDebounce } from "./useDebounce";
 
 import * as Constants from "../constants";
 
 // search bar in which the call to the api
 // to request the lyrics of songs is handled
 export const SearchBar = ({
+  setInput,
   artists,
   languages,
   genres,
@@ -14,7 +18,24 @@ export const SearchBar = ({
   valuesPopularity,
   valuesSongs,
 }) => {
-  const [input, setInput] = useState("");
+  const [inputSearch, setInputSearch] = useState("");
+  const debounceValue = useDebounce(inputSearch, 650);
+
+  // const useDebounce = (value, delay) => {
+  //   const [debounceValue, setDebounceValue] = useState(value);
+
+  //   useEffect(() => {
+  //     const handler = setTimeout(() => {
+  //       setDebounceValue(value);
+  //     }, delay);
+
+  //     return () => {
+  //       clearTimeout(handler);
+  //     };
+  //   }, [value, delay]);
+
+  //   return debounceValue;
+  // };
 
   // this useEffect is responsible for calling the api to request
   // the results every time something is written in the search bar
@@ -23,28 +44,43 @@ export const SearchBar = ({
     console.log("use effect");
     console.log(valuesSongs);
     console.log(valuesPopularity);
-    fetch(Constants.searchBarLink)
-      .then((response) => response.json())
-      .then((json) => {
-        const results = json.filter((user) => {
-          return (
-            input &&
-            user &&
-            user.name &&
-            user.name.toLowerCase().includes(input)
-          );
-          // Esta parte de filtrar deberia de ir en el backend (Nosotros deberiamos solo de pasar los datos y recibir lo necesario)
-        });
-        setResults(results);
-      });
+    setInput(inputSearch);
+
+    const getData = async () => {
+      if (inputSearch === "") {
+        setResults([]);
+        return;
+      } else {
+        fetch(Constants.searchBarLink + inputSearch)
+          .then((response) => response.json())
+          .then((data) => {
+            // console.log("data es" + data);
+            const formattedResults = data.data.map((item) => {
+              return {
+                name: item.songName,
+                artist: item.artist,
+                link: item.songLink,
+                fragment: item.lyric,
+              };
+            });
+            setResults(formattedResults);
+          })
+          .catch((error) => {
+            console.log("Error getting the data:", error);
+          });
+      }
+    };
+
+    inputSearch ? getData() : setResults([]);
   }, [
+    setInput,
     artists,
     languages,
     genres,
     setResults,
     valuesPopularity,
     valuesSongs,
-    input,
+    debounceValue,
   ]);
 
   // //TO SEND THE WORDS IN THE SEARCHBAR TO THE API (RIGHT NOW WDK IF WE SHOULD SEND IT AS A INDIVIDUAL WORDS OR LIKE AN COMPLETE STRING)
@@ -71,7 +107,7 @@ export const SearchBar = ({
 
   // handle character typing
   const handleChange = (value) => {
-    setInput(value);
+    setInputSearch(value);
     // fetchData(value);
   };
 
@@ -81,7 +117,7 @@ export const SearchBar = ({
       <input
         className={classes.searchInput}
         placeholder="Search for Lyrics..."
-        value={input}
+        value={inputSearch}
         onChange={(e) => handleChange(e.target.value)}
       />
     </div>

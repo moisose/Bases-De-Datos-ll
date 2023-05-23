@@ -30,7 +30,7 @@ const Pagination = ({
                 behavior: "smooth",
               });
             }}
-            className={page == currentPage ? "active" : ""}
+            className={page == currentPage ? classes.active : ""}
           >
             {page}
           </button>
