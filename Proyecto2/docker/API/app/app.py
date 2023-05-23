@@ -44,8 +44,7 @@ CORS(app)
 
 # Link del api: https://main-app.politebush-c6efad18.eastus.azurecontainerapps.io/
 
-
-def shortLyric(lyric):
+def shortLyricTemp(lyric):
     jumps = 0
     index = len(lyric)
 
@@ -57,6 +56,45 @@ def shortLyric(lyric):
                 break
 
     return lyric[:index]
+
+def shortLyric(lyric, substring):
+    jumps = 0
+   
+    lyricsArray = lyric.split('\n')
+    endIndex = len(lyricsArray) - 1
+    
+    newString = ''
+
+    print(lyricsArray)
+
+    jumps = 0
+    find = False
+    for i, line in enumerate(lyricsArray):
+
+        if jumps <= 4 and find == False:
+            newString += line + '\n'
+
+        if (substring in line or find):
+            if find == False:
+                find = True
+                newString = ''
+                jumps = 0
+                print(i, endIndex)
+                if endIndex == i:
+                    for j in range(4):
+                        newString += lyricsArray[i - (4 - j)] + '\n'
+                        break
+
+            if line == '':
+                jumps -= 1
+            if jumps >= 4:
+                break
+
+            newString += line + '\n'
+            
+        jumps += 1
+
+    return newString
 
 
 @app.route('/', methods=['GET'])
@@ -141,9 +179,6 @@ def facets(phrase):
 
         results = collection.aggregate(pipeline)
 
-        # Close the connection
-        client.close()
-
         languages = []
         artists = []
         genres = []
@@ -198,33 +233,83 @@ def searchPhrase(phrase):
         # Obtener una referencia a la colección
         collection = db.get_collection(LyricsCollection)
 
-        pipeline = [
+        pipeline1 = [
             {
                 '$search': {
                     'index': 'default',
                     'text': {
                         'query': phrase,
                         'path': 'lyric'
+                    },
+                    # 'highlight': {
+                    #     'path': 'lyric'
+                    # }
+                }
+            },
+            # {
+            #     '$project': {
+            #         'highlights': {'$meta': 'searchHighlights'}
+            #     }
+            # }
+        ]
+
+        pipeline2 = [
+            {
+                '$search': {
+                    'index': 'default',
+                    'text': {
+                        'query': phrase,
+                        'path': 'lyric'
+                    },
+                    'highlight': {
+                        'path': 'lyric'
                     }
+                }
+            },
+            {
+                '$project': {
+                    'highlights': {'$meta': 'searchHighlights'}
                 }
             }
         ]
 
-        results = collection.aggregate(pipeline)
+        results = collection.aggregate(pipeline1)
+        highlights = collection.aggregate(pipeline2)
 
         # Close the connection
-        client.close()
         data = []
         # Procesar los resultados
+
         for document in results:
-            tempDoc = {"name": document['songName'], "artist": document['artist'], "lyric": shortLyric(
-                document['lyric']), "songLink": document['songLink']}
+            # data.append(str(document))
+            tempId = str(document['_id'])
+            tempDoc = {'_id': tempId,'artist': document['artist'], 'songLink': document['songLink'],
+                       'songName': document['songName'], 'lyric': shortLyricTemp(document['lyric'])}
+            tempHighlights = []
+            for highlight in highlights:
+                if str(highlight['_id']) == tempId:
+                    tempHighlights = highlight['highlights']
+                    break
+
+            highestScore = 0
+            highestHighlight = None
+            for highlightedPhrase in tempHighlights:
+                if highlightedPhrase['score'] > highestScore:
+                    highestScore = highlightedPhrase['score']
+                    highestHighlight = highlightedPhrase
+
+            
+            #tempDoc['highlights'] = str(highestHighlight)
             data.append(tempDoc)
 
         return {"data": data}
     except Exception as e:
         return {"Error": e}
 
+"""
+"{'_id': ObjectId('6466f6f04ae9d0963302dc22'), 'highlights': [{'score': 2.1976070404052734, 'path': 'lyric', 'texts': [{'value': \"Daddy, what'd'ja \", 'type': 'text'}, {'value': 'leave', 'type': 'hit'}, {'value': ' behind for me?!?\\n', 'type': 'text'}]}
+
+"""
 
 @app.route('/search/<string:phrase>/<string:artist>/<string:language>/<string:gender>/<int:minPop>/<int:maxPop>/<int:amountOfSongs>', methods=['GET'])
 def search(phrase, artist, language, gender, minPop, maxPop, amountOfSongs):
@@ -306,7 +391,7 @@ def details(artist, songName):
 
         # Obtener una referencia a la colección
         collection = db.get_collection(LyricsCollection)
-        
+
         songLink = "/" + artist + "/" + songName
 
         pipeline = [
@@ -331,9 +416,10 @@ def details(artist, songName):
         data = []
         # Procesar los resultados
         for document in results:
-            tempDoc = {'artist': document['artist'], 'genres': document['genres'], 'popularity': document['popularity'], 'songs': document['songs'], 'songLink': document['songLink'], 'songName': document['songName'], 'lyric': document['lyric']}
+            tempDoc = {'artist': document['artist'], 'genres': document['genres'], 'popularity': document['popularity'],
+                       'songs': document['songs'], 'songLink': document['songLink'], 'songName': document['songName'], 'lyric': document['lyric']}
             data.append(tempDoc)
-        
+
         return {"data": data}
     except Exception as e:
         return {"Error": e}
@@ -477,7 +563,7 @@ def test():
         # ]
 
         # /pink-floyd/another-brick-in-the-wall-part-1-2-3.html
-        #/pabllo-vittar/parabens-part-psirico.html
+        # /pabllo-vittar/parabens-part-psirico.html
         pipeline = [
             {
                 '$search': {
