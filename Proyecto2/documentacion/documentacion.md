@@ -28,7 +28,7 @@ Se define la función parseArtists para hacer la lectura y el parseo de los arti
     <img src="Resources/parseArtistsP1.png" alt="Parse Artists" />
 </center>
 
- Lo primero que se hace en la  función es abrir la conexión de Mongo DB, se envía un ping para comprobar que la conexión es correcta.
+Lo primero que se hace en la función es abrir la conexión de Mongo DB, se envía un ping para comprobar que la conexión es correcta.
 
 <center>
     <img src="Resources/parseArtistsP2.png" alt="Parse Artists" />
@@ -74,7 +74,7 @@ Se define la función parseLyrics para hacer la lectura y el parseo de las canci
     <img src="Resources/parseLyricsP2.png" alt="Parse Lyrics" />
 </center>
 
- Lo primero que se hace en la  función es abrir la conexión de Mongo DB, se envía un ping para comprobar que la conexión es correcta.
+Lo primero que se hace en la función es abrir la conexión de Mongo DB, se envía un ping para comprobar que la conexión es correcta.
 
 <center>
     <img src="Resources/parseLyricsP1.png" alt="Parse Lyrics" />
@@ -86,7 +86,7 @@ Después, definimos la base de datos y la collection que se va a usar para carga
     <img src="Resources/parseArtistsP3.png" alt="Parse Lyrics" />
 </center>
 
-También, se define un csv reader para hacer la lectura y parseo del csv de artistas. 
+También, se define un csv reader para hacer la lectura y parseo del csv de artistas.
 
 <center>
     <img src="Resources/parseLyricsP3.png" alt="Parse Lyrics" />
@@ -94,7 +94,7 @@ También, se define un csv reader para hacer la lectura y parseo del csv de arti
 
 Por otro lado, se definen:
 
--  "artistCollection": colección de artistas existentes en la base de datos.
+- "artistCollection": colección de artistas existentes en la base de datos.
 - "artistDocuments": todos los documentos de la colección de artistas.
 - "songLinks": lista de todos los nombres de canciones en la base de datos. Se define el delimitador por el cual se separan los campos.
 - "documents": lista para los documentos que van a ser insertados en la base de datos.
@@ -111,8 +111,8 @@ Se define un ciclo para ir por cada fila del csv. Primeramente, se obtiene el do
 Para insertar datos se verifica lo siguiente:
 
 1. La existencia del artista que se obtuvo mediante el link de la canción, comprobando que "matchingDict" tenga un len superior a 0.. En este caso, se imprime el mensaje en consola y se continua con la siguiente fila.
-2. Verifica que la canción que se va a insertar no exista para evitar datos duplicados. Si la canción no existe, entonces se almacenan los datos en "doc" y luego se inserta en "documents". 
-2.1. Si la canción ya existe, se imprime el mensaje en consola.
+2. Verifica que la canción que se va a insertar no exista para evitar datos duplicados. Si la canción no existe, entonces se almacenan los datos en "doc" y luego se inserta en "documents".
+   2.1. Si la canción ya existe, se imprime el mensaje en consola.
 
 Ademas, se utiliza el link de la canción para verificar la unicidad del documento a insertar.
 
@@ -131,7 +131,6 @@ Se usa la función insert_many para insertar todos los documentos a Mongo y se c
 </center>
 
 Finalmente, si hay un error se despliega el error en la consola.
-
 
 ### **Download File**
 
@@ -153,7 +152,7 @@ Luego, se crea el archivo en modo binario utilizando el path recibido por parám
     <img src="Resources/downloadFileP3.png" alt="Download File" />
 </center>
 
-Posteriormente, se abre el archivo recién creado en modo lectura con encoding UTF-8 y se almacena en la variable “currentFile”. 
+Posteriormente, se abre el archivo recién creado en modo lectura con encoding UTF-8 y se almacena en la variable “currentFile”.
 
 <center>
     <img src="Resources/downloadFileP4.png" alt="Download File" />
@@ -167,8 +166,6 @@ Para finalizar con el proceso de descargado, se imprime un mensaje de confirmaci
 
 Finalmente, si hay un error se despliega el error en la consola.
 
-
-
 ## **MongoDB**
 
 <center>
@@ -181,12 +178,25 @@ Se definen la base de datos OpenLyricsSearch con las collections artist y Lyrics
     <img src="Resources/indiceMongo.png" alt="Parse Artists" />
 </center>
 
-
-
-
 ## **API**
 
 ## **App de React**
+
+### **Organización del proyecto**
+
+La aplicación web de este proyecto fue realizada utilizando React JS. Para crearlo se utilizó vite. Se le puso de nombre open lyrics.
+
+A continuación se muestra el directorio de la aplicación. Se manejan las siguientes carpetas:
+
+- **./fonts** para guardar las tipografías utilizadas en la interfaz.
+- **./node_modules** contiene la instalación de los módulos.
+- **./public** contiene las imágenes de la interfaz y el favicon.
+- **./src** es la carpeta en la que está toda la lógica de la app, esta se explicará en detalle más adelante.
+- **./** es la ruta principal y aquí se encuentra el index.html, los json de configuración y el .gitignore para poder utilizar el proyecto en Github.
+
+<center>
+    <img src="Resources/ReactDirectory.png" alt="Parse Artists" />
+</center>
 
 # **Pruebas realizadas**
 
