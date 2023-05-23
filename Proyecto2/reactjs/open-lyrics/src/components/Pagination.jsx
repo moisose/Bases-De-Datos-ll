@@ -11,10 +11,44 @@ const Pagination = ({
   setCurrentPage,
   currentPage,
 }) => {
+
   let pages = [];
 
-  for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
-    pages.push(i);
+  const totalPages = Math.ceil(totalPosts / postsPerPage);
+  
+  // Número de páginas a mostrar antes y después de los puntos suspensivos
+  const visiblePages = 2;
+  
+  if (totalPages <= visiblePages + 2) {
+    // Mostrar todas las páginas si no hay suficientes páginas para mostrar con puntos suspensivos
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i);
+    }
+  } else {
+    const currentPageIndex = currentPage ;
+  
+    // Agregar página inicial
+    pages.push(1);
+  
+    // Agregar páginas antes de los puntos suspensivos
+    let startPage = Math.max(2, currentPageIndex - visiblePages);
+    let endPage = Math.min(startPage + visiblePages * 2, totalPages - 1);
+  
+    if (startPage > 2) {
+      pages.push('...');
+    }
+  
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+  
+    // Agregar puntos suspensivos si hay páginas después del número actual
+    if (endPage < totalPages - 1) {
+      pages.push('...');
+    }
+  
+    // Agregar página final
+    pages.push(totalPages);
   }
 
   return (
