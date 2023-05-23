@@ -1,4 +1,5 @@
 # Imports
+import os
 from azure.storage.blob import BlobServiceClient
 from flask import Flask, flash, request, send_file
 from flask_cors import CORS
@@ -18,12 +19,21 @@ ARTISTS_FILE='artists-data.csv'
 LYRICS_FILE='lyrics-data.csv'
 
 """
+"""
+#Env Variables------------------------------------------------------------------------------------		
+UserName= os.getenv('USERNAME')
+Password= os.getenv('PASSWORD')
+DatabaseName= os.getenv('DATABASENAME')
+ArtistsCollection= os.getenv('ARTISTS_COLLECTION')
+LyricsCollection= os.getenv('LYRICS_COLLECTION')
 
+"""
 UserName = 'MelSaFer'
 Password = '3trZoWOalvOKN7tQ'
 DatabaseName = 'OpenLyricsSearch'
 ArtistsCollection = 'artistsCollection'
 LyricsCollection = 'lyricsCollection'
+# """
 
 uri = "mongodb+srv://" + str(UserName) + ":" + str(Password) + \
     "@mangos.ybmshbl.mongodb.net/" + str(DatabaseName)
@@ -33,6 +43,20 @@ app = Flask(__name__)
 CORS(app)
 
 # Link del api: https://main-app.politebush-c6efad18.eastus.azurecontainerapps.io/
+
+
+def shortLyric(lyric):
+    jumps = 0
+    index = len(lyric)
+
+    for i, char in enumerate(lyric):
+        if char == '\n':
+            jumps += 1
+            if jumps == 4:
+                index = i
+                break
+
+    return lyric[:index]
 
 
 @app.route('/', methods=['GET'])
@@ -47,14 +71,103 @@ Este endpoint devuelve la lista de artistas, lenguajes y generos de las cancione
 
 @app.route('/facets/list/<string:phrase>', methods=['GET'])
 def facets(phrase):
-    artists = [{"name": "Foster The People"}, {
-        "name": "Tame Impala"}, {"name": "Mac Demarco"}]
-    languages = [{"name": "Spanish"}, {
-        "name": "English"}, {"name": "Portuguese"}]
-    genres = [{"name": "Pop"}, {"name": "Rock"},
-              {"name": "Jazz"}, {"name": "Hip Hop"}]
+    try:
+        client = MongoClient(uri)
 
-    return {"artists": artists, "languages": languages, "genres": genres}
+        # Obtener una referencia a la base de datos
+        db = client.get_database(DatabaseName)
+
+        # Obtener una referencia a la colección
+        collection = db.get_collection(LyricsCollection)
+
+        pipeline = [
+            {
+                '$search': {
+                    'index': 'default',
+                    'text': {
+                        'query': phrase,
+                        'path': 'lyric'
+                    }
+                }
+            },
+            {
+                '$facet': {
+                    'languageFacet': [
+                        {
+                            '$group': {
+                                '_id': '$language',
+                            }
+                        }
+                    ],
+                    'genresFacet': [
+                        {
+                            '$group': {
+                                '_id': None,
+                                'allGenres': {'$push': '$genres'}
+                            }
+                        },
+                        {
+                            '$project': {
+                                '_id': 0,
+                                'allGenres': {'$concatArrays': '$allGenres'}
+                            }
+                        },
+                        {
+                            '$project': {
+                                'flattenedArray': {
+                                    '$reduce': {
+                                        'input': "$allGenres",
+                                        'initialValue': [],
+                                        'in': {'$concatArrays': ["$$value", "$$this"]}
+                                    }
+                                }
+                            }
+                        },
+                        {'$unwind': "$flattenedArray"},
+                        {'$group': {'_id': "$flattenedArray"}},
+                        {'$project': {'_id': 0, 'genres': "$_id"}}
+                    ],
+                    'artistFacet': [
+                        {
+                            '$group': {
+                                '_id': '$artist'
+                            }
+                        }
+                    ]
+
+                }
+            }
+        ]
+
+        results = collection.aggregate(pipeline)
+
+        # Close the connection
+        client.close()
+
+        languages = []
+        artists = []
+        genres = []
+
+        # Procesar los resultados
+        for document in results:
+            for language in document['languageFacet']:
+                tmpLanguage = {"name": language['_id']}
+                languages.append(tmpLanguage)
+
+            for artist in document['artistFacet']:
+                tmpArtist = {"name": artist['_id']}
+                artists.append(tmpArtist)
+
+            for genre in document['genresFacet']:
+                tmp = genre['genres']
+                if tmp[0] == " ":
+                    tmp = tmp[1:]
+                tmpGenre = {"name": tmp}
+                genres.append(tmpGenre)
+
+        return {"languages": languages, "artists": artists, "genres": genres}
+    except Exception as e:
+        return {"Error": e}
 
 
 """
@@ -74,16 +187,95 @@ Nombre de la canción, artista, pequeño fragmento donde esté la palabra que se
 """
 
 
-@app.route('/search/<string:phrase>/<string:artist>/<string:language>/<string:gender>/<string:popularity>/<int:amountOfSongs>', methods=['GET'])
-def search(phrase, artist, language, gender, popularity, amountOfSongs):
-    example1 = {"name": "Example 1", "artist": "Artist 1",
-                "fragment": "This is phrase 1"}
-    example2 = {"name": "Example 2", "artist": "Artist 2",
-                "fragment": "This is phrase 2"}
-    example3 = {"name": "Example 3", "artist": "Artist 3",
-                "fragment": "This is phrase 3"}
-    data = [example1, example2, example3]
-    return {"data": data}
+@app.route('/search/phrase/<string:phrase>', methods=['GET'])
+def searchPhrase(phrase):
+    try:
+        client = MongoClient(uri)
+
+        # Obtener una referencia a la base de datos
+        db = client.get_database(DatabaseName)
+
+        # Obtener una referencia a la colección
+        collection = db.get_collection(LyricsCollection)
+
+        pipeline = [
+            {
+                '$search': {
+                    'index': 'default',
+                    'text': {
+                        'query': phrase,
+                        'path': 'lyric'
+                    }
+                }
+            }
+        ]
+
+        results = collection.aggregate(pipeline)
+
+        # Close the connection
+        client.close()
+        data = []
+        # Procesar los resultados
+        for document in results:
+            tempDoc = {"name": document['songName'], "artist": document['artist'], "lyric": shortLyric(
+                document['lyric']), "songLink": document['songLink']}
+            data.append(tempDoc)
+
+        return {"data": data}
+    except Exception as e:
+        return {"Error": e}
+
+
+@app.route('/search/<string:phrase>/<string:artist>/<string:language>/<string:gender>/<int:minPop>/<int:maxPop>/<int:amountOfSongs>', methods=['GET'])
+def search(phrase, artist, language, gender, minPop, maxPop, amountOfSongs):
+
+    try:
+        client = MongoClient(uri)
+
+        # Obtener una referencia a la base de datos
+        db = client.get_database(DatabaseName)
+
+        # Obtener una referencia a la colección
+        collection = db.get_collection(LyricsCollection)
+
+        pipeline = [
+            {
+                '$search': {
+                    'index': 'default',
+                    'text': {
+                        'query': phrase,
+                        'path': 'lyric'
+                    }
+                }
+            },
+            {
+                '$match': {
+                    'artist': artist,
+                    'language': language,
+                    'gender': gender,
+                    'popularity': {'$gte': minPop, '$lte': maxPop}
+                }
+            },
+            {
+                '$project': {
+                    '_id': 0
+                }
+            }
+        ]
+
+        results = collection.aggregate(pipeline)
+
+        # Close the connection
+        client.close()
+        data = []
+        # Procesar los resultados
+        for document in results:
+            tempDoc = {"name": document['name'], "artist": document['artist'],
+                       "lyric": document['lyric'], "songLink": document['songLink']}
+
+        return {"data": data}
+    except Exception as e:
+        return {"Error": e}
 
 
 """
@@ -104,11 +296,47 @@ letra completa
 """
 
 
-@app.route('/details/<string:name>/<string:artist>', methods=['GET'])
-def details(name, artist):
-    data = {"artist": "Artist 1", "genres": ["Genre 1", "Genre 2"], "songs": 10, "popularity": 10, "link": "https://www.google.com", "title": "Title 1",
-            "lyrics": "Este es el verso 1\nEste es el verso 2\nEste es el verso 3\nEste es el verso 4\nEste es el verso 5\nEste es el verso 6\nEste es el verso 7\nEste es el verso 8\nEste es el verso 9\nEste es el verso 10"}
-    return {"data": data}
+@app.route('/details/<string:artist>/<string:songName>', methods=['GET'])
+def details(artist, songName):
+    try:
+        client = MongoClient(uri)
+
+        # Obtener una referencia a la base de datos
+        db = client.get_database(DatabaseName)
+
+        # Obtener una referencia a la colección
+        collection = db.get_collection(LyricsCollection)
+        
+        songLink = "/" + artist + "/" + songName
+
+        pipeline = [
+            {
+                '$search': {
+                    'index': 'default',
+                    'text': {
+                        'query': songLink,
+                        'path': 'songLink'
+                    }
+                }
+            },
+            {
+                '$limit': 1
+            }
+        ]
+
+        results = collection.aggregate(pipeline)
+
+        # Close the connection
+        client.close()
+        data = []
+        # Procesar los resultados
+        for document in results:
+            tempDoc = {'artist': document['artist'], 'genres': document['genres'], 'popularity': document['popularity'], 'songs': document['songs'], 'songLink': document['songLink'], 'songName': document['songName'], 'lyric': document['lyric']}
+            data.append(tempDoc)
+        
+        return {"data": data}
+    except Exception as e:
+        return {"Error": e}
 
 
 @app.route('/test', methods=['GET'])
@@ -116,7 +344,7 @@ def test():
     try:
         client = MongoClient(uri)
 
-    # Obtener una referencia a la base de datos
+        # Obtener una referencia a la base de datos
         db = client.get_database(DatabaseName)
 
         # Obtener una referencia a la colección
@@ -183,14 +411,6 @@ def test():
         #                         'documents': {'$push': '$$ROOT'}
         #                     }
         #                 }
-        #             ],
-        #             'genresFacet': [
-        #                 {
-        #                     '$group': {
-        #                         '_id': '$genres',
-        #                         'documents': {'$push': '$$ROOT'}
-        #                     }
-        #                 }
         #             ]
         #         }
         #     }
@@ -198,55 +418,93 @@ def test():
 
         # Query que agrupa los documentos por artista y por género y devuelve los documentos que coinciden con la búsqueda y se hace el
         # match con el artista
+        # pipeline = [
+        #     {
+        #         '$search': {
+        #             'index': 'default',
+        #             'text': {
+        #                 'query': 'Quando',
+        #                 'path': 'lyric'
+        #             }
+        #         }
+        #     },
+        #     {
+        #         '$facet': {
+        #             'languageFacet': [
+        #                 {
+        #                     '$group': {
+        #                         '_id': '$language',
+        #                     }
+        #                 }
+        #             ],
+        #             'genresFacet': [
+        #                 {
+        #                     '$group': {
+        #                         '_id': None,
+        #                         'allGenres': {'$push': '$genres'}
+        #                     }
+        #                 },
+        #                 {
+        #                     '$project': {
+        #                         '_id': 0,
+        #                         'allGenres': {'$concatArrays': '$allGenres'}
+        #                     }
+        #                 },
+        #                 {
+        #                     '$project': {
+        #                         'flattenedArray': {
+        #                             '$reduce': {
+        #                                 'input': "$allGenres",
+        #                                 'initialValue': [],
+        #                                 'in': {'$concatArrays': ["$$value", "$$this"]}
+        #                             }
+        #                         }
+        #                     }
+        #                 },
+        #                 {'$unwind': "$flattenedArray"},
+        #                 {'$group': {'_id': "$flattenedArray"}},
+        #                 {'$project': {'_id': 0, 'genres': "$_id"}}
+        #             ],
+        #             'artistFacet': [
+        #                 {
+        #                     '$group': {
+        #                         '_id': '$artist'
+        #                     }
+        #                 }
+        #             ]
+        #         }
+        #     }
+        # ]
+
+        # /pink-floyd/another-brick-in-the-wall-part-1-2-3.html
+        #/pabllo-vittar/parabens-part-psirico.html
         pipeline = [
             {
                 '$search': {
                     'index': 'default',
                     'text': {
-                        'query': 'Quando',
-                        'path': 'lyric'
+                        'query': '/pink-floyd/another-brick-in-the-wall-part-1-2-3.html',
+                        'path': 'songLink'
                     }
                 }
             },
             {
-                '$match': {
-                    'artist': 'Ivete Sangalo'
-                }
-            },
-            {
-                '$facet': {
-                    'artistFacet': [
-                        {
-                            '$group': {
-                                '_id': '$artist',
-                                'documents': {'$push': '$$ROOT'}
-                            }
-                        }
-                    ],
-                    'genresFacet': [
-                        {
-                            '$group': {
-                                '_id': '$genres',
-                                'documents': {'$push': '$$ROOT'}
-                            }
-                        }
-                    ]
-                }
+                '$limit': 1
             }
         ]
 
         # Ejecutar la consulta y obtener los resultados
-        result = collection.aggregate(pipeline)
+        results = collection.aggregate(pipeline)
 
-        results = []
+        result = []
 
         # Procesar los resultados
-        for document in result:
+        for document in results:
             # Hacer algo con el documento
-            results.append(str(document))
+            result.append(str(document))
             # print(document)
 
-        return {"data": results}
+        return {"data": result}
     except Exception as e:
         return {"Error": str(e)}
 
