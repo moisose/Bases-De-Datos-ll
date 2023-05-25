@@ -228,20 +228,20 @@ def getAllBlobFiles():
         for blob in blob_list:
             files.append(blob.name)
 
-        # Rrocess the files that haven't been processed yet
+        # Process the files that haven't been processed yet
         newFile = open(path_File + "\\" + 'newFile.txt', 'wb')
         content = ""
         for fileName in files:
             if fileName not in processedFiles:
-                #currentFile = downloadFile(fileName, path_File + "\\" + fileName)
+                currentFile = downloadFile(fileName, path_File + "\\" + fileName)
                 
                 # Verify if the file is an Artist or Lyrics file
                 if "artists" in fileName:
-                    #parseArtists(currentFile)
+                    parseArtists(currentFile)
                     pass
 
                 elif "lyrics" in fileName:
-                    #parseLyrics(currentFile)
+                    parseLyrics(currentFile)
                     pass
 
                 elif "processedFiles.txt" == fileName:
@@ -313,6 +313,8 @@ def selectRandomGenre(genres):
     genreIndex = random.randint(0, len(genres)-1)
     selectedGenre = genres[genreIndex]
     return selectedGenre
+
+#------------------------------------------------------------------------------------------
     
 def main():
     #artistDownloaded = downloadFile(Artist_File, path_File + "\\" + Artist_File)
