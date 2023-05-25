@@ -35,6 +35,7 @@ ArtistsCollection = 'artistsCollection'
 LyricsCollection = 'lyricsCollection'
 # """
 
+# Mongo Atlas connection string
 uri = "mongodb+srv://" + str(UserName) + ":" + str(Password) + \
     "@mangos.ybmshbl.mongodb.net/" + str(DatabaseName)
 
@@ -44,18 +45,42 @@ CORS(app)
 
 # Link del api: https://main-app.politebush-c6efad18.eastus.azurecontainerapps.io/
 
-def shortLyricTemp(lyric):
-    jumps = 0
-    index = len(lyric)
+# ====================================================================================================
+# Auxiliar functions
 
-    for i, char in enumerate(lyric):
-        if char == '\n':
-            jumps += 1
-            if jumps == 4:
-                index = i
+"""
+Method mainPhrase
+
+Method that receives a list of highlights and returns the main phrase of the song related to the search
+"""
+def mainPhrase(highlights):
+    phrase = ""
+    highlightList = []
+    hitFlag = False
+    for highlight in highlights:
+        if highlight['type'] == 'hit':
+            phrase += highlight['value']
+            hitFlag = True
+            highlightList.append(highlight)
+        elif highlight['type'] == 'text' and hitFlag == True:
+            if len(phrase) <= 80:
+                if '\n' in highlight['value']:
+                    phrase += highlight['value'].split('\n')[0]
+                    tempHighlight = {'type': 'text', 'value': highlight['value'].split('\n')[0]}
+                    highlightList.append(tempHighlight)
+                    break
+                else:
+                    phrase += highlight['value']
+                    highlightList.append(highlight)
+            else:
                 break
+    return [phrase, highlightList]
 
-    return lyric[:index]
+"""
+Method shortLyric
+
+Method that receives a lyric and returns the closest 4 lines of the song related to the search
+"""
 
 def shortLyric(lyric, substring):
     jumps = 0
@@ -64,8 +89,6 @@ def shortLyric(lyric, substring):
     endIndex = len(lyricsArray) - 1
     
     newString = ''
-
-    print(lyricsArray)
 
     jumps = 0
     find = False
@@ -79,7 +102,6 @@ def shortLyric(lyric, substring):
                 find = True
                 newString = ''
                 jumps = 0
-                print(i, endIndex)
                 if endIndex == i:
                     for j in range(4):
                         newString += lyricsArray[i - (4 - j)] + '\n'
@@ -96,6 +118,72 @@ def shortLyric(lyric, substring):
 
     return newString
 
+"""
+Method artistFilter
+
+Method that adds the artist filter to the pipeline query if the artist is specified
+"""
+def artistFilter(pipeline, artist):
+    match = {
+        '$match': {
+            'artist': artist
+        }
+    }
+    pipeline.append(match)
+
+"""
+Method genreFilter
+
+Method that adds the genre filter to the pipeline query if the genre is specified
+"""
+def genreFilter(pipeline, genre):
+    match = {
+        '$match': {
+            'genres': genre
+        }
+    }
+    pipeline.append(match)
+
+"""
+Method languageFilter
+
+Method that adds the language filter to the pipeline query if the language is specified
+"""
+def languageFilter(pipeline, language):
+    match = {
+        '$match': {
+            'language': language
+        }
+    }
+    pipeline.append(match)
+
+"""
+Method popularityFilter
+
+Method that adds the popularity filter to the pipeline query if the popularity is specified
+"""
+def popularityFilter(pipeline, minPop, maxPop):
+    match = {
+        '$match': {
+            'popularity': {
+                '$gte': minPop,
+                '$lte': maxPop
+            }
+        }
+    }
+    pipeline.append(match)
+
+"""
+Method amountOfSongsFilter
+
+Method that adds the amount of songs filter to the pipeline query if the amount of songs is specified
+"""
+def amountOfSongsFilter(pipeline, amountOfSongs):
+    limit = {
+        '$limit': amountOfSongs
+    }
+    pipeline.append(limit)
+
 
 @app.route('/', methods=['GET'])
 def main():
@@ -103,10 +191,8 @@ def main():
 
 
 """
-Este endpoint devuelve la lista de artistas, lenguajes y generos de las canciones que contienen la letra especifica
+This endpoint returns the artist list, the genres list and the languages list that have a relation with the lyrics searched
 """
-
-
 @app.route('/facets/list/<string:phrase>', methods=['GET'])
 def facets(phrase):
     try:
@@ -206,24 +292,13 @@ def facets(phrase):
 
 
 """
-Endpoint Search
+Search Endpoint
 
-Recibe:
-frase buscada (obligatorio)
-artista (opcional)
-lenguaje (opcional)
-genero (opcional)
-popularidad (opcional)
-numero de canciones (opcional)
-
-El endpoint devuelve: 
-Nombre de la canción, artista, pequeño fragmento donde esté la palabra que se busca
-
+This endpoint returns the songs that have a relation with the lyrics searched and the filters applied
 """
 
-
-@app.route('/search/phrase/<string:phrase>', methods=['GET'])
-def searchPhrase(phrase):
+@app.route('/search/<string:phrase>/<string:artist>/<string:language>/<string:genre>/<string:minPop>/<string:maxPop>/<string:amountOfSongs>', methods=['GET'])
+def search(phrase, artist, language, genre, minPop, maxPop, amountOfSongs):
     try:
         client = MongoClient(uri)
 
@@ -233,27 +308,19 @@ def searchPhrase(phrase):
         # Obtener una referencia a la colección
         collection = db.get_collection(LyricsCollection)
 
-        pipeline1 = [
+        searchPipeline = [
             {
                 '$search': {
                     'index': 'default',
                     'text': {
                         'query': phrase,
                         'path': 'lyric'
-                    },
-                    # 'highlight': {
-                    #     'path': 'lyric'
-                    # }
+                    }
                 }
-            },
-            # {
-            #     '$project': {
-            #         'highlights': {'$meta': 'searchHighlights'}
-            #     }
-            # }
+            }
         ]
 
-        pipeline2 = [
+        highlightsPipeline = [
             {
                 '$search': {
                     'index': 'default',
@@ -273,8 +340,23 @@ def searchPhrase(phrase):
             }
         ]
 
-        results = collection.aggregate(pipeline1)
-        highlights = collection.aggregate(pipeline2)
+        if artist != "null":
+            artistFilter(searchPipeline, artist)
+        
+        if language != "null":
+            languageFilter(searchPipeline, language)
+
+        if genre != "null":
+            genreFilter(searchPipeline, genre)
+        
+        if minPop != "-1" and maxPop != "-1":
+            popularityFilter(searchPipeline, minPop, maxPop)
+        
+        if amountOfSongs != "-1":
+            amountOfSongsFilter(searchPipeline, int(amountOfSongs))
+
+        results = collection.aggregate(searchPipeline)
+        highlights = collection.aggregate(highlightsPipeline)
 
         # Close the connection
         data = []
@@ -284,7 +366,7 @@ def searchPhrase(phrase):
             # data.append(str(document))
             tempId = str(document['_id'])
             tempDoc = {'_id': tempId,'artist': document['artist'], 'songLink': document['songLink'],
-                       'songName': document['songName'], 'lyric': shortLyricTemp(document['lyric'])}
+                       'songName': document['songName']}
             tempHighlights = []
             for highlight in highlights:
                 if str(highlight['_id']) == tempId:
@@ -298,89 +380,22 @@ def searchPhrase(phrase):
                     highestScore = highlightedPhrase['score']
                     highestHighlight = highlightedPhrase
 
-            
-            #tempDoc['highlights'] = str(highestHighlight)
+            processedHighlights = mainPhrase(highestHighlight['texts'])
+            tempDoc['highlights'] = processedHighlights[1]
+            tempDoc['lyric'] = shortLyric(document['lyric'], processedHighlights[0])
             data.append(tempDoc)
 
         return {"data": data}
     except Exception as e:
         return {"Error": e}
-
-"""
-"{'_id': ObjectId('6466f6f04ae9d0963302dc22'), 'highlights': [{'score': 2.1976070404052734, 'path': 'lyric', 'texts': [{'value': \"Daddy, what'd'ja \", 'type': 'text'}, {'value': 'leave', 'type': 'hit'}, {'value': ' behind for me?!?\\n', 'type': 'text'}]}
-
-"""
-
-@app.route('/search/<string:phrase>/<string:artist>/<string:language>/<string:gender>/<int:minPop>/<int:maxPop>/<int:amountOfSongs>', methods=['GET'])
-def search(phrase, artist, language, gender, minPop, maxPop, amountOfSongs):
-
-    try:
-        client = MongoClient(uri)
-
-        # Obtener una referencia a la base de datos
-        db = client.get_database(DatabaseName)
-
-        # Obtener una referencia a la colección
-        collection = db.get_collection(LyricsCollection)
-
-        pipeline = [
-            {
-                '$search': {
-                    'index': 'default',
-                    'text': {
-                        'query': phrase,
-                        'path': 'lyric'
-                    }
-                }
-            },
-            {
-                '$match': {
-                    'artist': artist,
-                    'language': language,
-                    'gender': gender,
-                    'popularity': {'$gte': minPop, '$lte': maxPop}
-                }
-            },
-            {
-                '$project': {
-                    '_id': 0
-                }
-            }
-        ]
-
-        results = collection.aggregate(pipeline)
-
-        # Close the connection
-        client.close()
-        data = []
-        # Procesar los resultados
-        for document in results:
-            tempDoc = {"name": document['name'], "artist": document['artist'],
-                       "lyric": document['lyric'], "songLink": document['songLink']}
-
-        return {"data": data}
-    except Exception as e:
-        return {"Error": e}
+    
 
 
 """
+Details Endpoint
 
-Endpoint de detalles:
-Recibe: Nombre y artista de la canción
-Devuelve:
-Full Documento especifico que se pide
-
-Nombre del artista
-generos
-cantidad de canciones
-popularidad
-link
-titulo de la cancion
-letra completa
-
+This endpoint returns the details of a song based on its link
 """
-
-
 @app.route('/details/<string:artist>/<string:songName>', methods=['GET'])
 def details(artist, songName):
     try:
@@ -411,8 +426,6 @@ def details(artist, songName):
 
         results = collection.aggregate(pipeline)
 
-        # Close the connection
-        client.close()
         data = []
         # Procesar los resultados
         for document in results:
@@ -423,176 +436,6 @@ def details(artist, songName):
         return {"data": data}
     except Exception as e:
         return {"Error": e}
-
-
-@app.route('/test', methods=['GET'])
-def test():
-    try:
-        client = MongoClient(uri)
-
-        # Obtener una referencia a la base de datos
-        db = client.get_database(DatabaseName)
-
-        # Obtener una referencia a la colección
-        collection = db.get_collection(LyricsCollection)
-
-        # Ejecutar una consulta utilizando un índice específico
-
-        # Query que agrupa los documentos por artista y por género y la cantidad de documentos que coinciden con la búsqueda
-        # pipeline = [
-        #         {
-        #         '$search': {
-        #             'index': 'default',
-        #             'text': {
-        #                 'query': 'Quando',
-        #                 'path': 'lyric'
-        #             }
-        #         }
-        #     },
-        #     {
-        #         '$facet': {
-        #             'artistFacet': [
-        #                 {
-        #                     '$bucketAuto': {
-        #                         'groupBy': '$artist',
-        #                         'buckets': 10,
-        #                         'output': {
-        #                             'count': { '$sum': 1 }
-        #                         }
-        #                     }
-        #                 }
-        #             ],
-        #             'genresFacet': [
-        #                 {
-        #                     '$bucketAuto': {
-        #                         'groupBy': '$genres',
-        #                         'buckets': 10,
-        #                         'output': {
-        #                             'count': { '$sum': 1 }
-        #                         }
-        #                     }
-        #                 }
-        #             ]
-        #         }
-        #     }
-        # ]
-
-        # Query que agrupa los documentos por artista y por género y devuelve los documentos que coinciden con la búsqueda
-        # pipeline = [
-        #     {
-        #         '$search': {
-        #             'index': 'default',
-        #             'text': {
-        #                 'query': 'Quando',
-        #                 'path': 'lyric'
-        #             }
-        #         }
-        #     },
-        #     {
-        #         '$facet': {
-        #             'artistFacet': [
-        #                 {
-        #                     '$group': {
-        #                         '_id': '$artist',
-        #                         'documents': {'$push': '$$ROOT'}
-        #                     }
-        #                 }
-        #             ]
-        #         }
-        #     }
-        # ]
-
-        # Query que agrupa los documentos por artista y por género y devuelve los documentos que coinciden con la búsqueda y se hace el
-        # match con el artista
-        # pipeline = [
-        #     {
-        #         '$search': {
-        #             'index': 'default',
-        #             'text': {
-        #                 'query': 'Quando',
-        #                 'path': 'lyric'
-        #             }
-        #         }
-        #     },
-        #     {
-        #         '$facet': {
-        #             'languageFacet': [
-        #                 {
-        #                     '$group': {
-        #                         '_id': '$language',
-        #                     }
-        #                 }
-        #             ],
-        #             'genresFacet': [
-        #                 {
-        #                     '$group': {
-        #                         '_id': None,
-        #                         'allGenres': {'$push': '$genres'}
-        #                     }
-        #                 },
-        #                 {
-        #                     '$project': {
-        #                         '_id': 0,
-        #                         'allGenres': {'$concatArrays': '$allGenres'}
-        #                     }
-        #                 },
-        #                 {
-        #                     '$project': {
-        #                         'flattenedArray': {
-        #                             '$reduce': {
-        #                                 'input': "$allGenres",
-        #                                 'initialValue': [],
-        #                                 'in': {'$concatArrays': ["$$value", "$$this"]}
-        #                             }
-        #                         }
-        #                     }
-        #                 },
-        #                 {'$unwind': "$flattenedArray"},
-        #                 {'$group': {'_id': "$flattenedArray"}},
-        #                 {'$project': {'_id': 0, 'genres': "$_id"}}
-        #             ],
-        #             'artistFacet': [
-        #                 {
-        #                     '$group': {
-        #                         '_id': '$artist'
-        #                     }
-        #                 }
-        #             ]
-        #         }
-        #     }
-        # ]
-
-        # /pink-floyd/another-brick-in-the-wall-part-1-2-3.html
-        # /pabllo-vittar/parabens-part-psirico.html
-        pipeline = [
-            {
-                '$search': {
-                    'index': 'default',
-                    'text': {
-                        'query': '/pink-floyd/another-brick-in-the-wall-part-1-2-3.html',
-                        'path': 'songLink'
-                    }
-                }
-            },
-            {
-                '$limit': 1
-            }
-        ]
-
-        # Ejecutar la consulta y obtener los resultados
-        results = collection.aggregate(pipeline)
-
-        result = []
-
-        # Procesar los resultados
-        for document in results:
-            # Hacer algo con el documento
-            result.append(str(document))
-            # print(document)
-
-        return {"data": result}
-    except Exception as e:
-        return {"Error": str(e)}
 
 
 # Run the app
