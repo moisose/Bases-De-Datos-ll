@@ -36,13 +36,26 @@ template {
       cpu    = "0.25"
       memory = "0.5Gi"
       env {
-        name  = "ENV1"
-        value = "VAL1"
+        name  = "USERNAME"
+        value = "MelSaFer"
       }
       env {
-        name  = "ENV2"
-        value = "VAL2"
+        name  = "PASSWORD"
+        value = "3trZoWOalvOKN7tQ"
       }
+      env {
+        name  = "DATABASE"
+        value = "OpenLyricsSearch"
+      }
+      env {
+        name  = "ARTISTS_COLLECTION"
+        value = "artistsCollection"
+      }
+      env {
+        name  = "LYRICS_COLLECTION"
+        value = "lyricsCollection"
+      }
+
 #      liveness_probe {
 #        port      = 5000
 #        timeout   = 5
