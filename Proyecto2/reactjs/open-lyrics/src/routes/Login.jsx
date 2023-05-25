@@ -1,18 +1,16 @@
-import { Link, Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import { firebaseProperties } from "../fb";
 import Logueo from "./Logueo";
-import { useNavigate } from "react-router-dom";
-// import Home from "./Home";
 
+// style
 import * as Constants from "../constants";
-
-// import classes from "./Login.module.css";
 
 function Login() {
   const navigate = useNavigate();
   const [usuario, setUsuario] = React.useState(null);
 
+  // handles the login action
   useEffect(() => {
     firebaseProperties.auth().onAuthStateChanged((usuarioFirebase) => {
       console.log("you are already logged in with:", usuarioFirebase);
@@ -25,15 +23,18 @@ function Login() {
     firebaseProperties.auth().signOut();
   };
 
+  // handles the navigation to the home page
+  useEffect(() => {
+    if (usuario) {
+      navigate(Constants.homeRoute);
+    }
+  }, [usuario, navigate]);
+
   return (
     <>
       <Outlet />
       {logOut()}
-      {usuario ? (
-        navigate(Constants.homeRoute)
-      ) : (
-        <Logueo setUsuario={setUsuario} />
-      )}
+      {!usuario && <Logueo setUsuario={setUsuario} />}
     </>
   );
 }

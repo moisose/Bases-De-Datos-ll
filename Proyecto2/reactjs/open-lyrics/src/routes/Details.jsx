@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import classes from "./Details.module.css";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-// import { jsonData } from "../components/SearchResult";
 
 import * as Constants from "../constants";
 
@@ -43,30 +42,31 @@ function Details() {
     fetchData();
   }, [link]);
 
-  // useEffect(() => {
-  //   setLyric(data.fragment);
-  // }, [data]);
-
   return (
     <>
-      {/* <h1>Details</h1> */}
-
       {data ? (
         <>
-          <div className={classes.container}>
-            <Link to={Constants.homeRoute}>
+          <ul className={classes.menu}>
+            <li>
               <img
+                className={classes.logo}
+                src={Constants.detailsLogo}
+                alt="logo"
+              />
+            </li>
+            <li>
+              <Link to={Constants.homeRoute} className={classes.back}>
+                {/* <img
                 className={classes.arrow}
                 src={Constants.backImg}
                 alt="back arrow"
-              />
-            </Link>
-            <img
-              className={classes.logo}
-              src={Constants.detailsLogo}
-              alt="logo"
-            />
+              /> */}
+                GO HOME
+              </Link>
+            </li>
+          </ul>
 
+          <div className={classes.container}>
             <h1 className={classes.artist}>{data.artist}</h1>
             <p className={classes.details}>
               <strong>
@@ -83,7 +83,7 @@ function Details() {
               <strong>Link:</strong> {link}
             </p>
           </div>
-          <h2>{data.songName}</h2>
+          <h2>"{data.songName}"</h2>
           <div className={classes.column}>
             <span className={classes.lyric}>{data.lyric}</span>
           </div>
