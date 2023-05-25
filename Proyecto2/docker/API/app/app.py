@@ -19,7 +19,7 @@ ARTISTS_FILE='artists-data.csv'
 LYRICS_FILE='lyrics-data.csv'
 
 """
-"""
+# """
 #Env Variables------------------------------------------------------------------------------------		
 UserName= os.getenv('USERNAME')
 Password= os.getenv('PASSWORD')
@@ -33,7 +33,7 @@ Password = '3trZoWOalvOKN7tQ'
 DatabaseName = 'OpenLyricsSearch'
 ArtistsCollection = 'artistsCollection'
 LyricsCollection = 'lyricsCollection'
-# """
+"""
 
 # Mongo Atlas connection string
 uri = "mongodb+srv://" + str(UserName) + ":" + str(Password) + \
