@@ -7,6 +7,7 @@ from pathlib import Path
 import os
 import sys
 import csv
+import random
 
 #Mongo db libraries--------------------------------------------------------------------------------------
 from pymongo.mongo_client import MongoClient
@@ -200,6 +201,26 @@ def downloadFile(filename, filePath):
     except Exception as e:
         print(e)
  
+"""
+-----------------------------------------------------------------------------------------------
+Find the files from the blob storage
+ENTRIES: none
+OUTPUT: none
+-----------------------------------------------------------------------------------------------
+"""
+
+"""
+-----------------------------------------------------------------------------------------------
+Select a random genre from the list of genres
+ENTRIES: list of genres
+OUTPUT: selected genre
+-----------------------------------------------------------------------------------------------
+"""
+
+def selectRandomGenre(genres):
+    genreIndex = random.randint(0, genres.__len__()-1)
+    selectedGenre = genres[genreIndex]
+    return selectedGenre
     
 def main():
     artistDownloaded = downloadFile(Artist_File, path_File + "\\" + Artist_File)
