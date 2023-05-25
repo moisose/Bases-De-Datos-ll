@@ -27,7 +27,7 @@ class test_api(unittest.TestCase):
     def testSearch(self):
         url = baseurl+ '/search/' + phrase + '/' + artist + '/' + language + '/' + genre + '/' + minPop + '/' + maxPop + '/' + amountOfSongs
 
-        response = requests.post(url)
+        response = requests.get(url)
         self.assertEqual(response.status_code, 200)
 
         condition = ('Error' in response.json())
