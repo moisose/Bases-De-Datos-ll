@@ -186,6 +186,17 @@ Se definen la base de datos OpenLyricsSearch con las collections artist y Lyrics
 
 La aplicación web de este proyecto fue realizada utilizando React JS. Para crearlo se utilizó vite. Se le puso de nombre open lyrics.
 
+**Como estandarización para desarrollar el proyecto se determinó:**
+
+- Empezar el nombre de las rutas y componentes con mayúscula y luego usar camelcase.
+- Crear un file.module.css diferente para cada .jsx que contenga html.
+- Utilizar las imágenes en ./public y las fuentes en ./fonts.
+- Si se utilizan valores 'quemados', estos se deberán transferir al archivo de constantes para tener un mejor control de estos y poder reutilizarlos en la aplicación.
+- Si hay elementos visuales que se comparten entre rutas, entonces se utilizará una ruta madre y luego se tendrán las otras rutas adentro de esta.
+- Si hay partes del código que se ocupan reutilizar en otro lado, se convertirán en componentes .jsx.
+- Manejar una buena documentación interna.
+- No mantener imports que no se utilicen en los archivos .jsx.
+
 A continuación se muestra el directorio de la aplicación. Se manejan las siguientes carpetas:
 
 - **./fonts** para guardar las tipografías utilizadas en la interfaz.
@@ -195,7 +206,109 @@ A continuación se muestra el directorio de la aplicación. Se manejan las sigui
 - **./** es la ruta principal y aquí se encuentra el index.html, los json de configuración y el .gitignore para poder utilizar el proyecto en Github.
 
 <center>
-    <img src="Resources/ReactDirectory.png" alt="Parse Artists" />
+    <img src="Resources/react/ReactDirectory.png" alt="directory" />
+</center>
+
+<br>Se van a ir describiendo cada una de estas carpetas para comprender por completo la estructura de la aplicación web.
+
+#### **1) ./fonts**
+
+<center>
+    <img src="Resources/react/fonts.png" alt="fonts" />
+</center>
+
+Sourcer Sans Pro es la fuente elegida para utilizar en la interfaz. Como no es una fuente que está por defecto en html se descargaron los archivos .ttf y se colocaron aquí para posteriormente ser importadas como las fuentes por defecto de la aplicación.
+
+#### **2) ./node_modules**
+
+<center>
+    <img src="Resources/react/package.png" alt="modules" />
+</center>
+
+En esta carpeta están instalados todos los módulos necesarios para que la aplicación funcione. En la imágen se muestra el nombre de las dependencias utilizadas. Para cada una de estas se tuvo que ejecutar el `npm install {name}`.
+
+#### **3) ./public**
+
+<center>
+    <img src="Resources/react/public.png" alt="public" />
+</center>
+
+En esta carpeta guardamos las imágenes. Como es la carpeta public no se ocupa poner la ruta en el momento de llamar a los recursos. Se guardan los logos, íconos y favicon.
+
+#### **4) ./src**
+
+<center>
+    <img src="Resources/react/src.png" alt="source" />
+</center>
+
+Esta es la carpeta que contiene todo el código de la aplicación. Como es un proyecto de Vite todos los archivos son .jsx. Esto se divide en components y routes. El archivo main.jsx es el archivo principal de la aplicación, en el que se configura el router y las rutas a utilizar. Se tiene el archivo constants.jsx que va a tener los valores que se utilizan en todo lugar de la app, fb.jsx contiene la configuración de firebase.
+
+<center>
+    <img src="Resources/react/components.png" alt="components and routes" />
+</center>
+
+En components están los componentes que se reutilizan en react. Se utiliza de esta forma para hacelo más modular y comprender mejor cómo funciona el código. Para cada componente se tiene su propio archivo de estilo. Lo utilizamos de una forma diferente, en vez de llamar los archivos {name}.css los nombramos {name}.module.css. Esto se hace para poder especificar los estilos específicos para cada elemento del html.
+
+En routes se guardan las rutas de la aplicación. En la especificación se determina que se ocupan cuatro rutas: Login, Create User, Home y Details. Para la ruta de Login y Create User se utilizan los archivos Login.jsx y Logueo.jsx. Para el Home se utiliza Home.jsx y para Details Details.jsx.
+
+### **Explicación del código**
+
+#### **constants.jsx**
+
+<center>
+    <img src="Resources/react/constants.png" alt="main.jsx" />
+</center>
+
+En este archivo se tienen todos los valores que se utilizan en la aplicación. Con comentarios se organiza a qué corresponden cada constante. Se exportan para poder ser utilizadas e importadas desde otros archivos.
+
+#### **main.jsx**
+
+<center>
+    <img src="Resources/react/main.png" alt="main.jsx" />
+</center>
+
+Se crea el router de rutas. Se crea LoginBG que es el background del login y create user. Como es el mismo fondo entonces es la ruta madre y esta tendrá de hija a Login. Las otras rutas son Home y Details.
+
+Ya en la parte inferior se renderizan las rutas con el RouterProvider. Esto hace que la interfaz comience a funcionar. Todos los nombres de las rutas se importan desde el archivo de constantes.
+
+#### **firebase.jsx**
+
+<center>
+    <img src="Resources/react/firebase.png" alt="main.jsx" />
+</center>
+
+Contiene la configuración de firebase desde el SDK para poder usar la autenticación. Se exporta esta configuración.
+
+#### **index.css**
+
+<center>
+    <img src="Resources/react/index.png" alt="main.jsx" />
+</center>
+
+En este css está la configuración general de la aplicación. Se importan las fuentes y se les coloca el nombre a utilizar. También se coloca el color del fondo y otros valores por defecto para que sean heredados a todos los archivos de la página.
+
+#### **login.jsx**
+
+<center>
+    <img src="Resources/react/login.png" alt="main.jsx" />
+</center>
+
+Se importan los datos de firebase para manejar el inicio de sesión y la creación de los usuarios. En este jsx no se maneja el html, en este está la lógica de autenticación. Si se logra iniciar sesión, el usuario será redirigido a la ruta Home para que pueda empezar a hacer las búsquedas.
+
+#### **logueo.jsx**
+
+<center>
+    <img src="Resources/react/logueo.png" alt="main.jsx" />
+</center>
+
+Este solo es un fragmento de este archivo. En este también se utiliza firebase para poder hacer la creación o inicio de sesión. Para la interfaz se usa un form con los campos de email y contraseña. Estos dos inputs deben ser llenados para poder ingresar. Si ocurre un error la aplicación lo notificará. Cuando se crea un usuario la sesión se iniciará automáticamente y se redigirá a Home.
+
+Aquí se evidencia cómo es que se le dan los estilos a los elementos del html utilizando el elemnto importado llamado `classes`.
+
+#### **checkbox.jsx**
+
+<center>
+    <img src="Resources/react/checkbox.png" alt="main.jsx" />
 </center>
 
 # **Pruebas realizadas**

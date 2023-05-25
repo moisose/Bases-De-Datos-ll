@@ -56,6 +56,8 @@ const Home = () => {
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = results.slice(firstPostIndex, lastPostIndex);
+
+  // Searchbar input
   // --------------------------------------------------------------------
   const [input, setInput] = useState("");
   console.log(results);
@@ -92,6 +94,7 @@ const Home = () => {
             Array.isArray(data.genres)
           ) {
             setArtistsFacet(data.artists);
+            console.log(artistsFacet);
             setLanguagesFacet(data.languages);
             setGenresFacet(data.genres);
           }
@@ -107,22 +110,6 @@ const Home = () => {
     setMaxSongs(results.length);
     setValuesSongs(maxSongs);
   }, [results, maxSongs]);
-
-  // console.log(valuesSongs);
-
-  // load the facets data into the facets lists
-  // --------------------------------------------------------------------
-  // useEffect(() => {
-  //   fetch("https://mocki.io/v1/ce166011-9b6a-41f4-b284-787500876c7e") // Reemplaza la URL con tu endpoint de API
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setArtistsFacet(data), setLanguagesFacet(data), setGenresFacet(data);
-  //     })
-  //     .catch((error) => console.log("Error getting the data:", error));
-  // }, []);
-
-  // console.log("use effeeeeect");
-  // --------------------------------------------------------------------
 
   return (
     // main container
@@ -173,7 +160,6 @@ const Home = () => {
         {/* create all the checkboxes depending on the API data */}
         {/* Artists facet */}
         <Checkbox
-          apiLink={Constants.facetsApiLink}
           list={artistsFacet}
           setList={setArtistsFacet}
           selected={selectedArtists}
@@ -185,7 +171,6 @@ const Home = () => {
         {/* <div className={classes.checkbox}>Hola</div> */}
         {/* Languages facet */}
         <Checkbox
-          apiLink={Constants.facetsApiLink}
           list={languagesFacet}
           setList={setLanguagesFacet}
           selected={selectedLanguages}
@@ -195,7 +180,6 @@ const Home = () => {
         <p className={classes.subTitle}>Genre</p>
         {/* Genre facet */}
         <Checkbox
-          apiLink={Constants.facetsApiLink}
           list={genresFacet}
           setList={setGenresFacet}
           selected={selectedGenres}

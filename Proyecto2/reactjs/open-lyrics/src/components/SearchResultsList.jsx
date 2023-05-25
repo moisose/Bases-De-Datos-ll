@@ -1,4 +1,3 @@
-import React from "react";
 import classes from "./SearchResultsList.module.css";
 import { SearchResult } from "./SearchResult";
 
