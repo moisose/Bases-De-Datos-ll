@@ -218,13 +218,13 @@ OUTPUT: selected genre
 """
 
 def selectRandomGenre(genres):
-    genreIndex = random.randint(0, genres.__len__()-1)
+    genreIndex = random.randint(0, len(genres)-1)
     selectedGenre = genres[genreIndex]
     return selectedGenre
     
 def main():
-    artistDownloaded = downloadFile(Artist_File, path_File + "\\" + Artist_File)
-    parseArtists(artistDownloaded)
+    #artistDownloaded = downloadFile(Artist_File, path_File + "\\" + Artist_File)
+    #parseArtists(artistDownloaded)
     lyricsDownloaded = downloadFile(Lyrics_File, path_File + "\\" + Lyrics_File)
     parseLyrics(lyricsDownloaded)
 
