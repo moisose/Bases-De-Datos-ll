@@ -7,6 +7,7 @@ from pathlib import Path
 import os
 import sys
 import csv
+import random
 
 #Mongo db libraries--------------------------------------------------------------------------------------
 from pymongo.mongo_client import MongoClient
@@ -28,6 +29,7 @@ connectionString = "DefaultEndpointsProtocol=https;AccountName=filesmanagermango
 
 Artist_File="artists-data.csv"
 Lyrics_File="lyrics-data.csv"
+ProcessedFiles = "processedFiles.txt"
 artistDownloaded = None
 lyricsDownloaded = None
 
@@ -139,7 +141,7 @@ def parseLyrics(lyricsDownloaded_var):
             elif(row[2] not in songLinks):
                 #Parse of the csv file
                 doc['artist'] = matching_dict[0]["artist"]
-                doc['genres'] = matching_dict[0]["genres"]
+                doc['genres'] = selectRandomGenre(matching_dict[0]["genres"])
                 doc['popularity'] = matching_dict[0]["popularity"]
                 doc['songs'] = matching_dict[0]["songs"]
                 doc['artistLink'] = matching_dict[0]["link"]
@@ -200,12 +202,125 @@ def downloadFile(filename, filePath):
     except Exception as e:
         print(e)
  
+"""
+-----------------------------------------------------------------------------------------------
+Get the files from the blob storage
+ENTRIES: none
+OUTPUT: none
+-----------------------------------------------------------------------------------------------
+"""
+
+def getAllBlobFiles():
+    try:
+        # Connection with blob storage
+        blob_service_client = BlobServiceClient.from_connection_string(connectionString)
+        container_client = blob_service_client.get_container_client(containerName)
+
+        # List all blobs in the container
+        blob_list = container_client.list_blobs()
+
+        # Download txt that contains the processed files
+        processedFileTxt = downloadFile(ProcessedFiles, path_File + "\\" + ProcessedFiles)
+        processedFiles = processedFileTxt.readlines()
+
+        # Get the files that have been processed from the blob storage
+        files = []
+        for blob in blob_list:
+            files.append(blob.name)
+
+        # Rrocess the files that haven't been processed yet
+        newFile = open(path_File + "\\" + 'newFile.txt', 'wb')
+        content = ""
+        for fileName in files:
+            if fileName not in processedFiles:
+                #currentFile = downloadFile(fileName, path_File + "\\" + fileName)
+                
+                # Verify if the file is an Artist or Lyrics file
+                if "artists" in fileName:
+                    #parseArtists(currentFile)
+                    pass
+
+                elif "lyrics" in fileName:
+                    #parseLyrics(currentFile)
+                    pass
+
+                elif "processedFiles.txt" == fileName:
+                    print("skip")
+                    continue
+
+            content = content + fileName + "\n"
+            
+        # Write the content in the new processed files txt
+        newFile.write(content.encode('utf-8'))
+        newFile.close()
+
+        # Update the processed files txt in Blob Storage
+        updateBlobFile(path_File + "\\" + 'newFile.txt')
+
+        return files
+    except Exception as e:
+        print(e)
+
+
+"""
+-----------------------------------------------------------------------------------------------
+Update a file in Blob Storage
+ENTRIES: namefile, pathfile
+OUTPUT: none
+-----------------------------------------------------------------------------------------------
+
+"""
+
+def updateBlobFile(filepath):
+    try:
+        # Connection with blob storage
+        blob_service_client = BlobServiceClient.from_connection_string(connectionString)
+        container_client = blob_service_client.get_container_client(containerName)
+        blob_client = container_client.get_blob_client(ProcessedFiles)
+
+        # Uploads the new file to the blob
+        with open(filepath, "rb") as data:
+            content = data.readlines()
+            # Convert the content to a string
+            try:
+                decoded_list = [element.decode('utf-8') for element in content]
+                print(str(decoded_list))
+            except Exception as e:
+                print(e)
+
+        # Convert the content to a string
+        newContent = ""
+        for line in decoded_list:
+            newContent = newContent + line
+        newContent = newContent.encode('utf-8') # Convert the new string to bytes
+
+        blob_client.upload_blob(newContent, overwrite=True)  # Overwrites the existing blob
+
+        print(f"File {ProcessedFiles} updated in Blob Storage with {filepath}")
+    except Exception as e:
+        print(e)
+
+
+"""
+-----------------------------------------------------------------------------------------------
+Select a random genre from the list of genres
+ENTRIES: list of genres
+OUTPUT: selected genre
+-----------------------------------------------------------------------------------------------
+"""
+
+def selectRandomGenre(genres):
+    genreIndex = random.randint(0, genres.__len__()-1)
+    selectedGenre = genres[genreIndex]
+    return selectedGenre
     
 def main():
-    artistDownloaded = downloadFile(Artist_File, path_File + "\\" + Artist_File)
-    parseArtists(artistDownloaded)
-    lyricsDownloaded = downloadFile(Lyrics_File, path_File + "\\" + Lyrics_File)
-    parseLyrics(lyricsDownloaded)
+    #artistDownloaded = downloadFile(Artist_File, path_File + "\\" + Artist_File)
+    #parseArtists(artistDownloaded)
+    #lyricsDownloaded = downloadFile(Lyrics_File, path_File + "\\" + Lyrics_File)
+    #parseLyrics(lyricsDownloaded)
+
+    getAllBlobFiles()
 
 if __name__ == '__main__': 
     main()

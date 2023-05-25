@@ -7,6 +7,7 @@ from pathlib import Path
 import os
 import sys
 import csv
+import random
 
 #Mongo db libraries--------------------------------------------------------------------------------------
 from pymongo.mongo_client import MongoClient
@@ -71,6 +72,7 @@ def parseArtists(artistDownloaded_var):
                 doc['popularity'] = row[3]
                 doc['link'] = row[4]
                 documents.append(doc)
+                print(doc)
                 doc = {}
             else:
                 print(row[0] + " is already on the collection")
@@ -114,29 +116,32 @@ def parseLyrics(lyricsDownloaded_var):
         artistDocuments = list(artistCollection.find())
         songNames = collection.distinct("songName")
         artistColl = collection.distinct("artist")
-        #lyricsNameArtist = collection.distinct("artist")
-        
+        lyricsNameArtist = collection.distinct("artist")
+        i=0
         for row in csv_reader:
-            """ if i == 55:
+            if i == 55:
                 print(i)
-                break """
+                break
             #get artist document  
             matching_dict = list((d for d in artistDocuments if row[0] == d['link']))
             #print( row[0] + " " + row[1])
             if (matching_dict.__len__() == 0):
                 print("The artist " + row[0] + " is not in the database")
             elif( matching_dict[0] not in artistColl and row[1] not in songNames):
-                doc['artist'] = matching_dict[0]
+                #Parse of the csv file
+                doc['artist'] = matching_dict[0]["artist"]
+                doc['genres'] = selectRandomGenre(matching_dict[0]["genres"])
+                doc['popularity'] = matching_dict[0]["popularity"]
+                doc['songs'] = matching_dict[0]["songs"]
+                doc['artistLink'] = matching_dict[0]["link"]
                 doc['songName'] = row[1]
                 doc['songLink'] = row[2]
                 doc['lyric'] = row[3]
                 doc['language'] = row[4]
-                #documents.append(doc)
-                collection.insert_one(doc)
-                doc = {}
-                i = i + 1
+                print(doc)
             else:
                 print("The song " + row[1] + " by " + matching_dict[0]["artist"] + " is already on the collection")
+            i = i + 1
         #return documents
     except Exception as e:
         print("Unexpected error:", e)
@@ -147,8 +152,16 @@ def parseLyrics(lyricsDownloaded_var):
 -----------------------------------------------------------------------------------------------
 """
 
+def selectRandomGenre(genres):
+    genreIndex = random.randint(0, genres.__len__()-1)
+    selectedGenre = genres[genreIndex]
+    return selectedGenre
+
 
 def main():
+    #artistDownloaded = open('artists-data.csv', 'r', encoding='utf-8')
+    #parseArtists(artistDownloaded)
+    
     lyricsDownloaded = open('lyrics-data.csv', 'r', encoding='utf-8')
     parseLyrics(lyricsDownloaded)
     
