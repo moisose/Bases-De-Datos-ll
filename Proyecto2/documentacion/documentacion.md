@@ -146,7 +146,7 @@ Primeramente, se realiza la conexión con el Blob Storage.
     <img src="Resources/downloadFileP2.png" alt="Download File" />
 </center>
 
-Luego, se crea el archivo en modo binario utilizando el path recibido por parámetros. Se descarga el archivo desde el Blob Storage y se escribe en el nuevo archivo.
+Luego, se crea el archivo en modo de escritura binaria utilizando el path recibido por parámetros. Se descarga el archivo desde el Blob Storage y se escribe en el archivo recién creado.
 
 <center>
     <img src="Resources/downloadFileP3.png" alt="Download File" />
@@ -168,13 +168,20 @@ Finalmente, si hay un error se despliega el error en la consola.
 
 ### **getAllBlobFiles**
 
-Esta función se usa para obtener los archivos que estan en el blob storage. Lo primero que se hace es hacer la conexión con el blob storage.
+Esta función se usa para obtener los archivos que estan en el blob storage y hacer el parseo de los archivos que aún no han sido procesados (Es decir, los que no están en el txt de archivos procesados que se encuentra en el Blob Storage).
+
+<center>
+    <img src="Resources/processedFilesTxt.png" alt="Processed Files Example" />
+</center>
+
+
+Lo primero que se hace es hacer la conexión con el blob storage.
 
 <center>
     <img src="Resources/getFilesBSp1.png" alt="Download File" />
 </center>
 
-Despues, se optiene la lsta de los blob en el container y se almacenan en la variable **blob_list**. Posteriormente, se descarga el txt que contiene los nombres de los archivos que ya han sido subidos.
+Despues, se optiene la lista de los blob en el container y se almacenan en la variable **blob_list**. Posteriormente, se descarga el txt que contiene los nombres de los archivos que ya han sido subidos utilizando la función **downloadFile()**.
 
 <center>
     <img src="Resources/getFilesBSp2.png" alt="Download File" />
@@ -186,7 +193,9 @@ Despues, se obtienen los archivos que han sido procesados y se agregan a la list
     <img src="Resources/getFilesBSp3.png" alt="Download File" />
 </center>
 
-Se crea un nuevo archivo que va a ser usado para hacer el update del archivo con los nombres de los que ya han sido procesados, además, se recorren los **filesnames** que estan en la lista de **files** y se verifica si este nombre ya esta en la lista de archivos procesados, si no esta, se verifica si el nombre del archivo tiene artists o lyrics en el filename, además, se ignora el archivo de que tiene los nombres de los archivos procesados. Finalmente, tenemos la variable **content**, en esta se van a agregar los nombres de los archivos que han sido procesados.
+Se crea un nuevo archivo que va a ser usado para hacer el update del archivo con los nombres de los que ya han sido procesados. También se define la variable **content** y se inicializa con un string vacío. Esta variable almacenará el contenido del archivo actualizado.
+
+Luego, se recorren los **filesnames** que estan en la lista de **files** y se verifica si este nombre ya esta en la lista de archivos procesados, si no esta, se verifica si el nombre del archivo tiene artists o lyrics en el filename. Además, se ignora el archivo que tiene los nombres de los archivos procesados. Finalmente, tenemos la variable **content**, en esta se van a agregar los nombres de los archivos que han sido procesados para actualizar el txt de archivos procesados en el Blob Storage.
 
 <center>
     <img src="Resources/getFilesBSp4.png" alt="Download File" />
@@ -200,7 +209,18 @@ Finalmente, se escribe en el file lo que esta en la variable **content** y se ci
 
 ### **updateBlobFile**
 
-Esta función hace un update de un archivo que se encuentra en el blob storage, se usa para saber si un archivo ya se cargo a la base de Mongo, si ya se cargo, se agrega el nombre del archivo a un txt que contiene los nombres de los archivos que ya se cargaron.
+Esta función hace un update de un archivo que se encuentra en el blob storage, en el cual se encuentran los nombres de los archivos que ya han sido procesados.
+
+Primero, se establece la conexión al Blob Storage y se obtiene el archivo buscado (**processedFiles.txt**).
+
+Luego, se abre un archivo en modo de lectura binaria, indicándole el path que recibe la función por parámetros. Este path es el path del archivo txt en el BlobStorage. Una vez abierto el archivo, se guarda el contenido (tipo lista) de este en la variable **content**.
+
+Se intenta hacer un decode a la variable content. Si esto falla, entonces tira la excepción. Si no falla, continúa el proceso para convertir el contenido de esta lista en un string. Para hacer esto, se recorre la lista y se agrega cada línea a **newContent**, la cual es la variable que construye el string con el nuevo contenido.
+
+Por último, se actualiza el archivo en el BlobStorage y se retorna un string de confirmación.
+
+Finalmente, si hay un error se despliega el error en la consola.
+
 
 <center>
     <img src="Resources/updateBlobFile.png" alt="Download File" />
