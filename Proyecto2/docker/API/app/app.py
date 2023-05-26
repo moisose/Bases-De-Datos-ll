@@ -7,21 +7,15 @@ from flask_cors import CORS
 # Mongo Atlas imports
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-
+import pymongo.errors
 
 
 #Env Variables------------------------------------------------------------------------------------		
-# UserName= os.getenv('USERNAME')
-# Password= os.getenv('PASSWORD')
-# DatabaseName= os.getenv('DATABASENAME')
-# ArtistsCollection= os.getenv('ARTISTS_COLLECTION')
-# LyricsCollection= os.getenv('LYRICS_COLLECTION')
-
-UserName = 'MelSaFer'
-Password = '3trZoWOalvOKN7tQ'
-DatabaseName = 'OpenLyricsSearch'
-ArtistsCollection = 'artistsCollection'
-LyricsCollection = 'lyricsCollection'
+UserName= os.getenv('USERNAME')
+Password= os.getenv('PASSWORD')
+DatabaseName= os.getenv('DATABASE')
+ArtistsCollection= os.getenv('ARTISTS_COLLECTION')
+LyricsCollection= os.getenv('LYRICS_COLLECTION')
 
 # Mongo Atlas connection string
 uri = "mongodb+srv://" + str(UserName) + ":" + str(Password) + \
@@ -30,8 +24,6 @@ uri = "mongodb+srv://" + str(UserName) + ":" + str(Password) + \
 # Definition of the API
 app = Flask(__name__)
 CORS(app)
-
-# Link del api: https://main-app.politebush-c6efad18.eastus.azurecontainerapps.io/
 
 # ====================================================================================================
 # Auxiliar functions
@@ -154,8 +146,8 @@ def popularityFilter(pipeline, minPop, maxPop):
     match = {
         '$match': {
             'popularity': {
-                '$gte': minPop,
-                '$lte': maxPop
+                '$gte': float(minPop),
+                '$lte': float(maxPop)
             }
         }
     }
@@ -173,24 +165,34 @@ def amountOfSongsFilter(pipeline, amountOfSongs):
     pipeline.append(limit)
 
 
-@app.route('/', methods=['GET'])
-def main():
-    return {"message": "Welcome to the API con variables alambradas y nuevas facets!"}
+"""
+Method removeRepeatedGenres
 
+Method that receives a list of genres and returns a list of genres without repeated genres
+"""
+
+def removeRepeatedGenres(genres):
+    genresList = []
+    for genre in genres:
+        if genre not in genresList:
+            genresList.append(genre)
+    return genresList
+
+# ====================================================================================================
+# API Endpoints
 
 """
+Facets Endpoint 
 This endpoint returns the artist list, the genres list and the languages list that have a relation with the lyrics searched
 """
 @app.route('/facets/list/<string:phrase>', methods=['GET'])
 def facets(phrase):
     try:
-        client = MongoClient(uri)
+        client = MongoClient(str(uri))
 
-        # Obtener una referencia a la base de datos
-        db = client.get_database(DatabaseName)
+        db = client.get_database(str(DatabaseName))
 
-        # Obtener una referencia a la colección
-        collection = db.get_collection(LyricsCollection)
+        collection = db.get_collection(str(LyricsCollection))
 
         pipeline = [
             {
@@ -236,7 +238,6 @@ def facets(phrase):
         artists = []
         genres = []
 
-        # Procesar los resultados
         for document in results:
             for language in document['languageFacet']:
                 tmpLanguage = {"name": language['_id']}
@@ -253,9 +254,9 @@ def facets(phrase):
                 tmpGenre = {"name": tmp}
                 genres.append(tmpGenre)
 
-        return {"languages": languages, "artists": artists, "genres": genres}
-    except Exception as e:
-        return {"Error": e}
+        return {"languages": languages, "artists": artists, "genres": removeRepeatedGenres(genres)}
+    except pymongo.errors.PyMongoError as e:
+        return str(e)
 
 
 """
@@ -267,13 +268,11 @@ This endpoint returns the songs that have a relation with the lyrics searched an
 @app.route('/search/<string:phrase>/<string:artist>/<string:language>/<string:genre>/<string:minPop>/<string:maxPop>/<string:amountOfSongs>', methods=['GET'])
 def search(phrase, artist, language, genre, minPop, maxPop, amountOfSongs):
     try:
-        client = MongoClient(uri)
+        client = MongoClient(str(uri))
 
-        # Obtener una referencia a la base de datos
-        db = client.get_database(DatabaseName)
+        db = client.get_database(str(DatabaseName))
 
-        # Obtener una referencia a la colección
-        collection = db.get_collection(LyricsCollection)
+        collection = db.get_collection(str(LyricsCollection))
 
         searchPipeline = [
             {
@@ -325,15 +324,12 @@ def search(phrase, artist, language, genre, minPop, maxPop, amountOfSongs):
         results = collection.aggregate(searchPipeline)
         highlights = collection.aggregate(highlightsPipeline)
 
-        # Close the connection
         data = []
-        # Procesar los resultados
 
         for document in results:
-            # data.append(str(document))
             tempId = str(document['_id'])
             tempDoc = {'_id': tempId,'artist': document['artist'], 'songLink': document['songLink'],
-                       'songName': document['songName']}
+                       'songName': document['songName'], 'popularity': document['popularity']}
             tempHighlights = []
             for highlight in highlights:
                 if str(highlight['_id']) == tempId:
@@ -356,9 +352,8 @@ def search(phrase, artist, language, genre, minPop, maxPop, amountOfSongs):
             data.append(tempDoc)
 
         return {"data": data}
-    except Exception as e:
-        return {"Error": e}
-    
+    except pymongo.errors.PyMongoError as e:
+        return str(e)    
 
 
 """
@@ -369,13 +364,11 @@ This endpoint returns the details of a song based on its link
 @app.route('/details/<string:artist>/<string:songName>', methods=['GET'])
 def details(artist, songName):
     try:
-        client = MongoClient(uri)
+        client = MongoClient(str(uri))
 
-        # Obtener una referencia a la base de datos
-        db = client.get_database(DatabaseName)
+        db = client.get_database(str(DatabaseName))
 
-        # Obtener una referencia a la colección
-        collection = db.get_collection(LyricsCollection)
+        collection = db.get_collection(str(LyricsCollection))
 
         songLink = "/" + artist + "/" + songName
 
@@ -397,15 +390,14 @@ def details(artist, songName):
         results = collection.aggregate(pipeline)
 
         data = []
-        # Procesar los resultados
         for document in results:
             tempDoc = {'artist': document['artist'], 'genres': document['genres'], 'popularity': document['popularity'],
                        'songs': document['songs'], 'songLink': document['songLink'], 'songName': document['songName'], 'lyric': document['lyric']}
             data.append(tempDoc)
 
         return {"data": data}
-    except Exception as e:
-        return {"Error": e}
+    except pymongo.errors.PyMongoError as e:
+        return str(e) 
 
 
 # Run the app
