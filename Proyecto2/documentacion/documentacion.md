@@ -744,6 +744,17 @@ Aquí se evidencia cómo es que se le dan los estilos a los elementos del html u
 
 # **Resultados de las pruebas unitarias**
 
+## **API**
+Las pruebas unitarias fueron realizadas mediante este código. 
+<center>
+    <img src="Resources/codeUnittest.png" alt="code of the unittest" />
+</center>
+
+Los resultados fueron correctos en las 3: 
+<center>
+    <img src="Resources/resultsUnittest.png" alt="result of the unittest" />
+</center>
+
 # **Conclusiones**
 
 **1-** La comunicación entre el los miembros de grupo de trabajo es fundamental para un buen desarrollo del proyecto.
