@@ -143,7 +143,7 @@ def parseLyrics(lyricsDownloaded_var):
                 doc['artist'] = matching_dict[0]["artist"]
                 doc['genres'] = selectRandomGenre(matching_dict[0]["genres"])
                 doc['popularity'] = float(matching_dict[0]["popularity"])
-                doc['songs'] = matching_dict[0]["songs"]
+                doc['songs'] = int(matching_dict[0]["songs"])
                 doc['artistLink'] = matching_dict[0]["link"]
                 doc['songName'] = row[1]
                 doc['songLink'] = row[2]
