@@ -3,14 +3,14 @@ import requests
 import os
 
 baseurl = 'https://main-app.politebush-c6efad18.eastus.azurecontainerapps.io'
-phrase = 'Leave us'
-artist = 'Beyoncé'
+phrase = 'another'
+artist = 'beyonce'
 language = 'es'
 genre = 'Pop'
 minPop = '0'
 maxPop = '100'
 amountOfSongs = '10'
-songName = 'Halo'
+songName = 'robot.html'
 
 class test_api(unittest.TestCase):
     
@@ -35,7 +35,7 @@ class test_api(unittest.TestCase):
 
 
     def testDetails(self):
-        url = baseurl+'/details/' + artist + '/' + songName
+        url = baseurl + "/details/" + artist + "/" + songName
 
         response = requests.get(url)
         self.assertEqual(response.status_code, 200)

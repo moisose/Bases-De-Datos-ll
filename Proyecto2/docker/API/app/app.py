@@ -256,7 +256,7 @@ def facets(phrase):
 
         return {"languages": languages, "artists": artists, "genres": removeRepeatedGenres(genres)}
     except pymongo.errors.PyMongoError as e:
-        return str(e)
+        return {"Error":str(e)}
 
 
 """
@@ -353,7 +353,7 @@ def search(phrase, artist, language, genre, minPop, maxPop, amountOfSongs):
 
         return {"data": data}
     except pymongo.errors.PyMongoError as e:
-        return str(e)    
+        return {"Error":str(e)}    
 
 
 """
@@ -397,7 +397,7 @@ def details(artist, songName):
 
         return {"data": data}
     except pymongo.errors.PyMongoError as e:
-        return str(e) 
+        return {"Error":str(e)}
 
 
 # Run the app
