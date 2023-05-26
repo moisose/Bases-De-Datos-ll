@@ -166,6 +166,54 @@ Para finalizar con el proceso de descargado, se imprime un mensaje de confirmaci
 
 Finalmente, si hay un error se despliega el error en la consola.
 
+### **getAllBlobFiles**
+
+Esta función se usa para obtener los archivos que estan en el blob storage. Lo primero que se hace es hacer la conexión con el blob storage.
+
+<center>
+    <img src="Resources/getFilesBSp1.png" alt="Download File" />
+</center>
+
+Despues, se optiene la lsta de los blob en el container y se almacenan en la variable **blob_list**. Posteriormente, se descarga el txt que contiene los nombres de los archivos que ya han sido subidos.
+
+<center>
+    <img src="Resources/getFilesBSp2.png" alt="Download File" />
+</center>
+
+Despues, se obtienen los archivos que han sido procesados y se agregan a la lista de "files".
+
+<center>
+    <img src="Resources/getFilesBSp3.png" alt="Download File" />
+</center>
+
+Se crea un nuevo archivo que va a ser usado para hacer el update del archivo con los nombres de los que ya han sido procesados, además, se recorren los **filesnames** que estan en la lista de **files** y se verifica si este nombre ya esta en la lista de archivos procesados, si no esta, se verifica si el nombre del archivo tiene artists o lyrics en el filename, además, se ignora el archivo de que tiene los nombres de los archivos procesados. Finalmente, tenemos la variable **content**, en esta se van a agregar los nombres de los archivos que han sido procesados.
+
+<center>
+    <img src="Resources/getFilesBSp4.png" alt="Download File" />
+</center>
+
+Finalmente, se escribe en el file lo que esta en la variable **content** y se cierra este archivo. Se llama a la función para hacer un el update del archivo en el blob.
+
+<center>
+    <img src="Resources/getFilesBSp5.png" alt="Download File" />
+</center>
+
+### **updateBlobFile**
+
+Esta función hace un update de un archivo que se encuentra en el blob storage, se usa para saber si un archivo ya se cargo a la base de Mongo, si ya se cargo, se agrega el nombre del archivo a un txt que contiene los nombres de los archivos que ya se cargaron.
+
+<center>
+    <img src="Resources/updateBlobFile.png" alt="Download File" />
+</center>
+
+### **selectRandomGenre**
+
+Esta función selecciona un genero random para los lyrics.
+
+<center>
+    <img src="Resources/randomGenre.png" alt="Download File" />
+</center>
+
 ## **MongoDB**
 
 <center>

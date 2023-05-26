@@ -8,32 +8,20 @@ from flask_cors import CORS
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-"""
 
-USERNAME='MelSaFer'
-PASSWORD='3trZoWOalvOKN7tQ'
-DATABASE='OpenLyricsSearch'
-ARTISTS_COLLECTION='artistsCollection'
-LYRICS_COLLECTION='lyricsCollection'
-ARTISTS_FILE='artists-data.csv'
-LYRICS_FILE='lyrics-data.csv'
 
-"""
-# """
 #Env Variables------------------------------------------------------------------------------------		
-UserName= os.getenv('USERNAME')
-Password= os.getenv('PASSWORD')
-DatabaseName= os.getenv('DATABASENAME')
-ArtistsCollection= os.getenv('ARTISTS_COLLECTION')
-LyricsCollection= os.getenv('LYRICS_COLLECTION')
+# UserName= os.getenv('USERNAME')
+# Password= os.getenv('PASSWORD')
+# DatabaseName= os.getenv('DATABASENAME')
+# ArtistsCollection= os.getenv('ARTISTS_COLLECTION')
+# LyricsCollection= os.getenv('LYRICS_COLLECTION')
 
-"""
 UserName = 'MelSaFer'
 Password = '3trZoWOalvOKN7tQ'
 DatabaseName = 'OpenLyricsSearch'
 ArtistsCollection = 'artistsCollection'
 LyricsCollection = 'lyricsCollection'
-"""
 
 # Mongo Atlas connection string
 uri = "mongodb+srv://" + str(UserName) + ":" + str(Password) + \
@@ -187,7 +175,7 @@ def amountOfSongsFilter(pipeline, amountOfSongs):
 
 @app.route('/', methods=['GET'])
 def main():
-    return {"message": "Welcome to the API with example responses!"}
+    return {"message": "Welcome to the API con variables alambradas y nuevas facets!"}
 
 
 """
@@ -226,30 +214,9 @@ def facets(phrase):
                     'genresFacet': [
                         {
                             '$group': {
-                                '_id': None,
-                                'allGenres': {'$push': '$genres'}
+                                '_id': '$genres',
                             }
-                        },
-                        {
-                            '$project': {
-                                '_id': 0,
-                                'allGenres': {'$concatArrays': '$allGenres'}
-                            }
-                        },
-                        {
-                            '$project': {
-                                'flattenedArray': {
-                                    '$reduce': {
-                                        'input': "$allGenres",
-                                        'initialValue': [],
-                                        'in': {'$concatArrays': ["$$value", "$$this"]}
-                                    }
-                                }
-                            }
-                        },
-                        {'$unwind': "$flattenedArray"},
-                        {'$group': {'_id': "$flattenedArray"}},
-                        {'$project': {'_id': 0, 'genres': "$_id"}}
+                        }
                     ],
                     'artistFacet': [
                         {
@@ -280,7 +247,7 @@ def facets(phrase):
                 artists.append(tmpArtist)
 
             for genre in document['genresFacet']:
-                tmp = genre['genres']
+                tmp = genre['_id']
                 if tmp[0] == " ":
                     tmp = tmp[1:]
                 tmpGenre = {"name": tmp}
@@ -380,9 +347,12 @@ def search(phrase, artist, language, genre, minPop, maxPop, amountOfSongs):
                     highestScore = highlightedPhrase['score']
                     highestHighlight = highlightedPhrase
 
-            processedHighlights = mainPhrase(highestHighlight['texts'])
-            tempDoc['highlights'] = processedHighlights[1]
-            tempDoc['lyric'] = shortLyric(document['lyric'], processedHighlights[0])
+            try:
+                processedHighlights = mainPhrase(highestHighlight['texts'])
+                tempDoc['highlights'] = processedHighlights[1]
+                tempDoc['lyric'] = shortLyric(document['lyric'], processedHighlights[0])
+            except:
+                pass
             data.append(tempDoc)
 
         return {"data": data}

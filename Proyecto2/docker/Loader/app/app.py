@@ -128,7 +128,7 @@ def parseLyrics(lyricsDownloaded_var):
         
         max = 0
         for row in csv_reader: 
-            if max == 100:
+            if max ==5000:
                 break
             #Obtain the artist document from the list of artists documents
             matching_dict = list((d for d in artistDocuments if row[0] == d['link']))
@@ -142,8 +142,8 @@ def parseLyrics(lyricsDownloaded_var):
                 #Parse of the csv file
                 doc['artist'] = matching_dict[0]["artist"]
                 doc['genres'] = selectRandomGenre(matching_dict[0]["genres"])
-                doc['popularity'] = matching_dict[0]["popularity"]
-                doc['songs'] = matching_dict[0]["songs"]
+                doc['popularity'] = float(matching_dict[0]["popularity"])
+                doc['songs'] = int(matching_dict[0]["songs"])
                 doc['artistLink'] = matching_dict[0]["link"]
                 doc['songName'] = row[1]
                 doc['songLink'] = row[2]
@@ -228,20 +228,20 @@ def getAllBlobFiles():
         for blob in blob_list:
             files.append(blob.name)
 
-        # Rrocess the files that haven't been processed yet
+        # Process the files that haven't been processed yet
         newFile = open(path_File + "\\" + 'newFile.txt', 'wb')
         content = ""
         for fileName in files:
             if fileName not in processedFiles:
-                #currentFile = downloadFile(fileName, path_File + "\\" + fileName)
+                currentFile = downloadFile(fileName, path_File + "\\" + fileName)
                 
                 # Verify if the file is an Artist or Lyrics file
                 if "artists" in fileName:
-                    #parseArtists(currentFile)
+                    parseArtists(currentFile)
                     pass
 
                 elif "lyrics" in fileName:
-                    #parseLyrics(currentFile)
+                    parseLyrics(currentFile)
                     pass
 
                 elif "processedFiles.txt" == fileName:
@@ -313,6 +313,8 @@ def selectRandomGenre(genres):
     genreIndex = random.randint(0, len(genres)-1)
     selectedGenre = genres[genreIndex]
     return selectedGenre
+
+#------------------------------------------------------------------------------------------
     
 def main():
     #artistDownloaded = downloadFile(Artist_File, path_File + "\\" + Artist_File)
