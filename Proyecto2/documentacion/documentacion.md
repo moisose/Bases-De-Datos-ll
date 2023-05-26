@@ -247,6 +247,232 @@ Se definen la base de datos OpenLyricsSearch con las collections artist y Lyrics
 </center>
 
 ## **API**
+El API es utilizado para habilitar los distintos endpoints http para las distintas funcionalidades de la aplicación. Existen 3 endpoints distintos, cada uno con su respectiva funcionalidad. A continuación, se listan cada uno de los endpoints y se explica su utilidad:
+
+### **Facets Endpoint**
+Método HTTP: GET
+
+https://main-app.politebush-c6efad18.eastus.azurecontainerapps.io/facets/list/<string:phrase>
+
+
+Este endpoint recibe la frase de la letra de la canción que se está buscando y devuelve la lista de filtros por los que se podrán filtrar los resultados para la aplicación.
+
+
+    @app.route('/facets/list/<string:phrase>', methods=['GET'])
+    def facets(phrase):
+        try:
+            client = MongoClient(str(uri))
+
+            db = client.get_database(str(DatabaseName))
+
+            collection = db.get_collection(str(LyricsCollection))
+
+            pipeline = [
+                {
+                    '$search': {
+                        'index': 'default',
+                        'text': {
+                            'query': phrase,
+                            'path': 'lyric'
+                        }
+                    }
+                },
+                {
+                    '$facet': {
+                        'languageFacet': [
+                            {
+                                '$group': {
+                                    '_id': '$language',
+                                }
+                            }
+                        ],
+                        'genresFacet': [
+                            {
+                                '$group': {
+                                    '_id': '$genres',
+                                }
+                            }
+                        ],
+                        'artistFacet': [
+                            {
+                                '$group': {
+                                    '_id': '$artist'
+                                }
+                            }
+                        ]
+
+                    }
+                }
+            ]
+
+            results = collection.aggregate(pipeline)
+
+            languages = []
+            artists = []
+            genres = []
+
+            for document in results:
+                for language in document['languageFacet']:
+                    tmpLanguage = {"name": language['_id']}
+                    languages.append(tmpLanguage)
+
+                for artist in document['artistFacet']:
+                    tmpArtist = {"name": artist['_id']}
+                    artists.append(tmpArtist)
+
+                for genre in document['genresFacet']:
+                    tmp = genre['_id']
+                    if tmp[0] == " ":
+                        tmp = tmp[1:]
+                    tmpGenre = {"name": tmp}
+                    genres.append(tmpGenre)
+
+            return {"languages": languages, "artists": artists, "genres": removeRepeatedGenres(genres)}
+        except pymongo.errors.PyMongoError as e:
+            return str(e)
+
+### **Search Endpoint**
+Método HTTP: GET
+
+https://main-app.politebush-c6efad18.eastus.azurecontainerapps.io/search/<string:phrase>/<string:artist>/<string:language>/<string:genre>/<string:minPop>/<string:maxPop>/<string:amountOfSongs>
+
+
+Este endpoint recibe la frase de la letra de la canción que se está buscando, el artista, el lenguaje, el género, el mínimo y el máximo de la popularidad y la cantidad de canciones y devuelve la lista de resultados compatibles con la búsqueda y los respectivos filtros. 
+
+    @app.route('/search/<string:phrase>/<string:artist>/<string:language>/<string:genre>/<string:minPop>/<string:maxPop>/<string:amountOfSongs>', methods=['GET'])
+    def search(phrase, artist, language, genre, minPop, maxPop, amountOfSongs):
+        try:
+            client = MongoClient(str(uri))
+
+            db = client.get_database(str(DatabaseName))
+
+            collection = db.get_collection(str(LyricsCollection))
+
+            searchPipeline = [
+                {
+                    '$search': {
+                        'index': 'default',
+                        'text': {
+                            'query': phrase,
+                            'path': 'lyric'
+                        }
+                    }
+                }
+            ]
+
+            highlightsPipeline = [
+                {
+                    '$search': {
+                        'index': 'default',
+                        'text': {
+                            'query': phrase,
+                            'path': 'lyric'
+                        },
+                        'highlight': {
+                            'path': 'lyric'
+                        }
+                    }
+                },
+                {
+                    '$project': {
+                        'highlights': {'$meta': 'searchHighlights'}
+                    }
+                }
+            ]
+
+            if artist != "null":
+                artistFilter(searchPipeline, artist)
+            
+            if language != "null":
+                languageFilter(searchPipeline, language)
+
+            if genre != "null":
+                genreFilter(searchPipeline, genre)
+            
+            if minPop != "-1" and maxPop != "-1":
+                popularityFilter(searchPipeline, minPop, maxPop)
+            
+            if amountOfSongs != "-1":
+                amountOfSongsFilter(searchPipeline, int(amountOfSongs))
+
+            results = collection.aggregate(searchPipeline)
+            highlights = collection.aggregate(highlightsPipeline)
+
+            data = []
+
+            for document in results:
+                tempId = str(document['_id'])
+                tempDoc = {'_id': tempId,'artist': document['artist'], 'songLink': document['songLink'],
+                        'songName': document['songName'], 'popularity': document['popularity']}
+                tempHighlights = []
+                for highlight in highlights:
+                    if str(highlight['_id']) == tempId:
+                        tempHighlights = highlight['highlights']
+                        break
+
+                highestScore = 0
+                highestHighlight = None
+                for highlightedPhrase in tempHighlights:
+                    if highlightedPhrase['score'] > highestScore:
+                        highestScore = highlightedPhrase['score']
+                        highestHighlight = highlightedPhrase
+
+                try:
+                    processedHighlights = mainPhrase(highestHighlight['texts'])
+                    tempDoc['highlights'] = processedHighlights[1]
+                    tempDoc['lyric'] = shortLyric(document['lyric'], processedHighlights[0])
+                except:
+                    pass
+                data.append(tempDoc)
+
+            return {"data": data}
+        except pymongo.errors.PyMongoError as e:
+            return str(e)    
+
+### **Details Endpoint**
+Método HTTP: GET
+
+https://main-app.politebush-c6efad18.eastus.azurecontainerapps.io/details/<string:artist>/<string:songName>
+
+Este endpoint recibe el link de la canción de la que se desea conocer la información y devuelve toda la información correspondiente para la aplicación.
+
+    @app.route('/details/<string:artist>/<string:songName>', methods=['GET'])
+    def details(artist, songName):
+        try:
+            client = MongoClient(str(uri))
+
+            db = client.get_database(str(DatabaseName))
+
+            collection = db.get_collection(str(LyricsCollection))
+
+            songLink = "/" + artist + "/" + songName
+
+            pipeline = [
+                {
+                    '$search': {
+                        'index': 'default',
+                        'text': {
+                            'query': songLink,
+                            'path': 'songLink'
+                        }
+                    }
+                },
+                {
+                    '$limit': 1
+                }
+            ]
+
+            results = collection.aggregate(pipeline)
+
+            data = []
+            for document in results:
+                tempDoc = {'artist': document['artist'], 'genres': document['genres'], 'popularity': document['popularity'],
+                        'songs': document['songs'], 'songLink': document['songLink'], 'songName': document['songName'], 'lyric': document['lyric']}
+                data.append(tempDoc)
+
+            return {"data": data}
+        except pymongo.errors.PyMongoError as e:
+            return str(e) 
 
 ## **App de React**
 
@@ -426,5 +652,3 @@ Aquí se evidencia cómo es que se le dan los estilos a los elementos del html u
 **9-** Repartir y asignar tareas a cada integrante del equipo.
 
 **10-** Definir roles en el equipo de trabajo para mantener el orden y procurar buena dinámica de trabajo.
-
-# **Referencias bibliográficas donde aplique**
