@@ -128,7 +128,7 @@ def parseLyrics(lyricsDownloaded_var):
         
         max = 0
         for row in csv_reader: 
-            if max == 100:
+            if max ==5000:
                 break
             #Obtain the artist document from the list of artists documents
             matching_dict = list((d for d in artistDocuments if row[0] == d['link']))

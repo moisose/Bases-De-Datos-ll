@@ -20,7 +20,7 @@ resource "azurerm_linux_web_app" "main" {
   }
   site_config {
     application_stack {
-      docker_image     = "docker.io/nereo08/blobapi"
+      docker_image     = "docker.io/moisose/open-lyrics"
       docker_image_tag = "latest"
     }
   }
