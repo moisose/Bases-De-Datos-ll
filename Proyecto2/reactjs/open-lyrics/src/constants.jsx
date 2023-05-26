@@ -29,7 +29,7 @@ export const homeLogo = "/logo.png";
 
 // searchBar
 export const searchBarLink =
-  "https://main-app.politebush-c6efad18.eastus.azurecontainerapps.io/search/phrase/";
+  "https://main-app.politebush-c6efad18.eastus.azurecontainerapps.io/search/";
 
 // details route
 export const backImg = "/back.png";

@@ -6,12 +6,25 @@ import classes from "./Checkbox.module.css";
 const Checkbox = ({ list, setList, selected, setSelected, prefix }) => {
   const handleChange = (e, index) => {
     const activeData = document.getElementById(index).checked;
-    console.log(document.getElementById(index));
+    // console.log(document.getElementById(index));
+
     if (activeData) {
-      setSelected((oldData) => [...oldData, e.target.value]);
+      setSelected((oldData) => {
+        if (oldData.includes(e.target.value)) {
+          return [];
+        } else {
+          return [e.target.value];
+        }
+      });
     } else {
-      setSelected(selected.filter((values) => values !== e.target.value));
+      setSelected(selected.filter((value) => value !== e.target.value));
     }
+
+    // if (activeData) {
+    //   setSelected((oldData) => [...oldData, e.target.value]);
+    // } else {
+    //   setSelected(selected.filter((values) => values !== e.target.value));
+    // }
   };
 
   return (

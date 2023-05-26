@@ -17,7 +17,7 @@ const Home = () => {
   // const for the sliders
   // --------------------------------------------------------------------
   const [minPopularity, setMinPopularity] = useState(0);
-  const [maxPopularity, setMaxPopularity] = useState(100);
+  const [maxPopularity, setMaxPopularity] = useState(205.5);
   const [valuesPopularity, setValuesPopularity] = useState([
     minPopularity,
     maxPopularity,
@@ -60,7 +60,7 @@ const Home = () => {
   // Searchbar input
   // --------------------------------------------------------------------
   const [input, setInput] = useState("");
-  console.log(results);
+  // console.log(results);
 
   // this handle the reset filters button
   // clear the selected lists
@@ -68,7 +68,8 @@ const Home = () => {
     setSelectedArtists([]);
     setSelectedLanguages([]);
     setSelectedGenres([]);
-    setValuesPopularity([0, 100]);
+    setValuesPopularity([minPopularity, maxPopularity]);
+    setValuesSongs(maxSongs);
   };
 
   const eraseFacets = () => {
@@ -93,10 +94,16 @@ const Home = () => {
             Array.isArray(data.languages) &&
             Array.isArray(data.genres)
           ) {
-            setArtistsFacet(data.artists);
-            console.log(artistsFacet);
-            setLanguagesFacet(data.languages);
-            setGenresFacet(data.genres);
+            setArtistsFacet(
+              data.artists.sort((a, b) => a.name.localeCompare(b.name))
+            );
+            console.log("artistas facet: " + artistsFacet);
+            setLanguagesFacet(
+              data.languages.sort((a, b) => a.name.localeCompare(b.name))
+            );
+            setGenresFacet(
+              data.genres.sort((a, b) => a.name.localeCompare(b.name))
+            );
           }
         })
         .catch((error) => {
@@ -108,8 +115,17 @@ const Home = () => {
   //update song slider range
   useEffect(() => {
     setMaxSongs(results.length);
-    setValuesSongs(maxSongs);
+    setValuesSongs(results.length);
   }, [results, maxSongs]);
+
+  useEffect(() => {
+    setResults(results.slice(0, valuesSongs));
+    setCurrentPage(1);
+  }, [valuesSongs]);
+
+  // console.log("artistas facet: " + artistsFacet);
+
+  // console.log("results:", results);
 
   return (
     // main container
@@ -132,8 +148,9 @@ const Home = () => {
             languages={selectedLanguages}
             genres={selectedGenres}
             setResults={setResults}
-            valuesSongs={valuesSongs}
             valuesPopularity={valuesPopularity}
+            valuesSongs={valuesSongs}
+            setCurrentPage={setCurrentPage}
           />
         </div>
       </div>

@@ -21,6 +21,8 @@ function Details() {
     setLink(JSON.parse(location.state.info));
   }, [location]);
 
+  // console.log("generos: " + data.artist);
+
   //Fetch to get the data need it to use in this .jsx
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +72,8 @@ function Details() {
             <h1 className={classes.artist}>{data.artist}</h1>
             <p className={classes.details}>
               <strong>
-                {Array.isArray(data.genres) && data.genres.join(" - ")}
+                {/* {Array.isArray(data.genres) && data.genres.join(" - ")} */}
+                {data.genres}
               </strong>
             </p>
             <p className={classes.details}>

@@ -11,16 +11,45 @@ export const SearchResult = ({ result }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setLyric(result.fragment);
-    const regex = /\\n|\\r\\n|\\n\\r|\\r/g;
-    lyric.replace(regex, "<br>");
-  }, [lyric]);
+    if (result) {
+      const regex = /\\n|\\r\\n|\\n\\r|\\r/g;
+      let formattedLyric = result.fragment.replace(regex, "<br>");
+
+      const hitValues = result.highlights
+        .filter((item) => item.type === "hit")
+        .map((item) => item.value);
+
+      const replaceFn = (match) => `<strong>${match}</strong>`;
+
+      formattedLyric = formattedLyric.replace(
+        new RegExp(`\\b(${hitValues.join("|")})\\b`, "gi"),
+        replaceFn
+      );
+
+      setLyric(formattedLyric);
+    }
+  }, [result]);
+
+  // console.log("highlights: " + hits);
+
+  // for (const hit of hits) {
+  //   console.log(hit.value);
+  // }
+
+  // console.log("largo: " + hits.length);
+
+  // console.log("letra: " + lyric);
 
   return (
     <div className={classes.searchResult}>
       <div className={classes.name}>{result.name}</div>
       <div className={classes.artist}>{result.artist}</div>
-      <div className={classes.songFragment}>{lyric}</div>
+      <div className={classes.songFragment}>
+        <div
+          className={classes.lyric}
+          dangerouslySetInnerHTML={{ __html: lyric }}
+        />
+      </div>
       <Link
         to="/details"
         state={{ info: JSON.stringify(result.link) }}

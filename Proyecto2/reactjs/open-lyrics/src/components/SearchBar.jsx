@@ -16,6 +16,7 @@ export const SearchBar = ({
   setResults,
   valuesPopularity,
   valuesSongs,
+  setCurrentPage,
 }) => {
   const [inputSearch, setInputSearch] = useState("");
   const debounceValue = useDebounce(inputSearch, 300);
@@ -24,17 +25,34 @@ export const SearchBar = ({
   // the results every time something is written in the search bar
   // or when an element of the facets is marked or modified
   useEffect(() => {
-    console.log("use effect");
-    console.log(valuesSongs);
-    console.log(valuesPopularity);
+    const artistsParam = artists.length > 0 ? artists : null;
+    const languagesParam = languages.length > 0 ? languages : null;
+    const genresParam = genres.length > 0 ? genres : null;
+
     setInput(inputSearch);
+    setCurrentPage(1);
 
     const getData = async () => {
       if (inputSearch === "") {
         setResults([]);
         return;
       } else {
-        fetch(Constants.searchBarLink + inputSearch)
+        fetch(
+          Constants.searchBarLink +
+            inputSearch +
+            "/" +
+            artistsParam +
+            "/" +
+            languagesParam +
+            "/" +
+            genresParam +
+            "/" +
+            valuesPopularity[0] +
+            "/" +
+            valuesPopularity[1] +
+            "/" +
+            "-1"
+        )
           .then((response) => response.json())
           .then((data) => {
             // console.log("data es" + data);
@@ -44,8 +62,11 @@ export const SearchBar = ({
                 artist: item.artist,
                 link: item.songLink,
                 fragment: item.lyric,
+                highlights: item.highlights,
               };
             });
+
+            // console.log("formated results: " + formattedResults.length);
             setResults(formattedResults);
           })
           .catch((error) => {
@@ -63,7 +84,7 @@ export const SearchBar = ({
     genres,
     setResults,
     valuesPopularity,
-    valuesSongs,
+    // valuesSongs,
     debounceValue,
   ]);
 

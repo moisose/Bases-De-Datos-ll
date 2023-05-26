@@ -5,12 +5,12 @@
   background-color: white;
   border-radius: 15px;
   font-family: "Source Sans";
-  height: 160px;
+  height: 180px;
   padding: 1.5% 2.5%;
   margin-bottom: 20px;
   display: grid;
   grid-template-columns: 1fr 30% 30%;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 0.4fr 1fr;
   align-items: stretch;
 }
 
@@ -41,8 +41,8 @@
 .songFragment {
   color: #4c4c4c;
   white-space: pre-line;
-  height: 80px;
-  width: 60%;
+  height: 100px;
+  width: 100%;
   scrollbar-width: thin; /* Ancho de la barra de desplazamiento (puede ser "thin", "auto" o "none") */
   grid-column: 1/2;
   overflow-y: scroll;
@@ -70,10 +70,10 @@
   font-family: "Source Sans";
   font-size: 20px;
   grid-column: 3;
-  height: 60%;
+  height: 50px;
   width: 150px;
   padding: 12px;
-  margin-top: 30px;
+  margin-top: 50px;
   border-radius: 10px;
   border: none;
   color: #ffff;
