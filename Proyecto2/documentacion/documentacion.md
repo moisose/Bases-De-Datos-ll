@@ -474,6 +474,141 @@ Este endpoint recibe el link de la canción de la que se desea conocer la inform
         except pymongo.errors.PyMongoError as e:
             return str(e) 
 
+## **Funciones Auxiliares del API**
+
+### **Método mainPhrase**
+Método que recibe la lista de highlights y devuelve la frase principal de la canción que se relaciona a la búsqueda.
+
+    def mainPhrase(highlights):
+        phrase = ""
+        highlightList = []
+        hitFlag = False
+        for highlight in highlights:
+            if highlight['type'] == 'hit':
+                phrase += highlight['value']
+                hitFlag = True
+                highlightList.append(highlight)
+            elif highlight['type'] == 'text' and hitFlag == True:
+                if len(phrase) <= 80:
+                    if '\n' in highlight['value']:
+                        phrase += highlight['value'].split('\n')[0]
+                        tempHighlight = {'type': 'text', 'value': highlight['value'].split('\n')[0]}
+                        highlightList.append(tempHighlight)
+                        break
+                    else:
+                        phrase += highlight['value']
+                        highlightList.append(highlight)
+                else:
+                    break
+        return [phrase, highlightList]
+
+
+### **Método shortLyric**
+Método que recibe la letra de la cancion y la frase principal de la búsqueda y retorna las 4 lineas mas cercanas a la canción relacionada con la búsqueda.
+
+    def shortLyric(lyric, substring):
+        jumps = 0
+    
+        lyricsArray = lyric.split('\n')
+        endIndex = len(lyricsArray) - 1
+        
+        newString = ''
+
+        jumps = 0
+        find = False
+        for i, line in enumerate(lyricsArray):
+
+            if jumps <= 4 and find == False:
+                newString += line + '\n'
+
+            if (substring in line or find):
+                if find == False:
+                    find = True
+                    newString = ''
+                    jumps = 0
+                    if endIndex == i:
+                        for j in range(4):
+                            newString += lyricsArray[i - (4 - j)] + '\n'
+                            break
+
+                if line == '':
+                    jumps -= 1
+                if jumps >= 4:
+                    break
+
+                newString += line + '\n'
+                
+            jumps += 1
+
+        return newString
+### **Método artistFilter**
+Método que agrega el filtro por artista a la consulta si el artista se especifica.
+
+    def artistFilter(pipeline, artist):
+        match = {
+            '$match': {
+                'artist': artist
+            }
+        }
+        pipeline.append(match)
+
+### **Método genreFilter**
+Método que agrega el filtro por género a la consulta si el género se especifica.
+
+    def genreFilter(pipeline, genre):
+        match = {
+            '$match': {
+                'genres': genre
+            }
+        }
+        pipeline.append(match)
+
+### **Método languageFilter**
+Método que agrega el filtro por lenguaje a la consulta si el lenguaje se especifica.
+
+    def languageFilter(pipeline, language):
+        match = {
+            '$match': {
+                'language': language
+            }
+        }
+        pipeline.append(match)
+
+### **Método popularityFilter**
+Método que agrega el filtro por popularidad a la consulta si se especifica los rangos.
+
+    def popularityFilter(pipeline, minPop, maxPop):
+        match = {
+            '$match': {
+                'popularity': {
+                    '$gte': float(minPop),
+                    '$lte': float(maxPop)
+                }
+            }
+        }
+        pipeline.append(match)
+
+### **Método amountOfSongsFilter**
+Método que agrega el filtro por cantidad de canciones a la consulta cuando la cantidad de canciones se especifica.
+
+    def amountOfSongsFilter(pipeline, amountOfSongs):
+        limit = {
+            '$limit': amountOfSongs
+        }
+        pipeline.append(limit)
+
+### **Método removeRepeatedGenres**
+Método que quita los generos repetidos de una lista de generos para los facets.
+
+    def removeRepeatedGenres(genres):
+        genresList = []
+        for genre in genres:
+            if genre not in genresList:
+                genresList.append(genre)
+        return genresList
+
+### **
+
 ## **App de React**
 
 ### **Organización del proyecto**
