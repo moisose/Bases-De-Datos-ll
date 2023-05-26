@@ -41,7 +41,7 @@ ARG LYRICS_COLLECTION
 ENV LYRICS_COLLECTION ${LYRICS_COLLECTION}
 
 
-#RUN ls
-#RUN python -u unittests.py
+RUN ls
+RUN python -u unittests.py
 
 CMD [ "flask",  "--app", "app", "run", "--host=0.0.0.0" ]
