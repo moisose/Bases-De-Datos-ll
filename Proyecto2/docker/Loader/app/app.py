@@ -142,7 +142,7 @@ def parseLyrics(lyricsDownloaded_var):
                 #Parse of the csv file
                 doc['artist'] = matching_dict[0]["artist"]
                 doc['genres'] = selectRandomGenre(matching_dict[0]["genres"])
-                doc['popularity'] = matching_dict[0]["popularity"]
+                doc['popularity'] = float(matching_dict[0]["popularity"])
                 doc['songs'] = matching_dict[0]["songs"]
                 doc['artistLink'] = matching_dict[0]["link"]
                 doc['songName'] = row[1]
