@@ -642,8 +642,6 @@ Método que quita los generos repetidos de una lista de generos para los facets.
                 genresList.append(genre)
         return genresList
 
-### **
-
 ## **App de React**
 
 ### **Organización del proyecto**
