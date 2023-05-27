@@ -16,6 +16,42 @@
 
 # **Instrucciones para ejecutar su proyecto**
 
+## 1- Ejecución del loader
+**1.1.**  Para ejecutar la imagen debe abrir una consola wsl en la carpeta del proyecto.
+
+<center>
+    <img src="Resources/ejecuciónP1.png" alt="Pasos ejecución" />
+</center>
+
+**1.2.**  Dirigirse a la carpeta **Docker** con "cd Docker"
+
+<center>
+    <img src="Resources/ejecuciónP2.png" alt="Pasos ejecución" />
+</center>
+
+**1.3.** Ejecutar "bash build.sh", en caso de problemas, ejecutar "dos2unix build.sh" y luego de nuevo el "bash build.sh".
+
+<center>
+    <img src="Resources/ejecuciónP3.png" alt="Pasos ejecución" />
+</center>
+
+**1.4.** Para ejecutar la imagen, usar "sudo docker run melanysf/loader-p2".
+
+<center>
+    <img src="Resources/ejecuciónP4.png" alt="Pasos ejecución" />
+</center>
+
+**Nota:** Es importante, antes de hacer el build, haber abierto docker desktop.
+
+## 2- Ejecución de la aplicación en React
+**1.** Para utilizar la aplicación, debemos de ingresar al siguiente link: https://main-mangos.azurewebsites.net/
+
+<center>
+    <img src="Resources/ejecucionAppReact.png" alt="Ejecución de aplicación" />
+</center>
+
+**Nota:** La aplicación de React fue subida a Azure Services, por lo cual no necesita que se ingresen comandos de manera manual para que la aplicación corra de localmente en el dispositivo, pues la app está alojada en Azure, es decir, los archivos y recursos necesarios para que la aplicación funcione se encuentran en los servidores de Azure.
+
 # **Componentes**
 
 ## **Loader**
@@ -221,7 +257,6 @@ Por último, se actualiza el archivo en el BlobStorage y se retorna un string de
 
 Finalmente, si hay un error se despliega el error en la consola.
 
-
 <center>
     <img src="Resources/updateBlobFile.png" alt="Download File" />
 </center>
@@ -247,6 +282,367 @@ Se definen la base de datos OpenLyricsSearch con las collections artist y Lyrics
 </center>
 
 ## **API**
+El API es utilizado para habilitar los distintos endpoints http para las distintas funcionalidades de la aplicación. Existen 3 endpoints distintos, cada uno con su respectiva funcionalidad. A continuación, se listan cada uno de los endpoints y se explica su utilidad:
+
+### **Facets Endpoint**
+Método HTTP: GET
+
+https://main-app.politebush-c6efad18.eastus.azurecontainerapps.io/facets/list/<string:phrase>
+
+
+Este endpoint recibe la frase de la letra de la canción que se está buscando y devuelve la lista de filtros por los que se podrán filtrar los resultados para la aplicación.
+
+
+    @app.route('/facets/list/<string:phrase>', methods=['GET'])
+    def facets(phrase):
+        try:
+            client = MongoClient(str(uri))
+
+            db = client.get_database(str(DatabaseName))
+
+            collection = db.get_collection(str(LyricsCollection))
+
+            pipeline = [
+                {
+                    '$search': {
+                        'index': 'default',
+                        'text': {
+                            'query': phrase,
+                            'path': 'lyric'
+                        }
+                    }
+                },
+                {
+                    '$facet': {
+                        'languageFacet': [
+                            {
+                                '$group': {
+                                    '_id': '$language',
+                                }
+                            }
+                        ],
+                        'genresFacet': [
+                            {
+                                '$group': {
+                                    '_id': '$genres',
+                                }
+                            }
+                        ],
+                        'artistFacet': [
+                            {
+                                '$group': {
+                                    '_id': '$artist'
+                                }
+                            }
+                        ]
+
+                    }
+                }
+            ]
+
+            results = collection.aggregate(pipeline)
+
+            languages = []
+            artists = []
+            genres = []
+
+            for document in results:
+                for language in document['languageFacet']:
+                    tmpLanguage = {"name": language['_id']}
+                    languages.append(tmpLanguage)
+
+                for artist in document['artistFacet']:
+                    tmpArtist = {"name": artist['_id']}
+                    artists.append(tmpArtist)
+
+                for genre in document['genresFacet']:
+                    tmp = genre['_id']
+                    if tmp[0] == " ":
+                        tmp = tmp[1:]
+                    tmpGenre = {"name": tmp}
+                    genres.append(tmpGenre)
+
+            return {"languages": languages, "artists": artists, "genres": removeRepeatedGenres(genres)}
+        except pymongo.errors.PyMongoError as e:
+            return str(e)
+
+### **Search Endpoint**
+Método HTTP: GET
+
+https://main-app.politebush-c6efad18.eastus.azurecontainerapps.io/search/<string:phrase>/<string:artist>/<string:language>/<string:genre>/<string:minPop>/<string:maxPop>/<string:amountOfSongs>
+
+
+Este endpoint recibe la frase de la letra de la canción que se está buscando, el artista, el lenguaje, el género, el mínimo y el máximo de la popularidad y la cantidad de canciones y devuelve la lista de resultados compatibles con la búsqueda y los respectivos filtros. 
+
+    @app.route('/search/<string:phrase>/<string:artist>/<string:language>/<string:genre>/<string:minPop>/<string:maxPop>/<string:amountOfSongs>', methods=['GET'])
+    def search(phrase, artist, language, genre, minPop, maxPop, amountOfSongs):
+        try:
+            client = MongoClient(str(uri))
+
+            db = client.get_database(str(DatabaseName))
+
+            collection = db.get_collection(str(LyricsCollection))
+
+            searchPipeline = [
+                {
+                    '$search': {
+                        'index': 'default',
+                        'text': {
+                            'query': phrase,
+                            'path': 'lyric'
+                        }
+                    }
+                }
+            ]
+
+            highlightsPipeline = [
+                {
+                    '$search': {
+                        'index': 'default',
+                        'text': {
+                            'query': phrase,
+                            'path': 'lyric'
+                        },
+                        'highlight': {
+                            'path': 'lyric'
+                        }
+                    }
+                },
+                {
+                    '$project': {
+                        'highlights': {'$meta': 'searchHighlights'}
+                    }
+                }
+            ]
+
+            if artist != "null":
+                artistFilter(searchPipeline, artist)
+            
+            if language != "null":
+                languageFilter(searchPipeline, language)
+
+            if genre != "null":
+                genreFilter(searchPipeline, genre)
+            
+            if minPop != "-1" and maxPop != "-1":
+                popularityFilter(searchPipeline, minPop, maxPop)
+            
+            if amountOfSongs != "-1":
+                amountOfSongsFilter(searchPipeline, int(amountOfSongs))
+
+            results = collection.aggregate(searchPipeline)
+            highlights = collection.aggregate(highlightsPipeline)
+
+            data = []
+
+            for document in results:
+                tempId = str(document['_id'])
+                tempDoc = {'_id': tempId,'artist': document['artist'], 'songLink': document['songLink'],
+                        'songName': document['songName'], 'popularity': document['popularity']}
+                tempHighlights = []
+                for highlight in highlights:
+                    if str(highlight['_id']) == tempId:
+                        tempHighlights = highlight['highlights']
+                        break
+
+                highestScore = 0
+                highestHighlight = None
+                for highlightedPhrase in tempHighlights:
+                    if highlightedPhrase['score'] > highestScore:
+                        highestScore = highlightedPhrase['score']
+                        highestHighlight = highlightedPhrase
+
+                try:
+                    processedHighlights = mainPhrase(highestHighlight['texts'])
+                    tempDoc['highlights'] = processedHighlights[1]
+                    tempDoc['lyric'] = shortLyric(document['lyric'], processedHighlights[0])
+                except:
+                    pass
+                data.append(tempDoc)
+
+            return {"data": data}
+        except pymongo.errors.PyMongoError as e:
+            return str(e)    
+
+### **Details Endpoint**
+Método HTTP: GET
+
+https://main-app.politebush-c6efad18.eastus.azurecontainerapps.io/details/<string:artist>/<string:songName>
+
+Este endpoint recibe el link de la canción de la que se desea conocer la información y devuelve toda la información correspondiente para la aplicación.
+
+    @app.route('/details/<string:artist>/<string:songName>', methods=['GET'])
+    def details(artist, songName):
+        try:
+            client = MongoClient(str(uri))
+
+            db = client.get_database(str(DatabaseName))
+
+            collection = db.get_collection(str(LyricsCollection))
+
+            songLink = "/" + artist + "/" + songName
+
+            pipeline = [
+                {
+                    '$search': {
+                        'index': 'default',
+                        'text': {
+                            'query': songLink,
+                            'path': 'songLink'
+                        }
+                    }
+                },
+                {
+                    '$limit': 1
+                }
+            ]
+
+            results = collection.aggregate(pipeline)
+
+            data = []
+            for document in results:
+                tempDoc = {'artist': document['artist'], 'genres': document['genres'], 'popularity': document['popularity'],
+                        'songs': document['songs'], 'songLink': document['songLink'], 'songName': document['songName'], 'lyric': document['lyric']}
+                data.append(tempDoc)
+
+            return {"data": data}
+        except pymongo.errors.PyMongoError as e:
+            return str(e) 
+
+## **Funciones Auxiliares del API**
+
+### **Método mainPhrase**
+Método que recibe la lista de highlights y devuelve la frase principal de la canción que se relaciona a la búsqueda.
+
+    def mainPhrase(highlights):
+        phrase = ""
+        highlightList = []
+        hitFlag = False
+        for highlight in highlights:
+            if highlight['type'] == 'hit':
+                phrase += highlight['value']
+                hitFlag = True
+                highlightList.append(highlight)
+            elif highlight['type'] == 'text' and hitFlag == True:
+                if len(phrase) <= 80:
+                    if '\n' in highlight['value']:
+                        phrase += highlight['value'].split('\n')[0]
+                        tempHighlight = {'type': 'text', 'value': highlight['value'].split('\n')[0]}
+                        highlightList.append(tempHighlight)
+                        break
+                    else:
+                        phrase += highlight['value']
+                        highlightList.append(highlight)
+                else:
+                    break
+        return [phrase, highlightList]
+
+
+### **Método shortLyric**
+Método que recibe la letra de la cancion y la frase principal de la búsqueda y retorna las 4 lineas mas cercanas a la canción relacionada con la búsqueda.
+
+    def shortLyric(lyric, substring):
+        jumps = 0
+    
+        lyricsArray = lyric.split('\n')
+        endIndex = len(lyricsArray) - 1
+        
+        newString = ''
+
+        jumps = 0
+        find = False
+        for i, line in enumerate(lyricsArray):
+
+            if jumps <= 4 and find == False:
+                newString += line + '\n'
+
+            if (substring in line or find):
+                if find == False:
+                    find = True
+                    newString = ''
+                    jumps = 0
+                    if endIndex == i:
+                        for j in range(4):
+                            newString += lyricsArray[i - (4 - j)] + '\n'
+                            break
+
+                if line == '':
+                    jumps -= 1
+                if jumps >= 4:
+                    break
+
+                newString += line + '\n'
+                
+            jumps += 1
+
+        return newString
+### **Método artistFilter**
+Método que agrega el filtro por artista a la consulta si el artista se especifica.
+
+    def artistFilter(pipeline, artist):
+        match = {
+            '$match': {
+                'artist': artist
+            }
+        }
+        pipeline.append(match)
+
+### **Método genreFilter**
+Método que agrega el filtro por género a la consulta si el género se especifica.
+
+    def genreFilter(pipeline, genre):
+        match = {
+            '$match': {
+                'genres': genre
+            }
+        }
+        pipeline.append(match)
+
+### **Método languageFilter**
+Método que agrega el filtro por lenguaje a la consulta si el lenguaje se especifica.
+
+    def languageFilter(pipeline, language):
+        match = {
+            '$match': {
+                'language': language
+            }
+        }
+        pipeline.append(match)
+
+### **Método popularityFilter**
+Método que agrega el filtro por popularidad a la consulta si se especifica los rangos.
+
+    def popularityFilter(pipeline, minPop, maxPop):
+        match = {
+            '$match': {
+                'popularity': {
+                    '$gte': float(minPop),
+                    '$lte': float(maxPop)
+                }
+            }
+        }
+        pipeline.append(match)
+
+### **Método amountOfSongsFilter**
+Método que agrega el filtro por cantidad de canciones a la consulta cuando la cantidad de canciones se especifica.
+
+    def amountOfSongsFilter(pipeline, amountOfSongs):
+        limit = {
+            '$limit': amountOfSongs
+        }
+        pipeline.append(limit)
+
+### **Método removeRepeatedGenres**
+Método que quita los generos repetidos de una lista de generos para los facets.
+
+    def removeRepeatedGenres(genres):
+        genresList = []
+        for genre in genres:
+            if genre not in genresList:
+                genresList.append(genre)
+        return genresList
+
+### **
 
 ## **App de React**
 
@@ -376,12 +772,131 @@ Aquí se evidencia cómo es que se le dan los estilos a los elementos del html u
 #### **checkbox.jsx**
 
 <center>
-    <img src="Resources/react/checkbox.png" alt="main.jsx" />
+    <img src="Resources/react/checkbox.png" alt="checkbox.jsx" />
 </center>
+
+Este .jsx contiene el componente de checkbox. Es un área que almacena varios checkbox que se cargan desde una lista y aplicándoles el método map() se genera un cuadrado para cada elemento. Como cada checkbox debe de tener un id diferente para poder trabajar correctamente, el componente recibe un prefijo que se utilizará para diferenciar los identificadores únicos. El texto que se muestra en cada checkbox es el .nombre de cada objeto de la lista del facet.
+
+Cuando un checkbox se presiona, se activa la función handleChange() que recibe el evento y el índice del elemento. Aquí se comprueba si el checkbox ya estaba activado o no, si no estaba activado entonces se procede activar, pero si estaba activado se desactivará.
+
+Para los facets de artistas, géneros e idiomas solo se puede seleccionar un elemento a la vez, por esta razón es que si un checkbox está activo y luego se presiona otro, se desactivará el anterior para activar el nuevo.
+
+Nota: Abajo de esta lógica está la versión anterior, en la que se pueden seleccionar más de un checkbox a la vez.
+
+### **LoginBackground.jsx**
+
+<center>
+    <img src="Resources/react/LoginBackground.png" alt="LoginBackground.jsx" />
+</center>
+
+En este jsx se crea el fondo del apartado o vista de inicio de sesión o registro de usuario. Además, se carga y define el logo correspondiente a la aplicación.
+
+### **Pagination.jsx**
+
+<center>
+    <img src="Resources/react/Pagination.png" alt="Pagination.jsx" />
+</center>
+
+Este es solo una parte del archivo. Este jsx se encarga de generar la paginación de los resultados que se van a mostrar una vez que se ha realizado la búsqueda. En este componente se calcula el número total de páginas en relación del número de elementos que se quieren mostrar por página y el total de elementos para posteriormente generar una lista de botones que representan las páginas y permiten el desplazamiento entre las páginas.
+
+### **SearchBar.jsx**
+
+<center>
+    <img src="Resources/react/SearchBar.png" alt="SearchBar.jsx" />
+</center>
+
+Este es solo una parte del archivo. En este jsx se encuentra el componente SearchBar, este componente maneja la barra de búsqueda para buscar las letras de las canciones. En este componente al escribir en la barra de búsqueda, luego de un tiempo gracias al "useDebounce.jsx" que se explicará después, se hace una llamada al API con los parámetros de búsqueda, como la letra escrita en la barra, artistas, idiomas y géneros, para posteriormente mostrar los resultados de la búsqueda.
+
+### **SearchResult.jsx**
+
+<center>
+    <img src="Resources/react/SearchResult.png" alt="SearchResult.jsx" />
+</center>
+
+Se encarga de mostrar los resultados de la búsqueda de letras de las canciones. En este se reciben los resultados de la búsqueda del API y se colocan uno debajo del otro, se muestra el nombre de la canción, el artista y una fracción de la letra de la canción en donde se vea la coincidencia que esta tiene con lo ingresado en la barra de búsqueda. (Las palabras coincidentes mostradas en el pequeño fragmento de la canción son resaltadas para visualizar la relación entre lo buscado y los resultados)
+
+### **SearchResultsList.jsx**
+
+<center>
+    <img src="Resources/react/SearchResultsList.png" alt="SearchResultsList.jsx" />
+</center>
+
+Este jsx contiene un componente llamado SearchResultsList, el cual se encarga de mostrar una lista de los resultados de búsqueda. En este se itera sobre cada elemento del arreglo que contiene los resultados de la búsqueda y se crea un componente SearchResult para cada uno de ellos. Como se explicó anteriormente en el apartado de SearchResult.jsx, cada uno de estos componentes se crean utilizando los datos del resultado correspondiente a cada uno de ellos.
+
+### **useDebounce.jsx**
+
+<center>
+    <img src="Resources/react/useDebounce.png" alt="useDebounce.jsx" />
+</center>
+
+Se crea un hook llamado useDebounce, el cual retrasa la ejecución de una acción hasta que un valor se mantenga constante durante un cierto tiempo. Este es utilizado para que las busquedas no se realicen cada vez que se cambia una letra en la barra de busqueda, sino que se realice cuando ya se deje de modificar el texto durante un tiempo definido. (Disminuye la cantidad de consultas que se le deben de hacer al API y mejora el rendimiento de la aplicacion)
+
+### **Home.jsx**
+
+<center>
+    <img src="Resources/react/Home.png" alt="Home.jsx" />
+</center>
+
+ En este jsx es en donde se juntan todas las otras partes, pues se podría decir que esta es la pagina principal en donde se implementan la mayoria de funcionalidades de esta aplicación. En este se administran los filtros, las búsquedas y los resultados en la interfaz de búsqueda. Se utilizan hooks de estado para controlar los valores de los filtros y la paginación. También se utilizan hooks de useEffect para realizar la llamadas a una API y actualizar datos. En esta se muestra el logo de la aplicación, la barra de búsqueda, los filtros, los deslizadores y una lista de resultados con paginación.
+
+ ## Docker
+
+ Como se está utilizando vite junto a React, para poder encapsular la app en una imagen de Docker se tienen que hacer unos cambios y agregar archivos.
+
+En el archivo vite.config.js se agregaron las configuraciones del server. Aquí se especifica el watch, host, strictPort y port. Con todas estas configuraciones ya se puede crear la imagen de Docker.
+
+<center>
+    <img src="Resources/react/ViteConfig.png" alt="ViteConfig.jsx" />
+</center>
+
+En el directorio principal de la app se agregó .dockerignore y Dockerfile. En el .dockerignore se agregan las carpetas y files que no se tienen que agregar a la imagen. Estos son node_modules, npm-debug.log, build, .git, \*.md y .gitignore. En el Dockerfile está la configuración de la imagen. Se importa node, se copia package.json porque ahí se encuentran los módulos que se tienen que instalar, se instalan, se expone el puerto 5173 que es el que utiliza vite y se ejecuta el comando `npm run dev`.
+
+<center>
+    <i><b>.dockerignore</b></i>
+</center>
+
+<center>
+    <img src="Resources/react/dockerignore.png" alt="dockerignore.jsx" />
+</center>
+
+<center>
+    <br>
+    <i><b>Dockerfile</b></i>
+</center>
+
+<center>
+    <img src="Resources/react/Dockerfile.png" alt="Dockerfile.jsx" />
+</center>
+
+Teniendo todo esto listo, solo hace falta ejecutar los comandos para hacer la imagen y subirla a Dockerhub. Son los siguientes:
+
+- `docker build -f Dockerfile -t moisose/open-lyrics .`
+- `sudo docker push moisose/open-lyrics`
+
+Ahora bien, si se quiere ejecutar la imagen en local, se tiene que ejecutar:
+
+- `docker run -p 5173:5173 -d moisose/open-lyrics`
+
+En el navegador se accede al localhost en el puerto 5173 y la app funciona correctamente.
+
+Para el caso de este proyecto, se solicita que la app funcione en Azure services. Para poder configurar esto se tiene que ir a la carpeta original de este proyecto. Una vez ahí se accede a: ./infraestructure-p2/container_services.tf. Ahí en la parte de resource, luego en site_config y en application_stack, se encuentran los valores para docker_image y docker_image_tag. En esta sección solamente es poner el nombre de la imagen que se subió a Dockerhub que en este caso es `docker.io/moisose/open_lyrics` y en el docker_image_tag se coloca `latest`.
+
+Con esto configurado ya está todo listo para utilizar la aplicación. Si por alguna razón se tiene que hacer alguna modificación al código, entonces se tiene hacer de nuevo la imagen y subirla a Dockerhub. Azure se encargará automáticamente de actualizar la app en un corto tiempo.
 
 # **Pruebas realizadas**
 
 # **Resultados de las pruebas unitarias**
+
+## **API**
+Las pruebas unitarias fueron realizadas mediante este código. 
+<center>
+    <img src="Resources/codeUnittest.png" alt="code of the unittest" />
+</center>
+
+Los resultados fueron correctos en las 3: 
+<center>
+    <img src="Resources/resultsUnittest.png" alt="result of the unittest" />
+</center>
 
 # **Conclusiones**
 
@@ -426,5 +941,3 @@ Aquí se evidencia cómo es que se le dan los estilos a los elementos del html u
 **9-** Repartir y asignar tareas a cada integrante del equipo.
 
 **10-** Definir roles en el equipo de trabajo para mantener el orden y procurar buena dinámica de trabajo.
-
-# **Referencias bibliográficas donde aplique**
