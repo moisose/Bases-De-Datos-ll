@@ -16,6 +16,42 @@
 
 # **Instrucciones para ejecutar su proyecto**
 
+## 1- Ejecución del loader
+**1.1.**  Para ejecutar la imagen debe abrir una consola wsl en la carpeta del proyecto.
+
+<center>
+    <img src="Resources/ejecuciónP1.png" alt="Pasos ejecución" />
+</center>
+
+**1.2.**  Dirigirse a la carpeta **Docker** con "cd Docker"
+
+<center>
+    <img src="Resources/ejecuciónP2.png" alt="Pasos ejecución" />
+</center>
+
+**1.3.** Ejecutar "bash build.sh", en caso de problemas, ejecutar "dos2unix build.sh" y luego de nuevo el "bash build.sh".
+
+<center>
+    <img src="Resources/ejecuciónP3.png" alt="Pasos ejecución" />
+</center>
+
+**1.4.** Para ejecutar la imagen, usar "sudo docker run melanysf/loader-p2".
+
+<center>
+    <img src="Resources/ejecuciónP4.png" alt="Pasos ejecución" />
+</center>
+
+**Nota:** Es importante, antes de hacer el build, haber abierto docker desktop.
+
+## 2- Ejecución de la aplicación en React
+**1.** Para utilizar la aplicación, debemos de ingresar al siguiente link: https://main-mangos.azurewebsites.net/
+
+<center>
+    <img src="Resources/ejecucionAppReact.png" alt="Ejecución de aplicación" />
+</center>
+
+**Nota:** La aplicación de React fue subida a Azure Services, por lo cual no necesita que se ingresen comandos de manera manual para que la aplicación corra de localmente en el dispositivo, pues la app está alojada en Azure, es decir, los archivos y recursos necesarios para que la aplicación funcione se encuentran en los servidores de Azure.
+
 # **Componentes**
 
 ## **Loader**
@@ -220,7 +256,6 @@ Se intenta hacer un decode a la variable content. Si esto falla, entonces tira l
 Por último, se actualiza el archivo en el BlobStorage y se retorna un string de confirmación.
 
 Finalmente, si hay un error se despliega el error en la consola.
-
 
 <center>
     <img src="Resources/updateBlobFile.png" alt="Download File" />
@@ -737,8 +772,116 @@ Aquí se evidencia cómo es que se le dan los estilos a los elementos del html u
 #### **checkbox.jsx**
 
 <center>
-    <img src="Resources/react/checkbox.png" alt="main.jsx" />
+    <img src="Resources/react/checkbox.png" alt="checkbox.jsx" />
 </center>
+
+Este .jsx contiene el componente de checkbox. Es un área que almacena varios checkbox que se cargan desde una lista y aplicándoles el método map() se genera un cuadrado para cada elemento. Como cada checkbox debe de tener un id diferente para poder trabajar correctamente, el componente recibe un prefijo que se utilizará para diferenciar los identificadores únicos. El texto que se muestra en cada checkbox es el .nombre de cada objeto de la lista del facet.
+
+Cuando un checkbox se presiona, se activa la función handleChange() que recibe el evento y el índice del elemento. Aquí se comprueba si el checkbox ya estaba activado o no, si no estaba activado entonces se procede activar, pero si estaba activado se desactivará.
+
+Para los facets de artistas, géneros e idiomas solo se puede seleccionar un elemento a la vez, por esta razón es que si un checkbox está activo y luego se presiona otro, se desactivará el anterior para activar el nuevo.
+
+Nota: Abajo de esta lógica está la versión anterior, en la que se pueden seleccionar más de un checkbox a la vez.
+
+### **LoginBackground.jsx**
+
+<center>
+    <img src="Resources/react/LoginBackground.png" alt="LoginBackground.jsx" />
+</center>
+
+En este jsx se crea el fondo del apartado o vista de inicio de sesión o registro de usuario. Además, se carga y define el logo correspondiente a la aplicación.
+
+### **Pagination.jsx**
+
+<center>
+    <img src="Resources/react/Pagination.png" alt="Pagination.jsx" />
+</center>
+
+Este es solo una parte del archivo. Este jsx se encarga de generar la paginación de los resultados que se van a mostrar una vez que se ha realizado la búsqueda. En este componente se calcula el número total de páginas en relación del número de elementos que se quieren mostrar por página y el total de elementos para posteriormente generar una lista de botones que representan las páginas y permiten el desplazamiento entre las páginas.
+
+### **SearchBar.jsx**
+
+<center>
+    <img src="Resources/react/SearchBar.png" alt="SearchBar.jsx" />
+</center>
+
+Este es solo una parte del archivo. En este jsx se encuentra el componente SearchBar, este componente maneja la barra de búsqueda para buscar las letras de las canciones. En este componente al escribir en la barra de búsqueda, luego de un tiempo gracias al "useDebounce.jsx" que se explicará después, se hace una llamada al API con los parámetros de búsqueda, como la letra escrita en la barra, artistas, idiomas y géneros, para posteriormente mostrar los resultados de la búsqueda.
+
+### **SearchResult.jsx**
+
+<center>
+    <img src="Resources/react/SearchResult.png" alt="SearchResult.jsx" />
+</center>
+
+Se encarga de mostrar los resultados de la búsqueda de letras de las canciones. En este se reciben los resultados de la búsqueda del API y se colocan uno debajo del otro, se muestra el nombre de la canción, el artista y una fracción de la letra de la canción en donde se vea la coincidencia que esta tiene con lo ingresado en la barra de búsqueda. (Las palabras coincidentes mostradas en el pequeño fragmento de la canción son resaltadas para visualizar la relación entre lo buscado y los resultados)
+
+### **SearchResultsList.jsx**
+
+<center>
+    <img src="Resources/react/SearchResultsList.png" alt="SearchResultsList.jsx" />
+</center>
+
+Este jsx contiene un componente llamado SearchResultsList, el cual se encarga de mostrar una lista de los resultados de búsqueda. En este se itera sobre cada elemento del arreglo que contiene los resultados de la búsqueda y se crea un componente SearchResult para cada uno de ellos. Como se explicó anteriormente en el apartado de SearchResult.jsx, cada uno de estos componentes se crean utilizando los datos del resultado correspondiente a cada uno de ellos.
+
+### **useDebounce.jsx**
+
+<center>
+    <img src="Resources/react/useDebounce.png" alt="useDebounce.jsx" />
+</center>
+
+Se crea un hook llamado useDebounce, el cual retrasa la ejecución de una acción hasta que un valor se mantenga constante durante un cierto tiempo. Este es utilizado para que las busquedas no se realicen cada vez que se cambia una letra en la barra de busqueda, sino que se realice cuando ya se deje de modificar el texto durante un tiempo definido. (Disminuye la cantidad de consultas que se le deben de hacer al API y mejora el rendimiento de la aplicacion)
+
+### **Home.jsx**
+
+<center>
+    <img src="Resources/react/Home.png" alt="Home.jsx" />
+</center>
+
+ En este jsx es en donde se juntan todas las otras partes, pues se podría decir que esta es la pagina principal en donde se implementan la mayoria de funcionalidades de esta aplicación. En este se administran los filtros, las búsquedas y los resultados en la interfaz de búsqueda. Se utilizan hooks de estado para controlar los valores de los filtros y la paginación. También se utilizan hooks de useEffect para realizar la llamadas a una API y actualizar datos. En esta se muestra el logo de la aplicación, la barra de búsqueda, los filtros, los deslizadores y una lista de resultados con paginación.
+
+ ## Docker
+
+ Como se está utilizando vite junto a React, para poder encapsular la app en una imagen de Docker se tienen que hacer unos cambios y agregar archivos.
+
+En el archivo vite.config.js se agregaron las configuraciones del server. Aquí se especifica el watch, host, strictPort y port. Con todas estas configuraciones ya se puede crear la imagen de Docker.
+
+<center>
+    <img src="Resources/react/ViteConfig.png" alt="ViteConfig.jsx" />
+</center>
+
+En el directorio principal de la app se agregó .dockerignore y Dockerfile. En el .dockerignore se agregan las carpetas y files que no se tienen que agregar a la imagen. Estos son node_modules, npm-debug.log, build, .git, \*.md y .gitignore. En el Dockerfile está la configuración de la imagen. Se importa node, se copia package.json porque ahí se encuentran los módulos que se tienen que instalar, se instalan, se expone el puerto 5173 que es el que utiliza vite y se ejecuta el comando `npm run dev`.
+
+<center>
+    <i><b>.dockerignore</b></i>
+</center>
+
+<center>
+    <img src="Resources/react/dockerignore.png" alt="dockerignore.jsx" />
+</center>
+
+<center>
+    <br>
+    <i><b>Dockerfile</b></i>
+</center>
+
+<center>
+    <img src="Resources/react/Dockerfile.png" alt="Dockerfile.jsx" />
+</center>
+
+Teniendo todo esto listo, solo hace falta ejecutar los comandos para hacer la imagen y subirla a Dockerhub. Son los siguientes:
+
+- `docker build -f Dockerfile -t moisose/open-lyrics .`
+- `sudo docker push moisose/open-lyrics`
+
+Ahora bien, si se quiere ejecutar la imagen en local, se tiene que ejecutar:
+
+- `docker run -p 5173:5173 -d moisose/open-lyrics`
+
+En el navegador se accede al localhost en el puerto 5173 y la app funciona correctamente.
+
+Para el caso de este proyecto, se solicita que la app funcione en Azure services. Para poder configurar esto se tiene que ir a la carpeta original de este proyecto. Una vez ahí se accede a: ./infraestructure-p2/container_services.tf. Ahí en la parte de resource, luego en site_config y en application_stack, se encuentran los valores para docker_image y docker_image_tag. En esta sección solamente es poner el nombre de la imagen que se subió a Dockerhub que en este caso es `docker.io/moisose/open_lyrics` y en el docker_image_tag se coloca `latest`.
+
+Con esto configurado ya está todo listo para utilizar la aplicación. Si por alguna razón se tiene que hacer alguna modificación al código, entonces se tiene hacer de nuevo la imagen y subirla a Dockerhub. Azure se encargará automáticamente de actualizar la app en un corto tiempo.
 
 # **Pruebas realizadas**
 

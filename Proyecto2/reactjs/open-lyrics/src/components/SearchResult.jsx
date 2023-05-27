@@ -30,16 +30,6 @@ export const SearchResult = ({ result }) => {
     }
   }, [result]);
 
-  // console.log("highlights: " + hits);
-
-  // for (const hit of hits) {
-  //   console.log(hit.value);
-  // }
-
-  // console.log("largo: " + hits.length);
-
-  // console.log("letra: " + lyric);
-
   return (
     <div className={classes.searchResult}>
       <div className={classes.name}>{result.name}</div>
