@@ -1,0 +1,10 @@
+mongodb:
+  enabled: true
+elastic:
+  version: 8.6.1
+  replicas: 1
+  name: ic4302
+kibana:
+  version: 8.6.1
+  replicas: 1
+  name: ic4302

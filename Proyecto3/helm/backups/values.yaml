@@ -1,0 +1,16 @@
+mongo:
+  enabled: true
+  config:
+    namespace: default
+    connectionString: databases-mongodb.default.svc.cluster.local:27017
+    storageAccount: filesmanagernereo
+    container: documents
+    path: /mongo
+    maxBackups: 3
+    azureSecret: azure-storage-account-key
+    secret: databases-mongodb
+    name: mongo
+    schedule: "0 */12 * * *"
+    diskSize: 2
+    storageClass: hostpath
+    provider: Azure
