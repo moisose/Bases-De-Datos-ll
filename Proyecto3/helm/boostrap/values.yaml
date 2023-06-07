@@ -1,5 +1,5 @@
 # encode using Base 64
 # Linux, execute echo 'value' | base64
-azureStoreAccountB64: ZmlsZXNastYW5hZ2VybmVyZW8=
-azureStorageAccountKeyB64: SsdaGFlYXhlUG11emdhNElrN2JrZUN4TERtSVVSNWcwVGsxRU1pc1NSMll4ZkMzZlRVdkovdko0RnEvdmdtYUs2T0g3anNOS0IrQUN3LytBU3RwYkNzZVE9PQo=
+azureStoreAccountB64: ZmlsZXNtYW5hZ2VybWFuZ29zCg==
+azureStorageAccountKeyB64: NzFtczJ0M1lGblc3UXU0S2xsZ0MxUFI1YWRSWlZVaGJxS0duN21JWGFRSTBaZ0Y3b3VnUVVSMExXaGY3aWNFQ005OFlkVjljMmdyVCtBU3Q4Wlh1K2c9PQo=
 namespace: default

@@ -3,7 +3,7 @@ mongo:
   config:
     namespace: default
     connectionString: databases-mongodb.default.svc.cluster.local:27017
-    storageAccount: filesmanagernereo
+    storageAccount: filesmanagermangos
     container: documents
     path: /mongo
     maxBackups: 3
