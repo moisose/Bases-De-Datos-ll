@@ -15,3 +15,20 @@ mongo:
     storageClass: hostpath
     provider: Azure
     image: moisose/mongodb-client
+postgresql:
+  enabled: true
+  config:
+    namespace: default
+    connectionString: databases-postgresql.default.svc.cluster.local:5432
+    storageAccount: filesmanagermangos
+    container: documents
+    path: /postgresql
+    maxBackups: 3
+    azureSecret: azure-storage-account-key
+    secret: databases-postgresql
+    name: postgresql
+    schedule: "0 */12 * * *"
+    diskSize: 2
+    storageClass: hostpath
+    provider: Azure
+    image: moisose/postgresql-client

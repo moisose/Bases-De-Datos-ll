@@ -1,0 +1,200 @@
+{{ if .Values.postgresql.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.config.postgresql.mapName }}
+  namespace: {{ .Values.namespace }}
+data:
+{{ (.Files.Glob "sql/postgres.sql").AsConfig | indent 2 }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgresql-snapshotter
+  namespace: {{ .Values.postgresql.config.namespace }}
+spec:
+  storageClassName: {{ .Values.postgresql.config.storageClass }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.postgresql.config.diskSize }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "postgresql-backup"
+  namespace: {{ .Values.postgresql.config.namespace }}
+spec:
+  schedule: {{ .Values.postgresql.config.schedule }}
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          terminationGracePeriodSeconds: 0
+          restartPolicy: Never
+          volumes:
+          - name: scripts
+            configMap:
+              name: postgresql-backups-script
+              defaultMode: 0777
+          - name: postgresql-snapshotter
+            persistentVolumeClaim:
+              claimName: postgresql-snapshotter
+          containers:
+            - image: mcr.microsoft.com/azure-cli
+              name: postgresql-snapshotter
+              env:
+                - name: POSTGRESQL_CONNECTION_STRING
+                  value: "{{ .Values.postgresql.config.connectionString }}"
+                - name: AZURE_STORAGE_ACCOUNT
+                  value: "{{ .Values.postgresql.config.storageAccount }}"
+                - name: CONTAINER
+                  value: "{{ .Values.postgresql.config.container }}"
+                - name: BACKUP_PATH
+                  value: "{{ .Values.postgresql.config.path }}"
+                - name: MAX_BACKUPS
+                  value: "{{ .Values.postgresql.config.maxBackups }}"
+                - name: POSTGRESQL_USERNAME
+                  value: "root"
+                - name: POSTGRESQL_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: "{{ .Values.postgresql.config.secret }}"
+                      key: postgres-password
+                      optional: false
+                - name: AZURE_STORAGE_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: "{{ .Values.postgresql.config.azureSecret }}"
+                      key: azure.client.default.key
+                      optional: false
+              volumeMounts:
+                - mountPath: "/pgdump"
+                  name: postgresql-snapshotter
+                - name: scripts
+                  mountPath: /scripts
+              command:
+                - "/scripts/postgresql.sh"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mongo-backup-0
+  namespace: {{ .Values.postgresql.config.namespace }}
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ .Values.postgresql.config.serviceAccount }}
+      volumes:
+      - name: scripts
+        configMap:
+          name: postgresql-backups-script
+          defaultMode: 0777
+      - name: postgresql-snapshotter
+        persistentVolumeClaim:
+          claimName: postgresql-snapshotter
+      containers:
+        - image: mcr.microsoft.com/azure-cli
+          name: postgresql-snapshotter
+          env:
+            - name: POSTGRESQL_CONNECTION_STRING
+              value: "{{ .Values.postgresql.config.connectionString }}"
+            - name: AZURE_STORAGE_ACCOUNT
+              value: "{{ .Values.postgresql.config.storageAccount }}"
+            - name: CONTAINER
+              value: "{{ .Values.postgresql.config.container }}"
+            - name: BACKUP_PATH
+              value: "{{ .Values.postgresql.config.path }}"
+            - name: MAX_BACKUPS
+              value: "{{ .Values.postgresql.config.maxBackups }}"
+            - name: POSTGRESQL_USERNAME
+              value: "root"
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.postgresql.config.secret }}"
+                  key: postgres-password
+                  optional: false
+            - name: AZURE_STORAGE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.postgresql.config.azureSecret }}"
+                  key: azure.client.default.key
+                  optional: false
+          volumeMounts:
+            - mountPath: "/pgdump"
+              name: postgresql-snapshotter
+            - name: scripts
+              mountPath: /scripts
+          command:
+            - "/scripts/postgresql.sh"
+      restartPolicy: Never
+  backoffLimit: 1
+---
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------
+# insert data
+# ---------------------------------------------------------------------------------------------------------------------------------------------
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgresql-data
+  namespace: {{ .Values.namespace }}
+data:
+{{ (.Files.Glob "sql/postgres.sql").AsConfig | indent 2 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postgresql-data-0
+spec:
+  template:
+    spec:
+      volumes:
+      - name: scripts
+        configMap:
+          name: postgresql-data
+          defaultMode: 0777
+      containers:
+      - name: pi
+        image: {{ .Values.postgresql.config.image }}
+        volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+        env:
+          - name: POSTGRESQL_CONNECTION_STRING
+            value: "{{ .Values.postgresql.config.connectionString }}"
+          - name: AZURE_STORAGE_ACCOUNT
+            value: "{{ .Values.postgresql.config.storageAccount }}"
+          - name: CONTAINER
+            value: "{{ .Values.postgresql.config.container }}"
+          - name: BACKUP_PATH
+            value: "{{ .Values.postgresql.config.path }}"
+          - name: MAX_BACKUPS
+            value: "{{ .Values.postgresql.config.maxBackups }}"
+          - name: POSTGRESQL_USERNAME
+            value: "root"
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.postgresql.config.secret }}"
+                key: postgres-password
+                optional: false
+          - name: AZURE_STORAGE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.postgresql.config.azureSecret }}"
+                key: azure.client.default.key
+                optional: false
+        command: ["/bin/sh"]
+        args: ["-c", "PGPASSWORD=$(DB_PASS) psql -h $(DB_HOST) -U postgres -f \"/scripts/postgres.sql\""]
+      restartPolicy: Never
+  backoffLimit: 8
+
+{{- end }}
