@@ -139,4 +139,66 @@ spec:
       restartPolicy: Never
   backoffLimit: 1
 
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------
+# insert data
+# ---------------------------------------------------------------------------------------------------------------------------------------------
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-data
+  namespace: {{ .Values.namespace }}
+data:
+{{ (.Files.Glob "sql/data.json").AsConfig | indent 2 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mongo-data-0
+spec:
+  template:
+    spec:
+      volumes:
+      - name: scripts
+        configMap:
+          name: mongo-data
+          defaultMode: 0777
+      containers:
+      - name: pi
+        image: {{ .Values.mongo.config.image }}
+        volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+        env:
+          - name: MONGO_CONNECTION_STRING
+            value: "{{ .Values.mongo.config.connectionString }}"
+          - name: AZURE_STORAGE_ACCOUNT
+            value: "{{ .Values.mongo.config.storageAccount }}"
+          - name: CONTAINER
+            value: "{{ .Values.mongo.config.container }}"
+          - name: BACKUP_PATH
+            value: "{{ .Values.mongo.config.path }}"
+          - name: MAX_BACKUPS
+            value: "{{ .Values.mongo.config.maxBackups }}"
+          - name: MONGO_USERNAME
+            value: "root"
+          - name: MONGO_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.mongo.config.secret }}"
+                key: mongodb-root-password
+                optional: false
+          - name: AZURE_STORAGE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.mongo.config.azureSecret }}"
+                key: azure.client.default.key
+                optional: false
+        command: ["/bin/sh", "-c", "mongosh --host $(MONGO_CONNECTION_STRING) --port 27017 --username $(MONGO_USERNAME) --password $(MONGO_PASSWORD) --eval \"
+        db.getSiblingDB('bd2').names.insertMany([ { 'name': 'Juan' }, { 'name': 'Luisiana' }, {'name': 'Rodrigo'} ]);\""]
+      restartPolicy: Never
+  backoffLimit: 8
+
 {{- end }}
