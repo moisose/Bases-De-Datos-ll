@@ -1,5 +1,5 @@
 mongodb:
-  enabled: true
+  enabled: false
 mariadb:
   enabled: false
 postgresql:

@@ -1,5 +1,5 @@
 mongo:
-  enabled: true
+  enabled: false
   config:
     namespace: default
     connectionString: databases-mongodb.default.svc.cluster.local:27017
@@ -18,8 +18,9 @@ mongo:
 postgresql:
   enabled: true
   config:
+    mapName: script-db
     namespace: default
-    connectionString: databases-postgresql.default.svc.cluster.local:5432
+    connectionString: databases-postgresql.default.svc.cluster.local
     storageAccount: filesmanagermangos
     container: documents
     path: /postgresql
