@@ -14,4 +14,7 @@ az config set extension.use_dynamic_install=yes_without_prompt
 # --host, -u or --username, -p or --password, --gzip(compress the output), --archive(Writes the output to a specified archive file)
 mongodump --host="$MONGO_CONNECTION_STRING" -u $MONGO_USERNAME -p $MONGO_PASSWORD --gzip --archive=/mongodump/$DATE
 az storage blob directory upload --container $CONTAINER -s /mongodump/$DATE -d $BACKUP_PATH --auth-mode key --recursive
-rm -rf /mongodump/$DATE
+rm -rf /mongodump/$
+
+# eliminar todo de la base
+mongosh "$MONGO_CONNECTION_STRING" --username "$MONGO_USERNAME" --password "$MONGO_PASSWORD" --eval "db.getCollectionNames().forEach((collection) => db.getCollection(collection).drop())"
