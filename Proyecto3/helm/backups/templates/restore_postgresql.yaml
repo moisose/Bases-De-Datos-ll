@@ -35,7 +35,7 @@ spec:
             - name: BACKUP_PATH
               value: "{{ .Values.postgresql.config.path }}"
             - name: POSTGRESQL_USERNAME
-              value: "root"
+              value: "postgres"
             - name: DB_HOST
               value: "databases-postgresql"
             - name: POSTGRESQL_PASSWORD

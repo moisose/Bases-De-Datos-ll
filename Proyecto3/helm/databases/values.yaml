@@ -4,6 +4,8 @@ mariadb:
   enabled: false
 postgresql:
   enabled: true
+  auth:
+    postgresPassword: "1234"
 neo4j:
   enabled: false
 couchdb:
