@@ -14,10 +14,12 @@ apk add  mongodb-tools
 # Azure CLI command for enable dynamic install without a prompt.
 az config set extension.use_dynamic_install=yes_without_prompt
 
+echo "Descargando el respaldo desde Azure Blob Storage"
 # Descargar el respaldo desde Azure Blob Storage
-az storage blob download --container $CONTAINER --name mongo/$BACKUP_NAME/$ARCHIVE_NAME --file mongorestore/$BACKUP_NAME/$ARCHIVE_NAME --auth-mode key --connection-string $CONNECTION_STRING_AZURE
+az storage blob download --container $CONTAINER --name mongo/$BACKUP_NAME/$ARCHIVE_NAME --file mongorestore/$BACKUP_NAME --auth-mode key --connection-string $CONNECTION_STRING_AZURE
 
+echo "Restaurando el respaldo en MongoDB"
 # Restaurar el respaldo en MongoDB
-mongorestore --host="$MONGO_CONNECTION_STRING" -u $MONGO_USERNAME -p $MONGO_PASSWORD --gzip --archive=mongorestore/$BACKUP_NAME/$ARCHIVE_NAME
+mongorestore --host="$MONGO_CONNECTION_STRING" -u $MONGO_USERNAME -p $MONGO_PASSWORD --gzip --archive=mongorestore/$BACKUP_NAME
 
 #--host $MONGO_HOST --port $MONGO_PORT --gzip --archive=$BACKUP_PATH/$BACKUP_NAME

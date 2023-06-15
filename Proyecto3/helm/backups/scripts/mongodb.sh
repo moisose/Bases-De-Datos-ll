@@ -8,6 +8,7 @@ apk update
 apk upgrade
 # The MongoDB tools provide import, export, and diagnostic capabilities.
 apk add  mongodb-tools
+apk add mongodb=3.4.4-r0
 # Azure CLI command for enable dynamic install without a prompt.
 az config set extension.use_dynamic_install=yes_without_prompt
 # mongodump configuration for connect to an instance
@@ -17,4 +18,4 @@ az storage blob directory upload --container $CONTAINER -s /mongodump/$DATE -d $
 rm -rf /mongodump/$
 
 # eliminar todo de la base
-mongosh "$MONGO_CONNECTION_STRING" --username "$MONGO_USERNAME" --password "$MONGO_PASSWORD" --eval "db.getCollectionNames().forEach((collection) => db.getCollection(collection).drop())"
+mongo --host="$MONGO_CONNECTION_STRING" --username "$MONGO_USERNAME" --password "$MONGO_PASSWORD" --eval "db.getCollectionNames().forEach((collection) => db.getCollection(collection).drop())"
