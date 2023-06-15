@@ -12,6 +12,6 @@ apk add postgresql-client
 # Azure CLI command for enable dynamic install without a prompt.
 az config set extension.use_dynamic_install=yes_without_prompt
 # pg_dump configuration for connect to an instance
-PGPASSWORD="$POSTGRESQL_PASSWORD" pg_dump --host $DB_HOST -U $POSTGRESQL_USERNAME --file=/pgdump/$DATE/database.dump
+PGPASSWORD="$POSTGRESQL_PASSWORD" pg_dump --host $DB_HOST -U $POSTGRESQL_USERNAME --file=/pgdump/$DATE/db_backup.dump
 az storage blob directory upload --container $CONTAINER -s /pgdump/$DATE -d $BACKUP_PATH --auth-mode key --recursive
 rm -rf /pgdump/$DATE
