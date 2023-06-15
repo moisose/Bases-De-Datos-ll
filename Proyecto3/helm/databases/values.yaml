@@ -1,7 +1,11 @@
 mongodb:
   enabled: false
+  auth:
+    rootPassword: "1234"
 mariadb:
   enabled: false
+  auth:
+    rootPassword: "1234"
 postgresql:
   enabled: true
   auth:

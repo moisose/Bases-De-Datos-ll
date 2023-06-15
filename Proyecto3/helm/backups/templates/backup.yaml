@@ -1,4 +1,4 @@
-{{- if .Values.mongo.enabled }}
+{{- if and .Values.mongo.enabled .Values.config.backup.enabled}}
 
 apiVersion: v1
 kind: ConfigMap

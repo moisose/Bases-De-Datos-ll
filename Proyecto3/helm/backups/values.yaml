@@ -1,3 +1,8 @@
+config:
+  backup:
+    enabled: false
+  restore:
+    enabled: true
 mongo:
   enabled: false
   config:
