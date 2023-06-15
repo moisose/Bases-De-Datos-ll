@@ -1,0 +1,59 @@
+{{- if .Values.mariadb.enabled }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-restore-script
+  namespace: {{ .Values.namespace }}
+data:
+{{ (.Files.Glob "scripts/mariadbrestore.sh").AsConfig | indent 2 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mariadb-restore-0
+  namespace: {{ .Values.mariadb.config.namespace }}
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ .Values.mariadb.config.serviceAccount }}
+      volumes:
+      - name: scripts
+        configMap:
+          name: mariadb-restore-script
+          defaultMode: 0777
+      containers:
+        - image: mcr.microsoft.com/azure-cli
+          name: mariadb-restorer
+          env:
+            - name: MARIADB_CONNECTION_STRING
+              value: "{{ .Values.mariadb.config.connectionString }}"
+            - name: AZURE_STORAGE_ACCOUNT
+              value: "{{ .Values.mariadb.config.storageAccount }}"
+            - name: CONTAINER
+              value: "{{ .Values.mariadb.config.container }}"
+            - name: BACKUP_PATH
+              value: "{{ .Values.mariadb.config.path }}"
+            - name: MARIADB_USERNAME
+              value: "root"
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.mariadb.config.secret }}"
+                  key: mariadb-password
+                  optional: false
+            - name: AZURE_STORAGE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.mariadb.config.azureSecret }}"
+                  key: azure.client.default.key
+                  optional: false
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+          command:
+            - "/scripts/mariadbrestore.sh"
+      restartPolicy: Never
+  backoffLimit: 1
+
+  {{- end }}

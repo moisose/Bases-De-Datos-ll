@@ -10,8 +10,9 @@ DB_NAME = "babynames"
 mkdir -p mariadbrestore/$BACKUP_NAME
 
 # Instalar cliente de MariaDB
-apt-get update
-apt-get install mariadb-client -y
+apk update
+apk upgrade 
+apk add mariadb-client
 
 # Descargar el backup desde Azure Blob Storage
 echo "Descargando el respaldo desde Azure Blob Storage"
@@ -19,4 +20,4 @@ az storage blob download --container $CONTAINER --name mariadb/$BACKUP_NAME/$ARC
 
 # Restaurar el backup en la base de datos
 echo "Restaurando el respaldo en MariaDB"
-mariadb -u $MARIADB_USERNAME -p $MARIADB_PASSWORD $DB_NAME < mariadbrestore/$BACKUP_NAME/$ARCHIVE_NAME
+mysql -u $MARIADB_USERNAME -p $MARIADB_PASSWORD $DB_NAME < mariadbrestore/$BACKUP_NAME/$ARCHIVE_NAME
