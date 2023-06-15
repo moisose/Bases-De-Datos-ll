@@ -1,0 +1,204 @@
+{{ if .Values.mariadb.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-backups-script
+  namespace: {{ .Values.namespace }}
+data:
+{{ (.Files.Glob "scripts/mariadb.sh").AsConfig | indent 2 }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: -snapshotter
+  namespace: {{ .Values.mariadb.config.namespace }}
+spec:
+  storageClassName: {{ .Values.mariadb.config.storageClass }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.mariadb.config.diskSize }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "mariadb-backup"
+  namespace: {{ .Values.mariadb.config.namespace }}
+spec:
+  schedule: {{ .Values.mariadb.config.schedule }}
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          terminationGracePeriodSeconds: 0
+          restartPolicy: Never
+          volumes:
+          - name: scripts
+            configMap:
+              name: mariadb-backups-script
+              defaultMode: 0777
+          - name: mariadb-snapshotter
+            persistentVolumeClaim:
+              claimName: mariadb-snapshotter
+          containers:
+            - image: mcr.microsoft.com/azure-cli
+              name: mariadb-snapshotter
+              env:
+                - name: MARIADB_CONNECTION_STRING
+                  value: "{{ .Values.mariadb.config.connectionString }}"
+                - name: AZURE_STORAGE_ACCOUNT
+                  value: "{{ .Values.mariadb.config.storageAccount }}"
+                - name: CONTAINER
+                  value: "{{ .Values.mariadb.config.container }}"
+                - name: BACKUP_PATH
+                  value: "{{ .Values.mariadb.config.path }}"
+                - name: MAX_BACKUPS
+                  value: "{{ .Values.mariadb.config.maxBackups }}"
+                - name: MARIADB_USERNAME
+                  value: "root"
+                - name: MARIADB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: "{{ .Values.mariadb.config.secret }}"
+                      key: mariadb-root-password
+                      optional: false
+                - name: AZURE_STORAGE_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: "{{ .Values.mariadb.config.azureSecret }}"
+                      key: azure.client.default.key
+                      optional: false
+              volumeMounts:
+                - mountPath: "/pgdump"
+                  name: mariadb-snapshotter
+                - name: scripts
+                  mountPath: /scripts
+              command:
+                - "/scripts/mariadb.sh"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mariadb-backup-0
+  namespace: {{ .Values.mariadb.config.namespace }}
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ .Values.mariadb.config.serviceAccount }}
+      volumes:
+      - name: scripts
+        configMap:
+          name: mariadb-backups-script
+          defaultMode: 0777
+      - name: mariadb-snapshotter
+        persistentVolumeClaim:
+          claimName: mariadb-snapshotter
+      containers:
+        - image: mcr.microsoft.com/azure-cli
+          name: mariadb-snapshotter
+          env:
+            - name: MARIADB_CONNECTION_STRING
+              value: "{{ .Values.mariadb.config.connectionString }}"
+            - name: AZURE_STORAGE_ACCOUNT
+              value: "{{ .Values.mariadb.config.storageAccount }}"
+            - name: CONTAINER
+              value: "{{ .Values.mariadb.config.container }}"
+            - name: BACKUP_PATH
+              value: "{{ .Values.mariadb.config.path }}"
+            - name: MAX_BACKUPS
+              value: "{{ .Values.mariadb.config.maxBackups }}"
+            - name: DB_HOST
+              value: "databases-mariadb"
+            - name: MARIADB_USERNAME
+              value: "root"
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.mariadb.config.secret }}"
+                  key: mariadb-root-password
+                  optional: false
+            - name: AZURE_STORAGE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.mariadb.config.azureSecret }}"
+                  key: azure.client.default.key
+                  optional: false
+          volumeMounts:
+            - mountPath: "/pgdump"
+              name: mariadb-snapshotter
+            - name: scripts
+              mountPath: /scripts
+          command:
+            - "/scripts/mariadb.sh"
+      restartPolicy: Never
+  backoffLimit: 1
+---
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------
+# insert data
+# ---------------------------------------------------------------------------------------------------------------------------------------------
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-data
+  namespace: {{ .Values.namespace }}
+data:
+{{ (.Files.Glob "sql/mariadb.sql").AsConfig | indent 2 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mariadb-data-0
+spec:
+  template:
+    spec:
+      volumes:
+      - name: scripts
+        configMap:
+          name: mariadb-data
+          defaultMode: 0777
+      containers:
+      - name: pi
+        image: {{ .Values.mariadb.config.image }}
+        volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+        env:
+          - name: MARIADB_CONNECTION_STRING
+            value: "{{ .Values.mariadb.config.connectionString }}"
+          - name: AZURE_STORAGE_ACCOUNT
+            value: "{{ .Values.mariadb.config.storageAccount }}"
+          - name: CONTAINER
+            value: "{{ .Values.mariadb.config.container }}"
+          - name: BACKUP_PATH
+            value: "{{ .Values.mariadb.config.path }}"
+          - name: MAX_BACKUPS
+            value: "{{ .Values.mariadb.config.maxBackups }}"
+          - name: MARIADB_USERNAME
+            value: "root"
+          - name: DB_HOST
+            value: "databases-mariadb"
+          - name: MARIADB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.mariadb.config.secret }}"
+                key: mariadb-root-password
+                optional: false
+          - name: AZURE_STORAGE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.mariadb.config.azureSecret }}"
+                key: azure.client.default.key
+                optional: false
+        command: ["/bin/sh"]
+        args: ["-c", "PGPASSWORD=$(MARIADB_PASSWORD) psql -h $(DB_HOST) -U $(MARIADB_USERNAME) -f \"/scripts/mariadb.sql\""]
+      restartPolicy: Never
+  backoffLimit: 8
+
+{{- end }}

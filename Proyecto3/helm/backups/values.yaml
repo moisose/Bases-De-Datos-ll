@@ -1,5 +1,5 @@
 mongo:
-  enabled: true
+  enabled: false
   config:
     namespace: default
     connectionString: databases-mongodb.default.svc.cluster.local:27017
@@ -15,3 +15,39 @@ mongo:
     storageClass: hostpath
     provider: Azure
     image: moisose/mongodb-client
+postgresql:
+  enabled: true
+  config:
+    mapName: script-db
+    namespace: default
+    connectionString: databases-postgresql.default.svc.cluster.local
+    storageAccount: filesmanagermangos
+    container: documents
+    path: /postgresql
+    maxBackups: 3
+    azureSecret: azure-storage-account-key
+    secret: databases-postgresql
+    name: postgresql
+    schedule: "0 */12 * * *"
+    diskSize: 2
+    storageClass: hostpath
+    provider: Azure
+    image: moisose/postgresql-client
+mariadb:
+  enabled: true
+  config:
+    mapName: script-db
+    namespace: default
+    connectionString: databases-mariadb.default.svc.cluster.local
+    storageAccount: filesmanagermangos
+    container: documents
+    path: /mariadb
+    maxBackups: 3
+    azureSecret: azure-storage-account-key
+    secret: databases-mariadb
+    name: mariadb
+    schedule: "0 */12 * * *"
+    diskSize: 2
+    storageClass: hostpath
+    provider: Azure
+    image: moisose/mariadb-client
