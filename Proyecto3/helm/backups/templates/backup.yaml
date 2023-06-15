@@ -99,6 +99,7 @@ spec:
         persistentVolumeClaim:
           claimName: mongo-snapshotter
       containers:
+      
         - image: mcr.microsoft.com/azure-cli
           name: mongo-snapshotter
           env:
@@ -114,6 +115,8 @@ spec:
               value: "{{ .Values.mongo.config.maxBackups }}"
             - name: MONGO_USERNAME
               value: "root"
+            - name: MONGO_HOST
+              value: "databases-mongodb"
             - name: MONGO_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -131,8 +134,10 @@ spec:
               name: mongo-snapshotter
             - name: scripts
               mountPath: /scripts
-          command:
-            - "/scripts/mongodb.sh"
+          command: ["/bin/sh"]
+          args:
+            ["-c", "/scripts/mongodb.sh"]
+            # echo "MongoDB backup completed successfully"; "/scripts/mongodb.sh"; 
             # - "tail"
             # - "-f"
             # - "/dev/null"

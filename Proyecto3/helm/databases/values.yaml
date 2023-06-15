@@ -1,9 +1,9 @@
 mongodb:
-  enabled: true
+  enabled: false
 mariadb:
   enabled: false
 postgresql:
-  enabled: false
+  enabled: true
 neo4j:
   enabled: false
 couchdb:
