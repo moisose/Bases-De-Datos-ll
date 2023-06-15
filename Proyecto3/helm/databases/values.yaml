@@ -2,8 +2,10 @@ mongodb:
   enabled: false
 mariadb:
   enabled: false
-postgresql:
+mariadb:
   enabled: true
+postgresql:
+  enabled: false
   auth:
     postgresPassword: "1234"
 neo4j:

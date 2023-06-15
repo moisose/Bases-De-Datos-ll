@@ -16,7 +16,7 @@ mongo:
     provider: Azure
     image: moisose/mongodb-client
 postgresql:
-  enabled: true
+  enabled: false
   config:
     mapName: script-db
     namespace: default
@@ -34,11 +34,11 @@ postgresql:
     provider: Azure
     image: moisose/postgresql-client
 mariadb:
-  enabled: false
+  enabled: true
   config:
     mapName: script-db
     namespace: default
-    connectionString: databases-mariadb.default.svc.cluster.local
+    connectionString: databases-mariadb.default.svc.cluster.local:3306
     storageAccount: filesmanagermangos
     container: documents
     path: /mariadb
