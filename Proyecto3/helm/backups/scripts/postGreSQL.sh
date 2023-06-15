@@ -16,7 +16,7 @@ az config set extension.use_dynamic_install=yes_without_prompt
 PGPASSWORD="$POSTGRESQL_PASSWORD" pg_dumpall --host $DB_HOST -U $POSTGRESQL_USERNAME --file=/pgdump/$DATE/db_backup.dump
 
 # Drop all databases except the default ones
-PGPASSWORD="$POSTGRESQL_PASSWORD" psql --host $DB_HOST -U $POSTGRESQL_USERNAME -c "SELECT 'DROP DATABASE IF EXISTS ' || datname || ';' FROM pg_database WHERE datistemplate = false AND datname != 'postgres';" | PGPASSWORD="$POSTGRESQL_PASSWORD" psql --host $DB_HOST -U $POSTGRESQL_USERNAME
+#PGPASSWORD="$POSTGRESQL_PASSWORD" psql --host $DB_HOST -U $POSTGRESQL_USERNAME -c "SELECT 'DROP DATABASE IF EXISTS ' || datname || ';' FROM pg_database WHERE datistemplate = false AND datname != 'postgres';" | PGPASSWORD="$POSTGRESQL_PASSWORD" psql --host $DB_HOST -U $POSTGRESQL_USERNAME
 
 az storage blob directory upload --container $CONTAINER -s /pgdump/$DATE -d $BACKUP_PATH --auth-mode key --recursive
 rm -rf /pgdump/$DATE
