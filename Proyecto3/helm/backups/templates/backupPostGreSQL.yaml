@@ -5,7 +5,7 @@ metadata:
   name: postgresql-backups-script
   namespace: {{ .Values.namespace }}
 data:
-{{ (.Files.Glob "scripts/postgresql.sh").AsConfig | indent 2 }}
+{{ (.Files.Glob "scripts/postGreSQL.sh").AsConfig | indent 2 }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -78,7 +78,7 @@ spec:
                 - name: scripts
                   mountPath: /scripts
               command:
-                - "/scripts/postgresql.sh"
+                - "/scripts/postGreSQL.sh"
 ---
 apiVersion: batch/v1
 kind: Job
@@ -133,7 +133,7 @@ spec:
             - name: scripts
               mountPath: /scripts
           command:
-            - "/scripts/postgresql.sh"
+            - "/scripts/postGreSQL.sh"
       restartPolicy: Never
   backoffLimit: 1
 ---
