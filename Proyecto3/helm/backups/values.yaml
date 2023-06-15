@@ -16,7 +16,7 @@ mongo:
     provider: Azure
     image: moisose/mongodb-client
 postgresql:
-  enabled: true
+  enabled: false
   config:
     mapName: script-db
     namespace: default
