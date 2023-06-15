@@ -1,5 +1,5 @@
 mongo:
-  enabled: true
+  enabled: false
   config:
     namespace: default
     connectionString: databases-mongodb.default.svc.cluster.local:27017
@@ -16,7 +16,7 @@ mongo:
     provider: Azure
     image: moisose/mongodb-client
 postgresql:
-  enabled: false
+  enabled: true
   config:
     mapName: script-db
     namespace: default

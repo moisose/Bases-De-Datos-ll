@@ -36,6 +36,8 @@ spec:
               value: "{{ .Values.postgresql.config.path }}"
             - name: POSTGRESQL_USERNAME
               value: "root"
+            - name: DB_HOST
+              value: "databases-postgresql"
             - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
