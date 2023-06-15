@@ -64,7 +64,7 @@ Para cada una de las bases de datos, se agregan los valores necesarios en el arc
 
 ## **MongoDB**
 
-Para el backup de PostgreSQL se utilizó el archivo "backup.sh" en el que se realizan:
+Para el backup de MongoDB se utilizó el archivo "backup.sh" en el que se realizan:
 
 * ConfigMap: Se guardan aspectos de configuración, como el namestapce y el script correspondiente.
 
@@ -138,7 +138,7 @@ Para el backup de PostgreSQL se utilizó el archivo "backuppostgresql.yaml", en 
     <img src="Resources/cronjobPG.png" alt="Postgre Backup" />
 </center>
 
-* Job: Se crea el pod para realizar la tarea del respaldo de PostgreSQL, tambien se definen variables de entorno y demás.
+* Job: Se crea el pod para realizar la tarea del respaldo de PostgreSQL, tambien se definen variables de entorno y demás. Para la parte de la restauración, tambien se crea un job que se encarga de realizar la tarea de restaurar la base de datos.
 
 <center>
     <img src="Resources/jobPG.png" alt="Postgre Backup" />
@@ -163,6 +163,14 @@ Posteriormente se hace el **pg_dump** a la base de datos en postgresql mendiante
 Finalmente, se sube el dump al blobstorage de Azure.
 
 ### **Restauración**
+
+<center>
+    <img src="Resources/postgreRestore.png" alt="Postgre Backup" />
+</center>
+
+Para el script de restauración tambien se crea un directorio, se hace un update de los paquetes y se importa **postgresql-client**.
+
+Posteriormente, se descarga el archivo desde el blob de azure, para que luego se pueda restaurar la base de datos con el comando correspondiente.
 
 ## **ElasticSearch**
 
