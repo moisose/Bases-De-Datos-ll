@@ -10,7 +10,7 @@ data:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: -snapshotter
+  name: mariadb-snapshotter
   namespace: {{ .Values.mariadb.config.namespace }}
 spec:
   storageClassName: {{ .Values.mariadb.config.storageClass }}
@@ -197,7 +197,7 @@ spec:
                 key: azure.client.default.key
                 optional: false
         command: ["/bin/sh"]
-        args: ["-c", "PGPASSWORD=$(MARIADB_PASSWORD) psql -h $(DB_HOST) -U $(MARIADB_USERNAME) -f \"/scripts/mariadb.sql\""]
+        args: ["-c", "mysql -p$(MARIADB_PASSWORD) -uroot -h$(DB_HOST) < /scripts/mariadb.sql; mysql -p$(MARIADB_PASSWORD) -uroot -h$(DB_HOST) -e \"SHOW DATABASES\""]
       restartPolicy: Never
   backoffLimit: 8
 
