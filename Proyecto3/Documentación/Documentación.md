@@ -54,6 +54,134 @@
 
 ### **Restauración**
 
+# **Componentes**
+
+Para cada una de las bases de datos, se agregan los valores necesarios en el archivo "values.yaml", de la carpeta templetes, en la sección de backups.
+
+<center>
+    <img src="Resources/values.yalm_.png" alt="mongo Backup" />
+</center>
+
+## **MongoDB**
+
+Para el backup de PostgreSQL se utilizó el archivo "backup.sh" en el que se realizan:
+
+* ConfigMap: Se guardan aspectos de configuración, como el namestapce y el script correspondiente.
+
+<center>
+    <img src="Resources/configmapM.png" alt="mongo Backup" />
+</center>
+
+* PersistentVolumeClaim: Se solicita el almacenamiento necesario y se define el modo de lectura-escritura.
+
+<center>
+    <img src="Resources/pvcM.png" alt="Mongo Backup" />
+</center>
+
+* CronJob: Utilizado para automarizar los backups, tambien se definen variables de entorno y demás.
+
+<center>
+    <img src="Resources/cronjobM.png" alt="Mongo Backup" />
+</center>
+
+* Job: Se crea el pod para realizar la tarea del respaldo de MongoDB, tambien se definen variables de entorno y demás.
+
+<center>
+    <img src="Resources/jobM.png" alt="Postgre Backup" />
+</center>
+
+Por otro lado, en este mismo archivo se definen un configmap y un job para hacer el cargado de la base de datos y los datos de prueba necesarios para comprobar el funcionamiento del backup.
+
+<center>
+    <img src="Resources/loadDataM.png" alt="Mongo Backup" />
+</center>
+
+### **Backup**
+
+<center>
+    <img src="Resources/mongoBackup.png" alt="Mongo Backup" />
+</center>
+
+Para el script del backup de MongoDB se optiene la fecha, y se crea el directorio (en caso de que no exista), ademas, se hace un update de los paquetes y se importa **mongodb-tools**, este brinda las herramientas necesarias para manejar Mongo y poder hacer el dump.
+
+Posteriormente se hace el **mongodump** a Mongo mediante el conection string, el username y el password.
+
+Finalmente, se sube el dump al blobstorage de Azure.
+
+### **Restauración**
+
+## **MariaDB**
+
+### **Backup**
+
+### **Restauración**
+
+## **PostgreSQL**
+
+Para el backup de PostgreSQL se utilizó el archivo "backuppostgresql.yaml", en el que se realizan:
+
+* ConfigMap: Se guardan aspectos de configuración, como el namestapce y el script correspondiente.
+
+<center>
+    <img src="Resources/configmapPG.png" alt="Postgre Backup" />
+</center>
+
+* PersistentVolumeClaim: Se solicita el almacenamiento necesario y se define el modo de lectura-escritura.
+
+<center>
+    <img src="Resources/pvcPG.png" alt="Postgre Backup" />
+</center>
+
+* CronJob: Utilizado para automarizar los backups, tambien se definen variables de entorno y demás.
+
+<center>
+    <img src="Resources/cronjobPG.png" alt="Postgre Backup" />
+</center>
+
+* Job: Se crea el pod para realizar la tarea del respaldo de PostgreSQL, tambien se definen variables de entorno y demás.
+
+<center>
+    <img src="Resources/jobPG.png" alt="Postgre Backup" />
+</center>
+
+Por otro lado, en este mismo archivo se definen un configmap y un job para hacer el cargado de la base de datos y los datos de prueba necesarios para comprobar el funcionamiento del backup.
+
+<center>
+    <img src="Resources/loadDataPG.png" alt="Postgre Backup" />
+</center>
+
+### **Backup**
+
+<center>
+    <img src="Resources/postgreBackup.png" alt="Postgre Backup" />
+</center>
+
+Para el script del backup de PostGreSQL se optiene la fecha, y se crea el directorio (en caso de que no exista), ademas, se hace un update de los paquetes y se importa **postgresql-client**, este brinda las herramientas necesarias para manejar postgresql y poder hacer el dump.
+
+Posteriormente se hace el **pg_dump** a la base de datos en postgresql mendiante el username, el password y el host.
+
+Finalmente, se sube el dump al blobstorage de Azure.
+
+### **Restauración**
+
+## **ElasticSearch**
+
+### **Backup**
+
+### **Restauración**
+
+## **Neo4j**
+
+### **Backup**
+
+### **Restauración**
+
+## **CouchDB**
+
+### **Backup**
+
+### **Restauración**
+
 # **Conclusiones**
 
 **1-** Es fundamental la comunicación para un buen desarrollo del proyecto.
