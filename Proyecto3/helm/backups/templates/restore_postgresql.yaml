@@ -1,0 +1,59 @@
+{{- if .Values.postgresql.enabled }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgresql-restore-script
+  namespace: {{ .Values.namespace }}
+data:
+{{ (.Files.Glob "scripts/postgresqlRestore.sh").AsConfig | indent 2 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postgresql-restore-0
+  namespace: {{ .Values.postgresql.config.namespace }}
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ .Values.postgresql.config.serviceAccount }}
+      volumes:
+      - name: scripts
+        configMap:
+          name: postgresql-restore-script
+          defaultMode: 0777
+      containers:
+        - image: mcr.microsoft.com/azure-cli
+          name: postgresql-restorer
+          env:
+            - name: POSTGRESQL_CONNECTION_STRING
+              value: "{{ .Values.postgresql.config.connectionString }}"
+            - name: AZURE_STORAGE_ACCOUNT
+              value: "{{ .Values.postgresql.config.storageAccount }}"
+            - name: CONTAINER
+              value: "{{ .Values.postgresql.config.container }}"
+            - name: BACKUP_PATH
+              value: "{{ .Values.postgresql.config.path }}"
+            - name: POSTGRESQL_USERNAME
+              value: "root"
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.postgresql.config.secret }}"
+                  key: postgres-password
+                  optional: false
+            - name: AZURE_STORAGE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.postgresql.config.azureSecret }}"
+                  key: azure.client.default.key
+                  optional: false
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+          command:
+            - "/scripts/postgresqlRestore.sh"
+      restartPolicy: Never
+  backoffLimit: 1
+
+  {{- end }}
