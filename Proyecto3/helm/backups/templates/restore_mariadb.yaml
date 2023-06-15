@@ -40,8 +40,10 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: "{{ .Values.mariadb.config.secret }}"
-                  key: mariadb-password
+                  key: mariadb-root-password
                   optional: false
+            - name: DB_NAME 
+              value: "babynames"
             - name: AZURE_STORAGE_KEY
               valueFrom:
                 secretKeyRef:
