@@ -1,7 +1,7 @@
 mongodb:
-  enabled: false
-mariadb:
   enabled: true
+mariadb:
+  enabled: false
 postgresql:
   enabled: false
 neo4j:
