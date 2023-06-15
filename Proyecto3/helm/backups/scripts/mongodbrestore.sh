@@ -5,7 +5,7 @@ BACKUP_NAME="202306150036"       # Nombre del archivo de respaldo en el Blob Sto
 ARCHIVE_NAME="archive.gz"       # Nombre del archivo de respaldo en el Blob Storage
 CONNECTION_STRING_AZURE="DefaultEndpointsProtocol=https;AccountName=filesmanagermangos;AccountKey=71ms2t3YFnW7Qu4KllgC1PR5adRZVUhbqKGn7mIXaQI0ZgF7ougQUR0LWhf7icECM98YdV9c2grT+ASt8ZXu+g==;EndpointSuffix=core.windows.net"
 
-mkdir -p mongorestore/202306071702
+mkdir -p mongorestore/$BACKUP_NAME
 apk update
 apk upgrade
 # The MongoDB tools provide import, export, and diagnostic capabilities.

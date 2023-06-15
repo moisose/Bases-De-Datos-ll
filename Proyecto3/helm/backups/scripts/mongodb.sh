@@ -18,4 +18,4 @@ az storage blob directory upload --container $CONTAINER -s /mongodump/$DATE -d $
 rm -rf /mongodump/$
 
 # eliminar todo de la base
-mongo --host="$MONGO_CONNECTION_STRING" --username "$MONGO_USERNAME" --password "$MONGO_PASSWORD" --eval "db.getCollectionNames().forEach((collection) => db.getCollection(collection).drop())"
+mongosh --host="$MONGO_CONNECTION_STRING" --username "$MONGO_USERNAME" --password "$MONGO_PASSWORD" --eval "db.getCollectionNames().forEach((collection) => db.getCollection(collection).drop())"
