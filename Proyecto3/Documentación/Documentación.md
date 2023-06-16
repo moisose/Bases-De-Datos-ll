@@ -16,25 +16,119 @@
 
 # **Instrucciones para ejecutar el proyecto**
 
+Para ejecutar el proyecto se siguen los siguientes steps:
+
+1- Descomprimir el archivo .zip y abrir la línea de comandos wsl en la ubicación de la carpeta **Proyecto3**
+
+![step1](resources/step1.png)
+
+Posteriormente, puede ir a las carpetas **charts\databases** donde encontrará el archivo **values.yaml**, aquí podrá escoger la base de datos cambiando el valor de **enabled** a true
+
+![step1.2](resources/step1.2.png)
+
+Posteriormente, debe ir a las carpetas **charts\backups** donde encontrará el archivo **values.yaml**, donde debe escoger la base de datos anteriormente escogida cambiando el valor de **enabled** a true
+
+![step1.2](resources/step1.3.png)
+
+2- Ir a la carpeta **helm** con el comando **cd helm** o navegando hacia atrás on el comando **cd ..**
+
+3- Ejecutar el comando **bash build.sh**, si da error al ejecutar, intente con el comando **dos2unix build.sh** y, posteriormente, ejecute de nuevo **bash build.sh**. Esperar a que se instalen los componentes.
+
+![step3](resources/step3.png)
+
+4- Ir a lens y observar el backup y restore de la base de datos.
+
+![step4](resources/step4.png)
+
+5- Ejecutar el comando **bash uninstall.sh** para desinstalar los componentes.
+
+![step5](resources/step5.png) 
+
 # **Pruebas**
+
+## **Pruebas de backups en Azure**
+
+![azureTest](resources/azureTest.png)
 
 ## **MongoDB**
 
 ### **Backup**
 
+![mongoBackupTest](resources/mongoBackupTest.png)
+
+![mongoBackupTest2](resources/mongoBackupTest2.png)
+
+Para hacer un backup de MongoDB:
+
+1. Ir al archivo **databases/values.yaml**
+
+2. Cambiar config.backup.enabled a **true**
+
+![config](resources/configB.png)
+
 ### **Restauración**
+
+![mongoRestoreTest](resources/mongoRestoreTest.png)
+
+![mongoRestoreTest2](resources/mongoRestoreTest2.png)
+
+Para hacer una restauración de MongoDB:
+
+1. Ir al archivo **databases/values.yaml**
+
+2. Cambiar config.restore.enabled a **true**
+
+![config](resources/configR.png)
 
 ## **MariaDB**
 
 ### **Backup**
 
+![mariadbBackupTest](resources/mariadbBackupTest.png)
+
+![mariadbBackupTest2](resources/mariadbBackupTest2.png)
+
+Para hacer un backup de MariaDB:
+
+1. Ir al archivo **databases/values.yaml**
+
+2. Cambiar config.backup.enabled a **true**
+
+![config](resources/configB.png)
+
 ### **Restauración**
+
+No se implementa la restauración de bases de datos para MariaDB.
 
 ## **PostgreSQL**
 
 ### **Backup**
 
+![postgresBackupTest](resources/postgresBackupTest.png)
+
+![postgresBackupTest2](resources/postgresBackupTest2.png)
+
+Para hacer un backup de PostgreSQL:
+
+1. Ir al archivo **databases/values.yaml**
+
+2. Cambiar config.backup.enabled a **true**
+
+![config](resources/configB.png)
+
 ### **Restauración**
+
+![postgresRestoreTest](resources/postgresRestoreTest.png)
+
+![postgresRestoreTest2](resources/postgresRestoreTest2.png)
+
+Para hacer una restauración de PostgreSQL:
+
+1. Ir al archivo **databases/values.yaml**
+
+2. Cambiar config.restore.enabled a **true**
+
+![config](resources/configR.png)
 
 ## **ElasticSearch**
 

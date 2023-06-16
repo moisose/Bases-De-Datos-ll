@@ -1,8 +1,8 @@
 config:
   backup:
-    enabled: false
-  restore:
     enabled: true
+  restore:
+    enabled: false
 mongo:
   enabled: false
   config:
@@ -21,7 +21,7 @@ mongo:
     provider: Azure
     image: moisose/mongodb-client
 postgresql:
-  enabled: false
+  enabled: true
   config:
     mapName: script-db
     namespace: default
@@ -39,7 +39,7 @@ postgresql:
     provider: Azure
     image: moisose/postgresql-client
 mariadb:
-  enabled: true
+  enabled: false
   config:
     mapName: script-db
     namespace: default
