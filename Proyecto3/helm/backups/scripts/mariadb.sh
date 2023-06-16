@@ -12,6 +12,7 @@ apk upgrade
 apk add mariadb-client
 # Azure CLI command for enable dynamic install without a prompt.
 az config set extension.use_dynamic_install=yes_without_prompt
+# Dump the database
 mysqldump --host=$DB_HOST --user=$MARIADB_USERNAME --password=$MARIADB_PASSWORD --result-file > /mariadb_dump/$DATE/db_backup.dump
 az storage blob directory upload --container $CONTAINER -s /mariadb_dump/$DATE -d $BACKUP_PATH --auth-mode key --recursive
 rm -rf /mariadb_dump/$DATE

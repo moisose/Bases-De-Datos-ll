@@ -18,12 +18,4 @@ az config set extension.use_dynamic_install=yes_without_prompt
 mongodump --host="$MONGO_CONNECTION_STRING" -u $MONGO_USERNAME -p $MONGO_PASSWORD --gzip --archive=/mongodump/$DATE
 az storage blob directory upload --container $CONTAINER -s /mongodump/$DATE -d $BACKUP_PATH --auth-mode key --recursive
 rm -rf /mongodump/$DATE
-
-# mkdir -p /data/db/
-# chown `root` /data/db
-# rc-update add mongodb default
-# rc-service mongodb start
 mongo --version
-# mongo --host databases-mongodb --port 27017 --username root --password vSWATHQTKd --authenticationDatabase admin
-# eliminar todo de la base
-# mongosh --host="$MONGO_CONNECTION_STRING" --username "$MONGO_USERNAME" --password "$MONGO_PASSWORD" --eval "db.getCollectionNames().forEach((collection) => db.getCollection(collection).drop())"
