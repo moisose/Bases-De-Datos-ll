@@ -38,21 +38,15 @@
 
 ## **ElasticSearch**
 
-### **Backup**
-
-### **Restauración**
+No se implementa el respaldo ni la restauración de base de datos para ElasticSearch.
 
 ## **Neo4j**
 
-### **Backup**
-
-### **Restauración**
+No se implementa el respaldo ni la restauración de base de datos para Neo4j.
 
 ## **CouchDB**
 
-### **Backup**
-
-### **Restauración**
+No se implementa el respaldo ni la restauración de base de datos para CouchDB.
 
 # **Componentes**
 
@@ -64,9 +58,9 @@ Para cada una de las bases de datos, se agregan los valores necesarios en el arc
 
 ## **MongoDB**
 
-Para el backup de MongoDB se utilizó el archivo "backup.sh" en el que se realizan:
+Para el backup de MongoDB se utilizó el archivo "backup.yaml" en el que se realizan:
 
-* ConfigMap: Se guardan aspectos de configuración, como el namestapce y el script correspondiente.
+* ConfigMap: Se guardan aspectos de configuración, como el namespace y el script correspondiente.
 
 <center>
     <img src="Resources/configmapM.png" alt="mongo Backup" />
@@ -84,7 +78,7 @@ Para el backup de MongoDB se utilizó el archivo "backup.sh" en el que se realiz
     <img src="Resources/cronjobM.png" alt="Mongo Backup" />
 </center>
 
-* Job: Se crea el pod para realizar la tarea del respaldo de MongoDB, tambien se definen variables de entorno y demás.
+* Job: Se crea el pod para realizar la tarea del respaldo de MongoDB, tambien se definen variables de entorno y demás. Para realizar el restore del respaldo también se utiliza un Job.
 
 <center>
     <img src="Resources/jobM.png" alt="Postgre Backup" />
@@ -110,17 +104,75 @@ Finalmente, se sube el dump al blobstorage de Azure.
 
 ### **Restauración**
 
+<center>
+    <img src="Resources/mongoRestore.png" alt="Mongo Restore" />
+</center>
+
+Para el script de restauración tambien se crea un directorio, se hace un update de los paquetes y se importa **mongodb-tools**.
+
+Posteriormente, se descarga el archivo desde el blob de azure, para que luego se pueda restaurar la base de datos con el comando correspondiente. En este caso se usa **mongodbrestore**.
+
 ## **MariaDB**
+
+Para el backup de MariaDB se utilizó el archivo "backup_mariadb.yaml", en el que se realizan:
+
+* ConfigMap: Se guardan aspectos de configuración, como el namespace y el script correspondiente.
+
+<center>
+    <img src="Resources/configmapMDB.png" alt="MariaDB Backup" />
+</center>
+
+* PersistentVolumeClaim: Se solicita el almacenamiento necesario y se define el modo de lectura-escritura.
+
+<center>
+    <img src="Resources/pvcMDB.png" alt="MariaDB Backup" />
+</center>
+
+* CronJob: Utilizado para automatizar los backups, tambien se definen variables de entorno y demás.
+
+<center>
+    <img src="Resources/cronjobMDB.png" alt="MariaDB Backup" />
+</center>
+
+* Job: Se crea el pod para realizar la tarea del respaldo de MariaDB, tambien se definen variables de entorno y demás. Para la parte de la restauración, tambien se crea un job que se encarga de realizar la tarea de restaurar la base de datos.
+
+<center>
+    <img src="Resources/jobMDB.png" alt="MariaDB Backup" />
+</center>
+
+Por otro lado, en este mismo archivo se definen un configmap y un job para hacer el cargado de la base de datos y los datos de prueba necesarios para comprobar el funcionamiento del backup.
+
+<center>
+    <img src="Resources/loadDataMDB.png" alt="MariaDB Backup" />
+</center>
 
 ### **Backup**
 
+<center>
+    <img src="Resources/MDBBackup.png" alt="MariaDB Backup" />
+</center>
+
+Para el script del backup de MariaDB se optiene la fecha, y se crea el directorio (en caso de que no exista), ademas, se hace un update de los paquetes y se importa **mariadb-client**, este brinda las herramientas necesarias para manejar MariaDB y poder hacer el dump.
+
+Posteriormente se hace el **mysqldump** a la base de datos en MariaDB mendiante el username, el password y el host.
+
+Finalmente, se sube el dump al blobstorage de Azure.
+
 ### **Restauración**
+
+<center>
+    <img src="Resources/MDBRestore.png" alt="MariaDB Backup" />
+</center>
+
+Para el script de restauración tambien se crea un directorio, se hace un update de los paquetes y se importa **mariadb-client y mysql-server**.
+
+Posteriormente, se descarga el archivo desde el blob de azure, para que luego se pueda restaurar la base de datos con el comando correspondiente. En este caso el comando que se usa es **mariadbrestore**
 
 ## **PostgreSQL**
 
-Para el backup de PostgreSQL se utilizó el archivo "backuppostgresql.yaml", en el que se realizan:
+Para el backup de PostgreSQL se utilizó el archivo "backup_postgresql.yaml", en el que se realizan:
 
-* ConfigMap: Se guardan aspectos de configuración, como el namestapce y el script correspondiente.
+* ConfigMap: Se guardan aspectos de configuración, como el namespace y el script correspondiente.
 
 <center>
     <img src="Resources/configmapPG.png" alt="Postgre Backup" />
@@ -174,21 +226,15 @@ Posteriormente, se descarga el archivo desde el blob de azure, para que luego se
 
 ## **ElasticSearch**
 
-### **Backup**
-
-### **Restauración**
+No se implementa el respaldo ni la restauración de base de datos para ElasticSearch.
 
 ## **Neo4j**
 
-### **Backup**
-
-### **Restauración**
+No se implementa el respaldo ni la restauración de base de datos para Neo4j.
 
 ## **CouchDB**
 
-### **Backup**
-
-### **Restauración**
+No se implementa el respaldo ni la restauración de base de datos para CouchDB.
 
 # **Conclusiones**
 
