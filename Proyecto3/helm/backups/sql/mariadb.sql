@@ -40,7 +40,7 @@ CREATE PROCEDURE `sp_BabyName_Delete`(
    p_id INT
 )
 BEGIN
-  DELETE FROM BabyName
+  DELETE FROM babyname
   WHERE id = p_id;
 END//
 DELIMITER ;
@@ -57,7 +57,7 @@ CREATE PROCEDURE `sp_BabyName_Insert`(
    p_rnk INT
 )
 BEGIN
-  INSERT INTO BabyName (birthyear, gender, ethnicity, bbyName, cnt, rnk)
+  INSERT INTO babyname (birthyear, gender, ethnicity, bbyName, cnt, rnk)
   VALUES (p_birthyear, p_gender, p_ethnicity, p_bbyName, p_cnt, p_rnk);
 END//
 DELIMITER ;
@@ -70,7 +70,7 @@ CREATE PROCEDURE `sp_BabyName_Select`(
 )
 BEGIN
   SELECT *
-  FROM BabyName
+  FROM babyname
   WHERE id = p_id;
 END//
 DELIMITER ;
@@ -88,7 +88,7 @@ CREATE PROCEDURE `sp_BabyName_Update`(
    p_rnk INT
 )
 BEGIN
-  UPDATE BabyName
+  UPDATE babyname
   SET birthyear = p_birthyear,
       gender = p_gender,
       ethnicity = p_ethnicity,
@@ -98,6 +98,13 @@ BEGIN
   WHERE id = p_id;
 END//
 DELIMITER ;
+
+CALL sp_BabyName_Insert(2023, 'Male', 'Caucasian', 'John', 10, 1);
+
+CALL sp_BabyName_Insert(2023, 'Female', 'Hispanic', 'Isabella', 15, 2);
+
+CALL sp_BabyName_Insert(2023, 'Male', 'African American', 'Michael', 8, 3);
+
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;

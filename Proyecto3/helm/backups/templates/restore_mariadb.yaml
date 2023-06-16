@@ -1,4 +1,4 @@
-{{- if .Values.mariadb.enabled }}
+{{- if and .Values.mariadb.enabled .Values.config.restore.enabled }}
 
 apiVersion: v1
 kind: ConfigMap
@@ -36,6 +36,8 @@ spec:
               value: "{{ .Values.mariadb.config.path }}"
             - name: MARIADB_USERNAME
               value: "root"
+            - name: MARIADB_HOST
+              value: "databases-mariadb"
             - name: MARIADB_PASSWORD
               valueFrom:
                 secretKeyRef:

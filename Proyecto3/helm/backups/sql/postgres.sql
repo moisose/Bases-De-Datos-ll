@@ -94,3 +94,7 @@ begin
       rnk = p_rnk
   WHERE id = p_id;
 end;$$;
+
+CALL sp_BabyName_Insert(2021, 'Male', 'Ethnicity1', 'John', 10, 1);
+CALL sp_BabyName_Insert(2021, 'Female', 'Ethnicity2', 'Emma', 15, 2);
+CALL sp_BabyName_Insert(2022, 'Male', 'Ethnicity3', 'James', 8, 3);

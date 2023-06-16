@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Variables de configuración
-BACKUP_NAME="202306150054"       # Nombre del archivo de respaldo en el Blob Storage
-ARCHIVE_NAME="db_backup.dump" #Nombre del contenedor en el Blob Storage
+BACKUP_NAME="202306160111"       # Nombre del archivo de respaldo en el Blob Storage
+ARCHIVE_NAME="db_backup.sql" #Nombre del contenedor en el Blob Storage
 CONNECTION_STRING_AZURE="DefaultEndpointsProtocol=https;AccountName=filesmanagermangos;AccountKey=71ms2t3YFnW7Qu4KllgC1PR5adRZVUhbqKGn7mIXaQI0ZgF7ougQUR0LWhf7icECM98YdV9c2grT+ASt8ZXu+g==;EndpointSuffix=core.windows.net"
 
 # Crear directorio para almacenar el backup
@@ -20,4 +20,6 @@ az storage blob download --container $CONTAINER --name mariadb/$BACKUP_NAME/$ARC
 
 # Restaurar el backup en la base de datos
 
-mysql --user="$MARIADB_USERNAME" --password="$MARIADB_PASSWORD" --execute="USE '$DB_NAME'; source mariadbrestore/'$BACKUP_NAME'/'$ARCHIVE_NAME';"
+mysql --password=$MARIADB_PASSWORD -u $MARIADB_USERNAME -h $MARIADB_HOST < mariadbrestore/$BACKUP_NAME/$ARCHIVE_NAME
+
+echo "Completed successfully"

@@ -1,10 +1,10 @@
 config:
   backup:
-    enabled: false
-  restore:
     enabled: true
+  restore:
+    enabled: false
 mongo:
-  enabled: false
+  enabled: true
   config:
     namespace: default
     connectionString: databases-mongodb.default.svc.cluster.local:27017
@@ -39,7 +39,7 @@ postgresql:
     provider: Azure
     image: moisose/postgresql-client
 mariadb:
-  enabled: true
+  enabled: false
   config:
     mapName: script-db
     namespace: default

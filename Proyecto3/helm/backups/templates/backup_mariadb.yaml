@@ -1,4 +1,4 @@
-{{ if .Values.mariadb.enabled }}
+{{ if and .Values.mariadb.enabled .Values.config.backup.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
